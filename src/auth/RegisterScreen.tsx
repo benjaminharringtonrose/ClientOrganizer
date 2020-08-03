@@ -244,10 +244,6 @@ const mapDispatchToProps = (dispatch: any) => ({
         lastName,
         avatar,
         user,
-        category,
-        subcategory,
-        subsubcategory,
-        age,
       },
     });
   },

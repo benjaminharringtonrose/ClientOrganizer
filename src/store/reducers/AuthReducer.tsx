@@ -33,7 +33,6 @@ const INITIAL_STATE = {
 // AUTH REDUCER
 
 const AuthReducer = (state = INITIAL_STATE, action: any) => {
- 
   switch (action.type) {
     case EMAIL_CHANGED:
       return {
