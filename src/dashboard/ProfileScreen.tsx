@@ -1,5 +1,5 @@
 import React from "react";
-import { View, Text, Image, StyleSheet } from "react-native";
+import { View, Text, StyleSheet } from "react-native";
 import { connect } from "react-redux";
 import Button from "../common/components/Button";
 import Card from "../common/components/Card";
@@ -7,8 +7,7 @@ import CardSection from "../common/components/CardSection";
 import { LOGOUT_USER_REQUEST, FETCH_USER_REQUEST } from "../store/actions/types";
 import firebase from "firebase";
 import { Color } from "../common/styles/Colors";
-import { AntDesign } from "@expo/vector-icons";
-import { getUserById, getDocRef } from "./util";
+import { getDocRef } from "./util";
 import Spinner from "../common/components/Spinner";
 import { Spacing } from "../common/styles/Spacing";
 import Avatar from "../common/components/Avatar";
@@ -39,10 +38,6 @@ class ProfileScreen extends React.Component<ProfileScreenProps, LocalState> {
         avatar: undefined,
         firstName: undefined,
         lastName: undefined,
-        category: undefined,
-        subcategory: undefined,
-        subsubcategory: undefined,
-        age: undefined,
       },
       unsubscribe: firebase
         .firestore()
@@ -105,9 +100,9 @@ class ProfileScreen extends React.Component<ProfileScreenProps, LocalState> {
             labelRight={`${user?.firstName} ${user?.lastName}`}
           />
           <Text style={styles.subHeaderText}>{"Preferences"}</Text>
-          <CellLabelLeftRight labelLeft={"Interests"} labelRight={user.subcategory} />
-          <CellLabelLeftRight labelLeft={"Type"} labelRight={user.subsubcategory} />
-          <CellLabelLeftRight labelLeft={"Age Range"} labelRight={user.age} />
+          <CellLabelLeftRight labelLeft={"preference 1"} labelRight={"preference 1"} />
+          <CellLabelLeftRight labelLeft={"preference 2"} labelRight={"preference 2"} />
+          <CellLabelLeftRight labelLeft={"preference 3"} labelRight={"preference 3"} />
           <CardSection>
             <Button label={"Sign Out"} onPress={this.onLogoutPress} />
           </CardSection>

@@ -130,17 +130,7 @@ const addAvatar = async (data: any) => {
 
 export function* registerUserSaga(action: any) {
   try {
-    const {
-      email,
-      password,
-      firstName,
-      lastName,
-      avatar,
-      category,
-      subcategory,
-      subsubcategory,
-      age,
-    } = action.payload;
+    const { email, password, firstName, lastName, avatar } = action.payload;
     const auth = firebase.auth();
     const data = yield call([auth, auth.createUserWithEmailAndPassword], email, password);
     const db = firebase
@@ -152,10 +142,6 @@ export function* registerUserSaga(action: any) {
       lastName,
       email,
       avatar,
-      category,
-      subcategory,
-      subsubcategory,
-      age,
     });
     addAvatar(avatar);
     yield put(registerUserSuccess(data));

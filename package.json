@@ -8,13 +8,14 @@
     "eject": "expo eject"
   },
   "dependencies": {
+    "@types/firebase": "^3.2.1",
     "@types/react-native-snap-carousel": "^3.8.2",
     "@types/react-redux": "^7.1.9",
     "@types/redux-saga": "^0.10.5",
     "expo": "~38.0.8",
     "expo-image-picker": "^8.4.0",
     "expo-status-bar": "^1.0.2",
-    "firebase": "^7.17.1",
+    "firebase": "7.9.0",
     "react": "~16.11.0",
     "react-dom": "~16.11.0",
     "react-native": "https://github.com/expo/react-native/archive/sdk-38.0.2.tar.gz",

@@ -37,10 +37,6 @@ interface PropsFromState {
   password: string;
   loading: boolean;
   error: boolean;
-  category: string;
-  subcategory: string;
-  subsubcategory: string;
-  age: string;
 }
 interface DispatchFromState {
   emailChanged: (text: string) => any;
@@ -72,27 +68,14 @@ class RegisterScreen extends Component<RegisterScreenProps> {
   };
 
   private onRegisterPress = () => {
-    const {
-      email,
-      password,
-      firstName,
-      lastName,
-      avatar,
-      category,
-      subcategory,
-      subsubcategory,
-      age,
-    } = this.props;
+    const { email, password, firstName, lastName, avatar } = this.props;
+
     this.props.dispatchRegisterRequest({
       email,
       password,
       firstName,
       lastName,
       avatar,
-      category,
-      subcategory,
-      subsubcategory,
-      age,
     });
   };
 
@@ -129,7 +112,6 @@ class RegisterScreen extends Component<RegisterScreenProps> {
 
   render() {
     const { firstName, lastName, email, password, avatar } = this.props;
-    console.log(this.props.subsubcategory);
     return (
       <View style={{ flex: 1, backgroundColor: Color.darkThemeGreyDark }}>
         <Header
@@ -198,9 +180,8 @@ class RegisterScreen extends Component<RegisterScreenProps> {
   }
 }
 
-const mapStateToProps = ({ auth, initialFlow }: any) => {
+const mapStateToProps = ({ auth }: any) => {
   const { firstName, lastName, avatar, email, password, error, loading, user } = auth;
-  const { category, subcategory, subsubcategory, age } = initialFlow;
   return {
     firstName,
     lastName,
@@ -210,10 +191,6 @@ const mapStateToProps = ({ auth, initialFlow }: any) => {
     error,
     loading,
     user,
-    category,
-    subcategory,
-    subsubcategory,
-    age,
   };
 };
 
@@ -230,10 +207,6 @@ const mapDispatchToProps = (dispatch: any) => ({
     lastName,
     avatar,
     user,
-    category,
-    subcategory,
-    subsubcategory,
-    age,
   }: any) => {
     dispatch({
       type: REGISTER_USER_REQUEST,
