@@ -4,19 +4,18 @@ import { Provider } from "react-redux";
 import RouterComponent from "./Router";
 import store from "./src/store/store";
 import firebase from "firebase";
-import { Color } from "./src/common/styles/Colors";
 
 class App extends Component {
   componentDidMount() {
     var firebaseConfig = {
-      apiKey: "AIzaSyDFuLrVQJ_jbHS6UmpFxJbpHGiWVJN2CdM",
-      authDomain: "organizer-ae5f7.firebaseapp.com",
-      databaseURL: "https://organizer-ae5f7.firebaseio.com",
-      projectId: "organizer-ae5f7",
-      storageBucket: "organizer-ae5f7.appspot.com",
-      messagingSenderId: "643110698367",
-      appId: "1:643110698367:web:8f367024bdabbd25886e4a",
-      measurementId: "G-KC0368LSQB",
+      apiKey: "AIzaSyC1rGuEd2HjgZxhOxw8jC8KP7SSLqN1smo",
+      authDomain: "ulrn-f2a04.firebaseapp.com",
+      databaseURL: "https://ulrn-f2a04.firebaseio.com",
+      projectId: "ulrn-f2a04",
+      storageBucket: "ulrn-f2a04.appspot.com",
+      messagingSenderId: "84581802313",
+      appId: "1:84581802313:web:02f058aecc8411427aba98",
+      measurementId: "G-M99C4XXF7D",
     };
     // Initialize Firebase
     firebase.initializeApp(firebaseConfig);
