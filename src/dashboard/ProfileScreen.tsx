@@ -114,8 +114,8 @@ class ProfileScreen extends React.Component<ProfileScreenProps, LocalState> {
   }
 }
 
-const mapStateToProps = ({ users }: any) => {
-  const { loading, error } = users;
+const mapStateToProps = ({ user }: any) => {
+  const { loading, error } = user;
   return { loading, error };
 };
 

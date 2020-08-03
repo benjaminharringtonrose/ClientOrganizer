@@ -13,7 +13,7 @@ export default class NotificationScreen extends React.Component {
         }}
       >
         <StatusBar barStyle={"light-content"} />
-        <Text style={{ textAlign: "center", color: Color.white }}>{"Notifications"}</Text>
+        <Text style={{ textAlign: "center", color: Color.white }}>{"Reminders"}</Text>
       </ScrollView>
     );
   }

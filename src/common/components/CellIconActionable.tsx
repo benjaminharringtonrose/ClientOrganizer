@@ -7,8 +7,9 @@ import { Spacing } from "../styles/Spacing";
 import { Color } from "../styles/Colors";
 
 interface CellIconActionableProps {
-  label: string;
+  label?: string;
   labelColor?: string;
+  labelRight?: string;
   onPress: any;
   iconLeftName?: string;
   iconLeftColor?: string;
@@ -21,31 +22,13 @@ interface CellIconActionableProps {
 
 export default class CellIconActionable extends Component<CellIconActionableProps> {
   private getIcon = () => {
-    const { iconLeftName, iconLeftSize, iconLeftColor } = this.props;
+    const { iconLeftName, iconLeftSize } = this.props;
     switch (iconLeftName) {
-      case "guitar":
+      case "plus":
         return (
           <Icon
             name={iconLeftName}
-            type={"font-awesome-5"}
-            color={Color.white}
-            size={iconLeftSize}
-          />
-        );
-      case "language":
-        return (
-          <Icon
-            name={iconLeftName}
-            type={"font-awesome-5"}
-            color={Color.white}
-            size={iconLeftSize}
-          />
-        );
-      case "paint-brush":
-        return (
-          <Icon
-            name={iconLeftName}
-            type={"font-awesome-5"}
+            type={"antdesign"}
             color={Color.white}
             size={iconLeftSize}
           />
@@ -59,96 +42,6 @@ export default class CellIconActionable extends Component<CellIconActionableProp
             size={iconLeftSize}
           />
         );
-      case "baseball-ball":
-        return (
-          <Icon
-            name={iconLeftName}
-            type={"font-awesome-5"}
-            color={Color.white}
-            size={iconLeftSize}
-          />
-        );
-      case "baseball-bat":
-        return (
-          <Icon
-            name={iconLeftName}
-            type={"material-community"}
-            color={Color.white}
-            size={iconLeftSize}
-          />
-        );
-      case "basketball-hoop":
-        return (
-          <Icon
-            name={iconLeftName}
-            type={"material-community"}
-            color={Color.white}
-            size={iconLeftSize}
-          />
-        );
-      case "golf":
-        return (
-          <Icon
-            name={iconLeftName}
-            type={"material-community"}
-            color={Color.white}
-            size={iconLeftSize}
-          />
-        );
-      case "swimmer":
-        return (
-          <Icon
-            name={iconLeftName}
-            type={"font-awesome-5"}
-            color={Color.white}
-            size={iconLeftSize}
-          />
-        );
-      case "piano":
-        return (
-          <Icon
-            name={iconLeftName}
-            type={"material-community"}
-            color={Color.white}
-            size={iconLeftSize}
-          />
-        );
-      case "modern-mic":
-        return (
-          <Icon
-            name={iconLeftName}
-            type={"entypo"}
-            color={Color.white}
-            size={iconLeftSize}
-          />
-        );
-      case "ios-musical-note":
-        return (
-          <Icon
-            name={iconLeftName}
-            type={"ionicon"}
-            color={Color.white}
-            size={iconLeftSize}
-          />
-        );
-      case "violin":
-        return (
-          <Icon
-            name={iconLeftName}
-            type={"material-community"}
-            color={Color.white}
-            size={iconLeftSize}
-          />
-        );
-      case "soccer":
-        return (
-          <Icon
-            name={iconLeftName}
-            type={"material-community"}
-            color={Color.white}
-            size={iconLeftSize}
-          />
-        );
       default:
         console.warn("May have entered wrong value for icon name.");
         return <View />;
@@ -157,6 +50,7 @@ export default class CellIconActionable extends Component<CellIconActionableProp
   public render() {
     const {
       label,
+      labelRight,
       onPress,
       iconLeftName,
       iconRightName,
@@ -176,6 +70,7 @@ export default class CellIconActionable extends Component<CellIconActionableProp
               color={Color.white}
             />
           )}
+          {labelRight && <Text style={styles.labelRightText}>{labelRight}</Text>}
         </CardSection>
       </TouchableOpacity>
     );
@@ -185,7 +80,7 @@ export default class CellIconActionable extends Component<CellIconActionableProp
 const styles = StyleSheet.create({
   cardSectionContainer: {
     alignItems: "center",
-    paddingVertical: Spacing.med,
+    paddingVertical: Spacing.micro,
     paddingHorizontal: Spacing.med,
   },
   icon: {
@@ -197,7 +92,13 @@ const styles = StyleSheet.create({
   },
   labelText: {
     flex: 1,
-    fontSize: 20,
+    fontSize: 18,
+    paddingLeft: Spacing.small,
+    color: Color.white,
+  },
+  labelRightText: {
+    flex: 1,
+    fontSize: 16,
     paddingLeft: Spacing.small,
     color: Color.white,
   },

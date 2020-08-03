@@ -24,6 +24,7 @@ const INITIAL_STATE = {
   uid: "",
   error: "",
   loading: false,
+  clients: {},
 };
 
 // AUTH REDUCER
@@ -97,6 +98,7 @@ const AuthReducer = (state = INITIAL_STATE, action: any) => {
       return {
         ...state,
         user: action.payload,
+        clients: {},
         loading: false,
       };
     case REGISTER_USER_FAIL:

@@ -8,6 +8,8 @@ import { searchTextChanged } from "../store/actions/UserActions";
 import Card from "../common/components/Card";
 import { FlatList } from "react-native-gesture-handler";
 import CardSection from "../common/components/CardSection";
+import CellIconActionable from "../common/components/CellIconActionable";
+import { Actions } from "react-native-router-flux";
 
 interface PropsFromState {
   seachText: string;
@@ -28,15 +30,21 @@ class HomeScreen extends Component<HomeScreenProps> {
     const db: any = [];
     console.log(db.length > 0);
     return (
-      <View style={{ flex: 1, backgroundColor: Color.darkThemeGreyDark }}>
+      <View
+        style={{
+          flex: 1,
+          backgroundColor: Color.darkThemeGreyDark,
+          paddingHorizontal: Spacing.med,
+        }}
+      >
         <StatusBar barStyle={"light-content"} />
+        <Text style={styles.subHeaderText}>{"Client Manager"}</Text>
         <Card style={{ flex: 1 }}>
           <InputSearch
             onChangeText={this.onChangeSearchText}
             value={this.props.seachText}
             placeholder={"search clients..."}
             keyboardType={"web-search"}
-            style={{ marginTop: Spacing.xlarge, marginHorizontal: Spacing.med }}
           />
           {db.length > 0 ? (
             <FlatList
@@ -44,16 +52,14 @@ class HomeScreen extends Component<HomeScreenProps> {
                 flex: 1,
                 backgroundColor: Color.darkThemeGreyDark,
                 paddingTop: Spacing.xlarge,
-                paddingHorizontal: Spacing.small,
               }}
               data={db}
               renderItem={({ item }: any) => <Text>{item?.key}</Text>}
             />
           ) : (
-            <CardSection
+            <View
               style={{
-                paddingVertical: Spacing.xxlarge,
-                marginHorizontal: Spacing.med,
+                paddingVertical: Spacing.large,
                 alignItems: "center",
                 justifyContent: "center",
               }}
@@ -61,8 +67,15 @@ class HomeScreen extends Component<HomeScreenProps> {
               <Text style={{ color: Color.darkThemeGrey }}>
                 {"No clients have been added yet."}
               </Text>
-            </CardSection>
+            </View>
           )}
+          <CellIconActionable
+            iconLeftName={"plus"}
+            iconLeftSize={24}
+            labelRight={"add a new client"}
+            onPress={() => Actions.navigateToAddNewClient()}
+            style={{}}
+          />
         </Card>
       </View>
     );
@@ -80,4 +93,11 @@ const mapDispatchToProps = (dispatch: any) => ({
 
 export default connect(mapStateToProps, mapDispatchToProps)(HomeScreen);
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  subHeaderText: {
+    fontSize: 20,
+    color: Color.white,
+    paddingLeft: Spacing.micro,
+    marginTop: Spacing.xlarge,
+  },
+});

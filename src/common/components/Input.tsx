@@ -12,11 +12,11 @@ import { Color } from "../styles/Colors";
 import { Spacing } from "../styles/Spacing";
 
 interface InputProps {
-  label: string;
+  label?: string;
   value: string;
   onChangeText: any;
   placeholder?: string;
-  secureTextEntry: boolean;
+  secureTextEntry?: boolean;
   maxLength?: number;
   keyboardType?:
     | "default"
@@ -68,7 +68,9 @@ export default class Input extends Component<InputProps> {
           maxLength={maxLength}
           keyboardType={keyboardType}
           placeholder={placeholder}
-          placeholderTextColor={placeholderTextColor}
+          placeholderTextColor={
+            placeholderTextColor ? placeholderTextColor : Color.darkThemeGrey
+          }
           selectionColor={selectionColor}
         />
       </View>
@@ -85,6 +87,7 @@ const styles = StyleSheet.create({
     lineHeight: 23,
     color: Color.white,
     alignSelf: "center",
+    justifyContent: "center",
   },
   labelStyle: {
     fontSize: 16,

@@ -12,6 +12,7 @@ import StartupScreen from "./src/dashboard/StartupScreen";
 
 import { Ionicons } from "@expo/vector-icons";
 import { Color } from "./src/common/styles/Colors";
+import AddNewClientScreen from "./src/forms/AddNewClientScreen";
 
 class RouterComponent extends Component {
   render() {
@@ -51,7 +52,6 @@ class RouterComponent extends Component {
                 icon={() => <Ionicons name="ios-home" size={24} color={Color.white} />}
                 activeTintColor={Color.success}
               />
-
               <Tabs
                 key="messages"
                 component={ScheduleScreen}
@@ -82,6 +82,14 @@ class RouterComponent extends Component {
               />
             </Tabs>
           </Scene>
+          <Scene
+            key="navigateToAddNewClient"
+            component={AddNewClientScreen}
+            navTransparent
+            hideNavBar={false}
+            back
+            backButtonTintColor={Color.white}
+          />
         </Scene>
       </Router>
     );

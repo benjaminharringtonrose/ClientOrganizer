@@ -18,6 +18,7 @@ import {
   FETCH_USER_SUCCESS,
   FETCH_USER_FAIL,
 } from "./actions/types";
+import { getDocRef } from "../dashboard/util";
 
 export function* fetchUserSaga(action: any) {
   try {
@@ -133,15 +134,13 @@ export function* registerUserSaga(action: any) {
     const { email, password, firstName, lastName, avatar } = action.payload;
     const auth = firebase.auth();
     const data = yield call([auth, auth.createUserWithEmailAndPassword], email, password);
-    const db = firebase
-      .firestore()
-      .collection("users")
-      .doc(firebase.auth().currentUser?.uid);
+    const db = getDocRef();
     db.set({
       firstName,
       lastName,
       email,
       avatar,
+      clients: {},
     });
     addAvatar(avatar);
     yield put(registerUserSuccess(data));
