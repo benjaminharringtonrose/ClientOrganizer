@@ -20,6 +20,7 @@ class App extends Component {
     // Initialize Firebase
     firebase.initializeApp(firebaseConfig);
   }
+
   render() {
     return (
       <Provider store={store}>

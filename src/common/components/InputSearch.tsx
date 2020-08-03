@@ -10,7 +10,8 @@ import { IKeyboard } from "../types";
 import { StyleProp, ViewStyle } from "react-native";
 
 interface InputSearchProps {
-  onChangeText: () => void;
+  onChangeText: (text: string) => void;
+  value: string;
   onPress?: () => void;
   placeholder?: string;
   keyboardType?: IKeyboard;
@@ -18,15 +19,15 @@ interface InputSearchProps {
 }
 export default class InputSearch extends Component<InputSearchProps> {
   public render() {
-    const { onChangeText, placeholder, onPress, keyboardType, style } = this.props;
+    const { onChangeText, value, placeholder, onPress, keyboardType, style } = this.props;
     return (
       <CardSection style={[style, { flex: 1, alignItems: "center" }]}>
         <Input
           label={""}
-          value={""}
+          value={value}
           onChangeText={onChangeText}
           placeholder={placeholder ? placeholder : "Search"}
-          placeholderTextColor={Color.greyMed}
+          placeholderTextColor={Color.greyMedDark}
           secureTextEntry={false}
           selectionColor={Color.greyLight}
           keyboardType={keyboardType}
@@ -37,7 +38,7 @@ export default class InputSearch extends Component<InputSearchProps> {
         >
           <FontAwesome
             name={"search"}
-            size={24}
+            size={18}
             color={Color.white}
             style={{ paddingRight: Spacing.small }}
           />

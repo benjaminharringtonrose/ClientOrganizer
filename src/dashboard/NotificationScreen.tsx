@@ -7,7 +7,6 @@ export default class NotificationScreen extends React.Component {
   render() {
     return (
       <ScrollView
-        nestedScrollEnabled={true}
         style={{
           backgroundColor: Color.darkThemeGreyDark,
           paddingTop: Spacing.xxlarge,

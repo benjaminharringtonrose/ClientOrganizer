@@ -40,6 +40,7 @@ class RouterComponent extends Component {
               key="tabs"
               activeBackgroundColor={Color.darkThemeGreyDark}
               inactiveBackgroundColor={Color.darkThemeGreyDark}
+              showLabel={false}
             >
               <Tabs
                 key="home"
@@ -48,6 +49,18 @@ class RouterComponent extends Component {
                 hideNavBar={true}
                 back={false}
                 icon={() => <Ionicons name="ios-home" size={24} color={Color.white} />}
+                activeTintColor={Color.success}
+              />
+
+              <Tabs
+                key="messages"
+                component={ScheduleScreen}
+                tabBarLabel="Schedule"
+                hideNavBar={true}
+                icon={() => (
+                  <Ionicons name="ios-calendar" size={24} color={Color.white} />
+                )}
+                activeTintColor={Color.success}
               />
               <Tabs
                 key="notifications"
@@ -57,15 +70,7 @@ class RouterComponent extends Component {
                 icon={() => (
                   <Ionicons name="ios-notifications" size={24} color={Color.white} />
                 )}
-              />
-              <Tabs
-                key="messages"
-                component={ScheduleScreen}
-                tabBarLabel="Schedule"
-                hideNavBar={true}
-                icon={() => (
-                  <Ionicons name="ios-chatboxes" size={24} color={Color.white} />
-                )}
+                activeTintColor={Color.success}
               />
               <Tabs
                 key="profile"
@@ -73,6 +78,7 @@ class RouterComponent extends Component {
                 hideNavBar={true}
                 tabBarLabel="Profile"
                 icon={() => <Ionicons name="ios-person" size={24} color={Color.white} />}
+                activeTintColor={Color.success}
               />
             </Tabs>
           </Scene>

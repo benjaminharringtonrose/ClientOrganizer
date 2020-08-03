@@ -1,6 +1,5 @@
 import React, { Component } from "react";
-import { View, Text, StyleSheet, TouchableOpacity, ScrollView } from "react-native";
-import { Actions } from "react-native-router-flux";
+import { View, Text, StyleSheet, ScrollView } from "react-native";
 import { connect } from "react-redux";
 import Card from "../common/components/Card";
 import CardSection from "../common/components/CardSection";

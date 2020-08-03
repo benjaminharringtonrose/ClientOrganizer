@@ -19,10 +19,10 @@ const styles = StyleSheet.create({
   containerStyle: {
     flex: 1,
     borderWidth: 1,
-    borderRadius: 10,
+    borderRadius: 5,
     borderColor: Color.darkThemeGreyMed,
     backgroundColor: Color.darkThemeGreyMed,
-    padding: 5,
+    padding: 2,
     flexDirection: "row",
     position: "relative",
     marginBottom: Spacing.small,
