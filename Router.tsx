@@ -5,7 +5,7 @@ import LoginScreen from "./src/auth/LoginScreen";
 import RegisterScreen from "./src/auth/RegisterScreen";
 
 import HomeScreen from "./src/dashboard/HomeScreen";
-import MessageScreen from "./src/dashboard/MessageScreen";
+import ScheduleScreen from "./src/dashboard/ScheduleScreen";
 import NotificationScreen from "./src/dashboard/NotificationScreen";
 import ProfileScreen from "./src/dashboard/ProfileScreen";
 import StartupScreen from "./src/dashboard/StartupScreen";
@@ -40,10 +40,6 @@ class RouterComponent extends Component {
               key="tabs"
               activeBackgroundColor={Color.darkThemeGreyDark}
               inactiveBackgroundColor={Color.darkThemeGreyDark}
-              tabBarStyle={{
-                backgroundColor: Color.darkThemeGreyDark,
-                borderTopColor: Color.darkThemeGreyDark,
-              }}
             >
               <Tabs
                 key="home"
@@ -64,8 +60,8 @@ class RouterComponent extends Component {
               />
               <Tabs
                 key="messages"
-                component={MessageScreen}
-                tabBarLabel="Messages"
+                component={ScheduleScreen}
+                tabBarLabel="Schedule"
                 hideNavBar={true}
                 icon={() => (
                   <Ionicons name="ios-chatboxes" size={24} color={Color.white} />

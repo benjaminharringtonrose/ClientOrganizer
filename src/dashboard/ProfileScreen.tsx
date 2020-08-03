@@ -38,6 +38,7 @@ class ProfileScreen extends React.Component<ProfileScreenProps, LocalState> {
         avatar: undefined,
         firstName: undefined,
         lastName: undefined,
+        email: undefined,
       },
       unsubscribe: firebase
         .firestore()
@@ -99,6 +100,7 @@ class ProfileScreen extends React.Component<ProfileScreenProps, LocalState> {
             labelLeft={"Name"}
             labelRight={`${user?.firstName} ${user?.lastName}`}
           />
+          <CellLabelLeftRight labelLeft={"Email"} labelRight={user.email} />
           <Text style={styles.subHeaderText}>{"Preferences"}</Text>
           <CellLabelLeftRight labelLeft={"preference 1"} labelRight={"preference 1"} />
           <CellLabelLeftRight labelLeft={"preference 2"} labelRight={"preference 2"} />

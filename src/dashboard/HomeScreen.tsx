@@ -43,12 +43,4 @@ const mapDispatchToProps = (dispatch: any) => {};
 
 export default connect(mapStateToProps)(HomeScreen);
 
-const styles = StyleSheet.create({
-  featuredHeaderText: {
-    flex: 1,
-    color: Color.greyLight,
-    fontSize: 22,
-    paddingLeft: Spacing.xsmall,
-    paddingBottom: Spacing.small,
-  },
-});
+const styles = StyleSheet.create({});
