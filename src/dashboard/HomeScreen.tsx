@@ -7,9 +7,10 @@ import InputSearch from "../common/components/InputSearch";
 import { searchTextChanged } from "../store/actions/UserActions";
 import Card from "../common/components/Card";
 import { FlatList } from "react-native-gesture-handler";
-import CardSection from "../common/components/CardSection";
 import CellIconActionable from "../common/components/CellIconActionable";
 import { Actions } from "react-native-router-flux";
+import { getDocRef } from "./util";
+import firebase from "firebase";
 
 interface PropsFromState {
   seachText: string;
@@ -19,9 +20,37 @@ interface DispatchFromState {
   searchTextChanged: (text: string) => void;
 }
 
+interface LocalState {
+  clients: any;
+}
+
 type HomeScreenProps = PropsFromState & DispatchFromState;
 
-class HomeScreen extends Component<HomeScreenProps> {
+class HomeScreen extends Component<HomeScreenProps, LocalState> {
+  public state = {
+    clients: undefined,
+  };
+
+  public componentDidMount() {
+    const docRef = firebase
+      .firestore()
+      .collection("users")
+      .doc(firebase.auth().currentUser?.uid);
+
+    docRef
+      .get()
+      .then((doc: any) => {
+        if (doc.exists) {
+          this.setState({ clients: doc.data() });
+        } else {
+          console.log("No such document!");
+        }
+      })
+      .catch(function (error: string) {
+        console.log("Error getting document:", error);
+      });
+  }
+
   private onChangeSearchText = (text: string) => {
     this.props.searchTextChanged(text);
   };

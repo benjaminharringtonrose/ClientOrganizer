@@ -79,7 +79,6 @@ class AddNewClientScreen extends React.Component<AddNewClientScreenProps> {
     console.log(uid);
     const docRef = getDocRef();
     docRef
-
       .set(
         { clients: { name, address, phoneNumber, email, budget, preferredAreas, notes } },
         { merge: true }
