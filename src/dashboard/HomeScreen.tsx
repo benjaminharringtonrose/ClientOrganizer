@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { StyleSheet, StatusBar, ScrollView, View, Text } from "react-native";
+import { StyleSheet, StatusBar, View, Text } from "react-native";
 import { connect } from "react-redux";
 import { Spacing } from "../common/styles/Spacing";
 import { Color } from "../common/styles/Colors";
@@ -8,9 +8,11 @@ import { searchTextChanged } from "../store/actions/UserActions";
 import Card from "../common/components/Card";
 import { FlatList } from "react-native-gesture-handler";
 import CellIconActionable from "../common/components/CellIconActionable";
-import { Actions } from "react-native-router-flux";
-import { getDocRef } from "./util";
 import firebase from "firebase";
+
+interface PassedProps {
+  navigation: any;
+}
 
 interface PropsFromState {
   seachText: string;
@@ -21,27 +23,29 @@ interface DispatchFromState {
 }
 
 interface LocalState {
-  clients: any;
+  user: any;
 }
 
-type HomeScreenProps = PropsFromState & DispatchFromState;
+type HomeScreenProps = PropsFromState & DispatchFromState & PassedProps;
 
 class HomeScreen extends Component<HomeScreenProps, LocalState> {
   public state = {
-    clients: undefined,
+    user: {
+      clients: {},
+    },
   };
 
   public componentDidMount() {
     const docRef = firebase
       .firestore()
       .collection("users")
-      .doc(firebase.auth().currentUser?.uid);
+      .doc(`${firebase.auth().currentUser?.uid}`);
 
     docRef
       .get()
       .then((doc: any) => {
         if (doc.exists) {
-          this.setState({ clients: doc.data() });
+          this.setState({ user: doc.data() });
         } else {
           console.log("No such document!");
         }
@@ -56,14 +60,16 @@ class HomeScreen extends Component<HomeScreenProps, LocalState> {
   };
 
   render() {
-    const db: any = [];
-    console.log(db.length > 0);
+    const user: any = [this.state.user];
+    const clients: any = [this.state.user.clients];
+    console.log(user);
     return (
       <View
         style={{
           flex: 1,
           backgroundColor: Color.darkThemeGreyDark,
           paddingHorizontal: Spacing.med,
+          paddingTop: Spacing.xxlarge,
         }}
       >
         <StatusBar barStyle={"light-content"} />
@@ -75,15 +81,17 @@ class HomeScreen extends Component<HomeScreenProps, LocalState> {
             placeholder={"search clients..."}
             keyboardType={"web-search"}
           />
-          {db.length > 0 ? (
+          {clients.length > 0 ? (
             <FlatList
               style={{
                 flex: 1,
                 backgroundColor: Color.darkThemeGreyDark,
                 paddingTop: Spacing.xlarge,
               }}
-              data={db}
-              renderItem={({ item }: any) => <Text>{item?.key}</Text>}
+              data={user.clients}
+              renderItem={({ client }: any) => (
+                <Text style={{ color: Color.white }}>{client[name]}</Text>
+              )}
             />
           ) : (
             <View
@@ -102,7 +110,7 @@ class HomeScreen extends Component<HomeScreenProps, LocalState> {
             iconLeftName={"plus"}
             iconLeftSize={24}
             labelRight={"add a new client"}
-            onPress={() => Actions.navigateToAddNewClient()}
+            onPress={() => {}}
             style={{}}
           />
         </Card>

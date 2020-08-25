@@ -3,7 +3,6 @@ import { put, call } from "redux-saga/effects";
 import firebase from "firebase";
 require("firebase/firestore");
 import { getDocById } from "./firebaseAPI";
-import { Actions } from "react-native-router-flux";
 import {
   LOGIN_USER_REQUEST,
   LOGIN_USER_SUCCESS,
@@ -40,8 +39,6 @@ export function* loginUserSaga(action: any) {
     const auth = firebase.auth();
     const data = yield call([auth, auth.signInWithEmailAndPassword], email, password);
     yield put(loginUserSuccess(data));
-
-    Actions.tabs();
   } catch (error) {
     yield put(loginUserFail(error));
   }
@@ -64,7 +61,6 @@ function loginUserFail(error: any) {
 export function* logoutUserSaga() {
   try {
     yield call(() => firebase.auth().signOut());
-    yield Actions.initial();
     yield put(logoutUserSuccess());
   } catch (error) {
     yield put(logoutUserFail(error));
@@ -144,7 +140,6 @@ export function* registerUserSaga(action: any) {
     });
     addAvatar(avatar);
     yield put(registerUserSuccess(data));
-    Actions.tabs();
   } catch (error) {
     console.log(error);
     yield put(registerUserFail(error));

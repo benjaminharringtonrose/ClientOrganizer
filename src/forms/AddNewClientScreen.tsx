@@ -1,5 +1,12 @@
 import React from "react";
-import { View, Text, StyleSheet, ScrollView, StatusBar } from "react-native";
+import {
+  View,
+  Text,
+  StyleSheet,
+  ScrollView,
+  StatusBar,
+  ActionSheetIOS,
+} from "react-native";
 import { Color } from "../common/styles/Colors";
 import { Spacing } from "../common/styles/Spacing";
 import SubHeader from "../common/components/SubHeader";
@@ -19,7 +26,6 @@ import {
 } from "../store/actions";
 import { getDocRef } from "../dashboard/util";
 import { Actions } from "react-native-router-flux";
-import uuid from "react-native-uuid";
 
 interface PropsFromState {
   name: string;
@@ -75,17 +81,27 @@ class AddNewClientScreen extends React.Component<AddNewClientScreenProps> {
       preferredAreas,
       notes,
     } = this.props;
-    const uid = uuid.v1();
-    console.log(uid);
+
     const docRef = getDocRef();
     docRef
       .set(
-        { clients: { name, address, phoneNumber, email, budget, preferredAreas, notes } },
+        {
+          clients: {
+            [name]: {
+              address,
+              phoneNumber,
+              email,
+              budget,
+              preferredAreas,
+              notes,
+            },
+          },
+        },
         { merge: true }
       )
       .then(function () {
         console.log("Document successfully written!");
-        // Actions.navigateTo
+        Actions.home();
       })
       .catch(function (error: any) {
         console.error("Error writing document: ", error);

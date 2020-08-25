@@ -1,12 +1,11 @@
 import React, { Component } from "react";
-import { View, StatusBar } from "react-native";
+import { View, StatusBar, SafeAreaView } from "react-native";
 import { Provider } from "react-redux";
-import RouterComponent from "./Router";
 import store from "./src/store/store";
 import firebase from "firebase";
 import { Color } from "./src/common/styles/Colors";
-import { Buffer } from "buffer";
-global.Buffer = Buffer;
+import { Navigator } from "./navigation";
+require("firebase/firestore");
 
 class App extends Component {
   componentDidMount() {
@@ -23,13 +22,12 @@ class App extends Component {
     // Initialize Firebase
     firebase.initializeApp(firebaseConfig);
   }
-
   render() {
     return (
       <Provider store={store}>
         <StatusBar barStyle={"light-content"} />
-        <View style={{ flex: 1, backgroundColor: Color.darkThemeGreyMed }}>
-          <RouterComponent />
+        <View style={{ flex: 1, backgroundColor: Color.darkThemeGreyDark }}>
+          <Navigator />
         </View>
       </Provider>
     );

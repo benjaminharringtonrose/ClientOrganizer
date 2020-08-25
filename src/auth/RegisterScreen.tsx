@@ -27,6 +27,11 @@ import {
 import { Color } from "../common/styles/Colors";
 import { Spacing } from "../common/styles/Spacing";
 import Header from "../common/components/Header";
+import { Routes } from "../../navigation";
+
+interface PassedProps {
+  navigation: any;
+}
 
 interface PropsFromState {
   firstName: string;
@@ -47,7 +52,7 @@ interface DispatchFromState {
   dispatchRegisterRequest: (object: any) => any;
 }
 
-type RegisterScreenProps = PropsFromState & DispatchFromState;
+type RegisterScreenProps = PropsFromState & DispatchFromState & PassedProps;
 
 class RegisterScreen extends Component<RegisterScreenProps> {
   public componentDidMount() {}
@@ -77,6 +82,7 @@ class RegisterScreen extends Component<RegisterScreenProps> {
       lastName,
       avatar,
     });
+    this.props.navigation.navigate(Routes.HOME_SCREEN);
   };
 
   onPickAvatar = async () => {

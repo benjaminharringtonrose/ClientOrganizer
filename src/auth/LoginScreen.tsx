@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { View, Text, StyleSheet, ScrollView } from "react-native";
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from "react-native";
 import { connect } from "react-redux";
 import Card from "../common/components/Card";
 import CardSection from "../common/components/CardSection";
@@ -11,6 +11,11 @@ import { LOGIN_USER_REQUEST } from "../store/actions/types";
 import Header from "../common/components/Header";
 import { Spacing } from "../common/styles/Spacing";
 import { Color } from "../common/styles/Colors";
+import { Routes } from "../../navigation";
+
+interface PassedProps {
+  navigation: any;
+}
 
 interface PropsFromState {
   email: string;
@@ -24,7 +29,7 @@ interface DispatchFromState {
   dispatchLoginRequest: (object: any) => any;
 }
 
-type LoginScreenProps = PropsFromState & DispatchFromState;
+type LoginScreenProps = PropsFromState & DispatchFromState & PassedProps;
 
 class LoginScreen extends Component<LoginScreenProps> {
   private onEmailChange = (text: string) => {
@@ -38,6 +43,7 @@ class LoginScreen extends Component<LoginScreenProps> {
   private onLoginPress = () => {
     const { email, password } = this.props;
     this.props.dispatchLoginRequest({ email, password });
+    this.props.navigation.navigate(Routes.DASHBOARD_TABS);
   };
 
   private renderLoginButton = () => {
@@ -89,6 +95,14 @@ class LoginScreen extends Component<LoginScreenProps> {
             </CardSection>
             {this.renderError()}
             <CardSection>{this.renderLoginButton()}</CardSection>
+            <TouchableOpacity>
+              <Text
+                style={{ color: "white" }}
+                onPress={() => this.props.navigation.navigate(Routes.REGISTER_SCREEN)}
+              >
+                {"Register here"}
+              </Text>
+            </TouchableOpacity>
           </Card>
         </ScrollView>
       </View>
