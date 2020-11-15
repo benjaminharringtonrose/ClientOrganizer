@@ -30,7 +30,6 @@ const INITIAL_STATE = {
 // AUTH REDUCER
 
 const AuthReducer = (state = INITIAL_STATE, action: any) => {
-  console.log(state, action);
   switch (action.type) {
     case EMAIL_CHANGED:
       return {
@@ -51,6 +50,8 @@ const AuthReducer = (state = INITIAL_STATE, action: any) => {
     case LOGIN_USER_SUCCESS:
       return {
         ...state,
+        email: undefined,
+        password: undefined,
         user: action.payload,
         loading: false,
       };

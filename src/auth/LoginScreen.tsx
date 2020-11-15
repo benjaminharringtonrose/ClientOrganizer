@@ -32,6 +32,12 @@ interface DispatchFromState {
 type LoginScreenProps = PropsFromState & DispatchFromState & PassedProps;
 
 class LoginScreen extends Component<LoginScreenProps> {
+  componentDidUpdate(oldProps: any) {
+    if (oldProps.loading && !this.props.loading && !this.props.error) {
+      this.props.navigation.navigate(Routes.DASHBOARD_TABS);
+    }
+  }
+
   private onEmailChange = (text: string) => {
     this.props.emailChanged(text);
   };
@@ -43,7 +49,6 @@ class LoginScreen extends Component<LoginScreenProps> {
   private onLoginPress = () => {
     const { email, password } = this.props;
     this.props.dispatchLoginRequest({ email, password });
-    this.props.navigation.navigate(Routes.DASHBOARD_TABS);
   };
 
   private renderLoginButton = () => {

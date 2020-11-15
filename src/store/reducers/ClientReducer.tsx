@@ -19,7 +19,6 @@ const INITIAL_STATE = {
 };
 
 const ClientReducer = (state = INITIAL_STATE, action: any) => {
-  console.log(state, action);
   switch (action.type) {
     case CLIENT_NAME_CHANGED:
       return {

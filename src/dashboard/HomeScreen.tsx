@@ -7,6 +7,7 @@ import {
   ScrollView,
   FlatList,
   TouchableOpacity,
+  ActivityIndicator,
 } from "react-native";
 import { connect } from "react-redux";
 import { Spacing } from "../common/styles/Spacing";
@@ -17,9 +18,7 @@ import Card from "../common/components/Card";
 import CellIconActionable from "../common/components/CellIconActionable";
 import firebase from "firebase";
 import { Routes } from "../../navigation";
-import CellLabelLeftRight from "../common/components/CellLabelLeftRight";
 import { FETCH_USER_REQUEST } from "../store/actions/types";
-import { clientNotesChanged } from "../store/actions";
 
 interface PassedProps {
   navigation: any;
@@ -28,6 +27,7 @@ interface PassedProps {
 interface PropsFromState {
   seachText: string;
   clients: any;
+  fetchUserLoading: boolean;
 }
 
 interface DispatchFromState {
@@ -37,7 +37,6 @@ interface DispatchFromState {
 
 interface LocalState {
   clients: any;
-  database: any;
   modalVisible: boolean;
 }
 
@@ -58,7 +57,6 @@ class HomeScreen extends Component<HomeScreenProps, LocalState> {
   };
 
   public componentDidMount() {
-    console.log("UUID -------", firebase.auth().currentUser?.uid);
     this.props.dispatchFetchUser({ uid: firebase.auth().currentUser?.uid });
 
     if (this.props.clients) {
@@ -66,6 +64,13 @@ class HomeScreen extends Component<HomeScreenProps, LocalState> {
       this.setState({ clients: [...this.state.clients, ...mappedClients] });
     }
   }
+
+  // public componentDidUpdate(oldProps: any) {
+  //   if (oldProps !== this.props) {
+  //     const mappedClients = mapClients(this.props.clients);
+  //     this.setState({ clients: [...this.state.clients, ...mappedClients] });
+  //   }
+  // }
 
   private onChangeSearchText = (text: string) => {
     this.props.searchTextChanged(text);
@@ -81,7 +86,6 @@ class HomeScreen extends Component<HomeScreenProps, LocalState> {
   };
 
   private renderItem = ({ item }: any) => {
-    console.log("item.item", item);
     return (
       <TouchableOpacity
         onPress={() => this.props.navigation.navigate(Routes.CLIENT_DETAIL_SCREEN)}
@@ -92,10 +96,19 @@ class HomeScreen extends Component<HomeScreenProps, LocalState> {
   };
 
   render() {
-    console.log("XXXXXXXXXXXXXXXXXXXXXXXXXXX", this.props.clients);
-    console.log("-----THIS.STATE.CLIENTS-------", this.state.clients);
+    // console.log("this.props.clients --->", this.props.clients);
+    // console.log("this.state.clients --->", this.state.clients);
+    console.log(this.props.fetchUserLoading);
+    // console.log(this.props);
+    if (this.props.fetchUserLoading) {
+      return (
+        <View>
+          <ActivityIndicator />
+        </View>
+      );
+    }
     return (
-      <View
+      <ScrollView
         style={{
           flex: 1,
           backgroundColor: Color.darkThemeGreyDark,
@@ -124,15 +137,16 @@ class HomeScreen extends Component<HomeScreenProps, LocalState> {
             onPress={this.onAddNewClientPress}
           />
         </Card>
-      </View>
+      </ScrollView>
     );
   }
 }
 
 const mapStateToProps = (state: any) => {
-  const { clients } = state.user.user;
+  console.log("state", state);
   return {
-    clients,
+    clients: state.user.user.clients,
+    fetchUserLoading: state.user.fetchUserLoading,
   };
 };
 

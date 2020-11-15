@@ -9,11 +9,13 @@ const INITIAL_STATE = {
   user: {
     searchText: undefined,
     user: undefined,
+    fetchUserLoading: false,
+    fetchUserError: false,
   },
 };
 
 const StateReducer = (state = INITIAL_STATE, action: any) => {
-  console.log(state, action);
+  // console.log(state, action);
   switch (action.type) {
     case SEARCH_TEXT_CHANGED:
       return {
@@ -23,21 +25,20 @@ const StateReducer = (state = INITIAL_STATE, action: any) => {
     case FETCH_USER_REQUEST:
       return {
         ...state,
-        loading: true,
-        error: "",
+        fetchUserLoading: true,
       };
     case FETCH_USER_SUCCESS:
       return {
         ...state,
         user: action.payload,
-        loading: false,
+        fetchUserLoading: false,
       };
     case FETCH_USER_FAIL:
       return {
         ...state,
-        error: "Something Happened.",
+        fetchUserError: "Something Happened.",
         password: "",
-        loading: false,
+        fetchUserLoading: false,
       };
     default:
       return state;
