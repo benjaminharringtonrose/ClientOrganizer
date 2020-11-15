@@ -24,7 +24,6 @@ const styles = StyleSheet.create({
     backgroundColor: Color.darkThemeGreyMed,
     padding: 2,
     flexDirection: "row",
-    position: "relative",
     marginBottom: Spacing.small,
   },
 });

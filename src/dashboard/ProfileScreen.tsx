@@ -20,6 +20,7 @@ interface PassedProps {
 
 interface PropsFromState {
   loading: boolean;
+  error: boolean;
   fetchUserLoading: boolean;
   fetchUserError: any;
 }
@@ -50,14 +51,14 @@ class ProfileScreen extends React.Component<ProfileScreenProps, LocalState> {
   public componentDidMount() {}
 
   public componentDidUpdate(oldProps: any) {
-    if (oldProps.loading !== this.props.loading) {
+    if (oldProps.loading && !this.props.loading && !this.props.error) {
       this.props.navigation.navigate(Routes.LOGIN_SCREEN);
     }
   }
 
-  private renderLoginButton = () => {
+  private renderSignOutButton = () => {
     if (this.props.loading) {
-      return <Spinner size="large" style={{ marginTop: Spacing.small }} />;
+      return <Spinner size="small" />;
     } else {
       return <Button label={"Sign Out"} onPress={this.onLogoutPress} />;
     }
@@ -70,25 +71,20 @@ class ProfileScreen extends React.Component<ProfileScreenProps, LocalState> {
   public render() {
     const { fetchUserLoading, loading } = this.props;
     const { user } = this.state;
-    console.log(user);
-    if (!user) {
-      return <View style={{ backgroundColor: Color.darkThemeGreyDark }} />;
-    }
     return (
       <View style={styles.container}>
         <Card>
-          {fetchUserLoading || (loading && <Spinner size={800} color={Color.white} />)}
           <Text style={styles.subHeaderText}>{"User Information"}</Text>
           <CellLabelLeftRight
             labelLeft={"Name"}
             labelRight={`${user?.firstName} ${user?.lastName}`}
           />
-          <CellLabelLeftRight labelLeft={"Email"} labelRight={user.email} />
+          <CellLabelLeftRight labelLeft={"Email"} labelRight={user?.email} />
           <Text style={styles.subHeaderText}>{"Preferences"}</Text>
           <CellLabelLeftRight labelLeft={"preference 1"} labelRight={"preference 1"} />
           <CellLabelLeftRight labelLeft={"preference 2"} labelRight={"preference 2"} />
           <CellLabelLeftRight labelLeft={"preference 3"} labelRight={"preference 3"} />
-          <CardSection>{this.renderLoginButton()}</CardSection>
+          <CardSection>{this.renderSignOutButton()}</CardSection>
         </Card>
       </View>
     );
@@ -99,6 +95,7 @@ const mapStateToProps = (state: any) => {
   console.log(state);
   return {
     loading: state.auth.loading,
+    error: state.auth.error,
     fetchUserLoading: state.user.user.fetchUserLoading,
     fetchUserError: state.user.user.fetchUserfetchUserError,
   };
@@ -115,6 +112,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: Color.darkThemeGreyDark,
+    paddingTop: 200,
   },
   avatarContainer: {
     paddingTop: Spacing.xxlarge,

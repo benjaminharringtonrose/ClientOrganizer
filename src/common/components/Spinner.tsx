@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { View, ActivityIndicator, StyleSheet, StyleProp, ViewStyle } from "react-native";
+import { Spacing } from "../styles/Spacing";
 
 type SpinnerType = number | "small" | "large" | undefined;
 
@@ -25,5 +26,6 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
+    paddingVertical: Spacing.small,
   },
 });

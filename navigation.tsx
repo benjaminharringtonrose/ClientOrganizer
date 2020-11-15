@@ -90,10 +90,6 @@ const DashboardTabs = () => {
 
 export const Navigator = (): JSX.Element => {
   const Stack = createStackNavigator();
-  const initialRouteName = firebase.apps.length
-    ? Routes.DASHBOARD_TABS
-    : Routes.LOGIN_SCREEN;
-
   return (
     <NavigationContainer>
       <Stack.Navigator initialRouteName={Routes.LOGIN_SCREEN}>
@@ -114,6 +110,7 @@ export const Navigator = (): JSX.Element => {
             headerTransparent: true,
             headerShown: false,
             activeBackgroundColor: "tomato",
+            headerTitle: "",
           }}
         />
         <Stack.Screen

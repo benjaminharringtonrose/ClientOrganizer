@@ -19,6 +19,7 @@ import CellIconActionable from "../common/components/CellIconActionable";
 import firebase from "firebase";
 import { Routes } from "../../navigation";
 import { FETCH_USER_REQUEST } from "../store/actions/types";
+import CardSection from "../common/components/CardSection";
 
 interface PassedProps {
   navigation: any;
@@ -61,17 +62,14 @@ class HomeScreen extends Component<HomeScreenProps, LocalState> {
     if (uid) {
       this.props.dispatchFetchUser({ uid });
     }
-
-    if (this.props.clients) {
-      const mappedClients = mapClients(this.props.clients);
-      this.setState({ clients: [...this.state.clients, ...mappedClients] });
-    }
   }
 
   public componentDidUpdate(oldProps: any) {
-    if (oldProps.clients !== this.props.clients) {
-      const mappedClients = mapClients(this.props.clients);
-      this.setState({ clients: [...this.state.clients, ...mappedClients] });
+    if (oldProps.fetchUserLoading !== this.props.fetchUserLoading) {
+      if (oldProps.clients !== this.props.clients) {
+        const mappedClients = mapClients(this.props.clients);
+        this.setState({ clients: [...this.state.clients, ...mappedClients] });
+      }
     }
   }
 
@@ -84,28 +82,29 @@ class HomeScreen extends Component<HomeScreenProps, LocalState> {
     this.props.navigation.navigate(Routes.ADD_NEW_CLIENT_SCREEN);
   };
 
-  private onBackDropPress = () => {
-    this.setState({ modalVisible: !this.state.modalVisible });
-  };
-
   private renderItem = ({ item }: any) => {
     return (
-      <TouchableOpacity
-        onPress={() => this.props.navigation.navigate(Routes.CLIENT_DETAIL_SCREEN)}
-      >
-        <Text style={{ color: "#fff" }}>{item.name}</Text>
-      </TouchableOpacity>
+      // <TouchableOpacity
+      //   onPress={() =>
+      //     this.props.navigation.navigate(Routes.CLIENT_DETAIL_SCREEN, { client: item })
+      //   }
+      // >
+      //   <Text style={{ color: "#fff" }}>{item.name}</Text>
+      // </TouchableOpacity>
+      <CellIconActionable
+        onPress={() =>
+          this.props.navigation.navigate(Routes.CLIENT_DETAIL_SCREEN, { client: item })
+        }
+        label={item.name}
+      />
     );
   };
 
   render() {
-    // console.log("this.props.clients --->", this.props.clients);
-    // console.log("this.state.clients --->", this.state.clients);
     console.log(this.props.fetchUserLoading);
-    // console.log(this.props);
     if (this.props.fetchUserLoading) {
       return (
-        <View>
+        <View style={{ backgroundColor: Color.darkThemeGreyDark }}>
           <ActivityIndicator />
         </View>
       );
@@ -119,27 +118,33 @@ class HomeScreen extends Component<HomeScreenProps, LocalState> {
           paddingTop: Spacing.xxlarge,
         }}
       >
-        <StatusBar barStyle={"light-content"} />
-        <Text style={styles.subHeaderText}>{"Client Manager"}</Text>
-        <Card style={{ flex: 1 }}>
-          <InputSearch
-            onChangeText={this.onChangeSearchText}
-            value={this.props.seachText}
-            placeholder={"search clients..."}
-            keyboardType={"web-search"}
-          />
-          <FlatList
-            data={this.state.clients}
-            keyExtractor={(item: any) => item.id}
-            renderItem={({ item }) => this.renderItem({ item })}
-          />
-          <CellIconActionable
-            iconLeftName={"plus"}
-            iconLeftSize={24}
-            labelRight={"add a new client"}
-            onPress={this.onAddNewClientPress}
-          />
-        </Card>
+        {this.props.fetchUserLoading ? (
+          <ActivityIndicator />
+        ) : (
+          <>
+            <StatusBar barStyle={"light-content"} />
+            <Text style={styles.subHeaderText}>{"Client Manager"}</Text>
+            <Card style={{ flex: 1 }}>
+              <InputSearch
+                onChangeText={this.onChangeSearchText}
+                value={this.props.seachText}
+                placeholder={"search clients..."}
+                keyboardType={"web-search"}
+              />
+              <FlatList
+                data={this.state.clients}
+                keyExtractor={(item: any) => item.id}
+                renderItem={({ item }) => this.renderItem({ item })}
+              />
+              <CellIconActionable
+                iconLeftName={"plus"}
+                iconLeftSize={24}
+                labelRight={"add a new client"}
+                onPress={this.onAddNewClientPress}
+              />
+            </Card>
+          </>
+        )}
       </ScrollView>
     );
   }

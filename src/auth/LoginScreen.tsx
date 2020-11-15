@@ -53,7 +53,7 @@ class LoginScreen extends Component<LoginScreenProps> {
 
   private renderLoginButton = () => {
     if (this.props.loading) {
-      return <Spinner size="large" style={{ marginTop: Spacing.small }} />;
+      return <Spinner size="small" />;
     } else {
       return <Button label={"Login"} onPress={this.onLoginPress} />;
     }
