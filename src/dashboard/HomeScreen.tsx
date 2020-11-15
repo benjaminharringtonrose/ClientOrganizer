@@ -12,7 +12,6 @@ import firebase from "firebase";
 import { Routes } from "../../navigation";
 import CellLabelLeftRight from "../common/components/CellLabelLeftRight";
 import { FETCH_USER_REQUEST } from "../store/actions/types";
-import uuid from "uuid-random";
 
 interface PassedProps {
   navigation: any;
@@ -45,7 +44,8 @@ class HomeScreen extends Component<HomeScreenProps, LocalState> {
   };
 
   public componentDidMount() {
-    this.props.dispatchFetchUser(firebase.auth().currentUser?.uid);
+    console.log("UUID -------", firebase.auth().currentUser?.uid);
+    this.props.dispatchFetchUser({ uid: firebase.auth().currentUser?.uid });
   }
 
   private onChangeSearchText = (text: string) => {
@@ -62,7 +62,7 @@ class HomeScreen extends Component<HomeScreenProps, LocalState> {
   // };
 
   private renderList = (clients: any) => {
-    return clients.map((client: { address: any }) => {
+    return clients.map((id: any) => {
       return <CellLabelLeftRight labelLeft={"howdy"} />;
     });
   };
@@ -70,7 +70,6 @@ class HomeScreen extends Component<HomeScreenProps, LocalState> {
   render() {
     const user: any = [this.state.user];
     const clients: any = [this.state.user.clients];
-    console.log("USER ------", this.props.user);
     return (
       <View
         style={{
@@ -160,14 +159,15 @@ class HomeScreen extends Component<HomeScreenProps, LocalState> {
   }
 }
 
-const mapStateToProps = ({ auth }: any) => {
-  const { user } = auth;
+const mapStateToProps = (state: any) => {
+  const user = state;
   return { user };
 };
 
 const mapDispatchToProps = (dispatch: any) => ({
   searchTextChanged: (text: string) => dispatch(searchTextChanged(text)),
-  dispatchFetchUser: (user: any) => dispatch({ type: FETCH_USER_REQUEST, payload: user }),
+  dispatchFetchUser: ({ uid }: any) =>
+    dispatch({ type: FETCH_USER_REQUEST, payload: { uid } }),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(HomeScreen);

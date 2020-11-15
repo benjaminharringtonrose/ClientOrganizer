@@ -89,22 +89,22 @@ class AddNewClientScreen extends React.Component<AddNewClientScreenProps> {
       navigation,
     } = this.props;
 
-    const docRef = firebase
+    firebase
       .firestore()
       .collection("users")
-      .doc(firebase.auth().currentUser?.uid);
-    docRef
+      .doc(firebase.auth().currentUser?.uid)
       .set(
         {
-          client: {
-            id: uuid(),
-            name,
-            address,
-            phoneNumber,
-            email,
-            budget,
-            preferredAreas,
-            notes,
+          clients: {
+            [uuid()]: {
+              name,
+              address,
+              phoneNumber,
+              email,
+              budget,
+              preferredAreas,
+              notes,
+            },
           },
         },
         { merge: true }

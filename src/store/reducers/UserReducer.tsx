@@ -8,10 +8,12 @@ import {
 const INITIAL_STATE = {
   user: {
     searchText: undefined,
+    user: undefined,
   },
 };
 
-const UserReducer = (state = INITIAL_STATE, action: any) => {
+const StateReducer = (state = INITIAL_STATE, action: any) => {
+  console.log(state, action);
   switch (action.type) {
     case SEARCH_TEXT_CHANGED:
       return {
@@ -42,4 +44,4 @@ const UserReducer = (state = INITIAL_STATE, action: any) => {
   }
 };
 
-export default UserReducer;
+export default StateReducer;

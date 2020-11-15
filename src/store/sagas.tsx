@@ -2,7 +2,6 @@ import { fork, takeLatest } from "redux-saga/effects";
 import { put, call } from "redux-saga/effects";
 import firebase from "firebase";
 require("firebase/firestore");
-import { getDocById } from "./firebaseAPI";
 import {
   LOGIN_USER_REQUEST,
   LOGIN_USER_SUCCESS,
@@ -22,10 +21,9 @@ import { getDocRef } from "../dashboard/util";
 export function* fetchUserSaga(action: any) {
   try {
     const { uid } = action.payload;
-    const doc = yield getDocById("users", uid);
+    const doc = yield firebase.firestore().collection("users").doc(uid).get();
     const user = {
       ...doc.data(),
-      uid: doc.id,
     };
     yield put(fetchUserSuccess(user));
   } catch (error) {
