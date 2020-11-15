@@ -14,6 +14,8 @@ import { Ionicons } from "@expo/vector-icons";
 import { Color } from "./src/common/styles/Colors";
 import { Spacing } from "./src/common/styles/Spacing";
 import AddNewClientScreen from "./src/forms/AddNewClientScreen";
+import ClientDetailScreen from "./src/dashboard/ClientDetailsScreen";
+import firebase from "firebase";
 
 export enum Routes {
   LOGIN_SCREEN = "LOGIN_SCREEN",
@@ -24,6 +26,7 @@ export enum Routes {
   PROFILE_SCREEN = "PROFILE_SCREEN",
   DASHBOARD_TABS = "DASHBOARD_TABS",
   ADD_NEW_CLIENT_SCREEN = "ADD_NEW_CLIENT_SCREEN",
+  CLIENT_DETAIL_SCREEN = "CLIENT_DETAIL_SCREEN",
 }
 
 const DashboardTabs = () => {
@@ -87,10 +90,13 @@ const DashboardTabs = () => {
 
 export const Navigator = (): JSX.Element => {
   const Stack = createStackNavigator();
+  const initialRouteName = firebase.apps.length
+    ? Routes.DASHBOARD_TABS
+    : Routes.LOGIN_SCREEN;
 
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName={Routes.LOGIN_SCREEN}>
+      <Stack.Navigator initialRouteName={initialRouteName}>
         <Stack.Screen
           name={Routes.LOGIN_SCREEN}
           component={LoginScreen}
@@ -113,6 +119,11 @@ export const Navigator = (): JSX.Element => {
         <Stack.Screen
           name={Routes.ADD_NEW_CLIENT_SCREEN}
           component={AddNewClientScreen}
+          options={{ headerTransparent: true, headerTitle: "" }}
+        />
+        <Stack.Screen
+          name={Routes.CLIENT_DETAIL_SCREEN}
+          component={ClientDetailScreen}
           options={{ headerTransparent: true, headerTitle: "" }}
         />
       </Stack.Navigator>
