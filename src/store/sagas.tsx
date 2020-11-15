@@ -136,7 +136,6 @@ export function* registerUserSaga(action: any) {
       lastName,
       email,
       avatar,
-      clients: {},
     });
     addAvatar(avatar);
     yield put(registerUserSuccess(data));

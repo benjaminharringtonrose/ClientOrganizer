@@ -25,7 +25,13 @@ import {
   clientNotesChanged,
 } from "../store/actions";
 import { getDocRef } from "../dashboard/util";
-import { Actions } from "react-native-router-flux";
+import { Routes } from "../../navigation";
+import firebase from "firebase";
+import uuid from "uuid-random";
+
+interface PassedProps {
+  navigation: any;
+}
 
 interface PropsFromState {
   name: string;
@@ -47,7 +53,7 @@ interface DispatchFromState {
   clientNotesChanged: (text: string) => void;
 }
 
-type AddNewClientScreenProps = PropsFromState & DispatchFromState;
+type AddNewClientScreenProps = PropsFromState & DispatchFromState & PassedProps;
 
 class AddNewClientScreen extends React.Component<AddNewClientScreenProps> {
   private onChangeClientName = (text: string) => {
@@ -80,28 +86,32 @@ class AddNewClientScreen extends React.Component<AddNewClientScreenProps> {
       budget,
       preferredAreas,
       notes,
+      navigation,
     } = this.props;
 
-    const docRef = getDocRef();
+    const docRef = firebase
+      .firestore()
+      .collection("users")
+      .doc(firebase.auth().currentUser?.uid);
     docRef
       .set(
         {
-          clients: {
-            [name]: {
-              address,
-              phoneNumber,
-              email,
-              budget,
-              preferredAreas,
-              notes,
-            },
+          client: {
+            id: uuid(),
+            name,
+            address,
+            phoneNumber,
+            email,
+            budget,
+            preferredAreas,
+            notes,
           },
         },
         { merge: true }
       )
       .then(function () {
         console.log("Document successfully written!");
-        Actions.home();
+        navigation.navigate(Routes.HOME_SCREEN);
       })
       .catch(function (error: any) {
         console.error("Error writing document: ", error);

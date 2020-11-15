@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { View, StatusBar, SafeAreaView } from "react-native";
+import { View, StatusBar } from "react-native";
 import { Provider } from "react-redux";
 import store from "./src/store/store";
 import firebase from "firebase";

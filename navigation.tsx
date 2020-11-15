@@ -13,6 +13,7 @@ import ProfileScreen from "./src/dashboard/ProfileScreen";
 import { Ionicons } from "@expo/vector-icons";
 import { Color } from "./src/common/styles/Colors";
 import { Spacing } from "./src/common/styles/Spacing";
+import AddNewClientScreen from "./src/forms/AddNewClientScreen";
 
 export enum Routes {
   LOGIN_SCREEN = "LOGIN_SCREEN",
@@ -22,6 +23,7 @@ export enum Routes {
   NOTIFICATION_SCREEN = "NOTIFICATION_SCREEN",
   PROFILE_SCREEN = "PROFILE_SCREEN",
   DASHBOARD_TABS = "DASHBOARD_TABS",
+  ADD_NEW_CLIENT_SCREEN = "ADD_NEW_CLIENT_SCREEN",
 }
 
 const DashboardTabs = () => {
@@ -107,6 +109,11 @@ export const Navigator = (): JSX.Element => {
             headerShown: false,
             activeBackgroundColor: "tomato",
           }}
+        />
+        <Stack.Screen
+          name={Routes.ADD_NEW_CLIENT_SCREEN}
+          component={AddNewClientScreen}
+          options={{ headerTransparent: true, headerTitle: "" }}
         />
       </Stack.Navigator>
     </NavigationContainer>

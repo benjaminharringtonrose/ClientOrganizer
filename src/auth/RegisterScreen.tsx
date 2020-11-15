@@ -82,7 +82,7 @@ class RegisterScreen extends Component<RegisterScreenProps> {
       lastName,
       avatar,
     });
-    this.props.navigation.navigate(Routes.HOME_SCREEN);
+    this.props.navigation.navigate(Routes.DASHBOARD_TABS);
   };
 
   onPickAvatar = async () => {
