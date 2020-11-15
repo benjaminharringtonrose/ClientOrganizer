@@ -59,6 +59,11 @@ function loginUserFail(error: any) {
 export function* logoutUserSaga() {
   try {
     yield call(() => firebase.auth().signOut());
+    // firebase.auth().signOut().then(function() {
+    //   // Sign-out successful.
+    // }).catch(function(error) {
+    //   // An error happened.
+    // });
     yield put(logoutUserSuccess());
   } catch (error) {
     yield put(logoutUserFail(error));

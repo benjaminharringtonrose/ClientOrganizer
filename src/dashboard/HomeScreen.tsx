@@ -57,7 +57,10 @@ class HomeScreen extends Component<HomeScreenProps, LocalState> {
   };
 
   public componentDidMount() {
-    this.props.dispatchFetchUser({ uid: firebase.auth().currentUser?.uid });
+    const uid = firebase.auth().currentUser?.uid;
+    if (uid) {
+      this.props.dispatchFetchUser({ uid });
+    }
 
     if (this.props.clients) {
       const mappedClients = mapClients(this.props.clients);
@@ -65,12 +68,12 @@ class HomeScreen extends Component<HomeScreenProps, LocalState> {
     }
   }
 
-  // public componentDidUpdate(oldProps: any) {
-  //   if (oldProps !== this.props) {
-  //     const mappedClients = mapClients(this.props.clients);
-  //     this.setState({ clients: [...this.state.clients, ...mappedClients] });
-  //   }
-  // }
+  public componentDidUpdate(oldProps: any) {
+    if (oldProps.clients !== this.props.clients) {
+      const mappedClients = mapClients(this.props.clients);
+      this.setState({ clients: [...this.state.clients, ...mappedClients] });
+    }
+  }
 
   private onChangeSearchText = (text: string) => {
     this.props.searchTextChanged(text);

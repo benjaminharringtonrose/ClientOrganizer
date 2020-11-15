@@ -7,27 +7,31 @@ import CardSection from "../common/components/CardSection";
 import { LOGOUT_USER_REQUEST, FETCH_USER_REQUEST } from "../store/actions/types";
 import firebase from "firebase";
 import { Color } from "../common/styles/Colors";
-import { getDocRef } from "./util";
 import Spinner from "../common/components/Spinner";
 import { Spacing } from "../common/styles/Spacing";
 import Avatar from "../common/components/Avatar";
 import CellLabelLeftRight from "../common/components/CellLabelLeftRight";
+import { Routes } from "../../navigation";
 require("firebase/firestore");
+
+interface PassedProps {
+  navigation: any;
+}
 
 interface PropsFromState {
   loading: boolean;
-  error: any;
+  fetchUserLoading: boolean;
+  fetchUserError: any;
 }
 interface LocalState {
   user?: firebase.firestore.DocumentData;
-  unsubscribe: () => void | null;
 }
 interface DispatchFromState {
   dispatchLogoutRequest: (object: any) => any;
   dispatchFetchUser: (user: any) => any;
 }
 
-type ProfileScreenProps = PropsFromState & DispatchFromState;
+type ProfileScreenProps = PropsFromState & DispatchFromState & PassedProps;
 
 class ProfileScreen extends React.Component<ProfileScreenProps, LocalState> {
   constructor(props: ProfileScreenProps) {
@@ -40,46 +44,31 @@ class ProfileScreen extends React.Component<ProfileScreenProps, LocalState> {
         lastName: undefined,
         email: undefined,
       },
-      unsubscribe: firebase
-        .firestore()
-        .collection("users")
-        .doc(userId)
-        .onSnapshot((doc) => {
-          this.setState({ user: doc.data() });
-        }),
     };
   }
 
-  public componentDidMount() {
-    if (this.state.unsubscribe) {
-      this.state.unsubscribe();
+  public componentDidMount() {}
+
+  public componentDidUpdate(oldProps: any) {
+    if (oldProps.loading !== this.props.loading) {
+      this.props.navigation.navigate(Routes.LOGIN_SCREEN);
     }
-
-    const docRef = getDocRef();
-    docRef
-      .get()
-      .then((doc: any) => {
-        if (doc.exists) {
-          this.setState({ user: doc.data() });
-        } else {
-          console.log("No such document!");
-        }
-      })
-      .catch(function (error: string) {
-        console.log("Error getting document:", error);
-      });
   }
 
-  public componentWillUnmount() {
-    this.state.unsubscribe();
-  }
+  private renderLoginButton = () => {
+    if (this.props.loading) {
+      return <Spinner size="large" style={{ marginTop: Spacing.small }} />;
+    } else {
+      return <Button label={"Sign Out"} onPress={this.onLogoutPress} />;
+    }
+  };
 
   private onLogoutPress = () => {
     this.props.dispatchLogoutRequest(LOGOUT_USER_REQUEST);
   };
 
   public render() {
-    const { loading } = this.props;
+    const { fetchUserLoading, loading } = this.props;
     const { user } = this.state;
     console.log(user);
     if (!user) {
@@ -88,13 +77,7 @@ class ProfileScreen extends React.Component<ProfileScreenProps, LocalState> {
     return (
       <View style={styles.container}>
         <Card>
-          {!user?.avatar || loading ? (
-            <Spinner size={800} color={Color.white} />
-          ) : (
-            <View style={styles.avatarContainer}>
-              <Avatar uri={user?.avatar} size={800} color={Color.white} />
-            </View>
-          )}
+          {fetchUserLoading || (loading && <Spinner size={800} color={Color.white} />)}
           <Text style={styles.subHeaderText}>{"User Information"}</Text>
           <CellLabelLeftRight
             labelLeft={"Name"}
@@ -105,18 +88,20 @@ class ProfileScreen extends React.Component<ProfileScreenProps, LocalState> {
           <CellLabelLeftRight labelLeft={"preference 1"} labelRight={"preference 1"} />
           <CellLabelLeftRight labelLeft={"preference 2"} labelRight={"preference 2"} />
           <CellLabelLeftRight labelLeft={"preference 3"} labelRight={"preference 3"} />
-          <CardSection>
-            <Button label={"Sign Out"} onPress={this.onLogoutPress} />
-          </CardSection>
+          <CardSection>{this.renderLoginButton()}</CardSection>
         </Card>
       </View>
     );
   }
 }
 
-const mapStateToProps = ({ user }: any) => {
-  const { loading, error } = user;
-  return { loading, error };
+const mapStateToProps = (state: any) => {
+  console.log(state);
+  return {
+    loading: state.auth.loading,
+    fetchUserLoading: state.user.user.fetchUserLoading,
+    fetchUserError: state.user.user.fetchUserfetchUserError,
+  };
 };
 
 const mapDispatchToProps = (dispatch: any) => ({

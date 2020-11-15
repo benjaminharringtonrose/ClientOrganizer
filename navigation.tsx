@@ -96,7 +96,7 @@ export const Navigator = (): JSX.Element => {
 
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName={initialRouteName}>
+      <Stack.Navigator initialRouteName={Routes.LOGIN_SCREEN}>
         <Stack.Screen
           name={Routes.LOGIN_SCREEN}
           component={LoginScreen}
