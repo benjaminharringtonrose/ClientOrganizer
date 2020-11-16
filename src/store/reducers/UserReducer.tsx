@@ -14,7 +14,7 @@ const INITIAL_STATE = {
   },
 };
 
-const StateReducer = (state = INITIAL_STATE, action: any) => {
+const UserReducer = (state = INITIAL_STATE, action: any) => {
   console.log(state, action);
   switch (action.type) {
     case SEARCH_TEXT_CHANGED:
@@ -45,4 +45,4 @@ const StateReducer = (state = INITIAL_STATE, action: any) => {
   }
 };
 
-export default StateReducer;
+export default UserReducer;

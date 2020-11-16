@@ -31,6 +31,7 @@ interface PropsFromState {
   seachText: string;
   clients: any;
   fetchUserLoading: boolean;
+  fetchUserError: boolean;
 }
 
 interface DispatchFromState {
@@ -59,7 +60,11 @@ class HomeScreen extends Component<HomeScreenProps, LocalState> {
   }
 
   public componentDidUpdate(oldProps: any) {
-    if (oldProps.fetchUserLoading !== this.props.fetchUserLoading) {
+    if (
+      oldProps.fetchUserLoading &&
+      !this.props.fetchUserLoading &&
+      !this.props.fetchUserError
+    ) {
       if (oldProps.clients !== this.props.clients) {
         const mappedClients = mapClients(this.props.clients);
         this.setState({ clients: [...this.state.clients, ...mappedClients] });
@@ -70,6 +75,8 @@ class HomeScreen extends Component<HomeScreenProps, LocalState> {
   private onChangeSearchText = (text: string) => {
     this.props.searchTextChanged(text);
   };
+
+  private onEdit = () => {};
 
   private onAddNewClientPress = () => {
     this.setState({ modalVisible: !this.state.modalVisible });
@@ -82,7 +89,9 @@ class HomeScreen extends Component<HomeScreenProps, LocalState> {
         <View style={{ flex: 1 }}>
           <Text style={styles.subHeaderText}>{"Client Manager"}</Text>
         </View>
-
+        <TouchableOpacity style={{ marginRight: Spacing.large }} onPress={this.onEdit}>
+          <Icon style={{}} name={"edit"} type={"feather"} color={Color.white} size={18} />
+        </TouchableOpacity>
         <TouchableOpacity onPress={this.onAddNewClientPress}>
           <Icon
             style={{}}
@@ -146,10 +155,10 @@ class HomeScreen extends Component<HomeScreenProps, LocalState> {
 }
 
 const mapStateToProps = (state: any) => {
-  console.log("state", state);
   return {
     clients: state.user.user.clients,
     fetchUserLoading: state.user.fetchUserLoading,
+    fetchUserError: state.user.fetchUserError,
   };
 };
 
