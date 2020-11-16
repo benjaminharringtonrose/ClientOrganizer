@@ -13,7 +13,7 @@ import { Spacing } from "../styles/Spacing";
 
 interface InputProps {
   label?: string;
-  value: string;
+  value?: string;
   onChangeText: any;
   placeholder?: string;
   secureTextEntry?: boolean;

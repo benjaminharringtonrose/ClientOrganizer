@@ -18,7 +18,6 @@ import CellIconActionable from "../common/components/CellIconActionable";
 import firebase from "firebase";
 import { Routes } from "../../navigation";
 import { FETCH_USER_REQUEST } from "../store/actions/types";
-import CardSection from "../common/components/CardSection";
 import { Icon } from "react-native-elements";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { mapClients } from "./util";
@@ -67,7 +66,8 @@ class HomeScreen extends Component<HomeScreenProps, LocalState> {
     ) {
       if (oldProps.clients !== this.props.clients) {
         const mappedClients = mapClients(this.props.clients);
-        this.setState({ clients: [...this.state.clients, ...mappedClients] });
+        console.log("mapped clients", mappedClients);
+        this.setState({ clients: [...mappedClients] });
       }
     }
   }
@@ -89,14 +89,21 @@ class HomeScreen extends Component<HomeScreenProps, LocalState> {
         <View style={{ flex: 1 }}>
           <Text style={styles.subHeaderText}>{"Client Manager"}</Text>
         </View>
-        <TouchableOpacity style={{ marginRight: Spacing.large }} onPress={this.onEdit}>
-          <Icon style={{}} name={"edit"} type={"feather"} color={Color.white} size={18} />
-        </TouchableOpacity>
+
         <TouchableOpacity onPress={this.onAddNewClientPress}>
           <Icon
-            style={{}}
+            style={{ marginRight: Spacing.large }}
             name={"plus"}
             type={"antdesign"}
+            color={Color.white}
+            size={18}
+          />
+        </TouchableOpacity>
+        <TouchableOpacity style={{}} onPress={this.onEdit}>
+          <Icon
+            style={{}}
+            name={"trash"}
+            type={"feather"}
             color={Color.white}
             size={18}
           />

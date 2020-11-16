@@ -33,6 +33,7 @@ export const getUserById = (): any => {
 
 export function mapClients(clients: any) {
   let acc: any = [];
+  console.log(clients);
   for (const [key, value] of Object.entries(clients)) {
     acc = acc.concat({ ...(value as Object), id: key });
   }

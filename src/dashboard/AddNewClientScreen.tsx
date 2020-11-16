@@ -74,7 +74,7 @@ class AddNewClientScreen extends Component<AddNewClientScreenProps, LocalState> 
   };
 
   private onSubmit = () => {
-    const { dispatchFetchUser, navigation } = this.props;
+    const { dispatchFetchUser } = this.props;
     const {
       firstName,
       lastName,
@@ -86,6 +86,7 @@ class AddNewClientScreen extends Component<AddNewClientScreenProps, LocalState> 
       preferredAreas,
       notes,
     } = this.state;
+
     firebase
       .firestore()
       .collection("users")
@@ -132,15 +133,8 @@ class AddNewClientScreen extends Component<AddNewClientScreenProps, LocalState> 
       preferredAreas,
       notes,
     } = this.state;
-    console.log("-------->>>>", this.props);
     return (
-      <ScrollView
-        style={{
-          backgroundColor: Color.darkThemeGreyDark,
-          paddingTop: Spacing.large,
-          paddingHorizontal: Spacing.micro,
-        }}
-      >
+      <ScrollView style={styles.rootContainer}>
         <StatusBar barStyle={"light-content"} />
         <Card>
           <SubHeader label={"FirstName"} fontSize={14} />
@@ -240,4 +234,10 @@ const mapDispatchToProps = (dispatch: any) => ({
 
 export default connect(mapStateToProps, mapDispatchToProps)(AddNewClientScreen);
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  rootContainer: {
+    backgroundColor: Color.darkThemeGreyDark,
+    paddingTop: Spacing.large,
+    paddingHorizontal: Spacing.micro,
+  },
+});
