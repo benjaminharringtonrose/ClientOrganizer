@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { View, Text, StyleSheet, ScrollView, StatusBar } from "react-native";
+import { StyleSheet, ScrollView, StatusBar } from "react-native";
 import { Color } from "../common/styles/Colors";
 import { Spacing } from "../common/styles/Spacing";
 import SubHeader from "../common/components/SubHeader";
@@ -10,14 +10,21 @@ import Button from "../common/components/Button";
 import { Routes } from "../../navigation";
 import firebase from "firebase";
 import uuid from "uuid-random";
+import { connect } from "react-redux";
+import { FETCH_USER_REQUEST } from "../store/actions/types";
 
 interface PassedProps {
   navigation: any;
 }
 
-type AddNewClientScreenProps = PassedProps;
+interface DispatchFromState {
+  searchTextChanged: (text: string) => void;
+  dispatchFetchUser: (uid: any) => any;
+}
 
-export default function AddNewClientScreen(props: AddNewClientScreenProps) {
+type AddNewClientScreenProps = PassedProps & DispatchFromState;
+
+function AddNewClientScreen(props: AddNewClientScreenProps) {
   const { navigation } = props;
 
   const [firstName, setFirstName] = useState("");
@@ -25,7 +32,8 @@ export default function AddNewClientScreen(props: AddNewClientScreenProps) {
   const [address, setAddress] = useState("");
   const [email, setEmail] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
-  const [budget, setBudget] = useState("");
+  const [budgetLow, setBudgetLow] = useState("");
+  const [budgetHigh, setBudgetHigh] = useState("");
   const [preferredAreas, setPreferredAreas] = useState("");
   const [notes, setNotes] = useState("");
 
@@ -43,7 +51,8 @@ export default function AddNewClientScreen(props: AddNewClientScreenProps) {
               address,
               phoneNumber,
               email,
-              budget,
+              budgetLow,
+              budgetHigh,
               preferredAreas,
               notes,
             },
@@ -53,6 +62,7 @@ export default function AddNewClientScreen(props: AddNewClientScreenProps) {
       )
       .then(function () {
         console.log("Document successfully written!");
+
         navigation.navigate(Routes.HOME_SCREEN);
       })
       .catch(function (error: any) {
@@ -107,12 +117,16 @@ export default function AddNewClientScreen(props: AddNewClientScreenProps) {
             placeholder={"johnsmith@gmail.com"}
           />
         </CardSection>
-        <SubHeader label={"Budget"} fontSize={14} />
+        <SubHeader label={"LowBudget"} fontSize={14} />
+        <CardSection>
+          <Input value={budgetLow} onChangeText={setBudgetLow} placeholder={"$500,000"} />
+        </CardSection>
+        <SubHeader label={"HighBudget"} fontSize={14} />
         <CardSection>
           <Input
-            value={budget}
-            onChangeText={setBudget}
-            placeholder={"$500,000 - $550,000"}
+            value={budgetHigh}
+            onChangeText={setBudgetHigh}
+            placeholder={"$550,000"}
           />
         </CardSection>
         <SubHeader label={"Preferred Areas"} fontSize={14} />
@@ -134,5 +148,16 @@ export default function AddNewClientScreen(props: AddNewClientScreenProps) {
     </ScrollView>
   );
 }
+
+const mapStateToProps = (state: any) => {
+  return {};
+};
+
+const mapDispatchToProps = (dispatch: any) => ({
+  dispatchFetchUser: ({ uid }: any) =>
+    dispatch({ type: FETCH_USER_REQUEST, payload: { uid } }),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(AddNewClientScreen);
 
 const styles = StyleSheet.create({});

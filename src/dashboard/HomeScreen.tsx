@@ -21,6 +21,7 @@ import { FETCH_USER_REQUEST } from "../store/actions/types";
 import CardSection from "../common/components/CardSection";
 import { Icon } from "react-native-elements";
 import { TouchableOpacity } from "react-native-gesture-handler";
+import { mapClients } from "./util";
 
 interface PassedProps {
   navigation: any;
@@ -40,14 +41,6 @@ interface DispatchFromState {
 interface LocalState {
   clients: any;
   modalVisible: boolean;
-}
-
-export function mapClients(clients: any) {
-  let acc: any = [];
-  for (const [key, value] of Object.entries(clients)) {
-    acc = acc.concat({ ...(value as Object), id: key });
-  }
-  return acc;
 }
 
 type HomeScreenProps = PropsFromState & DispatchFromState & PassedProps;

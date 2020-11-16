@@ -30,3 +30,11 @@ export const getUserById = (): any => {
       console.log("Error getting document:", error);
     });
 };
+
+export function mapClients(clients: any) {
+  let acc: any = [];
+  for (const [key, value] of Object.entries(clients)) {
+    acc = acc.concat({ ...(value as Object), id: key });
+  }
+  return acc;
+}
