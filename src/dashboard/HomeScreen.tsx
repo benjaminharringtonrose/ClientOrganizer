@@ -109,7 +109,7 @@ class HomeScreen extends Component<HomeScreenProps, LocalState> {
         onPress={() =>
           this.props.navigation.navigate(Routes.CLIENT_DETAIL_SCREEN, { client: item })
         }
-        label={item.name}
+        label={`${item.firstName} ${item.lastName}`}
         iconRightName={"right"}
       />
     );

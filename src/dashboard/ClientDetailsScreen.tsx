@@ -4,6 +4,7 @@ import CellLabelLeftRight from "../common/components/CellLabelLeftRight";
 import { Color } from "../common/styles/Colors";
 import Card from "../common/components/Card";
 import CardSection from "../common/components/CardSection";
+import { Spacing } from "../common/styles/Spacing";
 
 interface PassedProps {
   navigation: any;
@@ -37,6 +38,6 @@ const styles = StyleSheet.create({
   rootContainer: {
     flex: 1,
     backgroundColor: Color.darkThemeGreyDark,
-    paddingTop: 200,
+    paddingTop: Spacing.med,
   },
 });

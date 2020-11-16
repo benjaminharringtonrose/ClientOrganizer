@@ -13,7 +13,7 @@ import ProfileScreen from "./src/dashboard/ProfileScreen";
 import { Ionicons } from "@expo/vector-icons";
 import { Color } from "./src/common/styles/Colors";
 import { Spacing } from "./src/common/styles/Spacing";
-import AddNewClientScreen from "./src/forms/AddNewClientScreen";
+import AddNewClientScreen from "./src/dashboard/AddNewClientScreen";
 import ClientDetailScreen from "./src/dashboard/ClientDetailsScreen";
 import firebase from "firebase";
 
@@ -116,12 +116,22 @@ export const Navigator = (): JSX.Element => {
         <Stack.Screen
           name={Routes.ADD_NEW_CLIENT_SCREEN}
           component={AddNewClientScreen}
-          options={{ headerTransparent: true, headerTitle: "" }}
+          options={{
+            headerShown: true,
+            headerTitle: "Add New Client",
+            headerTintColor: "white",
+            headerStyle: { backgroundColor: "black" },
+          }}
         />
         <Stack.Screen
           name={Routes.CLIENT_DETAIL_SCREEN}
           component={ClientDetailScreen}
-          options={{ headerTransparent: true, headerTitle: "" }}
+          options={{
+            headerShown: true,
+            headerTitle: "Client Details",
+            headerTintColor: "white",
+            headerStyle: { backgroundColor: "black" },
+          }}
         />
       </Stack.Navigator>
     </NavigationContainer>
