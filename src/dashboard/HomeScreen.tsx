@@ -6,7 +6,6 @@ import {
   Text,
   ScrollView,
   FlatList,
-  TouchableOpacity,
   ActivityIndicator,
 } from "react-native";
 import { connect } from "react-redux";
@@ -20,6 +19,8 @@ import firebase from "firebase";
 import { Routes } from "../../navigation";
 import { FETCH_USER_REQUEST } from "../store/actions/types";
 import CardSection from "../common/components/CardSection";
+import { Icon } from "react-native-elements";
+import { TouchableOpacity } from "react-native-gesture-handler";
 
 interface PassedProps {
   navigation: any;
@@ -82,20 +83,34 @@ class HomeScreen extends Component<HomeScreenProps, LocalState> {
     this.props.navigation.navigate(Routes.ADD_NEW_CLIENT_SCREEN);
   };
 
+  private renderHeader = () => {
+    return (
+      <View style={styles.headerContainer}>
+        <View style={{ flex: 1 }}>
+          <Text style={styles.subHeaderText}>{"Client Manager"}</Text>
+        </View>
+
+        <TouchableOpacity onPress={this.onAddNewClientPress}>
+          <Icon
+            style={{}}
+            name={"plus"}
+            type={"antdesign"}
+            color={Color.white}
+            size={18}
+          />
+        </TouchableOpacity>
+      </View>
+    );
+  };
+
   private renderItem = ({ item }: any) => {
     return (
-      // <TouchableOpacity
-      //   onPress={() =>
-      //     this.props.navigation.navigate(Routes.CLIENT_DETAIL_SCREEN, { client: item })
-      //   }
-      // >
-      //   <Text style={{ color: "#fff" }}>{item.name}</Text>
-      // </TouchableOpacity>
       <CellIconActionable
         onPress={() =>
           this.props.navigation.navigate(Routes.CLIENT_DETAIL_SCREEN, { client: item })
         }
         label={item.name}
+        iconRightName={"right"}
       />
     );
   };
@@ -110,20 +125,13 @@ class HomeScreen extends Component<HomeScreenProps, LocalState> {
       );
     }
     return (
-      <ScrollView
-        style={{
-          flex: 1,
-          backgroundColor: Color.darkThemeGreyDark,
-          paddingHorizontal: Spacing.med,
-          paddingTop: Spacing.xxlarge,
-        }}
-      >
+      <ScrollView style={styles.rootContainer}>
         {this.props.fetchUserLoading ? (
           <ActivityIndicator />
         ) : (
           <>
             <StatusBar barStyle={"light-content"} />
-            <Text style={styles.subHeaderText}>{"Client Manager"}</Text>
+            {this.renderHeader()}
             <Card style={{ flex: 1 }}>
               <InputSearch
                 onChangeText={this.onChangeSearchText}
@@ -135,12 +143,6 @@ class HomeScreen extends Component<HomeScreenProps, LocalState> {
                 data={this.state.clients}
                 keyExtractor={(item: any) => item.id}
                 renderItem={({ item }) => this.renderItem({ item })}
-              />
-              <CellIconActionable
-                iconLeftName={"plus"}
-                iconLeftSize={24}
-                labelRight={"add a new client"}
-                onPress={this.onAddNewClientPress}
               />
             </Card>
           </>
@@ -167,45 +169,20 @@ const mapDispatchToProps = (dispatch: any) => ({
 export default connect(mapStateToProps, mapDispatchToProps)(HomeScreen);
 
 const styles = StyleSheet.create({
+  rootContainer: {
+    flex: 1,
+    backgroundColor: Color.darkThemeGreyDark,
+    paddingHorizontal: Spacing.med,
+    paddingTop: Spacing.xxlarge,
+  },
+  headerContainer: {
+    flex: 1,
+    flexDirection: "row",
+    alignItems: "center",
+    marginHorizontal: Spacing.micro,
+  },
   subHeaderText: {
     fontSize: 20,
     color: Color.white,
-    paddingLeft: Spacing.micro,
-    marginTop: Spacing.xlarge,
-  },
-  centeredView: {
-    flex: 1,
-    justifyContent: "flex-end",
-  },
-  modalView: {
-    backgroundColor: Color.darkThemeBlueGrey,
-    borderRadius: 20,
-    paddingTop: 35,
-    alignItems: "center",
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    width: "100%",
-    height: "50%",
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
-    // elevation: 3,
-  },
-  openButton: {
-    backgroundColor: "#F194FF",
-    borderRadius: 20,
-    padding: 10,
-    elevation: 2,
-  },
-  textStyle: {
-    color: "white",
-    fontWeight: "bold",
-    textAlign: "center",
-  },
-  modalText: {
-    marginBottom: 15,
-    textAlign: "center",
   },
 });

@@ -11,7 +11,7 @@ interface CellIconActionableProps {
   labelColor?: string;
   labelRight?: string;
   onPress: any;
-  iconLeftName?: string;
+  iconLeftName?: "plus" | "book" | "right" | "left";
   iconLeftColor?: string;
   iconLeftSize?: number;
   iconRightName?: string;
@@ -42,6 +42,13 @@ export default class CellIconActionable extends Component<CellIconActionableProp
             size={iconLeftSize}
           />
         );
+      case "right":
+        <Icon
+          name={iconLeftName}
+          type={"antdesign"}
+          color={Color.white}
+          size={iconLeftSize}
+        />;
       default:
         console.warn("May have entered wrong value for icon name.");
         return <View />;

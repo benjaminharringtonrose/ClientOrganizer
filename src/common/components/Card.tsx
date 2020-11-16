@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { View, StyleProp, ViewStyle, ScrollView } from "react-native";
+import { Spacing } from "../styles/Spacing";
 
 interface CardProps {
   children: any;
@@ -28,8 +29,7 @@ const styles = {
     shadowOpacity: 0.1,
     shadowRadius: 2,
     elevation: 1,
-    marginLeft: 5,
-    marginRight: 5,
     marginTop: 10,
+    marginHorizontal: Spacing.micro,
   },
 };
