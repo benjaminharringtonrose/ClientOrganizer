@@ -19,9 +19,15 @@ export default class ClientDetailScreen extends Component<ClientDetailScreenProp
     return (
       <View style={styles.rootContainer}>
         <Card>
-          <CellLabelLeftRight labelLeft={"name"} labelRight={client.name} />
+          <CellLabelLeftRight
+            labelLeft={"name"}
+            labelRight={`${client.firstName} ${client.lastName}`}
+          />
           <CellLabelLeftRight labelLeft={"address"} labelRight={client.address} />
-          <CellLabelLeftRight labelLeft={"budget"} labelRight={client.budget} />
+          <CellLabelLeftRight
+            labelLeft={"budget"}
+            labelRight={`${client.budgetLow} - ${client.budgetHigh}`}
+          />
           <CellLabelLeftRight labelLeft={"email"} labelRight={client.email} />
           <CellLabelLeftRight labelLeft={"phoneNumber"} labelRight={client.phoneNumber} />
           <CellLabelLeftRight

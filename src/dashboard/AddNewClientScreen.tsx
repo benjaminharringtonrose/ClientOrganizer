@@ -18,7 +18,6 @@ interface PassedProps {
 }
 
 interface DispatchFromState {
-  searchTextChanged: (text: string) => void;
   dispatchFetchUser: (uid: any) => any;
 }
 
@@ -62,6 +61,10 @@ function AddNewClientScreen(props: AddNewClientScreenProps) {
       )
       .then(function () {
         console.log("Document successfully written!");
+        const uid = firebase.auth().currentUser?.uid;
+        if (uid) {
+          props.dispatchFetchUser({ uid });
+        }
 
         navigation.navigate(Routes.HOME_SCREEN);
       })
@@ -142,7 +145,7 @@ function AddNewClientScreen(props: AddNewClientScreenProps) {
           <Input value={notes} onChangeText={setNotes} placeholder={".............."} />
         </CardSection>
         <CardSection style={{ marginBottom: Spacing.xxlarge, marginTop: Spacing.med }}>
-          <Button label={"Submit"} onPress={onSubmit} />
+          <Button label={"Save"} onPress={onSubmit} />
         </CardSection>
       </Card>
     </ScrollView>
