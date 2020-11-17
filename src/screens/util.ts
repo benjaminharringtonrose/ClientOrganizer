@@ -1,11 +1,5 @@
 import firebase from "firebase";
 
-export const getUID = () => {
-  if (firebase.apps.length) {
-    return firebase.auth().currentUser?.uid;
-  }
-};
-
 export const capitalizeFirstLetter = (word: string) => {
   if (!word) {
     return word;
