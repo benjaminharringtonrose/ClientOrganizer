@@ -41,7 +41,7 @@ interface PropsFromState {
 interface DispatchFromState {
   searchTextChanged: (text: string) => void;
   dispatchFetchUser: (uid: any) => any;
-  dispatchDeleteClientRequested: () => any;
+  dispatchDeleteClientRequested: (clienId: any) => any;
   dispatchDeleteClientSucceeded: () => any;
 }
 
@@ -71,11 +71,12 @@ class HomeScreen extends Component<HomeScreenProps, LocalState> {
   }
 
   public componentDidUpdate(oldProps: any) {
-    if (
+    const needsUserUpdate =
       oldProps.fetchUserLoading &&
       !this.props.fetchUserLoading &&
-      !this.props.fetchUserError
-    ) {
+      !this.props.fetchUserError;
+
+    if (needsUserUpdate) {
       if (oldProps.clients !== this.props.clients) {
         const mappedClients = mapClients(this.props.clients);
         this.setState({ clients: [...mappedClients] });
@@ -95,26 +96,26 @@ class HomeScreen extends Component<HomeScreenProps, LocalState> {
     const { editMode, modalVisible, clientId } = this.state;
     const uid = firebase.auth().currentUser?.uid;
 
-    this.props.dispatchDeleteClientRequested();
-    firebase
-      .firestore()
-      .collection("users")
-      .doc(uid)
-      .set(
-        {
-          clients: {
-            [clientId!]: deleteField(),
-          },
-        },
-        { merge: true }
-      )
-      .then(() => {
-        this.props.dispatchDeleteClientSucceeded();
-        this.props.dispatchFetchUser({ uid });
-      })
-      .catch(function (error) {
-        console.error("Error removing document: ", error);
-      });
+    this.props.dispatchDeleteClientRequested({ clientId });
+    // firebase
+    //   .firestore()
+    //   .collection("users")
+    //   .doc(uid)
+    //   .set(
+    //     {
+    //       clients: {
+    //         [clientId!]: deleteField(),
+    //       },
+    //     },
+    //     { merge: true }
+    //   )
+    //   .then(() => {
+    //     this.props.dispatchDeleteClientSucceeded();
+    //     this.props.dispatchFetchUser({ uid });
+    //   })
+    //   .catch(function (error) {
+    //     console.error("Error removing document: ", error);
+    //   });
     this.setState({
       modalVisible: !modalVisible,
       editMode: !editMode,
@@ -174,8 +175,8 @@ class HomeScreen extends Component<HomeScreenProps, LocalState> {
   };
 
   public render() {
-    console.log(this.props.deleteClientLoading);
     const loading = this.props.fetchUserLoading || this.props.deleteClientLoading;
+
     return (
       <View style={styles.rootContainer}>
         <StatusBar barStyle={"light-content"} />
@@ -227,7 +228,8 @@ const mapDispatchToProps = (dispatch: any) => ({
   searchTextChanged: (text: string) => dispatch(searchTextChanged(text)),
   dispatchFetchUser: ({ uid }: any) =>
     dispatch({ type: FETCH_USER_REQUEST, payload: { uid } }),
-  dispatchDeleteClientRequested: () => dispatch({ type: DELETE_CLIENT.REQUESTED }),
+  dispatchDeleteClientRequested: ({ clientId }: any) =>
+    dispatch({ type: DELETE_CLIENT.REQUESTED, payload: { clientId } }),
   dispatchDeleteClientSucceeded: () => dispatch({ type: DELETE_CLIENT.SUCCEEDED }),
 });
 

@@ -18,6 +18,7 @@ import {
   DELETE_CLIENT,
 } from "./actions/types";
 import { getDocRef } from "../dashboard/util";
+import { deleteField } from "../screens/util";
 
 export function* fetchUserSaga(action: any) {
   try {
@@ -34,6 +35,31 @@ export function* fetchUserSaga(action: any) {
 
 // DELETE CLIENTS
 
+// private onDeletePress = () => {
+
+//   const uid = firebase.auth().currentUser?.uid;
+
+//   this.props.dispatchDeleteClientRequested();
+//   firebase
+//     .firestore()
+//     .collection("users")
+//     .doc(uid)
+//     .set(
+//       {
+//         clients: {
+//           [clientId!]: deleteField(),
+//         },
+//       },
+//       { merge: true }
+//     )
+//     .then(() => {
+//       this.props.dispatchDeleteClientSucceeded();
+//       this.props.dispatchFetchUser({ uid });
+//     })
+//     .catch(function (error) {
+//       console.error("Error removing document: ", error);
+//     });
+
 export const deleteClientSucceeded = () => ({
   type: DELETE_CLIENT.SUCCEEDED,
 });
@@ -42,6 +68,28 @@ export const deleteClientFailed = ({ error }: any) => ({
   type: DELETE_CLIENT.FAILED,
   payload: { error },
 });
+
+export function* deleteClientSaga(action: any) {
+  try {
+    const { clientId } = action.payload;
+    const uid = yield firebase.auth().currentUser?.uid;
+    yield firebase
+      .firestore()
+      .collection("users")
+      .doc(uid)
+      .set(
+        {
+          clients: {
+            [clientId!]: deleteField(),
+          },
+        },
+        { merge: true }
+      );
+    yield put(deleteClientSucceeded());
+  } catch (error) {
+    yield put(deleteClientFailed(error));
+  }
+}
 
 export function* loginUserSaga(action: any) {
   try {
