@@ -17,7 +17,7 @@ interface InputSearchProps {
   keyboardType?: IKeyboard;
   style?: StyleProp<ViewStyle>;
 }
-export default class InputSearch extends Component<InputSearchProps> {
+export default class SearchBar extends Component<InputSearchProps> {
   public render() {
     const { onChangeText, value, placeholder, onPress, keyboardType, style } = this.props;
     return (

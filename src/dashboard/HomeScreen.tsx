@@ -4,16 +4,13 @@ import {
   StatusBar,
   View,
   Text,
-  Modal,
-  ScrollView,
   FlatList,
   ActivityIndicator,
-  Alert,
 } from "react-native";
 import { connect } from "react-redux";
 import { Spacing } from "../common/styles/Spacing";
 import { Color } from "../common/styles/Colors";
-import InputSearch from "../common/components/InputSearch";
+import InputSearch from "../common/components/SearchBar";
 import { searchTextChanged } from "../store/actions/UserActions";
 import Card from "../common/components/Card";
 import CellIconActionable from "../common/components/CellIconActionable";
@@ -23,7 +20,6 @@ import { FETCH_USER_REQUEST, DELETE_CLIENT } from "../store/actions/types";
 import { Icon } from "react-native-elements";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { mapClients } from "./util";
-import Button from "../common/components/Button";
 import CardSection from "../common/components/CardSection";
 import AlertModal from "../common/components/AlertModal";
 

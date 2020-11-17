@@ -12,7 +12,7 @@ import Card from "../common/components/Card";
 import CardSection from "../common/components/CardSection";
 import AlertModal from "../common/components/AlertModal";
 import { Icon } from "react-native-elements";
-import InputSearch from "../common/components/InputSearch";
+import SearchBar from "../common/components/SearchBar";
 import CellIconActionable from "../common/components/CellIconActionable";
 
 import { Spacing } from "../common/styles/Spacing";
@@ -88,34 +88,21 @@ class HomeScreen extends Component<HomeScreenProps, LocalState> {
     this.setState({ editMode: !this.state.editMode });
   };
 
+  private onClientPress = ({ item }: any) => {
+    if (this.state.editMode) {
+      this.setState({ modalVisible: true, clientId: item.id });
+    } else {
+      this.props.navigation.navigate(Routes.CLIENT_DETAIL_SCREEN, { client: item });
+    }
+  };
+
   private onAddNewClientPress = () => {
     this.props.navigation.navigate(Routes.ADD_NEW_CLIENT_SCREEN);
   };
 
   private onDeletePress = () => {
     const { editMode, modalVisible, clientId } = this.state;
-    const uid = firebase.auth().currentUser?.uid;
-
     this.props.dispatchDeleteClientRequested({ clientId });
-    // firebase
-    //   .firestore()
-    //   .collection("users")
-    //   .doc(uid)
-    //   .set(
-    //     {
-    //       clients: {
-    //         [clientId!]: deleteField(),
-    //       },
-    //     },
-    //     { merge: true }
-    //   )
-    //   .then(() => {
-    //     this.props.dispatchDeleteClientSucceeded();
-    //     this.props.dispatchFetchUser({ uid });
-    //   })
-    //   .catch(function (error) {
-    //     console.error("Error removing document: ", error);
-    //   });
     this.setState({
       modalVisible: !modalVisible,
       editMode: !editMode,
@@ -155,18 +142,12 @@ class HomeScreen extends Component<HomeScreenProps, LocalState> {
     );
   };
 
-  private renderItem = ({ item }: any) => {
+  private renderClientCell = ({ item }: any) => {
     const iconName = this.state.editMode ? "minuscircle" : "right";
     const color = this.state.editMode ? "red" : Color.white;
     return (
       <CellIconActionable
-        onPress={() => {
-          if (this.state.editMode) {
-            this.setState({ modalVisible: true, clientId: item.id });
-          } else {
-            this.props.navigation.navigate(Routes.CLIENT_DETAIL_SCREEN, { client: item });
-          }
-        }}
+        onPress={this.onClientPress({ item })}
         label={`${item.firstName} ${item.lastName}`}
         iconRightName={iconName}
         iconRightColor={color}
@@ -175,6 +156,7 @@ class HomeScreen extends Component<HomeScreenProps, LocalState> {
   };
 
   public render() {
+    const { clients, modalVisible } = this.state;
     const loading = this.props.fetchUserLoading || this.props.deleteClientLoading;
 
     return (
@@ -183,7 +165,7 @@ class HomeScreen extends Component<HomeScreenProps, LocalState> {
         {this.renderHeader()}
         <Card style={{ flex: 1 }}>
           <CardSection style={{ marginBottom: Spacing.med }}>
-            <InputSearch
+            <SearchBar
               onChangeText={() => {}}
               value={this.props.seachText}
               placeholder={"search clients..."}
@@ -196,9 +178,9 @@ class HomeScreen extends Component<HomeScreenProps, LocalState> {
             </View>
           ) : (
             <FlatList
-              data={this.state.clients}
+              data={clients}
               keyExtractor={(item: any) => item.id}
-              renderItem={({ item }) => this.renderItem({ item })}
+              renderItem={({ item }) => this.renderClientCell({ item })}
             />
           )}
         </Card>
@@ -206,7 +188,7 @@ class HomeScreen extends Component<HomeScreenProps, LocalState> {
           label={"Are you sure you want to delete this client?"}
           onDeletePress={this.onDeletePress}
           onCancelPress={this.onCancelPress}
-          isVisible={this.state.modalVisible}
+          isVisible={modalVisible}
         />
       </View>
     );

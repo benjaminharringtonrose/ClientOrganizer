@@ -20,6 +20,23 @@ import {
 import { getDocRef } from "../dashboard/util";
 import { deleteField } from "../screens/util";
 
+// FETCH USER - ACTIONS
+
+function fetchUserSuccess(data: any) {
+  return {
+    type: FETCH_USER_SUCCESS,
+    payload: data,
+  };
+}
+function fetchUserFail(error: any) {
+  return {
+    type: FETCH_USER_FAIL,
+    payload: error,
+  };
+}
+
+// FETCH USER - SAGA
+
 export function* fetchUserSaga(action: any) {
   try {
     const { uid } = action.payload;
@@ -33,41 +50,18 @@ export function* fetchUserSaga(action: any) {
   }
 }
 
-// DELETE CLIENTS
-
-// private onDeletePress = () => {
-
-//   const uid = firebase.auth().currentUser?.uid;
-
-//   this.props.dispatchDeleteClientRequested();
-//   firebase
-//     .firestore()
-//     .collection("users")
-//     .doc(uid)
-//     .set(
-//       {
-//         clients: {
-//           [clientId!]: deleteField(),
-//         },
-//       },
-//       { merge: true }
-//     )
-//     .then(() => {
-//       this.props.dispatchDeleteClientSucceeded();
-//       this.props.dispatchFetchUser({ uid });
-//     })
-//     .catch(function (error) {
-//       console.error("Error removing document: ", error);
-//     });
+// DELETE CLIENT - ACTIONS
 
 export const deleteClientSucceeded = () => ({
   type: DELETE_CLIENT.SUCCEEDED,
 });
 
-export const deleteClientFailed = ({ error }: any) => ({
+export const deleteClientFailed = (error: any) => ({
   type: DELETE_CLIENT.FAILED,
-  payload: { error },
+  payload: error,
 });
+
+// DELETE CLIENT - SAGA
 
 export function* deleteClientSaga(action: any) {
   try {
@@ -86,21 +80,12 @@ export function* deleteClientSaga(action: any) {
         { merge: true }
       );
     yield put(deleteClientSucceeded());
-  } catch (error) {
-    yield put(deleteClientFailed(error));
+  } catch ({ error }) {
+    yield put(deleteClientFailed({ error }));
   }
 }
 
-export function* loginUserSaga(action: any) {
-  try {
-    const { email, password } = action.payload;
-    const auth = firebase.auth();
-    const data = yield call([auth, auth.signInWithEmailAndPassword], email, password);
-    yield put(loginUserSuccess(data));
-  } catch (error) {
-    yield put(loginUserFail(error));
-  }
-}
+// LOGIN USER - ACTIONS
 
 function loginUserSuccess(data: any) {
   return {
@@ -116,14 +101,20 @@ function loginUserFail(error: any) {
   };
 }
 
-export function* logoutUserSaga() {
+// LOGIN USER - SAGA
+
+export function* loginUserSaga(action: any) {
   try {
-    yield call(() => firebase.auth().signOut());
-    yield put(logoutUserSuccess());
+    const { email, password } = action.payload;
+    const auth = firebase.auth();
+    const data = yield call([auth, auth.signInWithEmailAndPassword], email, password);
+    yield put(loginUserSuccess(data));
   } catch (error) {
-    yield put(logoutUserFail(error));
+    yield put(loginUserFail(error));
   }
 }
+
+// LOGOUT USER - ACTIONS
 
 function logoutUserSuccess() {
   return {
@@ -138,7 +129,56 @@ function logoutUserFail(error: any) {
   };
 }
 
-// PHOTO UPLOAD ASYNC
+// LOGOUT USER - SAGA
+
+export function* logoutUserSaga() {
+  try {
+    yield call(() => firebase.auth().signOut());
+    yield put(logoutUserSuccess());
+  } catch (error) {
+    yield put(logoutUserFail(error));
+  }
+}
+
+// REGISTER USER - ACTIONS
+
+function registerUserSuccess(data: any) {
+  return {
+    type: REGISTER_USER_SUCCESS,
+    payload: data,
+  };
+}
+
+function registerUserFail(error: any) {
+  return {
+    type: REGISTER_USER_FAIL,
+    payload: error,
+  };
+}
+
+// REGISTER - SAGA
+
+export function* registerUserSaga(action: any) {
+  try {
+    const { email, password, firstName, lastName, avatar } = action.payload;
+    const auth = firebase.auth();
+    const data = yield call([auth, auth.createUserWithEmailAndPassword], email, password);
+    const db = getDocRef();
+    db.set({
+      firstName,
+      lastName,
+      email,
+      avatar,
+    });
+    addAvatarAsync(avatar);
+    yield put(registerUserSuccess(data));
+  } catch (error) {
+    console.log(error);
+    yield put(registerUserFail(error));
+  }
+}
+
+// PHOTO UPLOAD - ASYNC
 
 export const uploadPhotoAsync = (
   uri: RequestInfo,
@@ -162,7 +202,9 @@ export const uploadPhotoAsync = (
   });
 };
 
-const addAvatar = async (data: any) => {
+// ADD AVATAR - ASYNC
+
+const addAvatarAsync = async (data: any) => {
   try {
     let remoteUri = null;
     const db = firebase
@@ -180,55 +222,6 @@ const addAvatar = async (data: any) => {
     alert(`Error: ${error}`);
   }
 };
-
-// REGISTER SAGA
-
-export function* registerUserSaga(action: any) {
-  try {
-    const { email, password, firstName, lastName, avatar } = action.payload;
-    const auth = firebase.auth();
-    const data = yield call([auth, auth.createUserWithEmailAndPassword], email, password);
-    const db = getDocRef();
-    db.set({
-      firstName,
-      lastName,
-      email,
-      avatar,
-    });
-    addAvatar(avatar);
-    yield put(registerUserSuccess(data));
-  } catch (error) {
-    console.log(error);
-    yield put(registerUserFail(error));
-  }
-}
-
-function registerUserSuccess(data: any) {
-  return {
-    type: REGISTER_USER_SUCCESS,
-    payload: data,
-  };
-}
-
-function registerUserFail(error: any) {
-  return {
-    type: REGISTER_USER_FAIL,
-    payload: error,
-  };
-}
-
-function fetchUserSuccess(data: any) {
-  return {
-    type: FETCH_USER_SUCCESS,
-    payload: data,
-  };
-}
-function fetchUserFail({ error }: any) {
-  return {
-    type: FETCH_USER_FAIL,
-    payload: error,
-  };
-}
 
 // ACTION LISTENER
 
