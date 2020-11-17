@@ -32,6 +32,9 @@ export const getUserById = (): any => {
 };
 
 export function mapClients(clients: any) {
+  if (!clients) {
+    return;
+  }
   let acc: any = [];
   console.log(clients);
   for (const [key, value] of Object.entries(clients)) {

@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { View, Text, StyleSheet, ScrollView } from "react-native";
+import { View, Text, StyleSheet, ScrollView, SafeAreaView } from "react-native";
 import Card from "../common/components/Card";
 import CardSection from "../common/components/CardSection";
 import Input from "../common/components/Input";
@@ -51,23 +51,6 @@ class RegisterScreen extends Component<RegisterScreenProps> {
     }
   }
 
-  public componentDidMount() {}
-  private onEmailChange = (email: string) => {
-    this.props.emailChanged(email);
-  };
-
-  private onFirstNameChange = (firstName: string) => {
-    this.props.firstNameChanged(firstName);
-  };
-
-  private onLastNameChange = (lastName: string) => {
-    this.props.lastNameChanged(lastName);
-  };
-
-  private onPasswordChange = (password: string) => {
-    this.props.passwordChanged(password);
-  };
-
   private onRegisterPress = () => {
     const { email, password, firstName, lastName, avatar } = this.props;
 
@@ -92,8 +75,8 @@ class RegisterScreen extends Component<RegisterScreenProps> {
   renderError() {
     if (this.props.authError) {
       return (
-        <View style={{ backgroundColor: Color.darkThemeGreyDark }}>
-          <Text style={styles.errorTextStyle}>{this.props.authError}</Text>
+        <View style={styles.errorContainer}>
+          <Text style={styles.errorText}>{this.props.authError}</Text>
         </View>
       );
     }
@@ -101,28 +84,21 @@ class RegisterScreen extends Component<RegisterScreenProps> {
 
   render() {
     const { firstName, lastName, email, password } = this.props;
+
     return (
-      <View style={{ flex: 1, backgroundColor: Color.darkThemeGreyDark }}>
-        <Header
-          style={styles.greeting}
-          title={"Welcome!"}
-          description={"Sign up to get started."}
-        />
-        <ScrollView
-          style={{
-            flex: 1,
-            backgroundColor: Color.darkThemeGreyDark,
-            paddingTop: Spacing.small,
-          }}
-        >
-          <Card>
+      <SafeAreaView style={styles.rootContainer}>
+        <ScrollView>
+          <View style={styles.headerContainer}>
+            <Header title={"Welcome!"} description={"Sign up to get started."} />
+          </View>
+          <Card style={styles.registerFormContainer}>
             <CardSection>
               <Input
                 label="First Name"
                 placeholder="John"
                 placeholderTextColor={Color.greyMedDark}
                 secureTextEntry={false}
-                onChangeText={this.onFirstNameChange}
+                onChangeText={(newText: string) => this.props.firstNameChanged(newText)}
                 value={firstName}
               />
             </CardSection>
@@ -132,7 +108,7 @@ class RegisterScreen extends Component<RegisterScreenProps> {
                 placeholder="Smith"
                 placeholderTextColor={Color.greyMedDark}
                 secureTextEntry={false}
-                onChangeText={this.onLastNameChange}
+                onChangeText={(newText: string) => this.props.lastNameChanged(newText)}
                 value={lastName}
               />
             </CardSection>
@@ -142,7 +118,7 @@ class RegisterScreen extends Component<RegisterScreenProps> {
                 placeholder="email@gmail.com"
                 placeholderTextColor={Color.greyMedDark}
                 secureTextEntry={false}
-                onChangeText={this.onEmailChange}
+                onChangeText={(newText: string) => this.props.emailChanged(newText)}
                 value={email}
               />
             </CardSection>
@@ -152,7 +128,7 @@ class RegisterScreen extends Component<RegisterScreenProps> {
                 label="Password"
                 placeholder="password"
                 placeholderTextColor={Color.greyMedDark}
-                onChangeText={this.onPasswordChange}
+                onChangeText={(newText: string) => this.props.passwordChanged(newText)}
                 value={password}
               />
             </CardSection>
@@ -160,7 +136,7 @@ class RegisterScreen extends Component<RegisterScreenProps> {
             {this.renderButton()}
           </Card>
         </ScrollView>
-      </View>
+      </SafeAreaView>
     );
   }
 }
@@ -185,14 +161,7 @@ const mapDispatchToProps = (dispatch: any) => ({
   emailChanged: (email: string) => dispatch(emailChanged(email)),
   passwordChanged: (password: string) => dispatch(passwordChanged(password)),
   avatarChanged: (result: string) => dispatch(avatarChanged(result)),
-  dispatchRegisterRequest: ({
-    email,
-    password,
-    firstName,
-    lastName,
-    avatar,
-    user,
-  }: any) => {
+  dispatchRegisterRequest: ({ email, password, firstName, lastName, user }: any) => {
     dispatch({
       type: REGISTER_USER_REQUESTED,
       payload: {
@@ -200,7 +169,6 @@ const mapDispatchToProps = (dispatch: any) => ({
         password,
         firstName,
         lastName,
-        avatar,
         user,
       },
     });
@@ -210,41 +178,26 @@ const mapDispatchToProps = (dispatch: any) => ({
 export default connect(mapStateToProps, mapDispatchToProps)(RegisterScreen);
 
 const styles = StyleSheet.create({
-  errorTextStyle: {
-    fontSize: 20,
-    alignSelf: "center",
-    color: "red",
+  rootContainer: {
+    flex: 1,
+    backgroundColor: Color.darkThemeGreyDark,
   },
-  greeting: {
-    flex: 0.3,
-    textAlign: "center",
+  headerContainer: {
+    paddingTop: Spacing.xxlarge,
   },
-  avatarPlaceholder: {
-    alignSelf: "center",
-    width: 120,
-    height: 120,
-    backgroundColor: Color.darkThemeGreyMed,
-    borderRadius: 60,
-  },
-  avatar: {
-    position: "absolute",
-    width: 120,
-    height: 120,
-    borderRadius: 60,
-  },
-  addIcon: {
-    alignSelf: "center",
-    marginTop: 38,
-    marginLeft: 2,
-    color: Color.greyLight,
+  registerFormContainer: {
+    paddingTop: Spacing.xlarge,
   },
   button: {
     marginVertical: Spacing.med,
     paddingVertical: Spacing.small,
   },
-  loginTouchableContainer: {
-    justifyContent: "center",
+  errorContainer: {
+    backgroundColor: Color.darkThemeGreyDark,
+  },
+  errorText: {
+    fontSize: 20,
     alignSelf: "center",
-    paddingBottom: Spacing.xxlarge,
+    color: "red",
   },
 });
