@@ -79,10 +79,6 @@ class HomeScreen extends Component<HomeScreenProps, LocalState> {
     }
   }
 
-  private onChangeSearchText = (text: string) => {
-    this.props.searchTextChanged(text);
-  };
-
   private toggleEditMode = () => {
     this.setState({ editMode: !this.state.editMode });
   };
@@ -155,7 +151,7 @@ class HomeScreen extends Component<HomeScreenProps, LocalState> {
         <Card style={{ flex: 1 }}>
           <CardSection style={{ marginBottom: Spacing.med }}>
             <InputSearch
-              onChangeText={this.onChangeSearchText}
+              onChangeText={(text) => this.props.searchTextChanged(text)}
               value={this.props.seachText}
               placeholder={"search clients..."}
               keyboardType={"web-search"}
