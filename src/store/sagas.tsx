@@ -47,7 +47,8 @@ function fetchUserFail(error: any) {
 
 export function* fetchUserSaga(action: any) {
   try {
-    const { uid } = action.payload;
+    const uid = action.payload;
+    yield console.log("FETCH USER SAGA - UID", uid);
     const doc = yield firebase.firestore().collection("users").doc(uid).get();
     const user = {
       ...doc.data(),
@@ -73,10 +74,10 @@ export const deleteClientFailed = (error: any) => ({
 
 export function* deleteClientSaga(action: any) {
   try {
-    const { clientId } = action.payload;
-    yield console.log("saga - clientid", clientId);
+    const clientId = action.payload;
     const uid = yield firebase.auth().currentUser?.uid;
-    yield console.log("saga - uid", uid);
+    // yield console.log("saga - clientid", clientId); // ID CHECKS
+    // yield console.log("saga - uid", uid);
     yield firebase
       .firestore()
       .collection("users")
@@ -90,7 +91,7 @@ export function* deleteClientSaga(action: any) {
         { merge: true }
       );
     yield put(deleteClientSucceeded());
-    yield put({ type: FETCH_USER_REQUEST, payload: { uid } });
+    yield put(fetchUserRequested(uid));
   } catch (error) {
     yield put(deleteClientFailed(error));
   }

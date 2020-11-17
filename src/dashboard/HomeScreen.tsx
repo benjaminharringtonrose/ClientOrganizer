@@ -66,7 +66,7 @@ class HomeScreen extends Component<HomeScreenProps, LocalState> {
   public componentDidMount() {
     const uid = firebase.auth().currentUser?.uid;
     if (uid) {
-      this.props.dispatchFetchUser({ uid });
+      this.props.dispatchFetchUser(uid);
     }
   }
 
@@ -96,7 +96,7 @@ class HomeScreen extends Component<HomeScreenProps, LocalState> {
   };
 
   private onDeletePress = () => {
-    this.props.dispatchDeleteClient({ clientId: this.state.clientId });
+    this.props.dispatchDeleteClient(this.state.clientId);
     this.setState({
       modalVisible: !this.state.modalVisible,
       editMode: !this.state.editMode,
@@ -205,10 +205,9 @@ const mapStateToProps = (state: any) => {
 
 const mapDispatchToProps = (dispatch: any) => ({
   searchTextChanged: (text: string) => dispatch(searchTextChanged(text)),
-  dispatchFetchUser: ({ uid }: any) =>
-    dispatch({ type: FETCH_USER_REQUEST, payload: { uid } }),
-  dispatchDeleteClient: ({ clientId }: any) =>
-    dispatch({ type: DELETE_CLIENT_REQUESTED, payload: { clientId } }),
+  dispatchFetchUser: (uid: any) => dispatch({ type: FETCH_USER_REQUEST, payload: uid }),
+  dispatchDeleteClient: (clientId: any) =>
+    dispatch({ type: DELETE_CLIENT_REQUESTED, payload: clientId }),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(HomeScreen);

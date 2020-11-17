@@ -114,7 +114,7 @@ class AddNewClientScreen extends Component<AddNewClientScreenProps, LocalState> 
         console.log("Document successfully written!");
         const uid = firebase.auth().currentUser?.uid;
         if (uid) {
-          dispatchFetchUser({ uid });
+          dispatchFetchUser(uid);
         }
       })
       .catch(() => (error: any) => {
@@ -229,8 +229,7 @@ const mapStateToProps = (state: any) => {
 };
 
 const mapDispatchToProps = (dispatch: any) => ({
-  dispatchFetchUser: ({ uid }: any) =>
-    dispatch({ type: FETCH_USER_REQUEST, payload: { uid } }),
+  dispatchFetchUser: (uid: any) => dispatch({ type: FETCH_USER_REQUEST, payload: uid }),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(AddNewClientScreen);
