@@ -15,6 +15,7 @@ import { Color } from "./src/common/styles/Colors";
 import { Spacing } from "./src/common/styles/Spacing";
 import AddNewClientScreen from "./src/dashboard/AddNewClientScreen";
 import ClientDetailScreen from "./src/dashboard/ClientDetailsScreen";
+import firebase from "firebase";
 
 export enum Routes {
   LOGIN_SCREEN = "LOGIN_SCREEN",

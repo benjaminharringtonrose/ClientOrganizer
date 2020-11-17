@@ -4,26 +4,28 @@ import {
   StatusBar,
   View,
   Text,
+  Modal,
+  ScrollView,
   FlatList,
   ActivityIndicator,
-  TouchableOpacity,
+  Alert,
 } from "react-native";
-import Card from "../common/components/Card";
-import CardSection from "../common/components/CardSection";
-import AlertModal from "../common/components/AlertModal";
-import { Icon } from "react-native-elements";
-import InputSearch from "../common/components/InputSearch";
-import CellIconActionable from "../common/components/CellIconActionable";
-
+import { connect } from "react-redux";
 import { Spacing } from "../common/styles/Spacing";
 import { Color } from "../common/styles/Colors";
-
-import { connect } from "react-redux";
+import InputSearch from "../common/components/InputSearch";
 import { searchTextChanged } from "../store/actions/UserActions";
+import Card from "../common/components/Card";
+import CellIconActionable from "../common/components/CellIconActionable";
 import firebase from "firebase";
 import { Routes } from "../../navigation";
 import { FETCH_USER_REQUEST, DELETE_CLIENT } from "../store/actions/types";
-import { mapClients, deleteField } from "./util";
+import { Icon } from "react-native-elements";
+import { TouchableOpacity } from "react-native-gesture-handler";
+import { mapClients } from "./util";
+import Button from "../common/components/Button";
+import CardSection from "../common/components/CardSection";
+import AlertModal from "../common/components/AlertModal";
 
 interface PassedProps {
   navigation: any;
@@ -46,7 +48,6 @@ interface DispatchFromState {
 }
 
 interface LocalState {
-  uid?: string;
   clients: any;
   modalVisible: boolean;
   editMode: boolean;
@@ -54,10 +55,8 @@ interface LocalState {
 }
 
 type HomeScreenProps = PropsFromState & DispatchFromState & PassedProps;
-
 class HomeScreen extends Component<HomeScreenProps, LocalState> {
   public state = {
-    uid: undefined,
     clients: [],
     database: undefined,
     modalVisible: false,
@@ -67,7 +66,9 @@ class HomeScreen extends Component<HomeScreenProps, LocalState> {
 
   public componentDidMount() {
     const uid = firebase.auth().currentUser?.uid;
-    this.props.dispatchFetchUser({ uid });
+    if (uid) {
+      this.props.dispatchFetchUser({ uid });
+    }
   }
 
   public componentDidUpdate(oldProps: any) {
@@ -83,6 +84,10 @@ class HomeScreen extends Component<HomeScreenProps, LocalState> {
     }
   }
 
+  private onChangeSearchText = (text: string) => {
+    this.props.searchTextChanged(text);
+  };
+
   private toggleEditMode = () => {
     this.setState({ editMode: !this.state.editMode });
   };
@@ -92,10 +97,8 @@ class HomeScreen extends Component<HomeScreenProps, LocalState> {
   };
 
   private onDeletePress = () => {
-    const { editMode, modalVisible, clientId } = this.state;
-    const uid = firebase.auth().currentUser?.uid;
-
     this.props.dispatchDeleteClientRequested();
+    const uid = firebase.auth().currentUser?.uid;
     firebase
       .firestore()
       .collection("users")
@@ -103,7 +106,7 @@ class HomeScreen extends Component<HomeScreenProps, LocalState> {
       .set(
         {
           clients: {
-            [clientId!]: deleteField(),
+            [this.state.clientId!]: firebase.firestore.FieldValue.delete(),
           },
         },
         { merge: true }
@@ -116,17 +119,11 @@ class HomeScreen extends Component<HomeScreenProps, LocalState> {
         console.error("Error removing document: ", error);
       });
     this.setState({
-      modalVisible: !modalVisible,
-      editMode: !editMode,
-    });
-  };
-
-  private onCancelPress = () => {
-    this.setState({
       modalVisible: !this.state.modalVisible,
       editMode: !this.state.editMode,
     });
   };
+
   private renderHeader = () => {
     return (
       <View style={styles.headerContainer}>
@@ -142,8 +139,9 @@ class HomeScreen extends Component<HomeScreenProps, LocalState> {
             size={18}
           />
         </TouchableOpacity>
-        <TouchableOpacity onPress={this.toggleEditMode}>
+        <TouchableOpacity style={{}} onPress={this.toggleEditMode}>
           <Icon
+            style={{}}
             name={"trash"}
             type={"feather"}
             color={this.state.editMode ? "red" : Color.white}
@@ -183,7 +181,7 @@ class HomeScreen extends Component<HomeScreenProps, LocalState> {
         <Card style={{ flex: 1 }}>
           <CardSection style={{ marginBottom: Spacing.med }}>
             <InputSearch
-              onChangeText={() => {}}
+              onChangeText={this.onChangeSearchText}
               value={this.props.seachText}
               placeholder={"search clients..."}
               keyboardType={"web-search"}
@@ -204,7 +202,12 @@ class HomeScreen extends Component<HomeScreenProps, LocalState> {
         <AlertModal
           label={"Are you sure you want to delete this client?"}
           onDeletePress={this.onDeletePress}
-          onCancelPress={this.onCancelPress}
+          onCancelPress={() => {
+            this.setState({
+              modalVisible: !this.state.modalVisible,
+              editMode: !this.state.editMode,
+            });
+          }}
           isVisible={this.state.modalVisible}
         />
       </View>
@@ -244,10 +247,49 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     marginHorizontal: Spacing.micro,
+    // backgroundColor: "lightyellow",
   },
   headerText: {
     fontSize: 26,
     color: Color.white,
+  },
+  //modal
+  centeredView: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    marginTop: 22,
+  },
+  modalView: {
+    marginTop: 100,
+    backgroundColor: Color.darkThemeGrey,
+    borderRadius: 3,
+    padding: 40,
+    alignItems: "center",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5,
+  },
+  openButton: {
+    borderRadius: 20,
+    padding: 10,
+    elevation: 2,
+  },
+  textStyle: {
+    color: "white",
+    fontWeight: "bold",
+    textAlign: "center",
+  },
+  modalText: {
+    color: "white",
+    marginBottom: 15,
+    textAlign: "center",
+    fontSize: 20,
   },
   loadingContainer: {
     flex: 1,
