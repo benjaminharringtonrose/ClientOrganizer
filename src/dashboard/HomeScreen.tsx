@@ -25,6 +25,7 @@ import { TouchableOpacity } from "react-native-gesture-handler";
 import { mapClients } from "./util";
 import Button from "../common/components/Button";
 import CardSection from "../common/components/CardSection";
+import AlertModal from "../common/components/AlertModal";
 
 interface PassedProps {
   navigation: any;
@@ -187,13 +188,7 @@ class HomeScreen extends Component<HomeScreenProps, LocalState> {
             />
           </CardSection>
           {loading ? (
-            <View
-              style={{
-                flex: 1,
-                alignItems: "center",
-                justifyContent: "center",
-              }}
-            >
+            <View style={styles.loadingContainer}>
               <ActivityIndicator />
             </View>
           ) : (
@@ -204,39 +199,17 @@ class HomeScreen extends Component<HomeScreenProps, LocalState> {
             />
           )}
         </Card>
-
-        <Modal
-          animationType="slide"
-          transparent={true}
-          visible={this.state.modalVisible}
-          onRequestClose={() => {
-            Alert.alert("Modal has been closed.");
+        <AlertModal
+          label={"Are you sure you want to delete this client?"}
+          onDeletePress={this.onDeletePress}
+          onCancelPress={() => {
+            this.setState({
+              modalVisible: !this.state.modalVisible,
+              editMode: !this.state.editMode,
+            });
           }}
-        >
-          <View style={styles.centeredView}>
-            <Card>
-              <View style={styles.modalView}>
-                <Text style={styles.modalText}>
-                  {"Are you sure you want to delete this client?"}
-                </Text>
-                <CardSection>
-                  <Button label={"Delete"} onPress={this.onDeletePress} />
-                </CardSection>
-                <CardSection>
-                  <Button
-                    label={"Cancel"}
-                    onPress={() => {
-                      this.setState({
-                        modalVisible: !this.state.modalVisible,
-                        editMode: !this.state.editMode,
-                      });
-                    }}
-                  />
-                </CardSection>
-              </View>
-            </Card>
-          </View>
-        </Modal>
+          isVisible={this.state.modalVisible}
+        />
       </View>
     );
   }
@@ -317,5 +290,10 @@ const styles = StyleSheet.create({
     marginBottom: 15,
     textAlign: "center",
     fontSize: 20,
+  },
+  loadingContainer: {
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "center",
   },
 });
