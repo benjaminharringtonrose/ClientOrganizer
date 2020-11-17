@@ -10,8 +10,7 @@ import {
 import { connect } from "react-redux";
 import { Spacing } from "../common/styles/Spacing";
 import { Color } from "../common/styles/Colors";
-import InputSearch from "../common/components/SearchBar";
-import { searchTextChanged } from "../store/actions/UserActions";
+import SearchBar from "../common/components/SearchBar";
 import Card from "../common/components/Card";
 import CellIconActionable from "../common/components/CellIconActionable";
 import firebase from "firebase";
@@ -28,7 +27,6 @@ interface PassedProps {
 }
 
 interface PropsFromState {
-  seachText: string;
   clients: any;
   fetchUserLoading: boolean;
   fetchUserError: string;
@@ -47,6 +45,7 @@ interface LocalState {
   modalVisible: boolean;
   editMode: boolean;
   clientId?: string;
+  searchText: string;
 }
 
 type HomeScreenProps = PropsFromState & DispatchFromState & PassedProps;
@@ -57,6 +56,7 @@ class HomeScreen extends Component<HomeScreenProps, LocalState> {
     modalVisible: false,
     editMode: false,
     clientId: undefined,
+    searchText: "",
   };
 
   public componentDidMount() {
@@ -149,9 +149,9 @@ class HomeScreen extends Component<HomeScreenProps, LocalState> {
         {this.renderHeader()}
         <Card style={{ flex: 1 }}>
           <CardSection style={{ marginBottom: Spacing.med }}>
-            <InputSearch
-              onChangeText={(text) => this.props.searchTextChanged(text)}
-              value={this.props.seachText}
+            <SearchBar
+              onChangeText={(searchText: string) => this.setState({ searchText })}
+              value={this.state.searchText || ""}
               placeholder={"search clients..."}
               keyboardType={"web-search"}
             />
@@ -195,7 +195,6 @@ const mapStateToProps = (state: any) => {
 };
 
 const mapDispatchToProps = (dispatch: any) => ({
-  searchTextChanged: (text: string) => dispatch(searchTextChanged(text)),
   dispatchFetchUser: (uid: any) => dispatch({ type: FETCH_USER_REQUESTED, payload: uid }),
   dispatchDeleteClient: (clientId: any) =>
     dispatch({ type: DELETE_CLIENT_REQUESTED, payload: clientId }),

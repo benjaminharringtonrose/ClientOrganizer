@@ -1,15 +1,13 @@
 import React, { Component } from "react";
 import { Color } from "../styles/Colors";
 import { Spacing } from "../styles/Spacing";
-import CardSection from "./CardSection";
-import { Icon } from "react-native-elements";
 import { FontAwesome } from "@expo/vector-icons";
 import Input from "./Input";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { IKeyboard } from "../types";
 import { StyleProp, ViewStyle } from "react-native";
 
-interface InputSearchProps {
+interface ISearchBarProps {
   onChangeText: (text: string) => void;
   value: string;
   onPress?: () => void;
@@ -17,9 +15,9 @@ interface InputSearchProps {
   keyboardType?: IKeyboard;
   style?: StyleProp<ViewStyle>;
 }
-export default class SearchBar extends Component<InputSearchProps> {
+export default class SearchBar extends Component<ISearchBarProps> {
   public render() {
-    const { onChangeText, value, placeholder, onPress, keyboardType, style } = this.props;
+    const { onChangeText, value, placeholder, onPress, keyboardType } = this.props;
     return (
       <>
         <Input
