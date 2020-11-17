@@ -3,6 +3,7 @@ import {
   FETCH_USER_REQUEST,
   FETCH_USER_SUCCESS,
   FETCH_USER_FAIL,
+  DELETE_CLIENT,
 } from "../actions/types";
 
 const INITIAL_STATE = {
@@ -11,6 +12,8 @@ const INITIAL_STATE = {
     user: undefined,
     fetchUserLoading: false,
     fetchUserError: false,
+    deleteClientLoading: false,
+    deleteClientError: false,
   },
 };
 
@@ -39,6 +42,22 @@ const UserReducer = (state = INITIAL_STATE, action: any) => {
         fetchUserError: "Something Happened.",
         password: "",
         fetchUserLoading: false,
+      };
+    case DELETE_CLIENT.REQUESTED:
+      return {
+        ...state,
+        deleteClientLoading: true,
+      };
+    case DELETE_CLIENT.SUCCEEDED:
+      return {
+        ...state,
+        deleteClientLoading: false,
+      };
+    case DELETE_CLIENT.FAILED:
+      return {
+        ...state,
+        deleteClientLoading: false,
+        deleteClientError: action.payload,
       };
     default:
       return state;

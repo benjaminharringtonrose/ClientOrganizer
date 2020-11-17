@@ -15,6 +15,7 @@ import {
   FETCH_USER_REQUEST,
   FETCH_USER_SUCCESS,
   FETCH_USER_FAIL,
+  DELETE_CLIENT,
 } from "./actions/types";
 import { getDocRef } from "../dashboard/util";
 
@@ -30,6 +31,17 @@ export function* fetchUserSaga(action: any) {
     yield put(fetchUserFail({ error }));
   }
 }
+
+// DELETE CLIENTS
+
+export const deleteClientSucceeded = () => ({
+  type: DELETE_CLIENT.SUCCEEDED,
+});
+
+export const deleteClientFailed = ({ error }: any) => ({
+  type: DELETE_CLIENT.FAILED,
+  payload: { error },
+});
 
 export function* loginUserSaga(action: any) {
   try {
@@ -59,11 +71,6 @@ function loginUserFail(error: any) {
 export function* logoutUserSaga() {
   try {
     yield call(() => firebase.auth().signOut());
-    // firebase.auth().signOut().then(function() {
-    //   // Sign-out successful.
-    // }).catch(function(error) {
-    //   // An error happened.
-    // });
     yield put(logoutUserSuccess());
   } catch (error) {
     yield put(logoutUserFail(error));
@@ -168,7 +175,7 @@ function fetchUserSuccess(data: any) {
     payload: data,
   };
 }
-function fetchUserFail(error: { error: any }) {
+function fetchUserFail({ error }: any) {
   return {
     type: FETCH_USER_FAIL,
     payload: error,

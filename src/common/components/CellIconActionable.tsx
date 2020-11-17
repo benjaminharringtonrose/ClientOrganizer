@@ -11,7 +11,7 @@ interface CellIconActionableProps {
   labelColor?: string;
   labelRight?: string;
   onPress: any;
-  iconLeftName?: "plus" | "book" | "right" | "left";
+  iconLeftName?: "plus" | "minus" | "book" | "right" | "left";
   iconLeftColor?: string;
   iconLeftSize?: number;
   iconRightName?: string;
@@ -25,6 +25,15 @@ export default class CellIconActionable extends Component<CellIconActionableProp
     const { iconLeftName, iconLeftSize } = this.props;
     switch (iconLeftName) {
       case "plus":
+        return (
+          <Icon
+            name={iconLeftName}
+            type={"antdesign"}
+            color={Color.white}
+            size={iconLeftSize}
+          />
+        );
+      case "minus":
         return (
           <Icon
             name={iconLeftName}
@@ -62,6 +71,7 @@ export default class CellIconActionable extends Component<CellIconActionableProp
       iconLeftName,
       iconRightName,
       iconRightSize,
+      iconRightColor,
       style,
     } = this.props;
     return (
@@ -74,7 +84,7 @@ export default class CellIconActionable extends Component<CellIconActionableProp
               name={iconRightName}
               style={styles.icon}
               size={iconRightSize}
-              color={Color.white}
+              color={iconRightColor || Color.white}
             />
           )}
           {labelRight && <Text style={styles.labelRightText}>{labelRight}</Text>}
