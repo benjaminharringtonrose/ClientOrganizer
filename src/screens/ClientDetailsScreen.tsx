@@ -1,9 +1,8 @@
 import React, { Component } from "react";
-import { Text, View, StyleSheet, ScrollView } from "react-native";
+import { StyleSheet, ScrollView } from "react-native";
 import CellLabelLeftRight from "../common/components/CellLabelLeftRight";
 import { Color } from "../common/styles/Colors";
 import Card from "../common/components/Card";
-import CardSection from "../common/components/CardSection";
 import { Spacing } from "../common/styles/Spacing";
 
 interface PassedProps {

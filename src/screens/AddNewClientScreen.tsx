@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, Component } from "react";
+import React, { Component } from "react";
 import { StyleSheet, ScrollView, StatusBar } from "react-native";
 import { Color } from "../common/styles/Colors";
 import { Spacing } from "../common/styles/Spacing";
@@ -12,7 +12,6 @@ import firebase from "firebase";
 import uuid from "uuid-random";
 import { connect } from "react-redux";
 import { FETCH_USER_REQUEST } from "../store/actions/types";
-import UserReducer from "../store/reducers/UserReducer";
 import Spinner from "../common/components/Spinner";
 
 interface PassedProps {

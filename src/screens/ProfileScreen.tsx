@@ -1,5 +1,5 @@
 import React from "react";
-import { View, Text, StyleSheet, ScrollView } from "react-native";
+import { Text, StyleSheet, ScrollView } from "react-native";
 import { connect } from "react-redux";
 import Button from "../common/components/Button";
 import Card from "../common/components/Card";
