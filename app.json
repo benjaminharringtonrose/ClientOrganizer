@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "HelloWorld",
+    "name": "OrganizedApproach",
     "slug": "organizedApproach",
     "version": "1.0.0",
     "orientation": "portrait",
@@ -27,6 +27,7 @@
       "ios",
       "android",
       "web"
-    ]
+    ],
+    "description": ""
   }
 }

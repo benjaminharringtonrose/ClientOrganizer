@@ -11,6 +11,8 @@ class App extends Component {
   componentDidMount() {
     if (!firebase.apps.length) {
       Firebase;
+    } else {
+      firebase.app();
     }
   }
   render() {
