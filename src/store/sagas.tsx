@@ -19,7 +19,7 @@ import {
   DELETE_CLIENT_SUCCEEDED,
   DELETE_CLIENT_FAILED,
 } from "./actions/types";
-import { getDocRef, deleteField } from "../dashboard/util";
+import { getDocRef } from "../screens/util";
 
 // FETCH USER - ACTIONS
 

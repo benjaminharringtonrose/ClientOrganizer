@@ -3,18 +3,18 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 
-import LoginScreen from "./src/auth/LoginScreen";
-import RegisterScreen from "./src/auth/RegisterScreen";
-import HomeScreen from "./src/dashboard/HomeScreen";
-import ScheduleScreen from "./src/dashboard/ScheduleScreen";
-import NotificationScreen from "./src/dashboard/NotificationScreen";
-import ProfileScreen from "./src/dashboard/ProfileScreen";
+import LoginScreen from "./src/screens/LoginScreen";
+import RegisterScreen from "./src/screens/RegisterScreen";
+import HomeScreen from "./src/screens/HomeScreen";
+import ScheduleScreen from "./src/screens/ScheduleScreen";
+import NotificationScreen from "./src/screens/NotificationScreen";
+import ProfileScreen from "./src/screens/ProfileScreen";
 
 import { Ionicons } from "@expo/vector-icons";
 import { Color } from "./src/common/styles/Colors";
 import { Spacing } from "./src/common/styles/Spacing";
-import AddNewClientScreen from "./src/dashboard/AddNewClientScreen";
-import ClientDetailScreen from "./src/dashboard/ClientDetailsScreen";
+import AddNewClientScreen from "./src/screens/AddNewClientScreen";
+import ClientDetailScreen from "./src/screens/ClientDetailsScreen";
 
 export enum Routes {
   LOGIN_SCREEN = "LOGIN_SCREEN",
