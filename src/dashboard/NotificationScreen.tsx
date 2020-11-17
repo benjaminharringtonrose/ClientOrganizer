@@ -1,5 +1,5 @@
 import React from "react";
-import { Text, StyleSheet, ScrollView, StatusBar } from "react-native";
+import { View, Text, StyleSheet, ScrollView, StatusBar } from "react-native";
 import { Color } from "../common/styles/Colors";
 import { Spacing } from "../common/styles/Spacing";
 

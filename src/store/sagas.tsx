@@ -17,7 +17,7 @@ import {
   FETCH_USER_FAIL,
   DELETE_CLIENT,
 } from "./actions/types";
-import { getDocRef } from "../screens/util";
+import { getDocRef } from "../dashboard/util";
 
 export function* fetchUserSaga(action: any) {
   try {
