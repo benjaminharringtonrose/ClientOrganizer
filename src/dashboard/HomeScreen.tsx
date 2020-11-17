@@ -110,9 +110,8 @@ class HomeScreen extends Component<HomeScreenProps, LocalState> {
             size={18}
           />
         </TouchableOpacity>
-        <TouchableOpacity style={{}} onPress={this.toggleEditMode}>
+        <TouchableOpacity onPress={this.toggleEditMode}>
           <Icon
-            style={{}}
             name={"trash"}
             type={"feather"}
             color={this.state.editMode ? "red" : Color.white}
@@ -123,7 +122,7 @@ class HomeScreen extends Component<HomeScreenProps, LocalState> {
     );
   };
 
-  private renderItem = ({ item }: any) => {
+  private renderClientCell = ({ item }: any) => {
     const iconName = this.state.editMode ? "minuscircle" : "right";
     const color = this.state.editMode ? "red" : Color.white;
     return (
@@ -165,7 +164,7 @@ class HomeScreen extends Component<HomeScreenProps, LocalState> {
             <FlatList
               data={this.state.clients}
               keyExtractor={(item: any) => item.id}
-              renderItem={({ item }) => this.renderItem({ item })}
+              renderItem={({ item }) => this.renderClientCell({ item })}
             />
           )}
         </Card>
@@ -206,7 +205,7 @@ export default connect(mapStateToProps, mapDispatchToProps)(HomeScreen);
 
 const styles = StyleSheet.create({
   rootContainer: {
-    flex: 3,
+    flex: 1,
     backgroundColor: Color.darkThemeGreyDark,
     paddingHorizontal: Spacing.med,
     paddingTop: Spacing.xxlarge,
@@ -215,49 +214,10 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     marginHorizontal: Spacing.micro,
-    // backgroundColor: "lightyellow",
   },
   headerText: {
     fontSize: 26,
     color: Color.white,
-  },
-  //modal
-  centeredView: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    marginTop: 22,
-  },
-  modalView: {
-    marginTop: 100,
-    backgroundColor: Color.darkThemeGrey,
-    borderRadius: 3,
-    padding: 40,
-    alignItems: "center",
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
-    elevation: 5,
-  },
-  openButton: {
-    borderRadius: 20,
-    padding: 10,
-    elevation: 2,
-  },
-  textStyle: {
-    color: "white",
-    fontWeight: "bold",
-    textAlign: "center",
-  },
-  modalText: {
-    color: "white",
-    marginBottom: 15,
-    textAlign: "center",
-    fontSize: 20,
   },
   loadingContainer: {
     flex: 1,
