@@ -75,6 +75,7 @@ class AddNewClientScreen extends Component<AddNewClientScreenProps, LocalState> 
 
   private onSubmit = () => {
     const { dispatchFetchUser } = this.props;
+
     const {
       firstName,
       lastName,
@@ -109,18 +110,18 @@ class AddNewClientScreen extends Component<AddNewClientScreenProps, LocalState> 
         },
         { merge: true }
       )
-      .then(function () {
+      .then(() => {
         console.log("Document successfully written!");
         const uid = firebase.auth().currentUser?.uid;
         if (uid) {
           dispatchFetchUser({ uid });
         }
-        // navigation.navigate(Routes.HOME_SCREEN);
       })
-      .catch(function (error: any) {
+      .catch(() => (error: any) => {
         console.error("Error writing document: ", error);
       });
   };
+
   public render() {
     const {
       firstName,

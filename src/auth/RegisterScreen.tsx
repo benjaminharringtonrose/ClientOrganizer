@@ -85,17 +85,17 @@ class RegisterScreen extends Component<RegisterScreenProps> {
     this.props.navigation.navigate(Routes.DASHBOARD_TABS);
   };
 
-  onPickAvatar = async () => {
-    UserPermissions.getCameraPermission();
-    let result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.Images,
-      allowsEditing: true,
-      aspect: [4, 3],
-    });
-    if (!result.cancelled) {
-      this.props.avatarChanged(result.uri);
-    }
-  };
+  // onPickAvatar = async () => {
+  //   UserPermissions.getCameraPermission();
+  //   let result = await ImagePicker.launchImageLibraryAsync({
+  //     mediaTypes: ImagePicker.MediaTypeOptions.Images,
+  //     allowsEditing: true,
+  //     aspect: [4, 3],
+  //   });
+  //   if (!result.cancelled) {
+  //     this.props.avatarChanged(result.uri);
+  //   }
+  // };
 
   private renderButton = () => {
     if (this.props.loading) {
@@ -132,10 +132,10 @@ class RegisterScreen extends Component<RegisterScreenProps> {
             paddingTop: Spacing.small,
           }}
         >
-          <TouchableOpacity style={styles.avatarPlaceholder} onPress={this.onPickAvatar}>
+          {/* <TouchableOpacity style={styles.avatarPlaceholder} onPress={this.onPickAvatar}>
             <Image source={{ uri: avatar }} style={styles.avatar} />
             <Ionicons name="ios-add" size={40} color="#FFF" style={styles.addIcon} />
-          </TouchableOpacity>
+          </TouchableOpacity> */}
           <Card>
             <CardSection>
               <Input

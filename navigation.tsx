@@ -101,7 +101,7 @@ export const Navigator = (): JSX.Element => {
         <Stack.Screen
           name={Routes.REGISTER_SCREEN}
           component={RegisterScreen}
-          options={{ headerTransparent: true, headerTitle: "" }}
+          options={{ headerTransparent: true, headerTitle: "", headerTintColor: "white" }}
         />
         <Stack.Screen
           name={Routes.DASHBOARD_TABS}

@@ -9,7 +9,6 @@ import firebase from "firebase";
 import { Color } from "../common/styles/Colors";
 import Spinner from "../common/components/Spinner";
 import { Spacing } from "../common/styles/Spacing";
-import Avatar from "../common/components/Avatar";
 import CellLabelLeftRight from "../common/components/CellLabelLeftRight";
 import { Routes } from "../../navigation";
 require("firebase/firestore");
@@ -35,20 +34,14 @@ interface DispatchFromState {
 type ProfileScreenProps = PropsFromState & DispatchFromState & PassedProps;
 
 class ProfileScreen extends React.Component<ProfileScreenProps, LocalState> {
-  constructor(props: ProfileScreenProps) {
-    super(props);
-    const userId = firebase.auth().currentUser?.uid;
-    this.state = {
-      user: {
-        avatar: undefined,
-        firstName: undefined,
-        lastName: undefined,
-        email: undefined,
-      },
-    };
-  }
-
-  public componentDidMount() {}
+  public state = {
+    user: {
+      avatar: undefined,
+      firstName: undefined,
+      lastName: undefined,
+      email: undefined,
+    },
+  };
 
   public componentDidUpdate(oldProps: any) {
     if (oldProps.loading && !this.props.loading && !this.props.error) {
@@ -69,7 +62,6 @@ class ProfileScreen extends React.Component<ProfileScreenProps, LocalState> {
   };
 
   public render() {
-    const { fetchUserLoading, loading } = this.props;
     const { user } = this.state;
     return (
       <View style={styles.container}>
@@ -112,7 +104,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: Color.darkThemeGreyDark,
-    paddingTop: 200,
+    paddingTop: Spacing.xxlarge,
   },
   avatarContainer: {
     paddingTop: Spacing.xxlarge,
