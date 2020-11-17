@@ -55,14 +55,14 @@ export default class Input extends Component<InputProps> {
       selectionColor,
     } = this.props;
     return (
-      <View style={[style, styles.containerStyle]}>
-        {!!label && <Text style={styles.labelStyle}>{label}</Text>}
+      <View style={[style, styles.rootContainer]}>
+        {!!label && <Text style={styles.labelText}>{label}</Text>}
 
         <TextInput
           secureTextEntry={secureTextEntry}
           autoCorrect={false}
           autoCapitalize={"none"}
-          style={[textStyle, styles.inputStyle]}
+          style={[textStyle, styles.input]}
           value={value}
           onChangeText={onChangeText}
           maxLength={maxLength}
@@ -79,17 +79,20 @@ export default class Input extends Component<InputProps> {
 }
 
 const styles = StyleSheet.create({
-  inputStyle: {
+  rootContainer: {
+    flex: 1,
+    minHeight: 40,
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  input: {
     flex: 1,
     paddingRight: Spacing.small,
     paddingLeft: Spacing.small,
     fontSize: 16,
-    lineHeight: 23,
     color: Color.white,
-    alignSelf: "center",
-    justifyContent: "center",
   },
-  labelStyle: {
+  labelText: {
     fontSize: 16,
     paddingLeft: Spacing.med,
     color: Color.greyMed,
@@ -98,11 +101,5 @@ const styles = StyleSheet.create({
     fontSize: 16,
     paddingLeft: 20,
     color: Color.white,
-  },
-  containerStyle: {
-    flex: 1,
-    minHeight: 40,
-    flexDirection: "row",
-    alignItems: "center",
   },
 });

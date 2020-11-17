@@ -138,7 +138,7 @@ class AddNewClientScreen extends Component<AddNewClientScreenProps, LocalState> 
       <ScrollView style={styles.rootContainer}>
         <StatusBar barStyle={"light-content"} />
         <Card>
-          <SubHeader label={"FirstName"} fontSize={14} />
+          <SubHeader label={"FirstName"} fontSize={16} />
           <CardSection>
             <Input
               value={firstName}
@@ -154,7 +154,7 @@ class AddNewClientScreen extends Component<AddNewClientScreenProps, LocalState> 
               placeholder={"Smith"}
             />
           </CardSection>
-          <SubHeader label={"Street Address"} fontSize={14} />
+          <SubHeader label={"Street Address"} fontSize={16} />
           <CardSection>
             <Input
               value={address}
@@ -162,7 +162,7 @@ class AddNewClientScreen extends Component<AddNewClientScreenProps, LocalState> 
               placeholder={"123 Beachside Ln"}
             />
           </CardSection>
-          <SubHeader label={"Phone number"} fontSize={14} />
+          <SubHeader label={"Phone number"} fontSize={16} />
           <CardSection>
             <Input
               value={phoneNumber}
@@ -170,7 +170,7 @@ class AddNewClientScreen extends Component<AddNewClientScreenProps, LocalState> 
               placeholder={"(555) 555-5555"}
             />
           </CardSection>
-          <SubHeader label={"Email Address"} fontSize={14} />
+          <SubHeader label={"Email Address"} fontSize={16} />
           <CardSection>
             <Input
               value={email}
@@ -178,7 +178,7 @@ class AddNewClientScreen extends Component<AddNewClientScreenProps, LocalState> 
               placeholder={"johnsmith@gmail.com"}
             />
           </CardSection>
-          <SubHeader label={"Budget Lowest"} fontSize={14} />
+          <SubHeader label={"Budget Lowest"} fontSize={16} />
           <CardSection>
             <Input
               value={budgetLow}
@@ -186,7 +186,7 @@ class AddNewClientScreen extends Component<AddNewClientScreenProps, LocalState> 
               placeholder={"$500,000"}
             />
           </CardSection>
-          <SubHeader label={"Budget Highest"} fontSize={14} />
+          <SubHeader label={"Budget Highest"} fontSize={16} />
           <CardSection>
             <Input
               value={budgetHigh}
@@ -194,7 +194,7 @@ class AddNewClientScreen extends Component<AddNewClientScreenProps, LocalState> 
               placeholder={"$550,000"}
             />
           </CardSection>
-          <SubHeader label={"Preferred Areas"} fontSize={14} />
+          <SubHeader label={"Preferred Areas"} fontSize={16} />
           <CardSection>
             <Input
               value={preferredAreas}
@@ -204,7 +204,7 @@ class AddNewClientScreen extends Component<AddNewClientScreenProps, LocalState> 
               placeholder={"Wrightsville Beach"}
             />
           </CardSection>
-          <SubHeader label={"Additional Notes"} fontSize={14} />
+          <SubHeader label={"Additional Notes"} fontSize={16} />
           <CardSection>
             <Input
               value={notes}

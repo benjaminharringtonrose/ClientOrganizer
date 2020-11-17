@@ -21,7 +21,7 @@ export default class InputSearch extends Component<InputSearchProps> {
   public render() {
     const { onChangeText, value, placeholder, onPress, keyboardType, style } = this.props;
     return (
-      <CardSection style={[style, { flex: 1, alignItems: "center" }]}>
+      <>
         <Input
           label={""}
           value={value}
@@ -43,7 +43,7 @@ export default class InputSearch extends Component<InputSearchProps> {
             style={{ paddingRight: Spacing.small }}
           />
         </TouchableOpacity>
-      </CardSection>
+      </>
     );
   }
 }

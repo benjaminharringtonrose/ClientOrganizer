@@ -1,5 +1,12 @@
 import React, { Component } from "react";
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from "react-native";
+import {
+  View,
+  Text,
+  StyleSheet,
+  ScrollView,
+  TouchableOpacity,
+  StatusBar,
+} from "react-native";
 import { connect } from "react-redux";
 import Card from "../common/components/Card";
 import CardSection from "../common/components/CardSection";
@@ -74,6 +81,7 @@ class LoginScreen extends Component<LoginScreenProps> {
   public render() {
     return (
       <View style={styles.mainContainer}>
+        <StatusBar barStyle={"light-content"} />
         <Header
           title={"ClientOrganizer"}
           description={"Welcome back!"}
@@ -87,6 +95,7 @@ class LoginScreen extends Component<LoginScreenProps> {
                 label="Email"
                 onChangeText={this.onEmailChange}
                 value={this.props.email}
+                selectionColor={Color.greyMed}
               />
             </CardSection>
 
@@ -96,6 +105,7 @@ class LoginScreen extends Component<LoginScreenProps> {
                 label="Password"
                 onChangeText={this.onPasswordChange}
                 value={this.props.password}
+                selectionColor={Color.greyMed}
               />
             </CardSection>
             {this.renderError()}

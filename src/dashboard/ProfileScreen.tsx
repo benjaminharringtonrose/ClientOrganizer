@@ -1,5 +1,5 @@
 import React from "react";
-import { View, Text, StyleSheet } from "react-native";
+import { View, Text, StyleSheet, ScrollView } from "react-native";
 import { connect } from "react-redux";
 import Button from "../common/components/Button";
 import Card from "../common/components/Card";
@@ -64,7 +64,7 @@ class ProfileScreen extends React.Component<ProfileScreenProps, LocalState> {
   public render() {
     const { user } = this.state;
     return (
-      <View style={styles.container}>
+      <ScrollView style={styles.container}>
         <Card>
           <Text style={styles.subHeaderText}>{"User Information"}</Text>
           <CellLabelLeftRight
@@ -76,9 +76,11 @@ class ProfileScreen extends React.Component<ProfileScreenProps, LocalState> {
           <CellLabelLeftRight labelLeft={"preference 1"} labelRight={"preference 1"} />
           <CellLabelLeftRight labelLeft={"preference 2"} labelRight={"preference 2"} />
           <CellLabelLeftRight labelLeft={"preference 3"} labelRight={"preference 3"} />
-          <CardSection>{this.renderSignOutButton()}</CardSection>
+          <CardSection style={{ marginTop: Spacing.med }}>
+            {this.renderSignOutButton()}
+          </CardSection>
         </Card>
-      </View>
+      </ScrollView>
     );
   }
 }

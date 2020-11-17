@@ -1,21 +1,11 @@
 import React, { Component } from "react";
-import {
-  View,
-  Text,
-  Image,
-  TouchableOpacity,
-  StyleSheet,
-  ScrollView,
-} from "react-native";
+import { View, Text, StyleSheet, ScrollView } from "react-native";
 import Card from "../common/components/Card";
 import CardSection from "../common/components/CardSection";
 import Input from "../common/components/Input";
 import Button from "../common/components/Button";
 import Spinner from "../common/components/Spinner";
-import { Ionicons } from "@expo/vector-icons";
 import { connect } from "react-redux";
-import UserPermissions from "../util/permissions";
-import * as ImagePicker from "expo-image-picker";
 import { REGISTER_USER_REQUEST } from "../store/actions/types";
 import {
   firstNameChanged,
@@ -85,18 +75,6 @@ class RegisterScreen extends Component<RegisterScreenProps> {
     this.props.navigation.navigate(Routes.DASHBOARD_TABS);
   };
 
-  // onPickAvatar = async () => {
-  //   UserPermissions.getCameraPermission();
-  //   let result = await ImagePicker.launchImageLibraryAsync({
-  //     mediaTypes: ImagePicker.MediaTypeOptions.Images,
-  //     allowsEditing: true,
-  //     aspect: [4, 3],
-  //   });
-  //   if (!result.cancelled) {
-  //     this.props.avatarChanged(result.uri);
-  //   }
-  // };
-
   private renderButton = () => {
     if (this.props.loading) {
       return <Spinner size="large" style={{ marginTop: Spacing.med }} />;
@@ -117,7 +95,7 @@ class RegisterScreen extends Component<RegisterScreenProps> {
   }
 
   render() {
-    const { firstName, lastName, email, password, avatar } = this.props;
+    const { firstName, lastName, email, password } = this.props;
     return (
       <View style={{ flex: 1, backgroundColor: Color.darkThemeGreyDark }}>
         <Header
@@ -132,10 +110,6 @@ class RegisterScreen extends Component<RegisterScreenProps> {
             paddingTop: Spacing.small,
           }}
         >
-          {/* <TouchableOpacity style={styles.avatarPlaceholder} onPress={this.onPickAvatar}>
-            <Image source={{ uri: avatar }} style={styles.avatar} />
-            <Ionicons name="ios-add" size={40} color="#FFF" style={styles.addIcon} />
-          </TouchableOpacity> */}
           <Card>
             <CardSection>
               <Input

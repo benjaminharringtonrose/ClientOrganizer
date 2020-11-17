@@ -127,7 +127,7 @@ class HomeScreen extends Component<HomeScreenProps, LocalState> {
     return (
       <View style={styles.headerContainer}>
         <View style={{ flex: 1 }}>
-          <Text style={styles.subHeaderText}>{"Client Manager"}</Text>
+          <Text style={styles.headerText}>{"Client Manager"}</Text>
         </View>
         <TouchableOpacity onPress={this.onAddNewClientPress}>
           <Icon
@@ -174,38 +174,37 @@ class HomeScreen extends Component<HomeScreenProps, LocalState> {
     console.log(this.props.deleteClientLoading);
     const loading = this.props.fetchUserLoading || this.props.deleteClientLoading;
     return (
-      <ScrollView style={styles.rootContainer}>
-        <>
-          <StatusBar barStyle={"light-content"} />
-          {this.renderHeader()}
-
-          <Card style={{ flex: 1 }}>
+      <View style={styles.rootContainer}>
+        <StatusBar barStyle={"light-content"} />
+        {this.renderHeader()}
+        <Card style={{ flex: 1 }}>
+          <CardSection style={{ marginBottom: Spacing.med }}>
             <InputSearch
               onChangeText={this.onChangeSearchText}
               value={this.props.seachText}
               placeholder={"search clients..."}
               keyboardType={"web-search"}
             />
-            {loading ? (
-              <View
-                style={{
-                  flex: 1,
+          </CardSection>
+          {loading ? (
+            <View
+              style={{
+                flex: 1,
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+            >
+              <ActivityIndicator />
+            </View>
+          ) : (
+            <FlatList
+              data={this.state.clients}
+              keyExtractor={(item: any) => item.id}
+              renderItem={({ item }) => this.renderItem({ item })}
+            />
+          )}
+        </Card>
 
-                  alignItems: "center",
-                  justifyContent: "center",
-                }}
-              >
-                <ActivityIndicator />
-              </View>
-            ) : (
-              <FlatList
-                data={this.state.clients}
-                keyExtractor={(item: any) => item.id}
-                renderItem={({ item }) => this.renderItem({ item })}
-              />
-            )}
-          </Card>
-        </>
         <Modal
           animationType="slide"
           transparent={true}
@@ -238,7 +237,7 @@ class HomeScreen extends Component<HomeScreenProps, LocalState> {
             </Card>
           </View>
         </Modal>
-      </ScrollView>
+      </View>
     );
   }
 }
@@ -266,19 +265,19 @@ export default connect(mapStateToProps, mapDispatchToProps)(HomeScreen);
 
 const styles = StyleSheet.create({
   rootContainer: {
-    flex: 1,
+    flex: 3,
     backgroundColor: Color.darkThemeGreyDark,
     paddingHorizontal: Spacing.med,
     paddingTop: Spacing.xxlarge,
   },
   headerContainer: {
-    flex: 1,
     flexDirection: "row",
     alignItems: "center",
     marginHorizontal: Spacing.micro,
+    // backgroundColor: "lightyellow",
   },
-  subHeaderText: {
-    fontSize: 20,
+  headerText: {
+    fontSize: 26,
     color: Color.white,
   },
   //modal

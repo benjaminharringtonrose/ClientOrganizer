@@ -97,7 +97,7 @@ export default class CellIconActionable extends Component<CellIconActionableProp
 const styles = StyleSheet.create({
   cardSectionContainer: {
     alignItems: "center",
-    paddingVertical: Spacing.micro,
+    paddingVertical: Spacing.small,
     paddingHorizontal: Spacing.med,
   },
   icon: {

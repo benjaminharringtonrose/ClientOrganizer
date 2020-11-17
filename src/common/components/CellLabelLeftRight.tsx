@@ -28,11 +28,20 @@ export default class CellLabelLeftRight extends Component<CellLabelLeftRightProp
         {loading ? (
           <Spinner size={800} color={Color.white} />
         ) : (
-          <CardSection>
-            <Text style={{ flex: 1, color: Color.white, paddingLeft: Spacing.small }}>
+          <CardSection style={{ paddingVertical: Spacing.small }}>
+            <Text
+              style={{
+                flex: 1,
+                color: Color.white,
+                paddingLeft: Spacing.small,
+                fontSize: 18,
+              }}
+            >
               {labelLeft}
             </Text>
-            <Text style={{ color: Color.white, paddingRight: Spacing.small }}>
+            <Text
+              style={{ color: Color.white, paddingRight: Spacing.small, fontSize: 18 }}
+            >
               {labelRight}
             </Text>
           </CardSection>

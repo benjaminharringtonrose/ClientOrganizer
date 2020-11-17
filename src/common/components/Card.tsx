@@ -11,9 +11,9 @@ export default class Card extends Component<CardProps> {
   public render() {
     const { children, style } = this.props;
     return (
-      <ScrollView style={{ flex: 1 }} indicatorStyle={"white"}>
+      <View style={{ flex: 1 }}>
         <View style={[style, styles.containerStyle]}>{children}</View>
-      </ScrollView>
+      </View>
     );
   }
 }

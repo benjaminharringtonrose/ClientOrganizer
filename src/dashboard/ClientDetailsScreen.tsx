@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Text, View, StyleSheet } from "react-native";
+import { Text, View, StyleSheet, ScrollView } from "react-native";
 import CellLabelLeftRight from "../common/components/CellLabelLeftRight";
 import { Color } from "../common/styles/Colors";
 import Card from "../common/components/Card";
@@ -17,25 +17,28 @@ export default class ClientDetailScreen extends Component<ClientDetailScreenProp
   public render() {
     const client = this.props.route?.["params"]?.["client"];
     return (
-      <View style={styles.rootContainer}>
+      <ScrollView style={styles.rootContainer}>
         <Card>
           <CellLabelLeftRight
-            labelLeft={"name"}
+            labelLeft={"Name"}
             labelRight={`${client.firstName} ${client.lastName}`}
           />
-          <CellLabelLeftRight labelLeft={"address"} labelRight={client.address} />
+          <CellLabelLeftRight labelLeft={"Address"} labelRight={client.address} />
           <CellLabelLeftRight
-            labelLeft={"budget"}
+            labelLeft={"Budget"}
             labelRight={`${client.budgetLow} - ${client.budgetHigh}`}
           />
-          <CellLabelLeftRight labelLeft={"email"} labelRight={client.email} />
-          <CellLabelLeftRight labelLeft={"phoneNumber"} labelRight={client.phoneNumber} />
+          <CellLabelLeftRight labelLeft={"Email"} labelRight={client.email} />
           <CellLabelLeftRight
-            labelLeft={"preferredAreas"}
+            labelLeft={"Phone Number"}
+            labelRight={client.phoneNumber}
+          />
+          <CellLabelLeftRight
+            labelLeft={"Preferred Areas"}
             labelRight={client.preferredAreas}
           />
         </Card>
-      </View>
+      </ScrollView>
     );
   }
 }
