@@ -86,7 +86,6 @@ class ProfileScreen extends React.Component<ProfileScreenProps, LocalState> {
 }
 
 const mapStateToProps = (state: any) => {
-  console.log(state);
   return {
     loading: state.auth.loading,
     error: state.auth.error,

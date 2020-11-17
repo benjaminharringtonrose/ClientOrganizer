@@ -1,13 +1,5 @@
 import firebase from "firebase";
 
-export const capitalizeFirstLetter = (word: string) => {
-  if (!word) {
-    return word;
-  }
-  const capitalized = word[0].toUpperCase() + word.slice(1);
-  return capitalized;
-};
-
 export const getDocRef = (): any => {
   return firebase.firestore().collection("users").doc(firebase.auth().currentUser?.uid);
 };
@@ -36,7 +28,6 @@ export function mapClients(clients: any) {
     return;
   }
   let acc: any = [];
-  console.log(clients);
   for (const [key, value] of Object.entries(clients)) {
     acc = acc.concat({ ...(value as Object), id: key });
   }

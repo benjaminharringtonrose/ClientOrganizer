@@ -196,7 +196,7 @@ const styles = StyleSheet.create({
     backgroundColor: Color.darkThemeGreyDark,
   },
   errorText: {
-    fontSize: 20,
+    fontSize: 12,
     alignSelf: "center",
     color: "red",
   },
