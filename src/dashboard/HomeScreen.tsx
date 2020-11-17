@@ -16,11 +16,7 @@ import Card from "../common/components/Card";
 import CellIconActionable from "../common/components/CellIconActionable";
 import firebase from "firebase";
 import { Routes } from "../../navigation";
-import {
-  FETCH_USER_REQUEST,
-  DELETE_CLIENT_REQUESTED,
-  DELETE_CLIENT_SUCCEEDED,
-} from "../store/actions/types";
+import { FETCH_USER_REQUESTED, DELETE_CLIENT_REQUESTED } from "../store/actions/types";
 import { Icon } from "react-native-elements";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { mapClients } from "./util";
@@ -205,7 +201,7 @@ const mapStateToProps = (state: any) => {
 
 const mapDispatchToProps = (dispatch: any) => ({
   searchTextChanged: (text: string) => dispatch(searchTextChanged(text)),
-  dispatchFetchUser: (uid: any) => dispatch({ type: FETCH_USER_REQUEST, payload: uid }),
+  dispatchFetchUser: (uid: any) => dispatch({ type: FETCH_USER_REQUESTED, payload: uid }),
   dispatchDeleteClient: (clientId: any) =>
     dispatch({ type: DELETE_CLIENT_REQUESTED, payload: clientId }),
 });

@@ -6,7 +6,7 @@ import Input from "../common/components/Input";
 import Button from "../common/components/Button";
 import Spinner from "../common/components/Spinner";
 import { connect } from "react-redux";
-import { REGISTER_USER_REQUEST } from "../store/actions/types";
+import { REGISTER_USER_REQUESTED } from "../store/actions/types";
 import {
   firstNameChanged,
   lastNameChanged,
@@ -30,8 +30,8 @@ interface PropsFromState {
   user: any;
   email: string;
   password: string;
-  loading: boolean;
-  error: boolean;
+  authLoading: boolean;
+  authError: boolean;
 }
 interface DispatchFromState {
   emailChanged: (text: string) => any;
@@ -45,6 +45,12 @@ interface DispatchFromState {
 type RegisterScreenProps = PropsFromState & DispatchFromState & PassedProps;
 
 class RegisterScreen extends Component<RegisterScreenProps> {
+  componentDidUpdate(oldProps: any) {
+    if (oldProps.authLoading && !this.props.authLoading && !this.props.authError) {
+      this.props.navigation.navigate(Routes.DASHBOARD_TABS);
+    }
+  }
+
   public componentDidMount() {}
   private onEmailChange = (email: string) => {
     this.props.emailChanged(email);
@@ -72,11 +78,10 @@ class RegisterScreen extends Component<RegisterScreenProps> {
       lastName,
       avatar,
     });
-    this.props.navigation.navigate(Routes.DASHBOARD_TABS);
   };
 
   private renderButton = () => {
-    if (this.props.loading) {
+    if (this.props.authLoading) {
       return <Spinner size="large" style={{ marginTop: Spacing.med }} />;
     }
     return (
@@ -85,10 +90,10 @@ class RegisterScreen extends Component<RegisterScreenProps> {
   };
 
   renderError() {
-    if (this.props.error) {
+    if (this.props.authError) {
       return (
-        <View style={{ backgroundColor: "white" }}>
-          <Text style={styles.errorTextStyle}>{this.props.error}</Text>
+        <View style={{ backgroundColor: Color.darkThemeGreyDark }}>
+          <Text style={styles.errorTextStyle}>{this.props.authError}</Text>
         </View>
       );
     }
@@ -168,8 +173,8 @@ const mapStateToProps = ({ auth }: any) => {
     avatar,
     email,
     password,
-    error,
-    loading,
+    authError: error,
+    authLoading: loading,
     user,
   };
 };
@@ -189,7 +194,7 @@ const mapDispatchToProps = (dispatch: any) => ({
     user,
   }: any) => {
     dispatch({
-      type: REGISTER_USER_REQUEST,
+      type: REGISTER_USER_REQUESTED,
       payload: {
         email,
         password,

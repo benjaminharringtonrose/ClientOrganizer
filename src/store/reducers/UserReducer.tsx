@@ -1,8 +1,7 @@
 import {
-  SEARCH_TEXT_CHANGED,
-  FETCH_USER_REQUEST,
-  FETCH_USER_SUCCESS,
-  FETCH_USER_FAIL,
+  FETCH_USER_REQUESTED,
+  FETCH_USER_SUCCEEDED,
+  FETCH_USER_FAILED,
   DELETE_CLIENT_REQUESTED,
   DELETE_CLIENT_SUCCEEDED,
   DELETE_CLIENT_FAILED,
@@ -22,23 +21,18 @@ const INITIAL_STATE = {
 const UserReducer = (state = INITIAL_STATE, action: any) => {
   console.log(state, action);
   switch (action.type) {
-    case SEARCH_TEXT_CHANGED:
-      return {
-        ...state,
-        searchText: action.payload,
-      };
-    case FETCH_USER_REQUEST:
+    case FETCH_USER_REQUESTED:
       return {
         ...state,
         fetchUserLoading: true,
       };
-    case FETCH_USER_SUCCESS:
+    case FETCH_USER_SUCCEEDED:
       return {
         ...state,
         user: action.payload,
         fetchUserLoading: false,
       };
-    case FETCH_USER_FAIL:
+    case FETCH_USER_FAILED:
       return {
         ...state,
         fetchUserError: action.payload,

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, Component } from "react";
+import React, { Component } from "react";
 import { StyleSheet, ScrollView, StatusBar } from "react-native";
 import { Color } from "../common/styles/Colors";
 import { Spacing } from "../common/styles/Spacing";
@@ -11,8 +11,7 @@ import { Routes } from "../../navigation";
 import firebase from "firebase";
 import uuid from "uuid-random";
 import { connect } from "react-redux";
-import { FETCH_USER_REQUEST } from "../store/actions/types";
-import UserReducer from "../store/reducers/UserReducer";
+import { FETCH_USER_REQUESTED } from "../store/actions/types";
 import Spinner from "../common/components/Spinner";
 
 interface PassedProps {
@@ -229,7 +228,7 @@ const mapStateToProps = (state: any) => {
 };
 
 const mapDispatchToProps = (dispatch: any) => ({
-  dispatchFetchUser: (uid: any) => dispatch({ type: FETCH_USER_REQUEST, payload: uid }),
+  dispatchFetchUser: (uid: any) => dispatch({ type: FETCH_USER_REQUESTED, payload: uid }),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(AddNewClientScreen);

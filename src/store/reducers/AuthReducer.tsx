@@ -1,17 +1,17 @@
 import {
   EMAIL_CHANGED,
   PASSWORD_CHANGED,
-  LOGIN_USER_REQUEST,
-  LOGIN_USER_SUCCESS,
-  LOGIN_USER_FAIL,
+  LOGIN_USER_REQUESTED,
+  LOGIN_USER_SUCCEEDED,
+  LOGIN_USER_FAILED,
   FIRST_NAME_CHANGED,
   LAST_NAME_CHANGED,
-  REGISTER_USER_REQUEST,
-  REGISTER_USER_SUCCESS,
-  REGISTER_USER_FAIL,
-  LOGOUT_USER_REQUEST,
-  LOGOUT_USER_SUCCESS,
-  LOGOUT_USER_FAIL,
+  REGISTER_USER_REQUESTED,
+  REGISTER_USER_SUCCEEDED,
+  REGISTER_USER_FAILED,
+  LOGOUT_USER_REQUESTED,
+  LOGOUT_USER_SUCCEEDED,
+  LOGOUT_USER_FAILED,
   AVATAR_CHANGED,
 } from "../actions/types";
 
@@ -31,23 +31,13 @@ const INITIAL_STATE = {
 
 const AuthReducer = (state = INITIAL_STATE, action: any) => {
   switch (action.type) {
-    case EMAIL_CHANGED:
-      return {
-        ...state,
-        email: action.payload,
-      };
-    case PASSWORD_CHANGED:
-      return {
-        ...state,
-        password: action.payload,
-      };
-    case LOGIN_USER_REQUEST:
+    // LOGIN
+    case LOGIN_USER_REQUESTED:
       return {
         ...state,
         loading: true,
-        error: "",
       };
-    case LOGIN_USER_SUCCESS:
+    case LOGIN_USER_SUCCEEDED:
       return {
         ...state,
         email: undefined,
@@ -55,32 +45,52 @@ const AuthReducer = (state = INITIAL_STATE, action: any) => {
         user: action.payload,
         loading: false,
       };
-    case LOGIN_USER_FAIL:
+    case LOGIN_USER_FAILED:
       return {
         ...state,
-        error: "Authentication Failed.",
+        error: action.payload.message,
         password: "",
         loading: false,
       };
-    case LOGOUT_USER_REQUEST:
+    // LOGOUT
+    case LOGOUT_USER_REQUESTED:
       return {
         ...state,
         loading: true,
       };
-    case LOGOUT_USER_SUCCESS:
+    case LOGOUT_USER_SUCCEEDED:
       return {
         ...state,
         ...INITIAL_STATE,
         loading: false,
       };
-    case LOGOUT_USER_FAIL:
+    case LOGOUT_USER_FAILED:
       return {
         ...state,
-        error: "Logout Failed.",
+        error: action.payload.message,
         loading: false,
       };
-
-    // REGISTER FORM CASES
+    // REGISTER
+    case REGISTER_USER_REQUESTED:
+      return {
+        ...state,
+        loading: true,
+      };
+    case REGISTER_USER_SUCCEEDED:
+      return {
+        ...state,
+        user: action.payload,
+        clients: {},
+        loading: false,
+      };
+    case REGISTER_USER_FAILED:
+      return {
+        ...state,
+        error: action.payload.message,
+        password: "",
+        loading: false,
+      };
+    // REGISTER FORM
     case FIRST_NAME_CHANGED:
       return {
         ...state,
@@ -91,24 +101,15 @@ const AuthReducer = (state = INITIAL_STATE, action: any) => {
         ...state,
         lastName: action.payload,
       };
-    case REGISTER_USER_REQUEST:
+    case EMAIL_CHANGED:
       return {
         ...state,
-        loading: true,
+        email: action.payload,
       };
-    case REGISTER_USER_SUCCESS:
+    case PASSWORD_CHANGED:
       return {
         ...state,
-        user: action.payload,
-        clients: {},
-        loading: false,
-      };
-    case REGISTER_USER_FAIL:
-      return {
-        ...state,
-        error: "Authentication Failed.",
-        password: "",
-        loading: false,
+        password: action.payload,
       };
     case AVATAR_CHANGED:
       return {

@@ -4,7 +4,7 @@ import { connect } from "react-redux";
 import Button from "../common/components/Button";
 import Card from "../common/components/Card";
 import CardSection from "../common/components/CardSection";
-import { LOGOUT_USER_REQUEST, FETCH_USER_REQUEST } from "../store/actions/types";
+import { LOGOUT_USER_REQUESTED, FETCH_USER_REQUESTED } from "../store/actions/types";
 import firebase from "firebase";
 import { Color } from "../common/styles/Colors";
 import Spinner from "../common/components/Spinner";
@@ -58,7 +58,7 @@ class ProfileScreen extends React.Component<ProfileScreenProps, LocalState> {
   };
 
   private onLogoutPress = () => {
-    this.props.dispatchLogoutRequest(LOGOUT_USER_REQUEST);
+    this.props.dispatchLogoutRequest(LOGOUT_USER_REQUESTED);
   };
 
   public render() {
@@ -96,8 +96,9 @@ const mapStateToProps = (state: any) => {
 };
 
 const mapDispatchToProps = (dispatch: any) => ({
-  dispatchLogoutRequest: () => dispatch({ type: LOGOUT_USER_REQUEST }),
-  dispatchFetchUser: (user: any) => dispatch({ type: FETCH_USER_REQUEST, payload: user }),
+  dispatchLogoutRequest: () => dispatch({ type: LOGOUT_USER_REQUESTED }),
+  dispatchFetchUser: (user: any) =>
+    dispatch({ type: FETCH_USER_REQUESTED, payload: user }),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(ProfileScreen);

@@ -3,18 +3,18 @@ import { put, call } from "redux-saga/effects";
 import firebase from "firebase";
 require("firebase/firestore");
 import {
-  LOGIN_USER_REQUEST,
-  LOGIN_USER_SUCCESS,
-  LOGIN_USER_FAIL,
-  LOGOUT_USER_REQUEST,
-  LOGOUT_USER_SUCCESS,
-  LOGOUT_USER_FAIL,
-  REGISTER_USER_REQUEST,
-  REGISTER_USER_SUCCESS,
-  REGISTER_USER_FAIL,
-  FETCH_USER_REQUEST,
-  FETCH_USER_SUCCESS,
-  FETCH_USER_FAIL,
+  LOGIN_USER_REQUESTED,
+  LOGIN_USER_SUCCEEDED,
+  LOGIN_USER_FAILED,
+  LOGOUT_USER_REQUESTED,
+  LOGOUT_USER_SUCCEEDED,
+  LOGOUT_USER_FAILED,
+  REGISTER_USER_REQUESTED,
+  REGISTER_USER_SUCCEEDED,
+  REGISTER_USER_FAILED,
+  FETCH_USER_REQUESTED,
+  FETCH_USER_SUCCEEDED,
+  FETCH_USER_FAILED,
   DELETE_CLIENT_REQUESTED,
   DELETE_CLIENT_SUCCEEDED,
   DELETE_CLIENT_FAILED,
@@ -25,20 +25,20 @@ import { getDocRef, deleteField } from "../dashboard/util";
 
 function fetchUserRequested(data: any) {
   return {
-    type: FETCH_USER_REQUEST,
+    type: FETCH_USER_REQUESTED,
     payload: data,
   };
 }
 
 function fetchUserSuccess(data: any) {
   return {
-    type: FETCH_USER_SUCCESS,
+    type: FETCH_USER_SUCCEEDED,
     payload: data,
   };
 }
 function fetchUserFail(error: any) {
   return {
-    type: FETCH_USER_FAIL,
+    type: FETCH_USER_FAILED,
     payload: error,
   };
 }
@@ -101,14 +101,14 @@ export function* deleteClientSaga(action: any) {
 
 function loginUserSuccess(data: any) {
   return {
-    type: LOGIN_USER_SUCCESS,
+    type: LOGIN_USER_SUCCEEDED,
     payload: data,
   };
 }
 
 function loginUserFail(error: any) {
   return {
-    type: LOGIN_USER_FAIL,
+    type: LOGIN_USER_FAILED,
     payload: error,
   };
 }
@@ -130,13 +130,13 @@ export function* loginUserSaga(action: any) {
 
 function logoutUserSuccess() {
   return {
-    type: LOGOUT_USER_SUCCESS,
+    type: LOGOUT_USER_SUCCEEDED,
   };
 }
 
 function logoutUserFail(error: any) {
   return {
-    type: LOGOUT_USER_FAIL,
+    type: LOGOUT_USER_FAILED,
     payload: error,
   };
 }
@@ -156,14 +156,14 @@ export function* logoutUserSaga() {
 
 function registerUserSuccess(data: any) {
   return {
-    type: REGISTER_USER_SUCCESS,
+    type: REGISTER_USER_SUCCEEDED,
     payload: data,
   };
 }
 
 function registerUserFail(error: any) {
   return {
-    type: REGISTER_USER_FAIL,
+    type: REGISTER_USER_FAILED,
     payload: error,
   };
 }
@@ -172,7 +172,7 @@ function registerUserFail(error: any) {
 
 export function* registerUserSaga(action: any) {
   try {
-    const { email, password, firstName, lastName, avatar } = action.payload;
+    const { email, password, firstName, lastName } = action.payload;
     const auth = firebase.auth();
     const data = yield call([auth, auth.createUserWithEmailAndPassword], email, password);
     const db = getDocRef();
@@ -180,9 +180,7 @@ export function* registerUserSaga(action: any) {
       firstName,
       lastName,
       email,
-      avatar,
     });
-    addAvatarAsync(avatar);
     yield put(registerUserSuccess(data));
   } catch (error) {
     console.log(error);
@@ -238,11 +236,11 @@ const addAvatarAsync = async (data: any) => {
 // ACTION LISTENER
 
 function* watchUserAuthentication() {
-  yield takeLatest(FETCH_USER_REQUEST, fetchUserSaga);
+  yield takeLatest(FETCH_USER_REQUESTED, fetchUserSaga);
   yield takeLatest(DELETE_CLIENT_REQUESTED, deleteClientSaga);
-  yield takeLatest(LOGIN_USER_REQUEST, loginUserSaga);
-  yield takeLatest(LOGOUT_USER_REQUEST, logoutUserSaga);
-  yield takeLatest(REGISTER_USER_REQUEST, registerUserSaga);
+  yield takeLatest(LOGIN_USER_REQUESTED, loginUserSaga);
+  yield takeLatest(LOGOUT_USER_REQUESTED, logoutUserSaga);
+  yield takeLatest(REGISTER_USER_REQUESTED, registerUserSaga);
 }
 
 // ROOT SAGA

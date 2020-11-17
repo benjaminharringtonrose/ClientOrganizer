@@ -14,7 +14,7 @@ import Input from "../common/components/Input";
 import Button from "../common/components/Button";
 import Spinner from "../common/components/Spinner";
 import { emailChanged, passwordChanged } from "../store/actions/AuthActions";
-import { LOGIN_USER_REQUEST } from "../store/actions/types";
+import { LOGIN_USER_REQUESTED } from "../store/actions/types";
 import Header from "../common/components/Header";
 import { Spacing } from "../common/styles/Spacing";
 import { Color } from "../common/styles/Colors";
@@ -27,8 +27,8 @@ interface PassedProps {
 interface PropsFromState {
   email: string;
   password: string;
-  loading: boolean;
-  error: boolean;
+  authLoading: boolean;
+  authError: boolean;
 }
 interface DispatchFromState {
   emailChanged: (text: string) => void;
@@ -40,7 +40,7 @@ type LoginScreenProps = PropsFromState & DispatchFromState & PassedProps;
 
 class LoginScreen extends Component<LoginScreenProps> {
   componentDidUpdate(oldProps: any) {
-    if (oldProps.loading && !this.props.loading && !this.props.error) {
+    if (oldProps.authLoading && !this.props.authLoading && !this.props.authError) {
       this.props.navigation.navigate(Routes.DASHBOARD_TABS);
     }
   }
@@ -59,7 +59,7 @@ class LoginScreen extends Component<LoginScreenProps> {
   };
 
   private renderLoginButton = () => {
-    if (this.props.loading) {
+    if (this.props.authLoading) {
       return <Spinner size="small" />;
     } else {
       return <Button label={"Login"} onPress={this.onLoginPress} />;
@@ -67,10 +67,10 @@ class LoginScreen extends Component<LoginScreenProps> {
   };
 
   private renderError = () => {
-    if (this.props.error) {
+    if (this.props.authError) {
       return (
         <View style={{ backgroundColor: "transparent", marginVertical: Spacing.small }}>
-          <Text style={styles.errorTextStyle}>{this.props.error}</Text>
+          <Text style={styles.errorTextStyle}>{this.props.authError}</Text>
         </View>
       );
     }
@@ -129,8 +129,8 @@ const mapStateToProps = (state: any) => {
   return {
     email: state.auth.email,
     password: state.auth.password,
-    error: state.auth.error,
-    loading: state.auth.loading,
+    authError: state.auth.error,
+    authLoading: state.auth.loading,
   };
 };
 
@@ -139,7 +139,7 @@ const mapDispatchToProps = (dispatch: any) => ({
   passwordChanged: (text: string) => dispatch(passwordChanged(text)),
   dispatchLoginRequest: ({ email, password }: any) => {
     dispatch({
-      type: LOGIN_USER_REQUEST,
+      type: LOGIN_USER_REQUESTED,
       payload: { email, password },
     });
   },
