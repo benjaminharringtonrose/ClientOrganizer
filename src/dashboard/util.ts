@@ -39,3 +39,7 @@ export function mapClients(clients: any) {
   }
   return acc;
 }
+
+export function deleteField() {
+  firebase.firestore.FieldValue.delete();
+}

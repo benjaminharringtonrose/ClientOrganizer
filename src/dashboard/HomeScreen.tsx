@@ -16,7 +16,11 @@ import Card from "../common/components/Card";
 import CellIconActionable from "../common/components/CellIconActionable";
 import firebase from "firebase";
 import { Routes } from "../../navigation";
-import { FETCH_USER_REQUEST, DELETE_CLIENT } from "../store/actions/types";
+import {
+  FETCH_USER_REQUEST,
+  DELETE_CLIENT_REQUESTED,
+  DELETE_CLIENT_SUCCEEDED,
+} from "../store/actions/types";
 import { Icon } from "react-native-elements";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { mapClients } from "./util";
@@ -39,8 +43,7 @@ interface PropsFromState {
 interface DispatchFromState {
   searchTextChanged: (text: string) => void;
   dispatchFetchUser: (uid: any) => any;
-  dispatchDeleteClientRequested: () => any;
-  dispatchDeleteClientSucceeded: () => any;
+  dispatchDeleteClient: (clientId: any) => any;
 }
 
 interface LocalState {
@@ -93,27 +96,7 @@ class HomeScreen extends Component<HomeScreenProps, LocalState> {
   };
 
   private onDeletePress = () => {
-    this.props.dispatchDeleteClientRequested();
-    const uid = firebase.auth().currentUser?.uid;
-    firebase
-      .firestore()
-      .collection("users")
-      .doc(uid)
-      .set(
-        {
-          clients: {
-            [this.state.clientId!]: firebase.firestore.FieldValue.delete(),
-          },
-        },
-        { merge: true }
-      )
-      .then(() => {
-        this.props.dispatchDeleteClientSucceeded();
-        this.props.dispatchFetchUser({ uid });
-      })
-      .catch(function (error) {
-        console.error("Error removing document: ", error);
-      });
+    this.props.dispatchDeleteClient({ clientId: this.state.clientId });
     this.setState({
       modalVisible: !this.state.modalVisible,
       editMode: !this.state.editMode,
@@ -168,7 +151,6 @@ class HomeScreen extends Component<HomeScreenProps, LocalState> {
   };
 
   public render() {
-    console.log(this.props.deleteClientLoading);
     const loading = this.props.fetchUserLoading || this.props.deleteClientLoading;
     return (
       <View style={styles.rootContainer}>
@@ -212,7 +194,6 @@ class HomeScreen extends Component<HomeScreenProps, LocalState> {
 }
 
 const mapStateToProps = (state: any) => {
-  console.log("state", state);
   return {
     clients: state.user.user.clients,
     fetchUserLoading: state.user.fetchUserLoading,
@@ -226,8 +207,8 @@ const mapDispatchToProps = (dispatch: any) => ({
   searchTextChanged: (text: string) => dispatch(searchTextChanged(text)),
   dispatchFetchUser: ({ uid }: any) =>
     dispatch({ type: FETCH_USER_REQUEST, payload: { uid } }),
-  dispatchDeleteClientRequested: () => dispatch({ type: DELETE_CLIENT.REQUESTED }),
-  dispatchDeleteClientSucceeded: () => dispatch({ type: DELETE_CLIENT.SUCCEEDED }),
+  dispatchDeleteClient: ({ clientId }: any) =>
+    dispatch({ type: DELETE_CLIENT_REQUESTED, payload: { clientId } }),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(HomeScreen);

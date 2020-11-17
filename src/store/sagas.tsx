@@ -15,12 +15,20 @@ import {
   FETCH_USER_REQUEST,
   FETCH_USER_SUCCESS,
   FETCH_USER_FAIL,
-  DELETE_CLIENT,
+  DELETE_CLIENT_REQUESTED,
+  DELETE_CLIENT_SUCCEEDED,
+  DELETE_CLIENT_FAILED,
 } from "./actions/types";
-import { getDocRef } from "../dashboard/util";
-import { deleteField } from "../screens/util";
+import { getDocRef, deleteField } from "../dashboard/util";
 
 // FETCH USER - ACTIONS
+
+function fetchUserRequested(data: any) {
+  return {
+    type: FETCH_USER_REQUEST,
+    payload: data,
+  };
+}
 
 function fetchUserSuccess(data: any) {
   return {
@@ -53,11 +61,11 @@ export function* fetchUserSaga(action: any) {
 // DELETE CLIENT - ACTIONS
 
 export const deleteClientSucceeded = () => ({
-  type: DELETE_CLIENT.SUCCEEDED,
+  type: DELETE_CLIENT_SUCCEEDED,
 });
 
 export const deleteClientFailed = (error: any) => ({
-  type: DELETE_CLIENT.FAILED,
+  type: DELETE_CLIENT_FAILED,
   payload: error,
 });
 
@@ -66,7 +74,9 @@ export const deleteClientFailed = (error: any) => ({
 export function* deleteClientSaga(action: any) {
   try {
     const { clientId } = action.payload;
+    yield console.log("saga - clientid", clientId);
     const uid = yield firebase.auth().currentUser?.uid;
+    yield console.log("saga - uid", uid);
     yield firebase
       .firestore()
       .collection("users")
@@ -74,14 +84,15 @@ export function* deleteClientSaga(action: any) {
       .set(
         {
           clients: {
-            [clientId!]: deleteField(),
+            [clientId!]: firebase.firestore.FieldValue.delete(),
           },
         },
         { merge: true }
       );
     yield put(deleteClientSucceeded());
-  } catch ({ error }) {
-    yield put(deleteClientFailed({ error }));
+    yield put({ type: FETCH_USER_REQUEST, payload: { uid } });
+  } catch (error) {
+    yield put(deleteClientFailed(error));
   }
 }
 
@@ -227,6 +238,7 @@ const addAvatarAsync = async (data: any) => {
 
 function* watchUserAuthentication() {
   yield takeLatest(FETCH_USER_REQUEST, fetchUserSaga);
+  yield takeLatest(DELETE_CLIENT_REQUESTED, deleteClientSaga);
   yield takeLatest(LOGIN_USER_REQUEST, loginUserSaga);
   yield takeLatest(LOGOUT_USER_REQUEST, logoutUserSaga);
   yield takeLatest(REGISTER_USER_REQUEST, registerUserSaga);
