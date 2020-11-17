@@ -23,7 +23,7 @@ import { searchTextChanged } from "../store/actions/UserActions";
 import firebase from "firebase";
 import { Routes } from "../../navigation";
 import { FETCH_USER_REQUEST, DELETE_CLIENT } from "../store/actions/types";
-import { mapClients, deleteField } from "./util";
+import { mapClients, deleteField, getUID } from "./util";
 
 interface PassedProps {
   navigation: any;
@@ -66,7 +66,7 @@ class HomeScreen extends Component<HomeScreenProps, LocalState> {
   };
 
   public componentDidMount() {
-    const uid = firebase.auth().currentUser?.uid;
+    const uid = getUID();
     this.props.dispatchFetchUser({ uid });
   }
 
@@ -93,7 +93,7 @@ class HomeScreen extends Component<HomeScreenProps, LocalState> {
 
   private onDeletePress = () => {
     const { editMode, modalVisible, clientId } = this.state;
-    const uid = firebase.auth().currentUser?.uid;
+    const uid = getUID();
 
     this.props.dispatchDeleteClientRequested();
     firebase
