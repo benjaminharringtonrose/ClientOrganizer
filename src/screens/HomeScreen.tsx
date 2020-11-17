@@ -23,7 +23,7 @@ import { searchTextChanged } from "../store/actions/UserActions";
 import firebase from "firebase";
 import { Routes } from "../../navigation";
 import { FETCH_USER_REQUEST, DELETE_CLIENT } from "../store/actions/types";
-import { mapClients, deleteField } from "../dashboard/util";
+import { mapClients, deleteField } from "./util";
 
 interface PassedProps {
   navigation: any;
