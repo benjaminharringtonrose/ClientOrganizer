@@ -18,6 +18,9 @@ import {
   DELETE_CLIENT_REQUESTED,
   DELETE_CLIENT_SUCCEEDED,
   DELETE_CLIENT_FAILED,
+  UPDATE_CLIENT_REQUESTED,
+  UPDATE_CLIENT_SUCCEEDED,
+  UPDATE_CLIENT_FAILED,
 } from "./actions/types";
 import { getDocRef } from "../screens/util";
 
@@ -56,6 +59,47 @@ export function* fetchUserSaga(action: any) {
     yield put(fetchUserSuccess(user));
   } catch (error) {
     yield put(fetchUserFail({ error }));
+  }
+}
+
+// UPDATE CLIENT - ACTIONS
+
+export const updateClientSucceeded = () => ({
+  type: UPDATE_CLIENT_SUCCEEDED,
+});
+
+export const updateClientFailed = (error: any) => ({
+  type: UPDATE_CLIENT_FAILED,
+  payload: error,
+});
+
+// UPDATE CLIENT - SAGA
+
+export function* updateClientSaga(action: any) {
+  try {
+    const { clientId, fieldKey, newValue } = action.payload;
+    const uid = yield firebase.auth().currentUser?.uid;
+    yield console.log("saga - clientid", clientId); // ID CHECKS
+    yield console.log("saga - uid", uid);
+    yield console.log("saga - new value", newValue);
+    yield firebase
+      .firestore()
+      .collection("users")
+      .doc(uid)
+      .set(
+        {
+          clients: {
+            [clientId!]: {
+              [fieldKey]: newValue,
+            },
+          },
+        },
+        { merge: true }
+      );
+    yield put(deleteClientSucceeded());
+    yield put(fetchUserRequested(uid));
+  } catch (error) {
+    yield put(deleteClientFailed(error));
   }
 }
 
@@ -237,6 +281,7 @@ const addAvatarAsync = async (data: any) => {
 
 function* watchUserAuthentication() {
   yield takeLatest(FETCH_USER_REQUESTED, fetchUserSaga);
+  yield takeLatest(UPDATE_CLIENT_REQUESTED, updateClientSaga);
   yield takeLatest(DELETE_CLIENT_REQUESTED, deleteClientSaga);
   yield takeLatest(LOGIN_USER_REQUESTED, loginUserSaga);
   yield takeLatest(LOGOUT_USER_REQUESTED, logoutUserSaga);

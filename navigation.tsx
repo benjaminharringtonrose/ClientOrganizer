@@ -15,6 +15,7 @@ import { Color } from "./src/common/styles/Colors";
 import { Spacing } from "./src/common/styles/Spacing";
 import AddNewClientScreen from "./src/screens/AddNewClientScreen";
 import ClientDetailScreen from "./src/screens/ClientDetailsScreen";
+import ClientUpdateScreen from "./src/screens/ClientUpdateScreen";
 
 export enum Routes {
   LOGIN_SCREEN = "LOGIN_SCREEN",
@@ -26,6 +27,7 @@ export enum Routes {
   DASHBOARD_TABS = "DASHBOARD_TABS",
   ADD_NEW_CLIENT_SCREEN = "ADD_NEW_CLIENT_SCREEN",
   CLIENT_DETAIL_SCREEN = "CLIENT_DETAIL_SCREEN",
+  CLIENT_UPDATE_SCREEN = "CLIENT_UPDATE_SCREEN",
 }
 
 const DashboardTabs = () => {
@@ -87,7 +89,7 @@ const DashboardTabs = () => {
   );
 };
 
-export const Navigator = (): JSX.Element => {
+export const Navigator = () => {
   const Stack = createStackNavigator();
   return (
     <NavigationContainer>
@@ -116,20 +118,27 @@ export const Navigator = (): JSX.Element => {
           name={Routes.ADD_NEW_CLIENT_SCREEN}
           component={AddNewClientScreen}
           options={{
-            headerShown: true,
-            headerTitle: "Add New Client",
+            headerTransparent: true,
             headerTintColor: "white",
-            headerStyle: { backgroundColor: "black" },
+            headerTitle: "",
           }}
         />
         <Stack.Screen
           name={Routes.CLIENT_DETAIL_SCREEN}
           component={ClientDetailScreen}
           options={{
-            headerShown: true,
-            headerTitle: "Client Details",
+            headerTransparent: true,
             headerTintColor: "white",
-            headerStyle: { backgroundColor: "black" },
+            headerTitle: "",
+          }}
+        />
+        <Stack.Screen
+          name={Routes.CLIENT_UPDATE_SCREEN}
+          component={ClientUpdateScreen}
+          options={{
+            headerTransparent: true,
+            headerTintColor: "white",
+            headerTitle: "",
           }}
         />
       </Stack.Navigator>

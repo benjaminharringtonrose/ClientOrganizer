@@ -10,7 +10,7 @@ interface CellIconActionableProps {
   label?: string;
   labelColor?: string;
   labelRight?: string;
-  onPress: any;
+  onPress: () => void;
   iconLeftName?: "plus" | "minus" | "book" | "right" | "left";
   iconLeftColor?: string;
   iconLeftSize?: number;
@@ -18,6 +18,7 @@ interface CellIconActionableProps {
   iconRightColor?: string;
   iconRightSize?: number;
   style?: ViewStyle;
+  disabled?: boolean;
 }
 
 export default class CellIconActionable extends Component<CellIconActionableProps> {
@@ -73,12 +74,18 @@ export default class CellIconActionable extends Component<CellIconActionableProp
       iconRightSize,
       iconRightColor,
       style,
+      disabled,
     } = this.props;
     return (
-      <TouchableOpacity onPress={onPress} style={[style, styles.touchable]}>
+      <TouchableOpacity
+        disabled={disabled || false}
+        onPress={onPress}
+        style={[style, styles.touchable]}
+      >
         <CardSection style={[style, styles.cardSectionContainer]}>
           {iconLeftName && this.getIcon()}
-          <Text style={styles.labelText}>{label}</Text>
+          <Text style={styles.labelText}>{label || " "}</Text>
+          {labelRight && <Text style={styles.labelRightText}>{labelRight || " "}</Text>}
           {iconRightName && (
             <AntDesign
               name={iconRightName}
@@ -87,7 +94,6 @@ export default class CellIconActionable extends Component<CellIconActionableProp
               color={iconRightColor || Color.white}
             />
           )}
-          {labelRight && <Text style={styles.labelRightText}>{labelRight}</Text>}
         </CardSection>
       </TouchableOpacity>
     );
@@ -98,7 +104,6 @@ const styles = StyleSheet.create({
   cardSectionContainer: {
     alignItems: "center",
     paddingVertical: Spacing.small,
-    paddingHorizontal: Spacing.med,
   },
   icon: {
     paddingRight: Spacing.small,
@@ -114,9 +119,8 @@ const styles = StyleSheet.create({
     color: Color.white,
   },
   labelRightText: {
-    flex: 1,
-    fontSize: 16,
-    paddingLeft: Spacing.small,
+    fontSize: 18,
+    paddingHorizontal: Spacing.small,
     color: Color.white,
   },
 });

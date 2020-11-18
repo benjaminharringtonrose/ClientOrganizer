@@ -1,5 +1,13 @@
 import React, { Component } from "react";
-import { StyleSheet, ScrollView, StatusBar } from "react-native";
+import {
+  StyleSheet,
+  ScrollView,
+  StatusBar,
+  SafeAreaView,
+  TouchableOpacity,
+  View,
+  Text,
+} from "react-native";
 import { Color } from "../common/styles/Colors";
 import { Spacing } from "../common/styles/Spacing";
 import SubHeader from "../common/components/SubHeader";
@@ -13,6 +21,7 @@ import uuid from "uuid-random";
 import { connect } from "react-redux";
 import { FETCH_USER_REQUESTED } from "../store/actions/types";
 import Spinner from "../common/components/Spinner";
+import { Icon } from "react-native-elements";
 
 interface PassedProps {
   navigation: any;
@@ -64,14 +73,6 @@ class AddNewClientScreen extends Component<AddNewClientScreenProps, LocalState> 
     }
   }
 
-  private renderLoginButton = () => {
-    if (this.props.fetchUserLoading) {
-      return <Spinner size="small" />;
-    } else {
-      return <Button label={"Save"} onPress={this.onSubmit} />;
-    }
-  };
-
   private onSubmit = () => {
     const { dispatchFetchUser } = this.props;
 
@@ -121,6 +122,24 @@ class AddNewClientScreen extends Component<AddNewClientScreenProps, LocalState> 
       });
   };
 
+  private renderHeader = () => {
+    return (
+      <View style={styles.headerContainer}>
+        <View style={{ flex: 1 }}>
+          <Text style={styles.headerText}>{"Add Client"}</Text>
+        </View>
+      </View>
+    );
+  };
+
+  private renderSaveButton = () => {
+    if (this.props.fetchUserLoading) {
+      return <Spinner size="small" />;
+    } else {
+      return <Button label={"Save"} onPress={this.onSubmit} />;
+    }
+  };
+
   public render() {
     const {
       firstName,
@@ -134,88 +153,95 @@ class AddNewClientScreen extends Component<AddNewClientScreenProps, LocalState> 
       notes,
     } = this.state;
     return (
-      <ScrollView style={styles.rootContainer}>
-        <StatusBar barStyle={"light-content"} />
-        <Card>
-          <SubHeader label={"FirstName"} fontSize={16} />
-          <CardSection>
-            <Input
-              value={firstName}
-              onChangeText={(newText: string) => this.setState({ firstName: newText })}
-              placeholder={"John"}
-            />
-          </CardSection>
-          <SubHeader label={"Last Name"} fontSize={14} />
-          <CardSection>
-            <Input
-              value={lastName}
-              onChangeText={(newText: string) => this.setState({ lastName: newText })}
-              placeholder={"Smith"}
-            />
-          </CardSection>
-          <SubHeader label={"Street Address"} fontSize={16} />
-          <CardSection>
-            <Input
-              value={address}
-              onChangeText={(newText: string) => this.setState({ address: newText })}
-              placeholder={"123 Beachside Ln"}
-            />
-          </CardSection>
-          <SubHeader label={"Phone number"} fontSize={16} />
-          <CardSection>
-            <Input
-              value={phoneNumber}
-              onChangeText={(newText: string) => this.setState({ phoneNumber: newText })}
-              placeholder={"(555) 555-5555"}
-            />
-          </CardSection>
-          <SubHeader label={"Email Address"} fontSize={16} />
-          <CardSection>
-            <Input
-              value={email}
-              onChangeText={(newText: string) => this.setState({ email: newText })}
-              placeholder={"johnsmith@gmail.com"}
-            />
-          </CardSection>
-          <SubHeader label={"Budget Lowest"} fontSize={16} />
-          <CardSection>
-            <Input
-              value={budgetLow}
-              onChangeText={(newText: string) => this.setState({ budgetLow: newText })}
-              placeholder={"$500,000"}
-            />
-          </CardSection>
-          <SubHeader label={"Budget Highest"} fontSize={16} />
-          <CardSection>
-            <Input
-              value={budgetHigh}
-              onChangeText={(newText: string) => this.setState({ budgetHigh: newText })}
-              placeholder={"$550,000"}
-            />
-          </CardSection>
-          <SubHeader label={"Preferred Areas"} fontSize={16} />
-          <CardSection>
-            <Input
-              value={preferredAreas}
-              onChangeText={(newText: string) =>
-                this.setState({ preferredAreas: newText })
-              }
-              placeholder={"Wrightsville Beach"}
-            />
-          </CardSection>
-          <SubHeader label={"Additional Notes"} fontSize={16} />
-          <CardSection>
-            <Input
-              value={notes}
-              onChangeText={(newText: string) => this.setState({ notes: newText })}
-              placeholder={".............."}
-            />
-          </CardSection>
-          <CardSection style={{ marginBottom: Spacing.xxlarge, marginTop: Spacing.med }}>
-            {this.renderLoginButton()}
-          </CardSection>
-        </Card>
-      </ScrollView>
+      <SafeAreaView style={{ flex: 1, backgroundColor: Color.darkThemeGreyDark }}>
+        <ScrollView style={styles.rootContainer}>
+          <StatusBar barStyle={"light-content"} />
+          {this.renderHeader()}
+          <Card>
+            <SubHeader label={"FirstName"} fontSize={16} />
+            <CardSection>
+              <Input
+                value={firstName}
+                onChangeText={(newText: string) => this.setState({ firstName: newText })}
+                placeholder={"John"}
+              />
+            </CardSection>
+            <SubHeader label={"Last Name"} fontSize={14} />
+            <CardSection>
+              <Input
+                value={lastName}
+                onChangeText={(newText: string) => this.setState({ lastName: newText })}
+                placeholder={"Smith"}
+              />
+            </CardSection>
+            <SubHeader label={"Street Address"} fontSize={16} />
+            <CardSection>
+              <Input
+                value={address}
+                onChangeText={(newText: string) => this.setState({ address: newText })}
+                placeholder={"123 Beachside Ln"}
+              />
+            </CardSection>
+            <SubHeader label={"Phone number"} fontSize={16} />
+            <CardSection>
+              <Input
+                value={phoneNumber}
+                onChangeText={(newText: string) =>
+                  this.setState({ phoneNumber: newText })
+                }
+                placeholder={"(555) 555-5555"}
+              />
+            </CardSection>
+            <SubHeader label={"Email Address"} fontSize={16} />
+            <CardSection>
+              <Input
+                value={email}
+                onChangeText={(newText: string) => this.setState({ email: newText })}
+                placeholder={"johnsmith@gmail.com"}
+              />
+            </CardSection>
+            <SubHeader label={"Budget Lowest"} fontSize={16} />
+            <CardSection>
+              <Input
+                value={budgetLow}
+                onChangeText={(newText: string) => this.setState({ budgetLow: newText })}
+                placeholder={"$500,000"}
+              />
+            </CardSection>
+            <SubHeader label={"Budget Highest"} fontSize={16} />
+            <CardSection>
+              <Input
+                value={budgetHigh}
+                onChangeText={(newText: string) => this.setState({ budgetHigh: newText })}
+                placeholder={"$550,000"}
+              />
+            </CardSection>
+            <SubHeader label={"Preferred Areas"} fontSize={16} />
+            <CardSection>
+              <Input
+                value={preferredAreas}
+                onChangeText={(newText: string) =>
+                  this.setState({ preferredAreas: newText })
+                }
+                placeholder={"Wrightsville Beach"}
+              />
+            </CardSection>
+            <SubHeader label={"Additional Notes"} fontSize={16} />
+            <CardSection>
+              <Input
+                value={notes}
+                onChangeText={(newText: string) => this.setState({ notes: newText })}
+                placeholder={".............."}
+              />
+            </CardSection>
+            <CardSection
+              style={{ marginBottom: Spacing.xxlarge, marginTop: Spacing.med }}
+            >
+              {this.renderSaveButton()}
+            </CardSection>
+          </Card>
+        </ScrollView>
+      </SafeAreaView>
     );
   }
 }
@@ -236,7 +262,16 @@ export default connect(mapStateToProps, mapDispatchToProps)(AddNewClientScreen);
 const styles = StyleSheet.create({
   rootContainer: {
     backgroundColor: Color.darkThemeGreyDark,
-    paddingTop: Spacing.large,
+    paddingTop: Spacing.xxlarge,
     paddingHorizontal: Spacing.micro,
+  },
+  headerContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginHorizontal: Spacing.micro,
+  },
+  headerText: {
+    fontSize: 26,
+    color: Color.white,
   },
 });

@@ -5,6 +5,9 @@ import {
   DELETE_CLIENT_REQUESTED,
   DELETE_CLIENT_SUCCEEDED,
   DELETE_CLIENT_FAILED,
+  UPDATE_CLIENT_REQUESTED,
+  UPDATE_CLIENT_SUCCEEDED,
+  UPDATE_CLIENT_FAILED,
 } from "../actions/types";
 
 const INITIAL_STATE = {
@@ -15,6 +18,8 @@ const INITIAL_STATE = {
     fetchUserError: false,
     deleteClientLoading: false,
     deleteClientError: false,
+    updateClientLoading: false,
+    updateClientError: false,
   },
 };
 
@@ -35,7 +40,7 @@ const UserReducer = (state = INITIAL_STATE, action: any) => {
     case FETCH_USER_FAILED:
       return {
         ...state,
-        fetchUserError: action.payload,
+        fetchUserError: action.payload.message,
         password: "",
         fetchUserLoading: false,
       };
@@ -53,7 +58,23 @@ const UserReducer = (state = INITIAL_STATE, action: any) => {
       return {
         ...state,
         deleteClientLoading: false,
-        deleteClientError: action.payload,
+        deleteClientError: action.payload.message,
+      };
+    case UPDATE_CLIENT_REQUESTED:
+      return {
+        ...state,
+        updateClientLoading: true,
+      };
+    case UPDATE_CLIENT_SUCCEEDED:
+      return {
+        ...state,
+        updateClientLoading: false,
+      };
+    case UPDATE_CLIENT_FAILED:
+      return {
+        ...state,
+        updateClientLoading: false,
+        updateClientError: action.payload.message,
       };
     default:
       return state;

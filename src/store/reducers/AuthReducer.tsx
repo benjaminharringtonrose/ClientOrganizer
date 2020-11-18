@@ -44,6 +44,7 @@ const AuthReducer = (state = INITIAL_STATE, action: any) => {
         password: undefined,
         user: action.payload,
         loading: false,
+        error: undefined,
       };
     case LOGIN_USER_FAILED:
       return {
@@ -82,6 +83,7 @@ const AuthReducer = (state = INITIAL_STATE, action: any) => {
         user: action.payload,
         clients: {},
         loading: false,
+        error: undefined,
       };
     case REGISTER_USER_FAILED:
       return {

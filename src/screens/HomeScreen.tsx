@@ -79,11 +79,8 @@ class HomeScreen extends Component<HomeScreenProps, LocalState> {
     }
   }
 
-  private toggleEditMode = () => {
-    this.setState({ editMode: !this.state.editMode });
-  };
-
   private onAddNewClientPress = () => {
+    this.setState({ editMode: !this.state.editMode });
     this.props.navigation.navigate(Routes.ADD_NEW_CLIENT_SCREEN);
   };
 
@@ -96,6 +93,7 @@ class HomeScreen extends Component<HomeScreenProps, LocalState> {
   };
 
   private renderHeader = () => {
+    const { editMode } = this.state;
     return (
       <View style={styles.headerContainer}>
         <View style={{ flex: 1 }}>
@@ -110,11 +108,11 @@ class HomeScreen extends Component<HomeScreenProps, LocalState> {
             size={18}
           />
         </TouchableOpacity>
-        <TouchableOpacity onPress={this.toggleEditMode}>
+        <TouchableOpacity onPress={() => this.setState({ editMode: !editMode })}>
           <Icon
             name={"trash"}
             type={"feather"}
-            color={this.state.editMode ? "red" : Color.white}
+            color={editMode ? "red" : Color.white}
             size={18}
           />
         </TouchableOpacity>
