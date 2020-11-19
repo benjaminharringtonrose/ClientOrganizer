@@ -32,6 +32,7 @@ interface InputProps {
   onSubmitEditting?: () => void;
   returnKeyType?: "default" | "go" | "next" | "previous";
   returnKeyLabel?: string;
+  autoCapitalize?: "words" | "characters" | "sentences";
 }
 
 export default class Input extends Component<InputProps> {
@@ -51,6 +52,7 @@ export default class Input extends Component<InputProps> {
       onSubmitEditting,
       returnKeyType,
       returnKeyLabel,
+      autoCapitalize,
     } = this.props;
     return (
       <View style={[style, styles.rootContainer]}>
@@ -60,7 +62,7 @@ export default class Input extends Component<InputProps> {
           {...this.props}
           secureTextEntry={secureTextEntry}
           autoCorrect={false}
-          autoCapitalize={"none"}
+          autoCapitalize={autoCapitalize || "none"}
           style={[textStyle, styles.input]}
           value={value}
           onChangeText={onChangeText}

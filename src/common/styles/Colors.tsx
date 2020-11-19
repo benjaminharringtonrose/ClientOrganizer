@@ -34,8 +34,12 @@ export const Color = Object.freeze({
   darkThemeGreyDark: "#121212",
   darkThemeGreen: "#36837E",
   darkThemeGreenLight: "#57D9A3",
+  darkThemePrupleLight: "#D6A905",
   darkThemeBlueGrey: "#627D98",
 
   error: "#A71930",
   success: "#0F751C",
+
+  confirm: "#00897B",
+  remove: "#C62828",
 });

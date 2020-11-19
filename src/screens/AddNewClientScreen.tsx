@@ -64,11 +64,7 @@ class AddNewClientScreen extends Component<AddNewClientScreenProps, LocalState> 
   };
 
   public componentDidUpdate(oldProps: any) {
-    if (
-      oldProps.fetchUserLoading &&
-      !this.props.fetchUserLoading &&
-      !this.props.fetchUserError
-    ) {
+    if (oldProps.fetchUserLoading && !this.props.fetchUserLoading && !this.props.fetchUserError) {
       this.props.navigation.navigate(Routes.HOME_SCREEN);
     }
   }
@@ -164,6 +160,7 @@ class AddNewClientScreen extends Component<AddNewClientScreenProps, LocalState> 
                 value={firstName}
                 onChangeText={(newText: string) => this.setState({ firstName: newText })}
                 placeholder={"John"}
+                autoCapitalize={"words"}
               />
             </CardSection>
             <SubHeader label={"Last Name"} fontSize={14} />
@@ -172,6 +169,7 @@ class AddNewClientScreen extends Component<AddNewClientScreenProps, LocalState> 
                 value={lastName}
                 onChangeText={(newText: string) => this.setState({ lastName: newText })}
                 placeholder={"Smith"}
+                autoCapitalize={"words"}
               />
             </CardSection>
             <SubHeader label={"Street Address"} fontSize={16} />
@@ -180,15 +178,14 @@ class AddNewClientScreen extends Component<AddNewClientScreenProps, LocalState> 
                 value={address}
                 onChangeText={(newText: string) => this.setState({ address: newText })}
                 placeholder={"123 Beachside Ln"}
+                autoCapitalize={"words"}
               />
             </CardSection>
             <SubHeader label={"Phone number"} fontSize={16} />
             <CardSection>
               <Input
                 value={phoneNumber}
-                onChangeText={(newText: string) =>
-                  this.setState({ phoneNumber: newText })
-                }
+                onChangeText={(newText: string) => this.setState({ phoneNumber: newText })}
                 placeholder={"(555) 555-5555"}
               />
             </CardSection>
@@ -220,10 +217,9 @@ class AddNewClientScreen extends Component<AddNewClientScreenProps, LocalState> 
             <CardSection>
               <Input
                 value={preferredAreas}
-                onChangeText={(newText: string) =>
-                  this.setState({ preferredAreas: newText })
-                }
+                onChangeText={(newText: string) => this.setState({ preferredAreas: newText })}
                 placeholder={"Wrightsville Beach"}
+                autoCapitalize={"words"}
               />
             </CardSection>
             <SubHeader label={"Additional Notes"} fontSize={16} />
@@ -232,11 +228,10 @@ class AddNewClientScreen extends Component<AddNewClientScreenProps, LocalState> 
                 value={notes}
                 onChangeText={(newText: string) => this.setState({ notes: newText })}
                 placeholder={".............."}
+                autoCapitalize={"sentences"}
               />
             </CardSection>
-            <CardSection
-              style={{ marginBottom: Spacing.xxlarge, marginTop: Spacing.med }}
-            >
+            <CardSection style={{ marginBottom: Spacing.xxlarge, marginTop: Spacing.med }}>
               {this.renderSaveButton()}
             </CardSection>
           </Card>
