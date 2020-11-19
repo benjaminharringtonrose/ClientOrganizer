@@ -24,6 +24,7 @@ export interface IClient {
   budgetLow: string;
   budgetHigh: string;
   preferredAreas: string;
+  notes: string;
 }
 
 interface PassedProps {
@@ -53,6 +54,7 @@ interface LocalState {
 }
 
 type HomeScreenProps = PropsFromState & DispatchFromState & PassedProps;
+
 class HomeScreen extends Component<HomeScreenProps, LocalState> {
   public state = {
     clients: [],
@@ -80,7 +82,7 @@ class HomeScreen extends Component<HomeScreenProps, LocalState> {
   }
 
   private onAddNewClientPress = () => {
-    this.setState({ editMode: !this.state.editMode });
+    this.setState({ editMode: false });
     this.props.navigation.navigate(Routes.ADD_NEW_CLIENT_SCREEN);
   };
 
@@ -124,9 +126,7 @@ class HomeScreen extends Component<HomeScreenProps, LocalState> {
           if (this.state.editMode) {
             this.setState({ modalVisible: true, clientId: item.id });
           } else {
-            console.log("HomeScreen clientId - ", this.state.clientId);
             this.props.navigation.navigate(Routes.CLIENT_DETAIL_SCREEN, {
-              clientId: this.state.clientId,
               client: item,
             });
           }

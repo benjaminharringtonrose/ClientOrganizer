@@ -16,6 +16,7 @@ import CellIconActionable from "../common/components/CellIconActionable";
 import { Routes } from "../../navigation";
 import { connect } from "react-redux";
 import { IClient } from "./HomeScreen";
+import { FlatList } from "react-native-gesture-handler";
 
 interface IPassedProps {
   navigation: any;
@@ -89,7 +90,7 @@ class ClientDetailScreen extends Component<IClientDetailScreenProps, ILocalState
                   }}
                   disabled={editMode ? false : true}
                   iconRightName={editMode ? "right" : undefined}
-                  iconRightColor={editMode ? Color.darkThemeGreenLight : undefined}
+                  iconRightSize={16}
                 />
                 <CellIconActionable
                   label={"Phone Number"}
@@ -103,7 +104,7 @@ class ClientDetailScreen extends Component<IClientDetailScreenProps, ILocalState
                   }}
                   disabled={editMode ? false : true}
                   iconRightName={editMode ? "right" : undefined}
-                  iconRightColor={editMode ? Color.darkThemeGreenLight : undefined}
+                  iconRightSize={16}
                 />
                 <CellIconActionable
                   label={"Email"}
@@ -117,7 +118,7 @@ class ClientDetailScreen extends Component<IClientDetailScreenProps, ILocalState
                   }}
                   disabled={editMode ? false : true}
                   iconRightName={editMode ? "right" : undefined}
-                  iconRightColor={editMode ? Color.darkThemeGreenLight : undefined}
+                  iconRightSize={16}
                 />
                 <CellIconActionable
                   label={"Budget Low"}
@@ -131,7 +132,7 @@ class ClientDetailScreen extends Component<IClientDetailScreenProps, ILocalState
                   }}
                   disabled={editMode ? false : true}
                   iconRightName={editMode ? "right" : undefined}
-                  iconRightColor={editMode ? Color.darkThemeGreenLight : undefined}
+                  iconRightSize={16}
                 />
                 <CellIconActionable
                   label={"Budget High"}
@@ -145,7 +146,7 @@ class ClientDetailScreen extends Component<IClientDetailScreenProps, ILocalState
                   }}
                   disabled={editMode ? false : true}
                   iconRightName={editMode ? "right" : undefined}
-                  iconRightColor={editMode ? Color.darkThemeGreenLight : undefined}
+                  iconRightSize={16}
                 />
                 <CellIconActionable
                   label={"Preferred Areas"}
@@ -159,7 +160,21 @@ class ClientDetailScreen extends Component<IClientDetailScreenProps, ILocalState
                   }}
                   disabled={editMode ? false : true}
                   iconRightName={editMode ? "right" : undefined}
-                  iconRightColor={editMode ? Color.darkThemeGreenLight : undefined}
+                  iconRightSize={16}
+                />
+                <CellIconActionable
+                  label={"Notes"}
+                  labelRight={this.props.clients[clientId]?.notes || " "}
+                  onPress={() => {
+                    this.setState({ editMode: false });
+                    this.props.navigation.navigate(Routes.CLIENT_UPDATE_SCREEN, {
+                      fieldLabel: "notes",
+                      clientId,
+                    });
+                  }}
+                  disabled={editMode ? false : true}
+                  iconRightName={editMode ? "right" : undefined}
+                  iconRightSize={16}
                 />
               </>
             )}
