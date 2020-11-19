@@ -217,7 +217,7 @@ function registerUserFail(error: any) {
 
 export function* registerUserSaga(action: any) {
   try {
-    const { email, password, firstName, lastName } = action.payload;
+    const { email, password, firstName, lastName, avatar } = action.payload;
     const auth = firebase.auth();
     const data = yield call([auth, auth.createUserWithEmailAndPassword], email, password);
     const db = getDocRef();
@@ -225,6 +225,7 @@ export function* registerUserSaga(action: any) {
       firstName,
       lastName,
       email,
+      avatar,
     });
     yield put(registerUserSuccess(data));
   } catch (error) {

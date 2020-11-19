@@ -1,13 +1,5 @@
 import React, { Component } from "react";
-import {
-  View,
-  Text,
-  StyleSheet,
-  ScrollView,
-  SafeAreaView,
-  TouchableOpacity,
-  Image,
-} from "react-native";
+import { View, Text, Image, TouchableOpacity, StyleSheet, ScrollView } from "react-native";
 import Card from "../common/components/Card";
 import CardSection from "../common/components/CardSection";
 import Input from "../common/components/Input";
@@ -15,6 +7,8 @@ import Button from "../common/components/Button";
 import Spinner from "../common/components/Spinner";
 import { Ionicons } from "@expo/vector-icons";
 import { connect } from "react-redux";
+import UserPermissions from "../util/permissions";
+import * as ImagePicker from "expo-image-picker";
 import { REGISTER_USER_REQUESTED } from "../store/actions/types";
 import {
   firstNameChanged,
@@ -26,13 +20,6 @@ import {
 import { Color } from "../common/styles/Colors";
 import { Spacing } from "../common/styles/Spacing";
 import Header from "../common/components/Header";
-import { Routes } from "../../navigation";
-import UserPermissions from "../util/permissions";
-import * as ImagePicker from "expo-image-picker";
-
-interface PassedProps {
-  navigation: any;
-}
 
 interface PropsFromState {
   firstName: string;
@@ -41,8 +28,12 @@ interface PropsFromState {
   user: any;
   email: string;
   password: string;
-  authLoading: boolean;
-  authError: boolean;
+  loading: boolean;
+  error: boolean;
+  category: string;
+  subcategory: string;
+  subsubcategory: string;
+  age: string;
 }
 interface DispatchFromState {
   emailChanged: (text: string) => any;
@@ -53,24 +44,48 @@ interface DispatchFromState {
   dispatchRegisterRequest: (object: any) => any;
 }
 
-type RegisterScreenProps = PropsFromState & DispatchFromState & PassedProps;
+type RegisterScreenProps = PropsFromState & DispatchFromState;
 
 class RegisterScreen extends Component<RegisterScreenProps> {
-  componentDidUpdate(oldProps: any) {
-    if (oldProps.authLoading && !this.props.authLoading && !this.props.authError) {
-      this.props.navigation.navigate(Routes.DASHBOARD_TABS);
-    }
-  }
+  public componentDidMount() {}
+  private onEmailChange = (email: string) => {
+    this.props.emailChanged(email);
+  };
+
+  private onFirstNameChange = (firstName: string) => {
+    this.props.firstNameChanged(firstName);
+  };
+
+  private onLastNameChange = (lastName: string) => {
+    this.props.lastNameChanged(lastName);
+  };
+
+  private onPasswordChange = (password: string) => {
+    this.props.passwordChanged(password);
+  };
 
   private onRegisterPress = () => {
-    const { email, password, firstName, lastName, avatar } = this.props;
-
+    const {
+      email,
+      password,
+      firstName,
+      lastName,
+      avatar,
+      category,
+      subcategory,
+      subsubcategory,
+      age,
+    } = this.props;
     this.props.dispatchRegisterRequest({
       email,
       password,
       firstName,
       lastName,
       avatar,
+      category,
+      subcategory,
+      subsubcategory,
+      age,
     });
   };
 
@@ -87,17 +102,17 @@ class RegisterScreen extends Component<RegisterScreenProps> {
   };
 
   private renderButton = () => {
-    if (this.props.authLoading) {
+    if (this.props.loading) {
       return <Spinner size="large" style={{ marginTop: Spacing.med }} />;
     }
     return <Button label={"Signup"} onPress={this.onRegisterPress} style={styles.button} />;
   };
 
   renderError() {
-    if (this.props.authError) {
+    if (this.props.error) {
       return (
-        <View style={styles.errorContainer}>
-          <Text style={styles.errorText}>{this.props.authError}</Text>
+        <View style={{ backgroundColor: "white" }}>
+          <Text style={styles.errorTextStyle}>{this.props.error}</Text>
         </View>
       );
     }
@@ -105,25 +120,33 @@ class RegisterScreen extends Component<RegisterScreenProps> {
 
   render() {
     const { firstName, lastName, email, password, avatar } = this.props;
-
+    console.log(this.props.subsubcategory);
     return (
-      <SafeAreaView style={styles.rootContainer}>
-        <ScrollView>
-          <View style={styles.headerContainer}>
-            <Header title={"Welcome!"} description={"Sign up to get started."} />
-          </View>
-          <Card style={styles.registerFormContainer}>
-            <TouchableOpacity style={styles.avatarPlaceholder} onPress={this.onPickAvatar}>
-              <Image source={{ uri: avatar }} style={styles.avatar} />
-              <Ionicons name="ios-add" size={40} color="#FFF" style={styles.addIcon} />
-            </TouchableOpacity>
+      <View style={{ flex: 1, backgroundColor: Color.darkThemeGreyDark }}>
+        <Header
+          style={styles.greeting}
+          title={"Welcome!"}
+          description={"Sign up to get started."}
+        />
+        <ScrollView
+          style={{
+            flex: 1,
+            backgroundColor: Color.darkThemeGreyDark,
+            paddingTop: Spacing.small,
+          }}
+        >
+          <TouchableOpacity style={styles.avatarPlaceholder} onPress={this.onPickAvatar}>
+            <Image source={{ uri: avatar }} style={styles.avatar} />
+            <Ionicons name="ios-add" size={40} color="#FFF" style={styles.addIcon} />
+          </TouchableOpacity>
+          <Card>
             <CardSection>
               <Input
                 label="First Name"
                 placeholder="John"
                 placeholderTextColor={Color.greyMedDark}
                 secureTextEntry={false}
-                onChangeText={(newText: string) => this.props.firstNameChanged(newText)}
+                onChangeText={this.onFirstNameChange}
                 value={firstName}
               />
             </CardSection>
@@ -133,7 +156,7 @@ class RegisterScreen extends Component<RegisterScreenProps> {
                 placeholder="Smith"
                 placeholderTextColor={Color.greyMedDark}
                 secureTextEntry={false}
-                onChangeText={(newText: string) => this.props.lastNameChanged(newText)}
+                onChangeText={this.onLastNameChange}
                 value={lastName}
               />
             </CardSection>
@@ -143,7 +166,7 @@ class RegisterScreen extends Component<RegisterScreenProps> {
                 placeholder="email@gmail.com"
                 placeholderTextColor={Color.greyMedDark}
                 secureTextEntry={false}
-                onChangeText={(newText: string) => this.props.emailChanged(newText)}
+                onChangeText={this.onEmailChange}
                 value={email}
               />
             </CardSection>
@@ -153,7 +176,7 @@ class RegisterScreen extends Component<RegisterScreenProps> {
                 label="Password"
                 placeholder="password"
                 placeholderTextColor={Color.greyMedDark}
-                onChangeText={(newText: string) => this.props.passwordChanged(newText)}
+                onChangeText={this.onPasswordChange}
                 value={password}
               />
             </CardSection>
@@ -161,22 +184,27 @@ class RegisterScreen extends Component<RegisterScreenProps> {
             {this.renderButton()}
           </Card>
         </ScrollView>
-      </SafeAreaView>
+      </View>
     );
   }
 }
 
-const mapStateToProps = ({ auth }: any) => {
+const mapStateToProps = ({ auth, initialFlow }: any) => {
   const { firstName, lastName, avatar, email, password, error, loading, user } = auth;
+  const { category, subcategory, subsubcategory, age } = initialFlow;
   return {
     firstName,
     lastName,
     avatar,
     email,
     password,
-    authError: error,
-    authLoading: loading,
+    error,
+    loading,
     user,
+    category,
+    subcategory,
+    subsubcategory,
+    age,
   };
 };
 
@@ -186,7 +214,18 @@ const mapDispatchToProps = (dispatch: any) => ({
   emailChanged: (email: string) => dispatch(emailChanged(email)),
   passwordChanged: (password: string) => dispatch(passwordChanged(password)),
   avatarChanged: (result: string) => dispatch(avatarChanged(result)),
-  dispatchRegisterRequest: ({ email, password, firstName, lastName, user, avatar }: any) => {
+  dispatchRegisterRequest: ({
+    email,
+    password,
+    firstName,
+    lastName,
+    avatar,
+    user,
+    category,
+    subcategory,
+    subsubcategory,
+    age,
+  }: any) => {
     dispatch({
       type: REGISTER_USER_REQUESTED,
       payload: {
@@ -194,8 +233,12 @@ const mapDispatchToProps = (dispatch: any) => ({
         password,
         firstName,
         lastName,
-        user,
         avatar,
+        user,
+        category,
+        subcategory,
+        subsubcategory,
+        age,
       },
     });
   },
@@ -204,27 +247,14 @@ const mapDispatchToProps = (dispatch: any) => ({
 export default connect(mapStateToProps, mapDispatchToProps)(RegisterScreen);
 
 const styles = StyleSheet.create({
-  rootContainer: {
-    flex: 1,
-    backgroundColor: Color.darkThemeGreyDark,
-  },
-  headerContainer: {
-    paddingTop: Spacing.xxlarge,
-  },
-  registerFormContainer: {
-    paddingTop: Spacing.xlarge,
-  },
-  button: {
-    marginVertical: Spacing.med,
-    paddingVertical: Spacing.small,
-  },
-  errorContainer: {
-    backgroundColor: Color.darkThemeGreyDark,
-  },
-  errorText: {
-    fontSize: 12,
+  errorTextStyle: {
+    fontSize: 20,
     alignSelf: "center",
     color: "red",
+  },
+  greeting: {
+    flex: 0.3,
+    textAlign: "center",
   },
   avatarPlaceholder: {
     alignSelf: "center",
@@ -244,5 +274,14 @@ const styles = StyleSheet.create({
     marginTop: 38,
     marginLeft: 2,
     color: Color.greyLight,
+  },
+  button: {
+    marginVertical: Spacing.med,
+    paddingVertical: Spacing.small,
+  },
+  loginTouchableContainer: {
+    justifyContent: "center",
+    alignSelf: "center",
+    paddingBottom: Spacing.xxlarge,
   },
 });
