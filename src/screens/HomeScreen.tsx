@@ -1,12 +1,5 @@
 import React, { Component } from "react";
-import {
-  StyleSheet,
-  StatusBar,
-  View,
-  Text,
-  FlatList,
-  ActivityIndicator,
-} from "react-native";
+import { StyleSheet, StatusBar, View, Text, FlatList, ActivityIndicator } from "react-native";
 import { connect } from "react-redux";
 import { Spacing } from "../common/styles/Spacing";
 import { Color } from "../common/styles/Colors";
@@ -22,6 +15,17 @@ import { mapClients } from "./util";
 import CardSection from "../common/components/CardSection";
 import AlertModal from "../common/components/AlertModal";
 
+export interface IClient {
+  firstName: string;
+  lastName: string;
+  address: string;
+  phoneNumber: string;
+  email: string;
+  budgetLow: string;
+  budgetHigh: string;
+  preferredAreas: string;
+}
+
 interface PassedProps {
   navigation: any;
 }
@@ -36,12 +40,12 @@ interface PropsFromState {
 
 interface DispatchFromState {
   searchTextChanged: (text: string) => void;
-  dispatchFetchUser: (uid: any) => any;
-  dispatchDeleteClient: (clientId: any) => any;
+  dispatchFetchUser: (uid: string) => void;
+  dispatchDeleteClient: (clientId: string) => void;
 }
 
 interface LocalState {
-  clients: any;
+  clients: IClient[];
   modalVisible: boolean;
   editMode: boolean;
   clientId?: string;
@@ -67,11 +71,7 @@ class HomeScreen extends Component<HomeScreenProps, LocalState> {
   }
 
   public componentDidUpdate(oldProps: any) {
-    if (
-      oldProps.fetchUserLoading &&
-      !this.props.fetchUserLoading &&
-      !this.props.fetchUserError
-    ) {
+    if (oldProps.fetchUserLoading && !this.props.fetchUserLoading && !this.props.fetchUserError) {
       if (oldProps.clients !== this.props.clients) {
         const mappedClients = mapClients(this.props.clients);
         this.setState({ clients: [...mappedClients] });
@@ -85,7 +85,7 @@ class HomeScreen extends Component<HomeScreenProps, LocalState> {
   };
 
   private onDeletePress = () => {
-    this.props.dispatchDeleteClient(this.state.clientId);
+    this.props.dispatchDeleteClient(this.state.clientId!);
     this.setState({
       modalVisible: !this.state.modalVisible,
       editMode: !this.state.editMode,
@@ -109,12 +109,7 @@ class HomeScreen extends Component<HomeScreenProps, LocalState> {
           />
         </TouchableOpacity>
         <TouchableOpacity onPress={() => this.setState({ editMode: !editMode })}>
-          <Icon
-            name={"trash"}
-            type={"feather"}
-            color={editMode ? "red" : Color.white}
-            size={18}
-          />
+          <Icon name={"trash"} type={"feather"} color={editMode ? "red" : Color.white} size={18} />
         </TouchableOpacity>
       </View>
     );
@@ -129,7 +124,11 @@ class HomeScreen extends Component<HomeScreenProps, LocalState> {
           if (this.state.editMode) {
             this.setState({ modalVisible: true, clientId: item.id });
           } else {
-            this.props.navigation.navigate(Routes.CLIENT_DETAIL_SCREEN, { client: item });
+            console.log("HomeScreen clientId - ", this.state.clientId);
+            this.props.navigation.navigate(Routes.CLIENT_DETAIL_SCREEN, {
+              clientId: this.state.clientId,
+              client: item,
+            });
           }
         }}
         label={`${item.firstName} ${item.lastName}`}

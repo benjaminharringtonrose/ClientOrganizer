@@ -6,17 +6,18 @@ import {
   SafeAreaView,
   View,
   TouchableOpacity,
+  ActivityIndicator,
 } from "react-native";
-import CellLabelLeftRight from "../common/components/CellLabelLeftRight";
 import { Color } from "../common/styles/Colors";
 import Card from "../common/components/Card";
 import { Spacing } from "../common/styles/Spacing";
-import Header from "../common/components/Header";
 import { Icon } from "react-native-elements";
 import CellIconActionable from "../common/components/CellIconActionable";
 import { Routes } from "../../navigation";
+import { connect } from "react-redux";
+import { IClient } from "./HomeScreen";
 
-interface PassedProps {
+interface IPassedProps {
   navigation: any;
   route: any;
 }
@@ -24,12 +25,15 @@ interface ILocalState {
   editMode: boolean;
 }
 
-type ClientDetailScreenProps = PassedProps;
+interface IPropsFromState {
+  clients: IClient[];
+  fetchUserLoading: boolean;
+  fetchUserError: boolean;
+}
 
-export default class ClientDetailScreen extends Component<
-  ClientDetailScreenProps,
-  ILocalState
-> {
+type IClientDetailScreenProps = IPassedProps & IPropsFromState;
+
+class ClientDetailScreen extends Component<IClientDetailScreenProps, ILocalState> {
   public state = {
     editMode: false,
   };
@@ -47,7 +51,7 @@ export default class ClientDetailScreen extends Component<
             name={"edit"}
             type={"antdesign"}
             color={editMode ? Color.darkThemeGreenLight : Color.white}
-            size={18}
+            size={26}
           />
         </TouchableOpacity>
       </View>
@@ -56,55 +60,125 @@ export default class ClientDetailScreen extends Component<
 
   public render() {
     const { editMode } = this.state;
-    const client = this.props.route?.["params"]?.["client"];
+
+    const clientId = this.props.route?.["params"]?.["client"]?.["id"];
+    console.log("clientId - details screen -", clientId);
     return (
       <SafeAreaView style={{ flex: 1, backgroundColor: Color.darkThemeGreyDark }}>
         <ScrollView style={styles.rootContainer}>
-          {this.renderHeader(client.firstName, client.lastName)}
+          {this.renderHeader(
+            this.props.clients[clientId]?.firstName,
+            this.props.clients[clientId]?.lastName
+          )}
           <Card>
-            <CellIconActionable
-              label={"Address"}
-              labelRight={client.address || " "}
-              onPress={() => this.props.navigation.navigate(Routes.CLIENT_UPDATE_SCREEN)}
-              disabled={editMode ? false : true}
-              iconRightName={editMode ? "right" : undefined}
-            />
-            <CellIconActionable
-              label={"Budget"}
-              labelRight={
-                client.budgetLow ? `${client.budgetLow} - ${client.budgetHigh}` : " "
-              }
-              onPress={() => {}}
-              disabled={editMode ? false : true}
-              iconRightName={editMode ? "right" : undefined}
-            />
-            <CellIconActionable
-              label={"Email"}
-              labelRight={client.email || " "}
-              onPress={() => {}}
-              disabled={editMode ? false : true}
-              iconRightName={editMode ? "right" : undefined}
-            />
-            <CellIconActionable
-              label={"Phone Number"}
-              labelRight={client.phoneNumber || " "}
-              onPress={() => {}}
-              disabled={editMode ? false : true}
-              iconRightName={editMode ? "right" : undefined}
-            />
-            <CellIconActionable
-              label={"Preferred Areas"}
-              labelRight={client.preferredAreas || " "}
-              onPress={() => {}}
-              disabled={editMode ? false : true}
-              iconRightName={editMode ? "right" : undefined}
-            />
+            {this.props.fetchUserLoading ? (
+              <View style={styles.loadingContainer}>
+                <ActivityIndicator />
+              </View>
+            ) : (
+              <>
+                <CellIconActionable
+                  label={"Address"}
+                  labelRight={this.props.clients[clientId]?.address || " "}
+                  onPress={() => {
+                    this.setState({ editMode: false });
+                    this.props.navigation.navigate(Routes.CLIENT_UPDATE_SCREEN, {
+                      fieldLabel: "address", // todo - enum
+                      clientId,
+                    });
+                  }}
+                  disabled={editMode ? false : true}
+                  iconRightName={editMode ? "right" : undefined}
+                  iconRightColor={editMode ? Color.darkThemeGreenLight : undefined}
+                />
+                <CellIconActionable
+                  label={"Phone Number"}
+                  labelRight={this.props.clients[clientId]?.phoneNumber || " "}
+                  onPress={() => {
+                    this.setState({ editMode: false });
+                    this.props.navigation.navigate(Routes.CLIENT_UPDATE_SCREEN, {
+                      fieldLabel: "phoneNumber",
+                      clientId,
+                    });
+                  }}
+                  disabled={editMode ? false : true}
+                  iconRightName={editMode ? "right" : undefined}
+                  iconRightColor={editMode ? Color.darkThemeGreenLight : undefined}
+                />
+                <CellIconActionable
+                  label={"Email"}
+                  labelRight={this.props.clients[clientId]?.email || " "}
+                  onPress={() => {
+                    this.setState({ editMode: false });
+                    this.props.navigation.navigate(Routes.CLIENT_UPDATE_SCREEN, {
+                      fieldLabel: "email",
+                      clientId,
+                    });
+                  }}
+                  disabled={editMode ? false : true}
+                  iconRightName={editMode ? "right" : undefined}
+                  iconRightColor={editMode ? Color.darkThemeGreenLight : undefined}
+                />
+                <CellIconActionable
+                  label={"Budget Low"}
+                  labelRight={this.props.clients[clientId]?.budgetLow || " "}
+                  onPress={() => {
+                    this.setState({ editMode: false });
+                    this.props.navigation.navigate(Routes.CLIENT_UPDATE_SCREEN, {
+                      fieldLabel: "budgetLow",
+                      clientId,
+                    });
+                  }}
+                  disabled={editMode ? false : true}
+                  iconRightName={editMode ? "right" : undefined}
+                  iconRightColor={editMode ? Color.darkThemeGreenLight : undefined}
+                />
+                <CellIconActionable
+                  label={"Budget High"}
+                  labelRight={this.props.clients[clientId]?.budgetHigh || " "}
+                  onPress={() => {
+                    this.setState({ editMode: false });
+                    this.props.navigation.navigate(Routes.CLIENT_UPDATE_SCREEN, {
+                      fieldLabel: "budgetHigh",
+                      clientId,
+                    });
+                  }}
+                  disabled={editMode ? false : true}
+                  iconRightName={editMode ? "right" : undefined}
+                  iconRightColor={editMode ? Color.darkThemeGreenLight : undefined}
+                />
+                <CellIconActionable
+                  label={"Preferred Areas"}
+                  labelRight={this.props.clients[clientId]?.preferredAreas || " "}
+                  onPress={() => {
+                    this.setState({ editMode: false });
+                    this.props.navigation.navigate(Routes.CLIENT_UPDATE_SCREEN, {
+                      fieldLabel: "preferredAreas",
+                      clientId,
+                    });
+                  }}
+                  disabled={editMode ? false : true}
+                  iconRightName={editMode ? "right" : undefined}
+                  iconRightColor={editMode ? Color.darkThemeGreenLight : undefined}
+                />
+              </>
+            )}
           </Card>
         </ScrollView>
       </SafeAreaView>
     );
   }
 }
+
+const mapStateToProps = (state: any) => {
+  return {
+    clients: state.user.user.clients,
+    fetchUserLoading: state.user.fetchUserLoading,
+    fetchUserError: state.user.fetchUserError,
+  };
+};
+
+export default connect(mapStateToProps)(ClientDetailScreen);
 
 const styles = StyleSheet.create({
   rootContainer: {
@@ -117,7 +191,13 @@ const styles = StyleSheet.create({
     marginHorizontal: Spacing.micro,
   },
   headerText: {
-    fontSize: 26,
+    flex: 1,
+    fontSize: 32,
     color: Color.white,
+  },
+  loadingContainer: {
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "center",
   },
 });

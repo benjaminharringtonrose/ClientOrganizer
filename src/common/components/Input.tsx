@@ -1,13 +1,5 @@
 import React, { Component } from "react";
-import {
-  TextInput,
-  View,
-  Text,
-  StyleSheet,
-  StyleProp,
-  ViewStyle,
-  TextStyle,
-} from "react-native";
+import { TextInput, View, Text, StyleSheet, StyleProp, ViewStyle, TextStyle } from "react-native";
 import { Color } from "../styles/Colors";
 import { Spacing } from "../styles/Spacing";
 
@@ -37,6 +29,9 @@ interface InputProps {
   textStyle?: StyleProp<TextStyle>;
   placeholderTextColor?: string;
   selectionColor?: string;
+  onSubmitEditting?: () => void;
+  returnKeyType?: "default" | "go" | "next" | "previous";
+  returnKeyLabel?: string;
 }
 
 export default class Input extends Component<InputProps> {
@@ -53,12 +48,16 @@ export default class Input extends Component<InputProps> {
       placeholder,
       placeholderTextColor,
       selectionColor,
+      onSubmitEditting,
+      returnKeyType,
+      returnKeyLabel,
     } = this.props;
     return (
       <View style={[style, styles.rootContainer]}>
         {!!label && <Text style={styles.labelText}>{label}</Text>}
 
         <TextInput
+          {...this.props}
           secureTextEntry={secureTextEntry}
           autoCorrect={false}
           autoCapitalize={"none"}
@@ -68,10 +67,11 @@ export default class Input extends Component<InputProps> {
           maxLength={maxLength}
           keyboardType={keyboardType}
           placeholder={placeholder}
-          placeholderTextColor={
-            placeholderTextColor ? placeholderTextColor : Color.darkThemeGrey
-          }
+          placeholderTextColor={placeholderTextColor ? placeholderTextColor : Color.darkThemeGrey}
           selectionColor={selectionColor}
+          onSubmitEditing={onSubmitEditting}
+          returnKeyType={returnKeyType}
+          returnKeyLabel={returnKeyLabel}
         />
       </View>
     );

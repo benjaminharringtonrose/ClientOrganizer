@@ -77,11 +77,12 @@ export const updateClientFailed = (error: any) => ({
 
 export function* updateClientSaga(action: any) {
   try {
-    const { clientId, fieldKey, newValue } = action.payload;
+    const { clientId, fieldLabel, fieldValue } = action.payload;
+    yield console.log("saga - action", action);
     const uid = yield firebase.auth().currentUser?.uid;
     yield console.log("saga - clientid", clientId); // ID CHECKS
     yield console.log("saga - uid", uid);
-    yield console.log("saga - new value", newValue);
+    yield console.log("saga - new value", fieldValue);
     yield firebase
       .firestore()
       .collection("users")
@@ -90,16 +91,16 @@ export function* updateClientSaga(action: any) {
         {
           clients: {
             [clientId!]: {
-              [fieldKey]: newValue,
+              [fieldLabel]: fieldValue,
             },
           },
         },
         { merge: true }
       );
-    yield put(deleteClientSucceeded());
+    yield put(updateClientSucceeded());
     yield put(fetchUserRequested(uid));
   } catch (error) {
-    yield put(deleteClientFailed(error));
+    yield put(updateClientFailed(error));
   }
 }
 
@@ -261,15 +262,9 @@ export const uploadPhotoAsync = (
 const addAvatarAsync = async (data: any) => {
   try {
     let remoteUri = null;
-    const db = firebase
-      .firestore()
-      .collection("users")
-      .doc(`${firebase.auth().currentUser?.uid}`);
+    const db = firebase.firestore().collection("users").doc(`${firebase.auth().currentUser?.uid}`);
     if (data) {
-      remoteUri = await uploadPhotoAsync(
-        data,
-        `avatars/${firebase.auth().currentUser?.uid}`
-      );
+      remoteUri = await uploadPhotoAsync(data, `avatars/${firebase.auth().currentUser?.uid}`);
       db.set({ avatar: remoteUri }, { merge: true });
     }
   } catch (error) {
