@@ -19,7 +19,7 @@ import { Routes } from "../../navigation";
 import firebase from "firebase";
 import uuid from "uuid-random";
 import { connect } from "react-redux";
-import { FETCH_USER_REQUESTED } from "../store/actions/types";
+import { FETCH_USER_REQUESTED, ADD_CLIENT_REQUESTED } from "../store/actions/types";
 import Spinner from "../common/components/Spinner";
 import { Icon } from "react-native-elements";
 
@@ -34,6 +34,7 @@ interface PropsFromState {
 
 interface DispatchFromState {
   dispatchFetchUser: (uid: any) => any;
+  dispatchAddClient: (object: any) => string;
 }
 
 interface LocalState {
@@ -84,38 +85,50 @@ class AddNewClientScreen extends Component<AddNewClientScreenProps, LocalState> 
       notes,
     } = this.state;
 
-    firebase
-      .firestore()
-      .collection("users")
-      .doc(firebase.auth().currentUser?.uid)
-      .set(
-        {
-          clients: {
-            [uuid()]: {
-              firstName,
-              lastName,
-              address,
-              phoneNumber,
-              email,
-              budgetLow,
-              budgetHigh,
-              preferredAreas,
-              notes,
-            },
-          },
-        },
-        { merge: true }
-      )
-      .then(() => {
-        console.log("Document successfully written!");
-        const uid = firebase.auth().currentUser?.uid;
-        if (uid) {
-          dispatchFetchUser(uid);
-        }
-      })
-      .catch(() => (error: any) => {
-        console.error("Error writing document: ", error);
-      });
+    this.props.dispatchAddClient({
+      firstName,
+      lastName,
+      address,
+      phoneNumber,
+      email,
+      budgetLow,
+      budgetHigh,
+      preferredAreas,
+      notes,
+    });
+
+    // firebase
+    //   .firestore()
+    //   .collection("users")
+    //   .doc(firebase.auth().currentUser?.uid)
+    //   .set(
+    //     {
+    //       clients: {
+    //         [uuid()]: {
+    //           firstName,
+    //           lastName,
+    //           address,
+    //           phoneNumber,
+    //           email,
+    //           budgetLow,
+    //           budgetHigh,
+    //           preferredAreas,
+    //           notes,
+    //         },
+    //       },
+    //     },
+    //     { merge: true }
+    //   )
+    //   .then(() => {
+    //     console.log("Document successfully written!");
+    //     const uid = firebase.auth().currentUser?.uid;
+    //     if (uid) {
+    //       dispatchFetchUser(uid);
+    //     }
+    //   })
+    //   .catch(() => (error: any) => {
+    //     console.error("Error writing document: ", error);
+    //   });
   };
 
   private renderHeader = () => {
@@ -250,6 +263,7 @@ const mapStateToProps = (state: any) => {
 
 const mapDispatchToProps = (dispatch: any) => ({
   dispatchFetchUser: (uid: any) => dispatch({ type: FETCH_USER_REQUESTED, payload: uid }),
+  dispatchAddClient: (object: any) => dispatch({ type: ADD_CLIENT_REQUESTED, payload: object }),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(AddNewClientScreen);

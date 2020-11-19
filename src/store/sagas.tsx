@@ -21,8 +21,11 @@ import {
   UPDATE_CLIENT_REQUESTED,
   UPDATE_CLIENT_SUCCEEDED,
   UPDATE_CLIENT_FAILED,
+  ADD_CLIENT_SUCCEEDED,
+  ADD_CLIENT_FAILED,
 } from "./actions/types";
 import { getDocRef } from "../screens/util";
+import uuid from "uuid-random";
 
 // FETCH USER - ACTIONS
 
@@ -51,7 +54,7 @@ function fetchUserFail(error: any) {
 export function* fetchUserSaga(action: any) {
   try {
     const uid = action.payload;
-    yield console.log("FETCH USER SAGA - UID", uid);
+    // yield console.log("FETCH USER SAGA - UID", uid);
     const doc = yield firebase.firestore().collection("users").doc(uid).get();
     const user = {
       ...doc.data(),
@@ -61,6 +64,91 @@ export function* fetchUserSaga(action: any) {
     yield put(fetchUserFail({ error }));
   }
 }
+
+function addClientSuccess() {
+  return {
+    type: ADD_CLIENT_SUCCEEDED,
+  };
+}
+function addClientFail(error: any) {
+  return {
+    type: ADD_CLIENT_FAILED,
+    payload: error,
+  };
+}
+
+export function* addClientSaga(action: any) {
+  try {
+    const {
+      firstName,
+      lastName,
+      address,
+      phoneNumber,
+      email,
+      budgetLow,
+      budgetHigh,
+      preferredAreas,
+      notes,
+    } = action.payload;
+    yield console.log(" ADD CLIENT SAGA", action);
+    const doc = yield getDocRef();
+    doc.set(
+      {
+        clients: {
+          [uuid()]: {
+            firstName,
+            lastName,
+            address,
+            phoneNumber,
+            email,
+            budgetLow,
+            budgetHigh,
+            preferredAreas,
+            notes,
+          },
+        },
+      },
+      { merge: true }
+    );
+    yield put(addClientSuccess());
+    const uid = yield firebase.auth().currentUser?.uid;
+    yield put(fetchUserRequested(uid));
+  } catch (error) {
+    yield put(addClientFail(error));
+  }
+}
+// firebase
+// .firestore()
+// .collection("users")
+// .doc(firebase.auth().currentUser?.uid)
+// .set(
+//   {
+//     clients: {
+//       [uuid()]: {
+//         firstName,
+//         lastName,
+//         address,
+//         phoneNumber,
+//         email,
+//         budgetLow,
+//         budgetHigh,
+//         preferredAreas,
+//         notes,
+//       },
+//     },
+//   },
+//   { merge: true }
+// )
+// .then(() => {
+//   console.log("Document successfully written!");
+//   const uid = firebase.auth().currentUser?.uid;
+//   if (uid) {
+//     dispatchFetchUser(uid);
+//   }
+// })
+// .catch(() => (error: any) => {
+//   console.error("Error writing document: ", error);
+// });
 
 // UPDATE CLIENT - ACTIONS
 
@@ -78,11 +166,10 @@ export const updateClientFailed = (error: any) => ({
 export function* updateClientSaga(action: any) {
   try {
     const { clientId, fieldLabel, fieldValue } = action.payload;
-    yield console.log("saga - action", action);
     const uid = yield firebase.auth().currentUser?.uid;
-    yield console.log("saga - clientid", clientId); // ID CHECKS
-    yield console.log("saga - uid", uid);
-    yield console.log("saga - new value", fieldValue);
+    // yield console.log("saga - clientid", clientId); // ID CHECKS
+    // yield console.log("saga - uid", uid);
+    // yield console.log("saga - new value", fieldValue);
     yield firebase
       .firestore()
       .collection("users")
@@ -221,7 +308,7 @@ export function* registerUserSaga(action: any) {
     const auth = firebase.auth();
     const data = yield call([auth, auth.createUserWithEmailAndPassword], email, password);
     const db = getDocRef();
-    db.set({
+    yield db.set({
       firstName,
       lastName,
       email,

@@ -64,7 +64,6 @@ class ClientUpdateScreen extends Component<IClientUpdateScreenProps, ILocalState
 
   public componentDidMount() {
     const clientId = this.props.route?.["params"]?.["clientId"];
-    console.log("CDM - cid", clientId);
     const fieldLabel = this.props.route?.["params"]?.["fieldLabel"];
     this.getInitialFieldValue(fieldLabel, this.props.clients[clientId]);
   }
@@ -82,7 +81,6 @@ class ClientUpdateScreen extends Component<IClientUpdateScreenProps, ILocalState
   }
 
   private getInitialFieldValue = (fieldLabel: FieldLabel, client: IClient) => {
-    console.log("CLIENT UPDATE SCREEN - CLIENT", client);
     if (!fieldLabel) {
       return "";
     }
@@ -112,10 +110,6 @@ class ClientUpdateScreen extends Component<IClientUpdateScreenProps, ILocalState
     const clientId: string = this.props.route?.["params"]?.["clientId"];
     const fieldLabel: string = this.props.route?.["params"]?.["fieldLabel"];
     const { updatedFieldValue } = this.state;
-    console.log("clientId -- ", clientId);
-    console.log("fieldLabel - ", fieldLabel);
-    console.log("updatedFieldLabel", updatedFieldValue);
-
     this.props.dispatchUpdateClient({ clientId, fieldLabel, updatedFieldValue });
   };
 
@@ -128,7 +122,6 @@ class ClientUpdateScreen extends Component<IClientUpdateScreenProps, ILocalState
   };
 
   public render() {
-    console.log(this.state.updatedFieldValue);
     return (
       <SafeAreaView style={{ flex: 1, backgroundColor: Color.darkThemeGreyDark }}>
         <ScrollView style={styles.rootContainer}>

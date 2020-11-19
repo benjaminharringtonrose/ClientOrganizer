@@ -49,7 +49,7 @@ interface DispatchFromState {
   passwordChanged: (text: string) => any;
   firstNameChanged: (text: string) => any;
   lastNameChanged: (text: string) => any;
-  avatarChanged: (text: string) => any;
+  dispatchChangeAvatar: (text: string) => any;
   dispatchRegisterRequest: (object: any) => any;
 }
 
@@ -82,7 +82,7 @@ class RegisterScreen extends Component<RegisterScreenProps> {
       aspect: [4, 3],
     });
     if (!result.cancelled) {
-      this.props.avatarChanged(result.uri);
+      this.props.dispatchChangeAvatar(result.uri);
     }
   };
 
@@ -185,7 +185,7 @@ const mapDispatchToProps = (dispatch: any) => ({
   lastNameChanged: (lastName: string) => dispatch(lastNameChanged(lastName)),
   emailChanged: (email: string) => dispatch(emailChanged(email)),
   passwordChanged: (password: string) => dispatch(passwordChanged(password)),
-  avatarChanged: (result: string) => dispatch(avatarChanged(result)),
+  dispatchChangeAvatar: (result: string) => dispatch(avatarChanged(result)),
   dispatchRegisterRequest: ({ email, password, firstName, lastName, user, avatar }: any) => {
     dispatch({
       type: REGISTER_USER_REQUESTED,

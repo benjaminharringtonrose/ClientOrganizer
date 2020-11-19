@@ -120,7 +120,6 @@ class RegisterScreen extends Component<RegisterScreenProps> {
 
   render() {
     const { firstName, lastName, email, password, avatar } = this.props;
-    console.log(this.props.subsubcategory);
     return (
       <View style={{ flex: 1, backgroundColor: Color.darkThemeGreyDark }}>
         <Header

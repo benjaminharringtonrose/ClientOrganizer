@@ -8,6 +8,9 @@ import {
   UPDATE_CLIENT_REQUESTED,
   UPDATE_CLIENT_SUCCEEDED,
   UPDATE_CLIENT_FAILED,
+  ADD_CLIENT_REQUESTED,
+  ADD_CLIENT_SUCCEEDED,
+  ADD_CLIENT_FAILED,
 } from "../actions/types";
 
 const INITIAL_STATE = {
@@ -20,6 +23,8 @@ const INITIAL_STATE = {
     deleteClientError: false,
     updateClientLoading: false,
     updateClientError: false,
+    addClientLoading: false,
+    addClientError: false,
   },
 };
 
@@ -75,6 +80,22 @@ const UserReducer = (state = INITIAL_STATE, action: any) => {
         ...state,
         updateClientLoading: false,
         updateClientError: action.payload.message,
+      };
+    case ADD_CLIENT_REQUESTED:
+      return {
+        ...state,
+        addClientLoading: true,
+      };
+    case ADD_CLIENT_SUCCEEDED:
+      return {
+        ...state,
+        addClientLoading: false,
+      };
+    case ADD_CLIENT_FAILED:
+      return {
+        ...state,
+        addClientLoading: false,
+        addClientError: action.payload.message,
       };
     default:
       return state;
