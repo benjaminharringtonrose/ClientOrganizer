@@ -112,7 +112,7 @@ class RegisterScreen extends Component<RegisterScreenProps> {
           <View style={styles.headerContainer}>
             <Header title={"Welcome!"} description={"Sign up to get started."} />
           </View>
-          <Card style={styles.registerFormContainer}>
+          <Card>
             <TouchableOpacity style={styles.avatarPlaceholder} onPress={this.onPickAvatar}>
               <Image source={{ uri: avatar }} style={styles.avatar} />
               <Ionicons name="ios-add" size={40} color="#FFF" style={styles.addIcon} />
@@ -211,9 +211,6 @@ const styles = StyleSheet.create({
   headerContainer: {
     paddingTop: Spacing.xxlarge,
   },
-  registerFormContainer: {
-    paddingTop: Spacing.xlarge,
-  },
   button: {
     marginVertical: Spacing.med,
     paddingVertical: Spacing.small,
@@ -232,6 +229,7 @@ const styles = StyleSheet.create({
     height: 120,
     backgroundColor: Color.darkThemeGreyMed,
     borderRadius: 60,
+    marginVertical: Spacing.small,
   },
   avatar: {
     position: "absolute",

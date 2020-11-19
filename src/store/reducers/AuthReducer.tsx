@@ -18,7 +18,7 @@ import {
 const INITIAL_STATE = {
   firstName: "",
   lastName: "",
-  avatar: undefined,
+  avatar: "",
   email: "",
   password: "",
   uid: "",
