@@ -75,7 +75,7 @@ class LoginScreen extends Component<LoginScreenProps> {
     return (
       <View style={styles.mainContainer}>
         <StatusBar barStyle={"light-content"} />
-        <Header title={"ClientOrganizer"} description={"Welcome back!"} style={styles.greeting} />
+        <Header title={"ClientManager"} description={"Welcome back!"} style={styles.greeting} />
         <ScrollView>
           <Card style={{ flex: 1 }}>
             <CardSection>

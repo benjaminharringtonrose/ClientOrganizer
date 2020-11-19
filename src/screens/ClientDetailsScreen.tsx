@@ -11,12 +11,12 @@ import {
 import { Color } from "../common/styles/Colors";
 import Card from "../common/components/Card";
 import { Spacing } from "../common/styles/Spacing";
-import { Icon } from "react-native-elements";
+import { Icon, colors } from "react-native-elements";
 import CellIconActionable from "../common/components/CellIconActionable";
 import { Routes } from "../../navigation";
 import { connect } from "react-redux";
 import { IClient } from "./HomeScreen";
-import { FlatList } from "react-native-gesture-handler";
+import MapView, { Marker } from "react-native-maps";
 
 interface IPassedProps {
   navigation: any;
@@ -43,7 +43,7 @@ class ClientDetailScreen extends Component<IClientDetailScreenProps, ILocalState
     const { editMode } = this.state;
     return (
       <View style={styles.headerContainer}>
-        <View style={{ flex: 1, paddingLeft: Spacing.small }}>
+        <View style={{ paddingLeft: Spacing.small }}>
           <Text style={styles.headerText}>{`${firstName} ${lastName}`}</Text>
         </View>
         <TouchableOpacity onPress={() => this.setState({ editMode: !editMode })}>
@@ -61,23 +61,21 @@ class ClientDetailScreen extends Component<IClientDetailScreenProps, ILocalState
 
   public render() {
     const { editMode } = this.state;
-
     const clientId = this.props.route?.["params"]?.["client"]?.["id"];
-    console.log("clientId - details screen -", clientId);
     return (
       <SafeAreaView style={{ flex: 1, backgroundColor: Color.darkThemeGreyDark }}>
-        <ScrollView style={styles.rootContainer}>
-          {this.renderHeader(
-            this.props.clients[clientId]?.firstName,
-            this.props.clients[clientId]?.lastName
-          )}
+        {this.renderHeader(
+          this.props.clients[clientId]?.firstName,
+          this.props.clients[clientId]?.lastName
+        )}
+        <ScrollView style={styles.rootContainer} indicatorStyle={"white"}>
           <Card>
             {this.props.fetchUserLoading ? (
               <View style={styles.loadingContainer}>
                 <ActivityIndicator />
               </View>
             ) : (
-              <>
+              <View>
                 <CellIconActionable
                   label={"Address"}
                   labelRight={this.props.clients[clientId]?.address || " "}
@@ -176,10 +174,19 @@ class ClientDetailScreen extends Component<IClientDetailScreenProps, ILocalState
                   iconRightName={editMode ? "right" : undefined}
                   iconRightSize={16}
                 />
-              </>
+              </View>
             )}
           </Card>
         </ScrollView>
+        <MapView
+          style={styles.mapContainer}
+          region={{
+            latitude: 34.244968,
+            longitude: -77.95262,
+            latitudeDelta: 0.01622,
+            longitudeDelta: 0.01221,
+          }}
+        />
       </SafeAreaView>
     );
   }
@@ -197,22 +204,30 @@ export default connect(mapStateToProps)(ClientDetailScreen);
 
 const styles = StyleSheet.create({
   rootContainer: {
+    flex: 1,
     backgroundColor: Color.darkThemeGreyDark,
-    paddingTop: Spacing.xxlarge,
   },
   headerContainer: {
+    paddingTop: Spacing.xxlarge,
     flexDirection: "row",
     alignItems: "center",
+    justifyContent: "space-between",
     marginHorizontal: Spacing.micro,
   },
   headerText: {
-    flex: 1,
     fontSize: 32,
     color: Color.white,
+    paddingBottom: Spacing.small,
   },
   loadingContainer: {
     flex: 1,
     alignItems: "center",
     justifyContent: "center",
+  },
+  mapContainer: {
+    flex: 1,
+    marginHorizontal: 10,
+    marginTop: Spacing.small,
+    borderRadius: 5,
   },
 });

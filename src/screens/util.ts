@@ -5,10 +5,7 @@ export const getDocRef = (): any => {
 };
 
 export const getUserById = (): any => {
-  let docRef = firebase
-    .firestore()
-    .collection("users")
-    .doc(firebase.auth().currentUser?.uid);
+  let docRef = firebase.firestore().collection("users").doc(firebase.auth().currentUser?.uid);
   docRef
     .get()
     .then((doc) => {
@@ -31,6 +28,21 @@ export function mapClients(clients: any) {
   for (const [key, value] of Object.entries(clients)) {
     acc = acc.concat({ ...(value as Object), id: key });
   }
+  acc.sort(function (a: any, b: any) {
+    if (!a || !b) {
+      return 0;
+    }
+    var nameA = a.lastName.toUpperCase(); // ignore upper and lowercase
+    var nameB = b.lastName.toUpperCase(); // ignore upper and lowercase
+    if (nameA < nameB) {
+      return -1;
+    }
+    if (nameA > nameB) {
+      return 1;
+    }
+    // names must be equal
+    return 0;
+  });
   return acc;
 }
 

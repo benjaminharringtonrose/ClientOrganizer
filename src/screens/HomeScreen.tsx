@@ -131,7 +131,7 @@ class HomeScreen extends Component<HomeScreenProps, LocalState> {
             });
           }
         }}
-        label={`${item.firstName} ${item.lastName}`}
+        label={`${item.lastName}, ${item.firstName}`}
         iconRightName={iconName}
         iconRightColor={color}
       />
