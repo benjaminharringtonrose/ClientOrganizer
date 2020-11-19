@@ -13,3 +13,5 @@ web-build/
 .DS_Store
 
 firebase.ts
+
+# to clean up ignored files, 
