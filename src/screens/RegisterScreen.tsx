@@ -63,13 +63,23 @@ class RegisterScreen extends Component<RegisterScreenProps> {
     });
   };
 
+  onPickAvatar = async () => {
+    UserPermissions.getCameraPermission();
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      allowsEditing: true,
+      aspect: [4, 3],
+    });
+    if (!result.cancelled) {
+      this.props.avatarChanged(result.uri);
+    }
+  };
+
   private renderButton = () => {
     if (this.props.authLoading) {
       return <Spinner size="large" style={{ marginTop: Spacing.med }} />;
     }
-    return (
-      <Button label={"Signup"} onPress={this.onRegisterPress} style={styles.button} />
-    );
+    return <Button label={"Signup"} onPress={this.onRegisterPress} style={styles.button} />;
   };
 
   renderError() {
