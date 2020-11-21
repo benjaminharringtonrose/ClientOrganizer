@@ -59,22 +59,16 @@ const DashboardTabs = () => {
         component={ScheduleScreen}
         options={{
           tabBarLabel: "Schedule",
-          tabBarIcon: () => (
-            <Ionicons name="ios-calendar" size={24} color={Color.white} />
-          ),
+          tabBarIcon: () => <Ionicons name="ios-calendar" size={24} color={Color.white} />,
         }}
       />
       <Tab.Screen
         name={Routes.NOTIFICATION_SCREEN}
         component={NotificationScreen}
-        tabBarIcon={() => (
-          <Ionicons name="ios-notifications" size={24} color={Color.white} />
-        )}
+        tabBarIcon={() => <Ionicons name="ios-notifications" size={24} color={Color.white} />}
         options={{
-          tabBarLabel: "Notifications",
-          tabBarIcon: () => (
-            <Ionicons name="ios-notifications" size={24} color={Color.white} />
-          ),
+          tabBarLabel: "Listings",
+          tabBarIcon: () => <Ionicons name="ios-notifications" size={24} color={Color.white} />,
         }}
       />
       <Tab.Screen

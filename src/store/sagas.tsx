@@ -23,6 +23,8 @@ import {
   UPDATE_CLIENT_FAILED,
   ADD_CLIENT_SUCCEEDED,
   ADD_CLIENT_FAILED,
+  ADD_CLIENT_REQUESTED,
+  AVATAR_CHANGED,
 } from "./actions/types";
 import { getDocRef } from "../screens/util";
 import uuid from "uuid-random";
@@ -117,38 +119,6 @@ export function* addClientSaga(action: any) {
     yield put(addClientFail(error));
   }
 }
-// firebase
-// .firestore()
-// .collection("users")
-// .doc(firebase.auth().currentUser?.uid)
-// .set(
-//   {
-//     clients: {
-//       [uuid()]: {
-//         firstName,
-//         lastName,
-//         address,
-//         phoneNumber,
-//         email,
-//         budgetLow,
-//         budgetHigh,
-//         preferredAreas,
-//         notes,
-//       },
-//     },
-//   },
-//   { merge: true }
-// )
-// .then(() => {
-//   console.log("Document successfully written!");
-//   const uid = firebase.auth().currentUser?.uid;
-//   if (uid) {
-//     dispatchFetchUser(uid);
-//   }
-// })
-// .catch(() => (error: any) => {
-//   console.error("Error writing document: ", error);
-// });
 
 // UPDATE CLIENT - ACTIONS
 
@@ -305,6 +275,7 @@ function registerUserFail(error: any) {
 export function* registerUserSaga(action: any) {
   try {
     const { email, password, firstName, lastName, avatar } = action.payload;
+    yield console.log("action.payload - regster saga", action.payload);
     const auth = firebase.auth();
     const data = yield call([auth, auth.createUserWithEmailAndPassword], email, password);
     const db = getDocRef();
@@ -329,20 +300,24 @@ export const uploadPhotoAsync = (
   filename: string | undefined
 ): Promise<unknown> => {
   return new Promise(async (res, rej) => {
-    const response = await fetch(uri);
-    const file = await response.blob();
-    let upload = firebase.storage().ref(filename).put(file);
-    upload.on(
-      "state_changed",
-      (snapshot) => {},
-      (err) => {
-        rej(err);
-      },
-      async () => {
-        const url = await upload.snapshot.ref.getDownloadURL();
-        res(url);
-      }
-    );
+    try {
+      const response = await fetch(uri);
+      const file = await response.blob();
+      let upload = firebase.storage().ref(filename).put(file);
+      upload.on(
+        "state_changed",
+        (snapshot) => {},
+        (err) => {
+          rej(err);
+        },
+        async () => {
+          const url = await upload.snapshot.ref.getDownloadURL();
+          res(url);
+        }
+      );
+    } catch (error) {
+      console.log(error);
+    }
   });
 };
 
@@ -365,11 +340,13 @@ const addAvatarAsync = async (data: any) => {
 
 function* watchUserAuthentication() {
   yield takeLatest(FETCH_USER_REQUESTED, fetchUserSaga);
+  yield takeLatest(ADD_CLIENT_REQUESTED, addClientSaga);
   yield takeLatest(UPDATE_CLIENT_REQUESTED, updateClientSaga);
   yield takeLatest(DELETE_CLIENT_REQUESTED, deleteClientSaga);
   yield takeLatest(LOGIN_USER_REQUESTED, loginUserSaga);
   yield takeLatest(LOGOUT_USER_REQUESTED, logoutUserSaga);
   yield takeLatest(REGISTER_USER_REQUESTED, registerUserSaga);
+  yield takeLatest(AVATAR_CHANGED, addAvatarAsync);
 }
 
 // ROOT SAGA

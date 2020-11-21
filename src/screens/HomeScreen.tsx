@@ -76,6 +76,9 @@ class HomeScreen extends Component<HomeScreenProps, LocalState> {
     if (oldProps.fetchUserLoading && !this.props.fetchUserLoading && !this.props.fetchUserError) {
       if (oldProps.clients !== this.props.clients) {
         const mappedClients = mapClients(this.props.clients);
+        if (mappedClients === {}) {
+          console.log("THAT'S IT");
+        }
         this.setState({ clients: [...mappedClients] });
       }
     }
@@ -162,6 +165,7 @@ class HomeScreen extends Component<HomeScreenProps, LocalState> {
               data={this.state.clients}
               keyExtractor={(item: any) => item.id}
               renderItem={({ item }) => this.renderClientCell({ item })}
+              indicatorStyle={"white"}
             />
           )}
         </Card>

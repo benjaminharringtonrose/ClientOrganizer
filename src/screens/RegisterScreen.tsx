@@ -37,7 +37,7 @@ interface PassedProps {
 interface PropsFromState {
   firstName: string;
   lastName: string;
-  avatar: string;
+  avatar?: string;
   user: any;
   email: string;
   password: string;
@@ -75,14 +75,19 @@ class RegisterScreen extends Component<RegisterScreenProps> {
   };
 
   onPickAvatar = async () => {
-    UserPermissions.getCameraPermission();
-    let result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.Images,
-      allowsEditing: true,
-      aspect: [4, 3],
-    });
-    if (!result.cancelled) {
-      this.props.dispatchChangeAvatar(result.uri);
+    try {
+      UserPermissions.getCameraPermission();
+      let result = await ImagePicker.launchImageLibraryAsync({
+        mediaTypes: ImagePicker.MediaTypeOptions.Images,
+        allowsEditing: true,
+        aspect: [4, 3],
+      });
+      if (!result.cancelled) {
+        console.log("true");
+        this.props.dispatchChangeAvatar(result.uri);
+      }
+    } catch (error) {
+      console.log(error);
     }
   };
 
@@ -114,7 +119,7 @@ class RegisterScreen extends Component<RegisterScreenProps> {
           </View>
           <Card>
             <TouchableOpacity style={styles.avatarPlaceholder} onPress={this.onPickAvatar}>
-              <Image source={{ uri: avatar }} style={styles.avatar} />
+              {!!avatar && <Image source={{ uri: avatar }} style={styles.avatar} />}
               <Ionicons name="ios-add" size={40} color="#FFF" style={styles.addIcon} />
             </TouchableOpacity>
             <CardSection>
@@ -167,7 +172,7 @@ class RegisterScreen extends Component<RegisterScreenProps> {
 }
 
 const mapStateToProps = ({ auth }: any) => {
-  const { firstName, lastName, avatar, email, password, error, loading, user } = auth;
+  const { firstName, lastName, email, password, avatar, error, loading, user } = auth;
   return {
     firstName,
     lastName,
@@ -186,7 +191,7 @@ const mapDispatchToProps = (dispatch: any) => ({
   emailChanged: (email: string) => dispatch(emailChanged(email)),
   passwordChanged: (password: string) => dispatch(passwordChanged(password)),
   dispatchChangeAvatar: (result: string) => dispatch(avatarChanged(result)),
-  dispatchRegisterRequest: ({ email, password, firstName, lastName, user, avatar }: any) => {
+  dispatchRegisterRequest: ({ email, password, firstName, lastName, avatar }: any) => {
     dispatch({
       type: REGISTER_USER_REQUESTED,
       payload: {
@@ -194,7 +199,6 @@ const mapDispatchToProps = (dispatch: any) => ({
         password,
         firstName,
         lastName,
-        user,
         avatar,
       },
     });

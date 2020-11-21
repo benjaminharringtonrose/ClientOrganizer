@@ -1,13 +1,5 @@
 import React, { Component } from "react";
-import {
-  StyleSheet,
-  ScrollView,
-  StatusBar,
-  SafeAreaView,
-  TouchableOpacity,
-  View,
-  Text,
-} from "react-native";
+import { StyleSheet, ScrollView, StatusBar, SafeAreaView, View, Text } from "react-native";
 import { Color } from "../common/styles/Colors";
 import { Spacing } from "../common/styles/Spacing";
 import SubHeader from "../common/components/SubHeader";
@@ -16,12 +8,9 @@ import CardSection from "../common/components/CardSection";
 import Card from "../common/components/Card";
 import Button from "../common/components/Button";
 import { Routes } from "../../navigation";
-import firebase from "firebase";
-import uuid from "uuid-random";
 import { connect } from "react-redux";
 import { FETCH_USER_REQUESTED, ADD_CLIENT_REQUESTED } from "../store/actions/types";
 import Spinner from "../common/components/Spinner";
-import { Icon } from "react-native-elements";
 
 interface PassedProps {
   navigation: any;
@@ -34,7 +23,7 @@ interface PropsFromState {
 
 interface DispatchFromState {
   dispatchFetchUser: (uid: any) => any;
-  dispatchAddClient: (object: any) => string;
+  dispatchAddClient: (object: any) => any;
 }
 
 interface LocalState {
@@ -71,8 +60,6 @@ class AddNewClientScreen extends Component<AddNewClientScreenProps, LocalState> 
   }
 
   private onSubmit = () => {
-    const { dispatchFetchUser } = this.props;
-
     const {
       firstName,
       lastName,
@@ -96,39 +83,6 @@ class AddNewClientScreen extends Component<AddNewClientScreenProps, LocalState> 
       preferredAreas,
       notes,
     });
-
-    // firebase
-    //   .firestore()
-    //   .collection("users")
-    //   .doc(firebase.auth().currentUser?.uid)
-    //   .set(
-    //     {
-    //       clients: {
-    //         [uuid()]: {
-    //           firstName,
-    //           lastName,
-    //           address,
-    //           phoneNumber,
-    //           email,
-    //           budgetLow,
-    //           budgetHigh,
-    //           preferredAreas,
-    //           notes,
-    //         },
-    //       },
-    //     },
-    //     { merge: true }
-    //   )
-    //   .then(() => {
-    //     console.log("Document successfully written!");
-    //     const uid = firebase.auth().currentUser?.uid;
-    //     if (uid) {
-    //       dispatchFetchUser(uid);
-    //     }
-    //   })
-    //   .catch(() => (error: any) => {
-    //     console.error("Error writing document: ", error);
-    //   });
   };
 
   private renderHeader = () => {

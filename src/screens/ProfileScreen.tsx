@@ -12,7 +12,6 @@ import { Ionicons } from "@expo/vector-icons";
 import { Spacing } from "../common/styles/Spacing";
 import CellLabelLeftRight from "../common/components/CellLabelLeftRight";
 import { Routes } from "../../navigation";
-require("firebase/firestore");
 import UserPermissions from "../util/permissions";
 import * as ImagePicker from "expo-image-picker";
 import { avatarChanged } from "../store/actions";
@@ -27,6 +26,9 @@ interface PropsFromState {
   fetchUserLoading: boolean;
   fetchUserError: any;
   avatar: string;
+  firstName: string;
+  lastName: string;
+  email: string;
 }
 interface LocalState {
   user?: firebase.firestore.DocumentData;
@@ -55,7 +57,7 @@ class ProfileScreen extends React.Component<ProfileScreenProps, LocalState> {
     }
   }
 
-  onPickAvatar = async () => {
+  private onPickAvatar = async () => {
     UserPermissions.getCameraPermission();
     let result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
@@ -80,24 +82,18 @@ class ProfileScreen extends React.Component<ProfileScreenProps, LocalState> {
   };
 
   public render() {
-    const { user } = this.state;
     return (
       <ScrollView style={styles.container}>
         <Card>
-          <TouchableOpacity style={styles.avatarPlaceholder} onPress={this.onPickAvatar}>
-            <Ionicons name="ios-add" size={40} color="#FFF" style={styles.addIcon} />
-            <Image source={{ uri: this.props.avatar || undefined }} style={styles.avatar} />
+          <TouchableOpacity style={styles.avatarPlaceholder} onPress={() => {}}>
+            <Image source={{ uri: this.props.avatar }} style={styles.avatar} />
           </TouchableOpacity>
           <Text style={styles.subHeaderText}>{"User Information"}</Text>
           <CellLabelLeftRight
             labelLeft={"Name"}
-            labelRight={`${user?.firstName} ${user?.lastName}`}
+            labelRight={`${this.props.firstName} ${this.props.lastName}`}
           />
-          <CellLabelLeftRight labelLeft={"Email"} labelRight={user?.email} />
-          <Text style={styles.subHeaderText}>{"Preferences"}</Text>
-          <CellLabelLeftRight labelLeft={"preference 1"} labelRight={"preference 1"} />
-          <CellLabelLeftRight labelLeft={"preference 2"} labelRight={"preference 2"} />
-          <CellLabelLeftRight labelLeft={"preference 3"} labelRight={"preference 3"} />
+          <CellLabelLeftRight labelLeft={"Email"} labelRight={this.props.email} />
           <CardSection style={{ marginTop: Spacing.med }}>{this.renderSignOutButton()}</CardSection>
         </Card>
       </ScrollView>
@@ -106,9 +102,12 @@ class ProfileScreen extends React.Component<ProfileScreenProps, LocalState> {
 }
 
 const mapStateToProps = (state: any) => {
-  console.log(state);
+  console.log("PROFILE SCREEN STATE", state);
   return {
-    avatar: state.auth,
+    avatar: state.user.user.avatar,
+    firstName: state.user.user.firstName,
+    lastName: state.user.user.lastName,
+    email: state.user.user.email,
     loading: state.auth.loading,
     error: state.auth.error,
     fetchUserLoading: state.user.user.fetchUserLoading,
@@ -130,11 +129,6 @@ const styles = StyleSheet.create({
     backgroundColor: Color.darkThemeGreyDark,
     paddingTop: Spacing.xxlarge,
   },
-  // avatarContainer: {
-  //   paddingTop: Spacing.xxlarge,
-  //   paddingBottom: Spacing.med,
-  //   backgroundColor: Color.darkThemeGreyMed,
-  // },
   avatarPlaceholder: {
     alignSelf: "center",
     width: 120,
@@ -144,13 +138,14 @@ const styles = StyleSheet.create({
     marginVertical: Spacing.small,
   },
   avatar: {
-    width: 136,
-    height: 136,
-    borderRadius: 68,
+    position: "absolute",
+    width: 120,
+    height: 120,
+    borderRadius: 60,
   },
   addIcon: {
     alignSelf: "center",
-    marginTop: 40,
+    marginTop: 38,
     marginLeft: 2,
     color: Color.greyLight,
   },
