@@ -5,9 +5,7 @@ import {
   DELETE_CLIENT_REQUESTED,
   DELETE_CLIENT_SUCCEEDED,
   DELETE_CLIENT_FAILED,
-  UPDATE_CLIENT_REQUESTED,
-  UPDATE_CLIENT_SUCCEEDED,
-  UPDATE_CLIENT_FAILED,
+  UPDATE_CLIENT,
   ADD_CLIENT_REQUESTED,
   ADD_CLIENT_SUCCEEDED,
   ADD_CLIENT_FAILED,
@@ -65,17 +63,17 @@ const UserReducer = (state = INITIAL_STATE, action: any) => {
         deleteClientLoading: false,
         deleteClientError: action.payload.message,
       };
-    case UPDATE_CLIENT_REQUESTED:
+    case UPDATE_CLIENT.REQUESTED:
       return {
         ...state,
         updateClientLoading: true,
       };
-    case UPDATE_CLIENT_SUCCEEDED:
+    case UPDATE_CLIENT.SUCCEEDED:
       return {
         ...state,
         updateClientLoading: false,
       };
-    case UPDATE_CLIENT_FAILED:
+    case UPDATE_CLIENT.FAILED:
       return {
         ...state,
         updateClientLoading: false,

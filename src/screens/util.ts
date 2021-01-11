@@ -23,7 +23,7 @@ export const getUserById = (): any => {
 };
 
 export function mapClients(clients: any) {
-  if (!clients) {
+  if (!clients || clients === {}) {
     return {};
   }
   let acc: any = [];

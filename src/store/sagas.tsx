@@ -18,9 +18,7 @@ import {
   DELETE_CLIENT_REQUESTED,
   DELETE_CLIENT_SUCCEEDED,
   DELETE_CLIENT_FAILED,
-  UPDATE_CLIENT_REQUESTED,
-  UPDATE_CLIENT_SUCCEEDED,
-  UPDATE_CLIENT_FAILED,
+  UPDATE_CLIENT,
   ADD_CLIENT_SUCCEEDED,
   ADD_CLIENT_FAILED,
   ADD_CLIENT_REQUESTED,
@@ -110,11 +108,11 @@ export function* addClientSaga(action: any) {
 // UPDATE CLIENT - ACTIONS
 
 export const updateClientSucceeded = () => ({
-  type: UPDATE_CLIENT_SUCCEEDED,
+  type: UPDATE_CLIENT.SUCCEEDED,
 });
 
 export const updateClientFailed = (error: any) => ({
-  type: UPDATE_CLIENT_FAILED,
+  type: UPDATE_CLIENT.FAILED,
   payload: error,
 });
 
@@ -328,7 +326,7 @@ const addAvatarAsync = async (data: any) => {
 function* watchUserAuthentication() {
   yield takeLatest(FETCH_USER_REQUESTED, fetchUserSaga);
   yield takeLatest(ADD_CLIENT_REQUESTED, addClientSaga);
-  yield takeLatest(UPDATE_CLIENT_REQUESTED, updateClientSaga);
+  yield takeLatest(UPDATE_CLIENT.REQUESTED, updateClientSaga);
   yield takeLatest(DELETE_CLIENT_REQUESTED, deleteClientSaga);
   yield takeLatest(LOGIN_USER_REQUESTED, loginUserSaga);
   yield takeLatest(LOGOUT_USER_REQUESTED, logoutUserSaga);
