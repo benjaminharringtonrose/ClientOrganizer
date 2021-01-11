@@ -10,6 +10,7 @@ import {
 } from "react-native";
 import { Icon } from "react-native-elements";
 import { connect } from "react-redux";
+import { isEqual } from "lodash";
 import firebase from "firebase";
 import { FETCH_USER, DELETE_CLIENT } from "../store/actions/types";
 import Routes from "../navigation/routes";
@@ -84,7 +85,7 @@ class HomeScreen extends Component<HomeScreenProps, LocalState> {
     if (oldProps.fetchUserLoading && !this.props.fetchUserLoading && !this.props.fetchUserError) {
       if (oldProps.clients !== this.props.clients) {
         const mappedClients = mapClients(this.props.clients);
-        if (mappedClients !== {}) {
+        if (!isEqual(mappedClients, {})) {
           this.setState({ clients: [...mappedClients] });
         }
       }

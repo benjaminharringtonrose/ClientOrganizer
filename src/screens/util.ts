@@ -1,4 +1,5 @@
 import firebase from "firebase";
+import { isEqual } from "lodash";
 import { Linking } from "react-native";
 
 export const getDocRef = (): any => {
@@ -22,7 +23,7 @@ export const getUserById = (): any => {
 };
 
 export function mapClients(clients: any) {
-  if (!clients || clients === {}) {
+  if (isEqual(clients, {})) {
     return {};
   }
   let acc: any = [];
