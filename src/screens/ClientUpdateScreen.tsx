@@ -33,13 +33,7 @@ interface ILocalState {
   updatedFieldValue: string;
 }
 
-type FieldLabel =
-  | "address"
-  | "phoneNumber"
-  | "email"
-  | "budgetLow"
-  | "budgetHigh"
-  | "preferredAreas";
+type FieldLabel = "address" | "phoneNumber" | "email";
 
 enum ClientFieldKey {
   firstName = "firstName",
@@ -47,9 +41,6 @@ enum ClientFieldKey {
   address = "address",
   phoneNumber = "phoneNumber",
   email = "email",
-  budgetLow = "budgetLow",
-  budgetHigh = "budgetHigh",
-  preferredAreas = "preferredAreas",
 }
 
 type IClientUpdateScreenProps = PassedProps & DispatchFromState & IPropsFromState;
@@ -92,15 +83,6 @@ class ClientUpdateScreen extends Component<IClientUpdateScreenProps, ILocalState
         return;
       case ClientFieldKey.email:
         this.setState({ fieldLabel: "Email", fieldValue: client.email });
-        return;
-      case ClientFieldKey.budgetLow:
-        this.setState({ fieldLabel: "Budget Low", fieldValue: client.budgetLow });
-        return;
-      case ClientFieldKey.budgetHigh:
-        this.setState({ fieldLabel: "Budget High", fieldValue: client.budgetHigh });
-        return;
-      case ClientFieldKey.preferredAreas:
-        this.setState({ fieldLabel: "Preferred Areas", fieldValue: client.preferredAreas });
         return;
     }
   };

@@ -20,8 +20,6 @@ export interface IClient {
   address: string;
   phoneNumber: string;
   email: string;
-  budgetLow: string;
-  budgetHigh: string;
   preferredAreas: string;
   notes: string;
 }
