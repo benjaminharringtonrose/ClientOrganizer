@@ -1,8 +1,6 @@
 import React, { Component } from "react";
-import { View, Text, StyleSheet, ViewStyle, StyleProp, TextStyle } from "react-native";
-import { Spacing } from "../styles/Spacing";
-import { Color } from "../styles/Colors";
-import { Divider } from "./Divider";
+import { View, Text, StyleSheet, ViewStyle, StyleProp } from "react-native";
+import { Color, Spacing } from "../styles";
 
 interface HeaderProps {
   label: string;
@@ -15,9 +13,7 @@ export default class SubHeader extends Component<HeaderProps> {
     const { label, fontSize, style } = this.props;
     return (
       <View style={style}>
-        <Text style={[styles.subHeaderText, { fontSize: fontSize ? fontSize : 20 }]}>
-          {label}
-        </Text>
+        <Text style={[styles.subHeaderText, { fontSize: fontSize ? fontSize : 20 }]}>{label}</Text>
       </View>
     );
   }

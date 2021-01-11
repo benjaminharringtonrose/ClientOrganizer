@@ -8,7 +8,7 @@ export const Color = Object.freeze({
   greyLight: "#D3D7DC",
   greyExtraLight: "#F8F8F8",
 
-  primary: "#49A0AE",
+  primary: "#303F9F",
   primaryMedDark: "",
   primaryMed: "",
   primaryDark: "",
@@ -16,7 +16,7 @@ export const Color = Object.freeze({
   primaryExtraLight: "",
   primaryBackground: "#E7F0F1",
 
-  secondary: "#353C51",
+  secondary: "#BDBDBD",
   secondaryMedDark: "",
   secondaryMed: "",
   secondaryDark: "",

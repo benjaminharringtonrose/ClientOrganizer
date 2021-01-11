@@ -11,8 +11,7 @@ import Button from "../common/components/Button";
 import Card from "../common/components/Card";
 import CardSection from "../common/components/CardSection";
 import CellLabelLeftRight from "../common/components/CellLabelLeftRight";
-import { Spacing } from "../common/styles/Spacing";
-import { Color } from "../common/styles/Colors";
+import { Color, Spacing } from "../common/styles";
 import { Routes } from "../navigation/routes";
 
 interface PassedProps {

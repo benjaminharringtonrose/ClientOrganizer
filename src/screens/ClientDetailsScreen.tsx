@@ -8,9 +8,8 @@ import {
   TouchableOpacity,
   ActivityIndicator,
 } from "react-native";
-import { Color } from "../common/styles/Colors";
+import { Color, Spacing } from "../common/styles";
 import Card from "../common/components/Card";
-import { Spacing } from "../common/styles/Spacing";
 import { Icon } from "react-native-elements";
 import CellIconActionable from "../common/components/CellIconActionable";
 import { Routes } from "../navigation/routes";

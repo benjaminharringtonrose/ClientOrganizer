@@ -1,16 +1,6 @@
 import React, { Component } from "react";
-import {
-  Text,
-  TouchableOpacity,
-  StyleSheet,
-  StyleProp,
-  ViewStyle,
-  Image,
-  View,
-  TextStyle,
-} from "react-native";
-import { Spacing } from "../styles/Spacing";
-import { Color } from "../styles/Colors";
+import { Text, TouchableOpacity, StyleProp, ViewStyle, View } from "react-native";
+import { Color, Spacing } from "../styles";
 import CardSection from "./CardSection";
 import Spinner from "./Spinner";
 
@@ -30,7 +20,7 @@ export default class CellLabelCenterActionable extends Component<CellLabelCenter
         {loading ? (
           <Spinner size={800} color={Color.white} />
         ) : (
-          <CardSection style={{ backgroundColor: !disabled ? Color.confirm : Color.greyMedDark }}>
+          <CardSection style={{ backgroundColor: !disabled ? Color.primary : Color.secondary }}>
             <TouchableOpacity
               onPress={onPress}
               disabled={disabled || false}

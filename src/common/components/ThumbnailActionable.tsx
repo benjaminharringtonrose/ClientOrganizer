@@ -8,8 +8,7 @@ import {
   ImageStyle,
 } from "react-native";
 import { Text } from "react-native";
-import { Spacing } from "../styles/Spacing";
-import { Color } from "../styles/Colors";
+import { Color, Spacing } from "../styles";
 interface ThumbnailActionableProps {
   imageSource: ImageSourcePropType;
   name: string;

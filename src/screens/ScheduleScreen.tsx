@@ -1,7 +1,6 @@
 import React from "react";
 import { View, Text, StyleSheet, ScrollView, StatusBar } from "react-native";
-import { Color } from "../common/styles/Colors";
-import { Spacing } from "../common/styles/Spacing";
+import { Color, Spacing } from "../common/styles";
 import { Calendar } from "react-native-calendars";
 
 export default class ScheduleScreen extends React.Component {

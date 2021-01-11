@@ -9,8 +9,7 @@ import Spinner from "../common/components/Spinner";
 import { emailChanged, passwordChanged } from "../store/actions/AuthActions";
 import { LOGIN_USER_REQUESTED } from "../store/actions/types";
 import Header from "../common/components/Header";
-import { Spacing } from "../common/styles/Spacing";
-import { Color } from "../common/styles/Colors";
+import { Color, Spacing } from "../common/styles";
 import { Routes } from "../navigation/routes";
 
 interface PassedProps {

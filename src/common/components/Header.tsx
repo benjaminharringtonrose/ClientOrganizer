@@ -1,8 +1,6 @@
 import React, { Component } from "react";
 import { View, Text, StyleSheet, ViewStyle, StyleProp, TextStyle } from "react-native";
-import { Spacing } from "../styles/Spacing";
-import { Color } from "../styles/Colors";
-import { Divider } from "./Divider";
+import { Color, Spacing } from "../styles";
 
 interface HeaderProps {
   title: string;

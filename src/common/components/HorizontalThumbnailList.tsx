@@ -9,8 +9,7 @@ import {
   ViewStyle,
 } from "react-native";
 import { TouchableText } from "../components/TouchableText";
-import { Spacing } from "../styles/Spacing";
-import { Color } from "../styles/Colors";
+import { Color, Spacing } from "../styles";
 
 interface HorizontalThumbnailListProps {
   headerText?: string;

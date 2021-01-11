@@ -3,7 +3,7 @@ import { View, Modal, Text, StyleSheet } from "react-native";
 import Card from "../components/Card";
 import CardSection from "../components/CardSection";
 import Button from "../components/Button";
-import { Color } from "../styles/Colors";
+import { Color } from "../styles";
 
 interface IAlertModalProps {
   label: string;

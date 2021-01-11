@@ -3,8 +3,7 @@ import { Text, TouchableOpacity, StyleSheet, ViewStyle, View } from "react-nativ
 import { Icon } from "react-native-elements";
 import { AntDesign } from "@expo/vector-icons";
 import CardSection from "../components/CardSection";
-import { Spacing } from "../styles/Spacing";
-import { Color } from "../styles/Colors";
+import { Color, Spacing } from "../styles";
 
 interface CellIconActionableProps {
   label?: string;
@@ -27,21 +26,11 @@ export default class CellIconActionable extends Component<CellIconActionableProp
     switch (iconLeftName) {
       case "plus":
         return (
-          <Icon
-            name={iconLeftName}
-            type={"antdesign"}
-            color={Color.white}
-            size={iconLeftSize}
-          />
+          <Icon name={iconLeftName} type={"antdesign"} color={Color.white} size={iconLeftSize} />
         );
       case "minus":
         return (
-          <Icon
-            name={iconLeftName}
-            type={"antdesign"}
-            color={Color.white}
-            size={iconLeftSize}
-          />
+          <Icon name={iconLeftName} type={"antdesign"} color={Color.white} size={iconLeftSize} />
         );
       case "book":
         return (
@@ -53,12 +42,7 @@ export default class CellIconActionable extends Component<CellIconActionableProp
           />
         );
       case "right":
-        <Icon
-          name={iconLeftName}
-          type={"antdesign"}
-          color={Color.white}
-          size={iconLeftSize}
-        />;
+        <Icon name={iconLeftName} type={"antdesign"} color={Color.white} size={iconLeftSize} />;
       default:
         console.warn("May have entered wrong value for icon name.");
         return <View />;

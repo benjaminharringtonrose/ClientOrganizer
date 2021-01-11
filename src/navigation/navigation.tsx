@@ -12,8 +12,7 @@ import NotificationScreen from "../screens/NotificationScreen";
 import ProfileScreen from "../screens/ProfileScreen";
 
 import { Ionicons } from "@expo/vector-icons";
-import { Color } from "../common/styles/Colors";
-import { Spacing } from "../common/styles/Spacing";
+import { Color, Spacing } from "../common/styles";
 import AddNewClientScreen from "../screens/AddNewClientScreen";
 import ClientDetailScreen from "../screens/ClientDetailsScreen";
 import ClientUpdateScreen from "../screens/ClientUpdateScreen";

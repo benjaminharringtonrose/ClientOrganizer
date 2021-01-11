@@ -1,8 +1,7 @@
 import React, { Component } from "react";
 import { StyleSheet, StatusBar, View, Text, FlatList, ActivityIndicator } from "react-native";
 import { connect } from "react-redux";
-import { Spacing } from "../common/styles/Spacing";
-import { Color } from "../common/styles/Colors";
+import { Color, Spacing } from "../common/styles";
 import SearchBar from "../common/components/SearchBar";
 import Card from "../common/components/Card";
 import CellIconActionable from "../common/components/CellIconActionable";

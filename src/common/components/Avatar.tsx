@@ -1,16 +1,6 @@
 import React, { Component } from "react";
-import {
-  Text,
-  TouchableOpacity,
-  StyleSheet,
-  StyleProp,
-  ViewStyle,
-  Image,
-  View,
-} from "react-native";
-import { Spacing } from "../styles/Spacing";
-import { Color } from "../styles/Colors";
-import CardSection from "./CardSection";
+import { StyleSheet, StyleProp, ViewStyle, Image, View } from "react-native";
+import { Color } from "../styles";
 import Spinner from "./Spinner";
 
 interface AvatarProps {

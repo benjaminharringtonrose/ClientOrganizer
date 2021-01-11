@@ -1,6 +1,5 @@
 import React, { Component } from "react";
-import { Color } from "../styles/Colors";
-import { Spacing } from "../styles/Spacing";
+import { Color, Spacing } from "../styles";
 import { FontAwesome } from "@expo/vector-icons";
 import Input from "./Input";
 import { TouchableOpacity } from "react-native-gesture-handler";

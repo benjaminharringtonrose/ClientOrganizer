@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import { StyleSheet, ScrollView, StatusBar, SafeAreaView, View, Text } from "react-native";
-import { Color } from "../common/styles/Colors";
-import { Spacing } from "../common/styles/Spacing";
+import { Color, Spacing } from "../common/styles";
 import SubHeader from "../common/components/SubHeader";
 import Input from "../common/components/Input";
 import CardSection from "../common/components/CardSection";

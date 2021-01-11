@@ -23,8 +23,7 @@ import {
   passwordChanged,
   avatarChanged,
 } from "../store/actions";
-import { Color } from "../common/styles/Colors";
-import { Spacing } from "../common/styles/Spacing";
+import { Color, Spacing } from "../common/styles";
 import Header from "../common/components/Header";
 import { Routes } from "../navigation/routes";
 import UserPermissions from "../util/permissions";

@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import { View, ViewStyle, StyleProp, StyleSheet } from "react-native";
-import { Color } from "../styles/Colors";
-import { Spacing } from "../styles/Spacing";
+import { Color } from "../styles";
 
 interface CardSectionProps {
   children: any;

@@ -1,15 +1,6 @@
 import React, { Component } from "react";
-import {
-  Text,
-  TouchableOpacity,
-  StyleSheet,
-  StyleProp,
-  ViewStyle,
-  Image,
-  View,
-} from "react-native";
-import { Spacing } from "../styles/Spacing";
-import { Color } from "../styles/Colors";
+import { Text, StyleProp, ViewStyle, View } from "react-native";
+import { Color, Spacing } from "../styles";
 import CardSection from "./CardSection";
 import Spinner from "./Spinner";
 
@@ -39,9 +30,7 @@ export default class CellLabelLeftRight extends Component<CellLabelLeftRightProp
             >
               {labelLeft}
             </Text>
-            <Text
-              style={{ color: Color.white, paddingRight: Spacing.small, fontSize: 18 }}
-            >
+            <Text style={{ color: Color.white, paddingRight: Spacing.small, fontSize: 18 }}>
               {labelRight}
             </Text>
           </CardSection>

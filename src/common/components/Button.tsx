@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import { Text, TouchableOpacity, StyleSheet, StyleProp, ViewStyle } from "react-native";
-import { Spacing } from "../styles/Spacing";
-import { Color } from "../styles/Colors";
+import { Color, Spacing } from "../styles";
 
 interface ButtonProps {
   onPress: any;

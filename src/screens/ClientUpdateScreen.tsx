@@ -1,8 +1,7 @@
 import React, { Component } from "react";
 import { StyleSheet, ScrollView, Text, SafeAreaView, View, TouchableOpacity } from "react-native";
-import { Color } from "../common/styles/Colors";
+import { Color, Spacing } from "../common/styles";
 import Card from "../common/components/Card";
-import { Spacing } from "../common/styles/Spacing";
 import Input from "../common/components/Input";
 import CardSection from "../common/components/CardSection";
 import Button from "../common/components/Button";
