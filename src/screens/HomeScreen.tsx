@@ -47,6 +47,7 @@ interface DispatchFromState {
 
 interface LocalState {
   clients: IClient[];
+  filteredClients: IClient[];
   modalVisible: boolean;
   editMode: boolean;
   clientId?: string;
@@ -58,6 +59,7 @@ type HomeScreenProps = PropsFromState & DispatchFromState & PassedProps;
 class HomeScreen extends Component<HomeScreenProps, LocalState> {
   public state = {
     clients: [],
+    filteredClients: [],
     database: undefined,
     modalVisible: false,
     editMode: false,
@@ -141,8 +143,17 @@ class HomeScreen extends Component<HomeScreenProps, LocalState> {
     );
   };
 
+  private searchClients = (searchText: string) => {
+    this.setState({ searchText });
+    const filteredClients = this.state.clients.filter(
+      (client: any) => client.lastName.includes(searchText) || client.firstName.includes(searchText)
+    );
+    this.setState({ filteredClients });
+  };
+
   public render() {
     const loading = this.props.fetchUserLoading || this.props.deleteClientLoading;
+    const showAllClients = !this.state.filteredClients.length;
     return (
       <View style={styles.rootContainer}>
         <StatusBar barStyle={"light-content"} />
@@ -150,7 +161,7 @@ class HomeScreen extends Component<HomeScreenProps, LocalState> {
         <Card style={{ flex: 1 }}>
           <CardSection style={{ marginBottom: Spacing.med }}>
             <SearchBar
-              onChangeText={(searchText: string) => this.setState({ searchText })}
+              onChangeText={this.searchClients}
               value={this.state.searchText || ""}
               placeholder={"search clients..."}
               keyboardType={"web-search"}
@@ -162,7 +173,7 @@ class HomeScreen extends Component<HomeScreenProps, LocalState> {
             </View>
           ) : (
             <FlatList
-              data={this.state.clients}
+              data={showAllClients ? this.state.clients : this.state.filteredClients}
               keyExtractor={(item: any) => item.id}
               renderItem={({ item }) => this.renderClientCell({ item })}
               indicatorStyle={"white"}

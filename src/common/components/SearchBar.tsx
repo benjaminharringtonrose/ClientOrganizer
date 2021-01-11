@@ -29,6 +29,7 @@ export default class SearchBar extends Component<ISearchBarProps> {
           secureTextEntry={false}
           selectionColor={Color.greyLight}
           keyboardType={keyboardType}
+          autoCapitalize={"words"}
         />
         <TouchableOpacity
           style={{ flex: 1, alignItems: "center", justifyContent: "center" }}
