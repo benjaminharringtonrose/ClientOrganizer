@@ -15,7 +15,7 @@ import CellIconActionable from "../common/components/CellIconActionable";
 import Routes from "../navigation/routes";
 import { connect } from "react-redux";
 import { IClient } from "./HomeScreen";
-import MapView, { Marker } from "react-native-maps";
+import MapView from "react-native-maps";
 import CellLabelCenterActionable from "../common/components/CellLabelCenterActionable";
 import { callTelephone } from "./util";
 

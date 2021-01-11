@@ -8,20 +8,23 @@ import {
   TouchableOpacity,
   Image,
 } from "react-native";
+import { connect } from "react-redux";
+import UserPermissions from "../util/permissions";
+import * as ImagePicker from "expo-image-picker";
+
 import Card from "../common/components/Card";
 import CardSection from "../common/components/CardSection";
 import Input from "../common/components/Input";
 import Button from "../common/components/Button";
 import Spinner from "../common/components/Spinner";
+import Header from "../common/components/Header";
 import { Ionicons } from "@expo/vector-icons";
-import { connect } from "react-redux";
+
 import { REGISTER_USER } from "../store/actions/types";
 import { avatarChanged } from "../store/actions";
 import { Color, Spacing } from "../common/styles";
-import Header from "../common/components/Header";
+
 import Routes from "../navigation/routes";
-import UserPermissions from "../util/permissions";
-import * as ImagePicker from "expo-image-picker";
 
 interface PassedProps {
   navigation: any;

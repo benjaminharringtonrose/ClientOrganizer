@@ -1,13 +1,9 @@
 import { LOGIN_USER, REGISTER_USER, LOGOUT_USER, AVATAR_CHANGED } from "../actions/types";
 
 const INITIAL_STATE = {
-  firstName: "",
-  lastName: "",
   avatar: "",
-  email: "",
-  password: "",
   uid: "",
-  error: "",
+  error: undefined,
   loading: false,
   clients: {},
 };
@@ -25,8 +21,6 @@ const AuthReducer = (state = INITIAL_STATE, action: any) => {
     case LOGIN_USER.SUCCEEDED:
       return {
         ...state,
-        email: undefined,
-        password: undefined,
         user: action.payload,
         loading: false,
         error: undefined,
@@ -35,7 +29,6 @@ const AuthReducer = (state = INITIAL_STATE, action: any) => {
       return {
         ...state,
         error: action.payload.message,
-        password: "",
         loading: false,
       };
     // LOGOUT
@@ -74,7 +67,6 @@ const AuthReducer = (state = INITIAL_STATE, action: any) => {
       return {
         ...state,
         error: action.payload.message,
-        password: "",
         loading: false,
       };
     case AVATAR_CHANGED:

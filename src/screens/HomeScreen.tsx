@@ -1,18 +1,27 @@
 import React, { Component } from "react";
-import { StyleSheet, StatusBar, View, Text, FlatList, ActivityIndicator } from "react-native";
+import {
+  StyleSheet,
+  StatusBar,
+  View,
+  Text,
+  FlatList,
+  ActivityIndicator,
+  TouchableOpacity,
+} from "react-native";
+import { Icon } from "react-native-elements";
 import { connect } from "react-redux";
-import { Color, Spacing } from "../common/styles";
+import firebase from "firebase";
+import { FETCH_USER, DELETE_CLIENT } from "../store/actions/types";
+import Routes from "../navigation/routes";
+
 import SearchBar from "../common/components/SearchBar";
 import Card from "../common/components/Card";
 import CellIconActionable from "../common/components/CellIconActionable";
-import firebase from "firebase";
-import Routes from "../navigation/routes";
-import { FETCH_USER, DELETE_CLIENT } from "../store/actions/types";
-import { Icon } from "react-native-elements";
-import { TouchableOpacity } from "react-native-gesture-handler";
-import { mapClients } from "./util";
 import CardSection from "../common/components/CardSection";
 import AlertModal from "../common/components/AlertModal";
+
+import { mapClients } from "./util";
+import { Color, Spacing } from "../common/styles";
 
 export interface IClient {
   firstName: string;

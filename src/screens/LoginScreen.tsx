@@ -1,13 +1,15 @@
 import React, { Component } from "react";
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity, StatusBar } from "react-native";
 import { connect } from "react-redux";
+import { LOGIN_USER } from "../store/actions/types";
+
 import Card from "../common/components/Card";
 import CardSection from "../common/components/CardSection";
 import Input from "../common/components/Input";
 import Button from "../common/components/Button";
 import Spinner from "../common/components/Spinner";
-import { LOGIN_USER } from "../store/actions/types";
 import Header from "../common/components/Header";
+
 import { Color, Spacing } from "../common/styles";
 import Routes from "../navigation/routes";
 
@@ -38,7 +40,13 @@ class LoginScreen extends Component<LoginScreenProps, LocalState> {
 
   componentDidUpdate(oldProps: any) {
     if (oldProps.authLoading && !this.props.authLoading && !this.props.authError) {
+      this.setState({ email: "", password: "" });
       this.props.navigation.navigate(Routes.DASHBOARD_TABS);
+    }
+    if (oldProps.authError !== this.props.authError) {
+      if (this.props.authError) {
+        this.setState({ password: "" });
+      }
     }
   }
 

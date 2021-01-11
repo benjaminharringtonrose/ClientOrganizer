@@ -2,7 +2,6 @@ import React from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import Routes from "./routes";
 
 import LoginScreen from "../screens/LoginScreen";
 import RegisterScreen from "../screens/RegisterScreen";
@@ -10,12 +9,13 @@ import HomeScreen from "../screens/HomeScreen";
 import ScheduleScreen from "../screens/ScheduleScreen";
 import NotificationScreen from "../screens/NotificationScreen";
 import ProfileScreen from "../screens/ProfileScreen";
-
-import { Ionicons } from "@expo/vector-icons";
-import { Color, Spacing } from "../common/styles";
 import AddNewClientScreen from "../screens/AddNewClientScreen";
 import ClientDetailScreen from "../screens/ClientDetailsScreen";
 import ClientUpdateScreen from "../screens/ClientUpdateScreen";
+
+import Routes from "./routes";
+import { Ionicons } from "@expo/vector-icons";
+import { Color, Spacing } from "../common/styles";
 
 const DashboardTabs = () => {
   const Tab = createBottomTabNavigator();
