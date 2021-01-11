@@ -85,7 +85,7 @@ class HomeScreen extends Component<HomeScreenProps, LocalState> {
     if (oldProps.fetchUserLoading && !this.props.fetchUserLoading && !this.props.fetchUserError) {
       if (oldProps.clients !== this.props.clients) {
         const mappedClients = mapClients(this.props.clients);
-        if (!isEqual(mappedClients, {})) {
+        if (mappedClients) {
           this.setState({ clients: [...mappedClients] });
         }
       }

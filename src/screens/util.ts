@@ -24,7 +24,7 @@ export const getUserById = (): any => {
 
 export function mapClients(clients: any) {
   if (isEqual(clients, {})) {
-    return {};
+    return undefined;
   }
   let acc: any = [];
   for (const [key, value] of Object.entries(clients)) {
