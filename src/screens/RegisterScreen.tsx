@@ -26,7 +26,7 @@ import {
 import { Color } from "../common/styles/Colors";
 import { Spacing } from "../common/styles/Spacing";
 import Header from "../common/components/Header";
-import { Routes } from "../../navigation";
+import { Routes } from "../navigation/routes";
 import UserPermissions from "../util/permissions";
 import * as ImagePicker from "expo-image-picker";
 

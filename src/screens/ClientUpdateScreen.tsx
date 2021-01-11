@@ -9,7 +9,7 @@ import Button from "../common/components/Button";
 import { IClient } from "./HomeScreen";
 import { UPDATE_CLIENT_REQUESTED, FETCH_USER_REQUESTED } from "../store/actions";
 import { connect } from "react-redux";
-import { Routes } from "../../navigation";
+import { Routes } from "../navigation/routes";
 import firebase from "firebase";
 
 interface PassedProps {

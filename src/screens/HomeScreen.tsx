@@ -7,7 +7,7 @@ import SearchBar from "../common/components/SearchBar";
 import Card from "../common/components/Card";
 import CellIconActionable from "../common/components/CellIconActionable";
 import firebase from "firebase";
-import { Routes } from "../../navigation";
+import { Routes } from "../navigation/routes";
 import { FETCH_USER_REQUESTED, DELETE_CLIENT_REQUESTED } from "../store/actions/types";
 import { Icon } from "react-native-elements";
 import { TouchableOpacity } from "react-native-gesture-handler";

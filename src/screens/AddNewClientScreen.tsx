@@ -7,7 +7,7 @@ import Input from "../common/components/Input";
 import CardSection from "../common/components/CardSection";
 import Card from "../common/components/Card";
 import Button from "../common/components/Button";
-import { Routes } from "../../navigation";
+import { Routes } from "../navigation/routes";
 import { connect } from "react-redux";
 import { FETCH_USER_REQUESTED, ADD_CLIENT_REQUESTED } from "../store/actions/types";
 import Spinner from "../common/components/Spinner";

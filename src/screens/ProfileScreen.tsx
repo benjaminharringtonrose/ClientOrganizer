@@ -1,20 +1,19 @@
 import React from "react";
 import { Text, StyleSheet, ScrollView, Image, TouchableOpacity } from "react-native";
 import { connect } from "react-redux";
-import Button from "../common/components/Button";
-import Card from "../common/components/Card";
-import CardSection from "../common/components/CardSection";
-import { LOGOUT_USER_REQUESTED, FETCH_USER_REQUESTED } from "../store/actions/types";
-import firebase from "firebase";
-import { Color } from "../common/styles/Colors";
-import Spinner from "../common/components/Spinner";
-import { Ionicons } from "@expo/vector-icons";
-import { Spacing } from "../common/styles/Spacing";
-import CellLabelLeftRight from "../common/components/CellLabelLeftRight";
-import { Routes } from "../../navigation";
 import UserPermissions from "../util/permissions";
 import * as ImagePicker from "expo-image-picker";
 import { avatarChanged } from "../store/actions";
+import { LOGOUT_USER_REQUESTED, FETCH_USER_REQUESTED } from "../store/actions/types";
+import firebase from "firebase";
+import Spinner from "../common/components/Spinner";
+import Button from "../common/components/Button";
+import Card from "../common/components/Card";
+import CardSection from "../common/components/CardSection";
+import CellLabelLeftRight from "../common/components/CellLabelLeftRight";
+import { Spacing } from "../common/styles/Spacing";
+import { Color } from "../common/styles/Colors";
+import { Routes } from "../navigation/routes";
 
 interface PassedProps {
   navigation: any;

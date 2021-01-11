@@ -2,33 +2,21 @@ import React from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import { Routes } from "./routes";
 
-import LoginScreen from "./src/screens/LoginScreen";
-import RegisterScreen from "./src/screens/RegisterScreen";
-import HomeScreen from "./src/screens/HomeScreen";
-import ScheduleScreen from "./src/screens/ScheduleScreen";
-import NotificationScreen from "./src/screens/NotificationScreen";
-import ProfileScreen from "./src/screens/ProfileScreen";
+import LoginScreen from "../screens/LoginScreen";
+import RegisterScreen from "../screens/RegisterScreen";
+import HomeScreen from "../screens/HomeScreen";
+import ScheduleScreen from "../screens/ScheduleScreen";
+import NotificationScreen from "../screens/NotificationScreen";
+import ProfileScreen from "../screens/ProfileScreen";
 
 import { Ionicons } from "@expo/vector-icons";
-import { Color } from "./src/common/styles/Colors";
-import { Spacing } from "./src/common/styles/Spacing";
-import AddNewClientScreen from "./src/screens/AddNewClientScreen";
-import ClientDetailScreen from "./src/screens/ClientDetailsScreen";
-import ClientUpdateScreen from "./src/screens/ClientUpdateScreen";
-
-export enum Routes {
-  LOGIN_SCREEN = "LOGIN_SCREEN",
-  REGISTER_SCREEN = "REGISTER_SCREEN",
-  HOME_SCREEN = "HOME_SCREEN",
-  SCHEDULE_SCREEN = "SCHEDULE_SCREEN",
-  NOTIFICATION_SCREEN = "NOTIFICATION_SCREEN",
-  PROFILE_SCREEN = "PROFILE_SCREEN",
-  DASHBOARD_TABS = "DASHBOARD_TABS",
-  ADD_NEW_CLIENT_SCREEN = "ADD_NEW_CLIENT_SCREEN",
-  CLIENT_DETAIL_SCREEN = "CLIENT_DETAIL_SCREEN",
-  CLIENT_UPDATE_SCREEN = "CLIENT_UPDATE_SCREEN",
-}
+import { Color } from "../common/styles/Colors";
+import { Spacing } from "../common/styles/Spacing";
+import AddNewClientScreen from "../screens/AddNewClientScreen";
+import ClientDetailScreen from "../screens/ClientDetailsScreen";
+import ClientUpdateScreen from "../screens/ClientUpdateScreen";
 
 const DashboardTabs = () => {
   const Tab = createBottomTabNavigator();

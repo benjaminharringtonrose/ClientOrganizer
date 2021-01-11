@@ -13,7 +13,7 @@ import Card from "../common/components/Card";
 import { Spacing } from "../common/styles/Spacing";
 import { Icon, colors } from "react-native-elements";
 import CellIconActionable from "../common/components/CellIconActionable";
-import { Routes } from "../../navigation";
+import { Routes } from "../navigation/routes";
 import { connect } from "react-redux";
 import { IClient } from "./HomeScreen";
 import MapView, { Marker } from "react-native-maps";
