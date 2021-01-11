@@ -6,9 +6,9 @@ import Input from "../common/components/Input";
 import CardSection from "../common/components/CardSection";
 import Button from "../common/components/Button";
 import { IClient } from "./HomeScreen";
-import { UPDATE_CLIENT, FETCH_USER_REQUESTED } from "../store/actions";
+import { UPDATE_CLIENT, FETCH_USER } from "../store/actions";
 import { connect } from "react-redux";
-import { Routes } from "../navigation/routes";
+import Routes from "../navigation/routes";
 import firebase from "firebase";
 
 interface PassedProps {
@@ -135,7 +135,7 @@ const mapStateToProps = (state: any) => {
 };
 
 const mapDispatchToProps = (dispatch: any) => ({
-  dispatchFetchUser: (uid: any) => dispatch({ type: FETCH_USER_REQUESTED, payload: uid }),
+  dispatchFetchUser: (uid: any) => dispatch({ type: FETCH_USER.REQUESTED, payload: uid }),
   dispatchUpdateClient: ({ clientId, fieldLabel, updatedFieldValue }: any) =>
     dispatch({
       type: UPDATE_CLIENT.REQUESTED,

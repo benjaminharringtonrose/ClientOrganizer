@@ -6,47 +6,44 @@ import CardSection from "../common/components/CardSection";
 import Input from "../common/components/Input";
 import Button from "../common/components/Button";
 import Spinner from "../common/components/Spinner";
-import { emailChanged, passwordChanged } from "../store/actions/AuthActions";
-import { LOGIN_USER_REQUESTED } from "../store/actions/types";
+import { LOGIN_USER } from "../store/actions/types";
 import Header from "../common/components/Header";
 import { Color, Spacing } from "../common/styles";
-import { Routes } from "../navigation/routes";
+import Routes from "../navigation/routes";
 
 interface PassedProps {
   navigation: any;
 }
 
 interface PropsFromState {
-  email: string;
-  password: string;
   authLoading: boolean;
   authError: boolean;
 }
 interface DispatchFromState {
-  emailChanged: (text: string) => void;
-  passwordChanged: (text: string) => void;
   dispatchLoginRequest: (object: any) => any;
+}
+
+interface LocalState {
+  email: string;
+  password: string;
 }
 
 type LoginScreenProps = PropsFromState & DispatchFromState & PassedProps;
 
-class LoginScreen extends Component<LoginScreenProps> {
+class LoginScreen extends Component<LoginScreenProps, LocalState> {
+  public state = {
+    email: "",
+    password: "",
+  };
+
   componentDidUpdate(oldProps: any) {
     if (oldProps.authLoading && !this.props.authLoading && !this.props.authError) {
       this.props.navigation.navigate(Routes.DASHBOARD_TABS);
     }
   }
 
-  private onEmailChange = (text: string) => {
-    this.props.emailChanged(text);
-  };
-
-  private onPasswordChange = (text: string) => {
-    this.props.passwordChanged(text);
-  };
-
   private onLoginPress = () => {
-    const { email, password } = this.props;
+    const { email, password } = this.state;
     this.props.dispatchLoginRequest({ email, password });
   };
 
@@ -68,8 +65,6 @@ class LoginScreen extends Component<LoginScreenProps> {
     }
   };
 
-  //----------------------------------
-
   public render() {
     return (
       <View style={styles.mainContainer}>
@@ -81,19 +76,18 @@ class LoginScreen extends Component<LoginScreenProps> {
               <Input
                 secureTextEntry={false}
                 label="Email"
-                onChangeText={this.onEmailChange}
-                value={this.props.email}
+                onChangeText={(email: string) => this.setState({ email })}
+                value={this.state.email}
                 selectionColor={Color.greyMed}
                 returnKeyType={"next"}
               />
             </CardSection>
-
             <CardSection>
               <Input
                 secureTextEntry
                 label="Password"
-                onChangeText={this.onPasswordChange}
-                value={this.props.password}
+                onChangeText={(password: string) => this.setState({ password })}
+                value={this.state.password}
                 selectionColor={Color.greyMed}
                 onSubmitEditting={() => this.onLoginPress()}
                 returnKeyType={"go"}
@@ -118,19 +112,15 @@ class LoginScreen extends Component<LoginScreenProps> {
 
 const mapStateToProps = (state: any) => {
   return {
-    email: state.auth.email,
-    password: state.auth.password,
     authError: state.auth.error,
     authLoading: state.auth.loading,
   };
 };
 
 const mapDispatchToProps = (dispatch: any) => ({
-  emailChanged: (text: string) => dispatch(emailChanged(text)),
-  passwordChanged: (text: string) => dispatch(passwordChanged(text)),
   dispatchLoginRequest: ({ email, password }: any) => {
     dispatch({
-      type: LOGIN_USER_REQUESTED,
+      type: LOGIN_USER.REQUESTED,
       payload: { email, password },
     });
   },

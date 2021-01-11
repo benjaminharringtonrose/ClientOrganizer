@@ -4,15 +4,16 @@ import { connect } from "react-redux";
 import UserPermissions from "../util/permissions";
 import * as ImagePicker from "expo-image-picker";
 import { avatarChanged } from "../store/actions";
-import { LOGOUT_USER_REQUESTED, FETCH_USER_REQUESTED } from "../store/actions/types";
+import { LOGOUT_USER, FETCH_USER } from "../store/actions/types";
 import firebase from "firebase";
 import Spinner from "../common/components/Spinner";
 import Button from "../common/components/Button";
 import Card from "../common/components/Card";
 import CardSection from "../common/components/CardSection";
 import CellLabelLeftRight from "../common/components/CellLabelLeftRight";
+import { Ionicons } from "@expo/vector-icons";
 import { Color, Spacing } from "../common/styles";
-import { Routes } from "../navigation/routes";
+import Routes from "../navigation/routes";
 
 interface PassedProps {
   navigation: any;
@@ -68,7 +69,7 @@ class ProfileScreen extends React.Component<ProfileScreenProps, LocalState> {
   };
 
   private onLogoutPress = () => {
-    this.props.dispatchLogoutRequest(LOGOUT_USER_REQUESTED);
+    this.props.dispatchLogoutRequest(LOGOUT_USER.REQUESTED);
   };
 
   private renderSignOutButton = () => {
@@ -85,6 +86,7 @@ class ProfileScreen extends React.Component<ProfileScreenProps, LocalState> {
         <Card>
           <TouchableOpacity style={styles.avatarPlaceholder} onPress={() => {}}>
             <Image source={{ uri: this.props.avatar }} style={styles.avatar} />
+            <Ionicons name="ios-add" size={40} color="#FFF" style={styles.addIcon} />
           </TouchableOpacity>
           <Text style={styles.subHeaderText}>{"User Information"}</Text>
           <CellLabelLeftRight
@@ -114,8 +116,8 @@ const mapStateToProps = (state: any) => {
 };
 
 const mapDispatchToProps = (dispatch: any) => ({
-  dispatchLogoutRequest: () => dispatch({ type: LOGOUT_USER_REQUESTED }),
-  dispatchFetchUser: (user: any) => dispatch({ type: FETCH_USER_REQUESTED, payload: user }),
+  dispatchLogoutRequest: () => dispatch({ type: LOGOUT_USER.REQUESTED }),
+  dispatchFetchUser: (user: any) => dispatch({ type: FETCH_USER.REQUESTED, payload: user }),
   dispatchChangeAvatar: (result: string) => dispatch(avatarChanged(result)),
 });
 

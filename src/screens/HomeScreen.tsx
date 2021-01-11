@@ -6,8 +6,8 @@ import SearchBar from "../common/components/SearchBar";
 import Card from "../common/components/Card";
 import CellIconActionable from "../common/components/CellIconActionable";
 import firebase from "firebase";
-import { Routes } from "../navigation/routes";
-import { FETCH_USER_REQUESTED, DELETE_CLIENT_REQUESTED } from "../store/actions/types";
+import Routes from "../navigation/routes";
+import { FETCH_USER, DELETE_CLIENT } from "../store/actions/types";
 import { Icon } from "react-native-elements";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { mapClients } from "./util";
@@ -75,10 +75,9 @@ class HomeScreen extends Component<HomeScreenProps, LocalState> {
     if (oldProps.fetchUserLoading && !this.props.fetchUserLoading && !this.props.fetchUserError) {
       if (oldProps.clients !== this.props.clients) {
         const mappedClients = mapClients(this.props.clients);
-        if (mappedClients === {}) {
-          console.log("THAT'S IT");
+        if (mappedClients !== {}) {
+          this.setState({ clients: [...mappedClients] });
         }
-        this.setState({ clients: [...mappedClients] });
       }
     }
   }
@@ -204,9 +203,9 @@ const mapStateToProps = (state: any) => {
 };
 
 const mapDispatchToProps = (dispatch: any) => ({
-  dispatchFetchUser: (uid: any) => dispatch({ type: FETCH_USER_REQUESTED, payload: uid }),
+  dispatchFetchUser: (uid: any) => dispatch({ type: FETCH_USER.REQUESTED, payload: uid }),
   dispatchDeleteClient: (clientId: any) =>
-    dispatch({ type: DELETE_CLIENT_REQUESTED, payload: clientId }),
+    dispatch({ type: DELETE_CLIENT.REQUESTED, payload: clientId }),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(HomeScreen);

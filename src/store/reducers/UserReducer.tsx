@@ -1,15 +1,4 @@
-import {
-  FETCH_USER_REQUESTED,
-  FETCH_USER_SUCCEEDED,
-  FETCH_USER_FAILED,
-  DELETE_CLIENT_REQUESTED,
-  DELETE_CLIENT_SUCCEEDED,
-  DELETE_CLIENT_FAILED,
-  UPDATE_CLIENT,
-  ADD_CLIENT_REQUESTED,
-  ADD_CLIENT_SUCCEEDED,
-  ADD_CLIENT_FAILED,
-} from "../actions/types";
+import { FETCH_USER, DELETE_CLIENT, UPDATE_CLIENT, ADD_CLIENT } from "../actions/types";
 
 const INITIAL_STATE = {
   user: {
@@ -29,35 +18,35 @@ const INITIAL_STATE = {
 const UserReducer = (state = INITIAL_STATE, action: any) => {
   console.log(state, action);
   switch (action.type) {
-    case FETCH_USER_REQUESTED:
+    case FETCH_USER.REQUESTED:
       return {
         ...state,
         fetchUserLoading: true,
       };
-    case FETCH_USER_SUCCEEDED:
+    case FETCH_USER.SUCCEEDED:
       return {
         ...state,
         user: action.payload,
         fetchUserLoading: false,
       };
-    case FETCH_USER_FAILED:
+    case FETCH_USER.FAILED:
       return {
         ...state,
         fetchUserError: action.payload.message,
         password: "",
         fetchUserLoading: false,
       };
-    case DELETE_CLIENT_REQUESTED:
+    case DELETE_CLIENT.REQUESTED:
       return {
         ...state,
         deleteClientLoading: true,
       };
-    case DELETE_CLIENT_SUCCEEDED:
+    case DELETE_CLIENT.SUCCEEDED:
       return {
         ...state,
         deleteClientLoading: false,
       };
-    case DELETE_CLIENT_FAILED:
+    case DELETE_CLIENT.FAILED:
       return {
         ...state,
         deleteClientLoading: false,
@@ -79,17 +68,17 @@ const UserReducer = (state = INITIAL_STATE, action: any) => {
         updateClientLoading: false,
         updateClientError: action.payload.message,
       };
-    case ADD_CLIENT_REQUESTED:
+    case ADD_CLIENT.REQUESTED:
       return {
         ...state,
         addClientLoading: true,
       };
-    case ADD_CLIENT_SUCCEEDED:
+    case ADD_CLIENT.SUCCEEDED:
       return {
         ...state,
         addClientLoading: false,
       };
-    case ADD_CLIENT_FAILED:
+    case ADD_CLIENT.FAILED:
       return {
         ...state,
         addClientLoading: false,

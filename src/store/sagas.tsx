@@ -3,25 +3,13 @@ import { put, call } from "redux-saga/effects";
 import firebase from "firebase";
 require("firebase/firestore");
 import {
-  LOGIN_USER_REQUESTED,
-  LOGIN_USER_SUCCEEDED,
-  LOGIN_USER_FAILED,
-  LOGOUT_USER_REQUESTED,
-  LOGOUT_USER_SUCCEEDED,
-  LOGOUT_USER_FAILED,
-  REGISTER_USER_REQUESTED,
-  REGISTER_USER_SUCCEEDED,
-  REGISTER_USER_FAILED,
-  FETCH_USER_REQUESTED,
-  FETCH_USER_SUCCEEDED,
-  FETCH_USER_FAILED,
-  DELETE_CLIENT_REQUESTED,
-  DELETE_CLIENT_SUCCEEDED,
-  DELETE_CLIENT_FAILED,
+  LOGIN_USER,
+  LOGOUT_USER,
+  REGISTER_USER,
+  FETCH_USER,
+  DELETE_CLIENT,
   UPDATE_CLIENT,
-  ADD_CLIENT_SUCCEEDED,
-  ADD_CLIENT_FAILED,
-  ADD_CLIENT_REQUESTED,
+  ADD_CLIENT,
   AVATAR_CHANGED,
 } from "./actions/types";
 import { getDocRef } from "../screens/util";
@@ -31,20 +19,20 @@ import uuid from "uuid-random";
 
 function fetchUserRequested(data: any) {
   return {
-    type: FETCH_USER_REQUESTED,
+    type: FETCH_USER.REQUESTED,
     payload: data,
   };
 }
 
 function fetchUserSuccess(data: any) {
   return {
-    type: FETCH_USER_SUCCEEDED,
+    type: FETCH_USER.SUCCEEDED,
     payload: data,
   };
 }
 function fetchUserFail(error: any) {
   return {
-    type: FETCH_USER_FAILED,
+    type: FETCH_USER.FAILED,
     payload: error,
   };
 }
@@ -67,12 +55,12 @@ export function* fetchUserSaga(action: any) {
 
 function addClientSuccess() {
   return {
-    type: ADD_CLIENT_SUCCEEDED,
+    type: ADD_CLIENT.SUCCEEDED,
   };
 }
 function addClientFail(error: any) {
   return {
-    type: ADD_CLIENT_FAILED,
+    type: ADD_CLIENT.FAILED,
     payload: error,
   };
 }
@@ -149,11 +137,11 @@ export function* updateClientSaga(action: any) {
 // DELETE CLIENT - ACTIONS
 
 export const deleteClientSucceeded = () => ({
-  type: DELETE_CLIENT_SUCCEEDED,
+  type: DELETE_CLIENT.SUCCEEDED,
 });
 
 export const deleteClientFailed = (error: any) => ({
-  type: DELETE_CLIENT_FAILED,
+  type: DELETE_CLIENT.FAILED,
   payload: error,
 });
 
@@ -188,14 +176,14 @@ export function* deleteClientSaga(action: any) {
 
 function loginUserSuccess(data: any) {
   return {
-    type: LOGIN_USER_SUCCEEDED,
+    type: LOGIN_USER.SUCCEEDED,
     payload: data,
   };
 }
 
 function loginUserFail(error: any) {
   return {
-    type: LOGIN_USER_FAILED,
+    type: LOGIN_USER.FAILED,
     payload: error,
   };
 }
@@ -217,13 +205,13 @@ export function* loginUserSaga(action: any) {
 
 function logoutUserSuccess() {
   return {
-    type: LOGOUT_USER_SUCCEEDED,
+    type: LOGOUT_USER.SUCCEEDED,
   };
 }
 
 function logoutUserFail(error: any) {
   return {
-    type: LOGOUT_USER_FAILED,
+    type: LOGOUT_USER.FAILED,
     payload: error,
   };
 }
@@ -243,14 +231,14 @@ export function* logoutUserSaga() {
 
 function registerUserSuccess(data: any) {
   return {
-    type: REGISTER_USER_SUCCEEDED,
+    type: REGISTER_USER.SUCCEEDED,
     payload: data,
   };
 }
 
 function registerUserFail(error: any) {
   return {
-    type: REGISTER_USER_FAILED,
+    type: REGISTER_USER.FAILED,
     payload: error,
   };
 }
@@ -324,13 +312,13 @@ const addAvatarAsync = async (data: any) => {
 // ACTION LISTENER
 
 function* watchUserAuthentication() {
-  yield takeLatest(FETCH_USER_REQUESTED, fetchUserSaga);
-  yield takeLatest(ADD_CLIENT_REQUESTED, addClientSaga);
+  yield takeLatest(FETCH_USER.REQUESTED, fetchUserSaga);
+  yield takeLatest(ADD_CLIENT.REQUESTED, addClientSaga);
   yield takeLatest(UPDATE_CLIENT.REQUESTED, updateClientSaga);
-  yield takeLatest(DELETE_CLIENT_REQUESTED, deleteClientSaga);
-  yield takeLatest(LOGIN_USER_REQUESTED, loginUserSaga);
-  yield takeLatest(LOGOUT_USER_REQUESTED, logoutUserSaga);
-  yield takeLatest(REGISTER_USER_REQUESTED, registerUserSaga);
+  yield takeLatest(DELETE_CLIENT.REQUESTED, deleteClientSaga);
+  yield takeLatest(LOGIN_USER.REQUESTED, loginUserSaga);
+  yield takeLatest(LOGOUT_USER.REQUESTED, logoutUserSaga);
+  yield takeLatest(REGISTER_USER.REQUESTED, registerUserSaga);
   yield takeLatest(AVATAR_CHANGED, addAvatarAsync);
 }
 

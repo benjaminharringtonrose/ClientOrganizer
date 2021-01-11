@@ -1,4 +1,4 @@
-export enum Routes {
+enum Routes {
   LOGIN_SCREEN = "LOGIN_SCREEN",
   REGISTER_SCREEN = "REGISTER_SCREEN",
   HOME_SCREEN = "HOME_SCREEN",
@@ -10,3 +10,5 @@ export enum Routes {
   CLIENT_DETAIL_SCREEN = "CLIENT_DETAIL_SCREEN",
   CLIENT_UPDATE_SCREEN = "CLIENT_UPDATE_SCREEN",
 }
+
+export default Routes;

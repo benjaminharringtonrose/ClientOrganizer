@@ -1,6 +1,5 @@
 import firebase from "firebase";
 import { Linking } from "react-native";
-import { Link } from "@react-navigation/native";
 
 export const getDocRef = (): any => {
   return firebase.firestore().collection("users").doc(firebase.auth().currentUser?.uid);

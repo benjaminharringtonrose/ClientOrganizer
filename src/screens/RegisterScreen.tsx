@@ -15,17 +15,11 @@ import Button from "../common/components/Button";
 import Spinner from "../common/components/Spinner";
 import { Ionicons } from "@expo/vector-icons";
 import { connect } from "react-redux";
-import { REGISTER_USER_REQUESTED } from "../store/actions/types";
-import {
-  firstNameChanged,
-  lastNameChanged,
-  emailChanged,
-  passwordChanged,
-  avatarChanged,
-} from "../store/actions";
+import { REGISTER_USER } from "../store/actions/types";
+import { avatarChanged } from "../store/actions";
 import { Color, Spacing } from "../common/styles";
 import Header from "../common/components/Header";
-import { Routes } from "../navigation/routes";
+import Routes from "../navigation/routes";
 import UserPermissions from "../util/permissions";
 import * as ImagePicker from "expo-image-picker";
 
@@ -34,27 +28,33 @@ interface PassedProps {
 }
 
 interface PropsFromState {
-  firstName: string;
-  lastName: string;
   avatar?: string;
   user: any;
-  email: string;
-  password: string;
   authLoading: boolean;
   authError: boolean;
 }
 interface DispatchFromState {
-  emailChanged: (text: string) => any;
-  passwordChanged: (text: string) => any;
-  firstNameChanged: (text: string) => any;
-  lastNameChanged: (text: string) => any;
   dispatchChangeAvatar: (text: string) => any;
   dispatchRegisterRequest: (object: any) => any;
 }
 
+interface LocalState {
+  firstName: string;
+  lastName: string;
+  email: string;
+  password: string;
+}
+
 type RegisterScreenProps = PropsFromState & DispatchFromState & PassedProps;
 
-class RegisterScreen extends Component<RegisterScreenProps> {
+class RegisterScreen extends Component<RegisterScreenProps, LocalState> {
+  public state = {
+    firstName: "",
+    lastName: "",
+    email: "",
+    password: "",
+  };
+
   componentDidUpdate(oldProps: any) {
     if (oldProps.authLoading && !this.props.authLoading && !this.props.authError) {
       this.props.navigation.navigate(Routes.DASHBOARD_TABS);
@@ -62,7 +62,8 @@ class RegisterScreen extends Component<RegisterScreenProps> {
   }
 
   private onRegisterPress = () => {
-    const { email, password, firstName, lastName, avatar } = this.props;
+    const { email, password, firstName, lastName } = this.state;
+    const { avatar } = this.props;
 
     this.props.dispatchRegisterRequest({
       email,
@@ -82,7 +83,6 @@ class RegisterScreen extends Component<RegisterScreenProps> {
         aspect: [4, 3],
       });
       if (!result.cancelled) {
-        console.log("true");
         this.props.dispatchChangeAvatar(result.uri);
       }
     } catch (error) {
@@ -108,7 +108,8 @@ class RegisterScreen extends Component<RegisterScreenProps> {
   }
 
   render() {
-    const { firstName, lastName, email, password, avatar } = this.props;
+    const { firstName, lastName, email, password } = this.state;
+    const { avatar } = this.props;
 
     return (
       <SafeAreaView style={styles.rootContainer}>
@@ -128,7 +129,7 @@ class RegisterScreen extends Component<RegisterScreenProps> {
                 placeholderTextColor={Color.greyMedDark}
                 secureTextEntry={false}
                 autoCapitalize={"words"}
-                onChangeText={(newText: string) => this.props.firstNameChanged(newText)}
+                onChangeText={(firstName: string) => this.setState({ firstName })}
                 value={firstName}
               />
             </CardSection>
@@ -139,7 +140,7 @@ class RegisterScreen extends Component<RegisterScreenProps> {
                 placeholderTextColor={Color.greyMedDark}
                 secureTextEntry={false}
                 autoCapitalize={"words"}
-                onChangeText={(newText: string) => this.props.lastNameChanged(newText)}
+                onChangeText={(lastName: string) => this.setState({ lastName })}
                 value={lastName}
               />
             </CardSection>
@@ -149,7 +150,7 @@ class RegisterScreen extends Component<RegisterScreenProps> {
                 placeholder="email@gmail.com"
                 placeholderTextColor={Color.greyMedDark}
                 secureTextEntry={false}
-                onChangeText={(newText: string) => this.props.emailChanged(newText)}
+                onChangeText={(email: string) => this.setState({ email })}
                 value={email}
               />
             </CardSection>
@@ -159,7 +160,7 @@ class RegisterScreen extends Component<RegisterScreenProps> {
                 label="Password"
                 placeholder="password"
                 placeholderTextColor={Color.greyMedDark}
-                onChangeText={(newText: string) => this.props.passwordChanged(newText)}
+                onChangeText={(password: string) => this.setState({ password })}
                 value={password}
               />
             </CardSection>
@@ -173,13 +174,9 @@ class RegisterScreen extends Component<RegisterScreenProps> {
 }
 
 const mapStateToProps = ({ auth }: any) => {
-  const { firstName, lastName, email, password, avatar, error, loading, user } = auth;
+  const { avatar, error, loading, user } = auth;
   return {
-    firstName,
-    lastName,
     avatar,
-    email,
-    password,
     authError: error,
     authLoading: loading,
     user,
@@ -187,14 +184,10 @@ const mapStateToProps = ({ auth }: any) => {
 };
 
 const mapDispatchToProps = (dispatch: any) => ({
-  firstNameChanged: (firstName: string) => dispatch(firstNameChanged(firstName)),
-  lastNameChanged: (lastName: string) => dispatch(lastNameChanged(lastName)),
-  emailChanged: (email: string) => dispatch(emailChanged(email)),
-  passwordChanged: (password: string) => dispatch(passwordChanged(password)),
   dispatchChangeAvatar: (result: string) => dispatch(avatarChanged(result)),
   dispatchRegisterRequest: ({ email, password, firstName, lastName, avatar }: any) => {
     dispatch({
-      type: REGISTER_USER_REQUESTED,
+      type: REGISTER_USER.REQUESTED,
       payload: {
         email,
         password,

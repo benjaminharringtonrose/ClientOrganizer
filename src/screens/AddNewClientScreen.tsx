@@ -1,15 +1,15 @@
 import React, { Component } from "react";
+import { connect } from "react-redux";
 import { StyleSheet, ScrollView, StatusBar, SafeAreaView, View, Text } from "react-native";
-import { Color, Spacing } from "../common/styles";
+import { FETCH_USER, ADD_CLIENT } from "../store/actions/types";
 import SubHeader from "../common/components/SubHeader";
 import Input from "../common/components/Input";
 import CardSection from "../common/components/CardSection";
 import Card from "../common/components/Card";
 import Button from "../common/components/Button";
-import { Routes } from "../navigation/routes";
-import { connect } from "react-redux";
-import { FETCH_USER_REQUESTED, ADD_CLIENT_REQUESTED } from "../store/actions/types";
+import Routes from "../navigation/routes";
 import Spinner from "../common/components/Spinner";
+import { Color, Spacing } from "../common/styles";
 
 interface PassedProps {
   navigation: any;
@@ -161,8 +161,8 @@ const mapStateToProps = (state: any) => {
 };
 
 const mapDispatchToProps = (dispatch: any) => ({
-  dispatchFetchUser: (uid: any) => dispatch({ type: FETCH_USER_REQUESTED, payload: uid }),
-  dispatchAddClient: (object: any) => dispatch({ type: ADD_CLIENT_REQUESTED, payload: object }),
+  dispatchFetchUser: (uid: any) => dispatch({ type: FETCH_USER.REQUESTED, payload: uid }),
+  dispatchAddClient: (object: any) => dispatch({ type: ADD_CLIENT.REQUESTED, payload: object }),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(AddNewClientScreen);
