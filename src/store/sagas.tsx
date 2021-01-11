@@ -68,7 +68,7 @@ function addClientFail(error: any) {
 export function* addClientSaga(action: any) {
   try {
     const { firstName, lastName, address, phoneNumber, email, notes } = action.payload;
-    yield console.log(" ADD CLIENT SAGA", action);
+    // yield console.log(" ADD CLIENT SAGA", action);
     const doc = yield getDocRef();
     doc.set(
       {
@@ -248,7 +248,7 @@ function registerUserFail(error: any) {
 export function* registerUserSaga(action: any) {
   try {
     const { email, password, firstName, lastName, avatar } = action.payload;
-    yield console.log("action.payload - regster saga", action.payload);
+    // yield console.log("action.payload - regster saga", action.payload);
     const auth = firebase.auth();
     const data = yield call([auth, auth.createUserWithEmailAndPassword], email, password);
     const db = getDocRef();

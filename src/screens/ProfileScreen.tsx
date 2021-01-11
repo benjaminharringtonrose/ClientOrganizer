@@ -4,7 +4,7 @@ import { connect } from "react-redux";
 import UserPermissions from "../util/permissions";
 import * as ImagePicker from "expo-image-picker";
 import { avatarChanged } from "../store/actions";
-import { LOGOUT_USER, FETCH_USER } from "../store/actions/types";
+import { LOGOUT_USER } from "../store/actions/types";
 import firebase from "firebase";
 import Spinner from "../common/components/Spinner";
 import Button from "../common/components/Button";
@@ -22,8 +22,6 @@ interface PassedProps {
 interface PropsFromState {
   loading: boolean;
   error: boolean;
-  fetchUserLoading: boolean;
-  fetchUserError: any;
   avatar: string;
   firstName: string;
   lastName: string;
@@ -34,7 +32,6 @@ interface LocalState {
 }
 interface DispatchFromState {
   dispatchLogoutRequest: (object: any) => any;
-  dispatchFetchUser: (user: any) => any;
   dispatchChangeAvatar: (text: string) => any;
 }
 
@@ -110,14 +107,11 @@ const mapStateToProps = (state: any) => {
     email: state.user.user.email,
     loading: state.auth.loading,
     error: state.auth.error,
-    fetchUserLoading: state.user.user.fetchUserLoading,
-    fetchUserError: state.user.user.fetchUserfetchUserError,
   };
 };
 
 const mapDispatchToProps = (dispatch: any) => ({
   dispatchLogoutRequest: () => dispatch({ type: LOGOUT_USER.REQUESTED }),
-  dispatchFetchUser: (user: any) => dispatch({ type: FETCH_USER.REQUESTED, payload: user }),
   dispatchChangeAvatar: (result: string) => dispatch(avatarChanged(result)),
 });
 
