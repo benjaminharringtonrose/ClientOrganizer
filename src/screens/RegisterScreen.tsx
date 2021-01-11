@@ -128,6 +128,7 @@ class RegisterScreen extends Component<RegisterScreenProps> {
                 placeholder="John"
                 placeholderTextColor={Color.greyMedDark}
                 secureTextEntry={false}
+                autoCapitalize={"words"}
                 onChangeText={(newText: string) => this.props.firstNameChanged(newText)}
                 value={firstName}
               />
@@ -138,6 +139,7 @@ class RegisterScreen extends Component<RegisterScreenProps> {
                 placeholder="Smith"
                 placeholderTextColor={Color.greyMedDark}
                 secureTextEntry={false}
+                autoCapitalize={"words"}
                 onChangeText={(newText: string) => this.props.lastNameChanged(newText)}
                 value={lastName}
               />
