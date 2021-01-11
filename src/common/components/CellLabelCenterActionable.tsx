@@ -20,7 +20,9 @@ export default class CellLabelCenterActionable extends Component<CellLabelCenter
         {loading ? (
           <Spinner size={800} color={Color.white} />
         ) : (
-          <CardSection style={{ backgroundColor: !disabled ? Color.primary : Color.secondary }}>
+          <CardSection
+            style={{ backgroundColor: !disabled ? Color.darkThemeGreen : Color.greyMed }}
+          >
             <TouchableOpacity
               onPress={onPress}
               disabled={disabled || false}
@@ -29,10 +31,11 @@ export default class CellLabelCenterActionable extends Component<CellLabelCenter
               <Text
                 style={{
                   flex: 1,
-                  color: Color.greyLight,
+                  color: !disabled ? Color.greyLight : Color.greyMedDark,
                   textAlign: "center",
                   alignSelf: "center",
                   fontSize: 20,
+                  fontWeight: "600",
                   paddingVertical: Spacing.small,
                 }}
               >

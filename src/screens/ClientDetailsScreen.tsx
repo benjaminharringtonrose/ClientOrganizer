@@ -52,7 +52,7 @@ class ClientDetailScreen extends Component<IClientDetailScreenProps, ILocalState
             style={{ marginRight: Spacing.large }}
             name={"edit"}
             type={"antdesign"}
-            color={editMode ? Color.darkThemeGreenLight : Color.white}
+            color={editMode ? Color.darkThemeGreen : Color.white}
             size={26}
           />
         </TouchableOpacity>
@@ -131,11 +131,12 @@ class ClientDetailScreen extends Component<IClientDetailScreenProps, ILocalState
                   iconRightName={editMode ? "right" : undefined}
                   iconRightSize={16}
                 />
-                <CellLabelCenterActionable
-                  label={`Call ${client?.firstName}`}
-                  onPress={() => callTelephone(client?.phoneNumber)}
-                  disabled={!client?.phoneNumber}
-                />
+                {!!client?.phoneNumber && (
+                  <CellLabelCenterActionable
+                    label={`Call ${client?.firstName}`}
+                    onPress={() => callTelephone(client?.phoneNumber)}
+                  />
+                )}
               </View>
             )}
           </Card>
