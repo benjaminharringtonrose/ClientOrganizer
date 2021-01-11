@@ -17,6 +17,8 @@ import { Routes } from "../navigation/routes";
 import { connect } from "react-redux";
 import { IClient } from "./HomeScreen";
 import MapView, { Marker } from "react-native-maps";
+import CellLabelCenterActionable from "../common/components/CellLabelCenterActionable";
+import { callTelephone } from "./util";
 
 interface IPassedProps {
   navigation: any;
@@ -62,12 +64,10 @@ class ClientDetailScreen extends Component<IClientDetailScreenProps, ILocalState
   public render() {
     const { editMode } = this.state;
     const clientId = this.props.route?.["params"]?.["client"]?.["id"];
+    const client = this.props.clients[clientId];
     return (
       <SafeAreaView style={{ flex: 1, backgroundColor: Color.darkThemeGreyDark }}>
-        {this.renderHeader(
-          this.props.clients[clientId]?.firstName,
-          this.props.clients[clientId]?.lastName
-        )}
+        {this.renderHeader(client?.firstName, client?.lastName)}
         <ScrollView style={styles.rootContainer} indicatorStyle={"white"}>
           <Card>
             {this.props.fetchUserLoading ? (
@@ -78,7 +78,7 @@ class ClientDetailScreen extends Component<IClientDetailScreenProps, ILocalState
               <View>
                 <CellIconActionable
                   label={"Address"}
-                  labelRight={this.props.clients[clientId]?.address || " "}
+                  labelRight={client?.address || " "}
                   onPress={() => {
                     this.setState({ editMode: false });
                     this.props.navigation.navigate(Routes.CLIENT_UPDATE_SCREEN, {
@@ -92,7 +92,7 @@ class ClientDetailScreen extends Component<IClientDetailScreenProps, ILocalState
                 />
                 <CellIconActionable
                   label={"Phone Number"}
-                  labelRight={this.props.clients[clientId]?.phoneNumber || " "}
+                  labelRight={client?.phoneNumber || " "}
                   onPress={() => {
                     this.setState({ editMode: false });
                     this.props.navigation.navigate(Routes.CLIENT_UPDATE_SCREEN, {
@@ -106,7 +106,7 @@ class ClientDetailScreen extends Component<IClientDetailScreenProps, ILocalState
                 />
                 <CellIconActionable
                   label={"Email"}
-                  labelRight={this.props.clients[clientId]?.email || " "}
+                  labelRight={client?.email || " "}
                   onPress={() => {
                     this.setState({ editMode: false });
                     this.props.navigation.navigate(Routes.CLIENT_UPDATE_SCREEN, {
@@ -120,7 +120,7 @@ class ClientDetailScreen extends Component<IClientDetailScreenProps, ILocalState
                 />
                 <CellIconActionable
                   label={"Notes"}
-                  labelRight={this.props.clients[clientId]?.notes || " "}
+                  labelRight={client?.notes || " "}
                   onPress={() => {
                     this.setState({ editMode: false });
                     this.props.navigation.navigate(Routes.CLIENT_UPDATE_SCREEN, {
@@ -131,6 +131,11 @@ class ClientDetailScreen extends Component<IClientDetailScreenProps, ILocalState
                   disabled={editMode ? false : true}
                   iconRightName={editMode ? "right" : undefined}
                   iconRightSize={16}
+                />
+                <CellLabelCenterActionable
+                  label={`Call ${client?.firstName}`}
+                  onPress={() => callTelephone(client?.phoneNumber)}
+                  disabled={!client?.phoneNumber}
                 />
               </View>
             )}

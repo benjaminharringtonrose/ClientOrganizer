@@ -1,4 +1,6 @@
 import firebase from "firebase";
+import { Linking } from "react-native";
+import { Link } from "@react-navigation/native";
 
 export const getDocRef = (): any => {
   return firebase.firestore().collection("users").doc(firebase.auth().currentUser?.uid);
@@ -48,4 +50,18 @@ export function mapClients(clients: any) {
 
 export function deleteField() {
   firebase.firestore.FieldValue.delete();
+}
+
+export function callTelephone(phoneNumber: string) {
+  if (!phoneNumber) return;
+  const formattedNumber = `tel://${phoneNumber}`;
+  Linking.canOpenURL(formattedNumber)
+    .then((isSupported) => {
+      if (isSupported) {
+        Linking.openURL(formattedNumber);
+      } else {
+        console.warn("Phone number is not supported.");
+      }
+    })
+    .catch((e) => console.log(e));
 }
