@@ -3,8 +3,6 @@ import {
   CLIENT_ADDRESS_CHANGED,
   CLIENT_PHONE_NUMBER_CHANGED,
   CLIENT_EMAIL_CHANGED,
-  CLIENT_BUDGET_CHANGED,
-  CLIENT_PREFERRED_AREAS_CHANGED,
   CLIENT_NOTES_CHANGED,
 } from "./types";
 
@@ -33,20 +31,6 @@ export const clientEmailChanged = (clientEmail: string) => {
   return {
     type: CLIENT_EMAIL_CHANGED,
     payload: clientEmail,
-  };
-};
-
-export const clientBudgetChanged = (clientBudget: string) => {
-  return {
-    type: CLIENT_BUDGET_CHANGED,
-    payload: clientBudget,
-  };
-};
-
-export const clientPreferredAreasChanged = (clientPreferredAreas: string) => {
-  return {
-    type: CLIENT_PREFERRED_AREAS_CHANGED,
-    payload: clientPreferredAreas,
   };
 };
 

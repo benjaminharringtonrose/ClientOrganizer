@@ -32,9 +32,6 @@ interface LocalState {
   address: string;
   phoneNumber: string;
   email: string;
-  budgetLow: string;
-  budgetHigh: string;
-  preferredAreas: string;
   notes: string;
 }
 
@@ -47,9 +44,6 @@ class AddNewClientScreen extends Component<AddNewClientScreenProps, LocalState> 
     address: "",
     phoneNumber: "",
     email: "",
-    budgetLow: "",
-    budgetHigh: "",
-    preferredAreas: "",
     notes: "",
   };
 
@@ -60,17 +54,7 @@ class AddNewClientScreen extends Component<AddNewClientScreenProps, LocalState> 
   }
 
   private onSubmit = () => {
-    const {
-      firstName,
-      lastName,
-      address,
-      phoneNumber,
-      email,
-      budgetLow,
-      budgetHigh,
-      preferredAreas,
-      notes,
-    } = this.state;
+    const { firstName, lastName, address, phoneNumber, email, notes } = this.state;
 
     this.props.dispatchAddClient({
       firstName,
@@ -78,9 +62,6 @@ class AddNewClientScreen extends Component<AddNewClientScreenProps, LocalState> 
       address,
       phoneNumber,
       email,
-      budgetLow,
-      budgetHigh,
-      preferredAreas,
       notes,
     });
   };
@@ -104,17 +85,7 @@ class AddNewClientScreen extends Component<AddNewClientScreenProps, LocalState> 
   };
 
   public render() {
-    const {
-      firstName,
-      lastName,
-      address,
-      phoneNumber,
-      email,
-      budgetLow,
-      budgetHigh,
-      preferredAreas,
-      notes,
-    } = this.state;
+    const { firstName, lastName, address, phoneNumber, email, notes } = this.state;
     return (
       <SafeAreaView style={{ flex: 1, backgroundColor: Color.darkThemeGreyDark }}>
         <ScrollView style={styles.rootContainer}>
@@ -162,31 +133,6 @@ class AddNewClientScreen extends Component<AddNewClientScreenProps, LocalState> 
                 value={email}
                 onChangeText={(newText: string) => this.setState({ email: newText })}
                 placeholder={"johnsmith@gmail.com"}
-              />
-            </CardSection>
-            <SubHeader label={"Budget Lowest"} fontSize={16} />
-            <CardSection>
-              <Input
-                value={budgetLow}
-                onChangeText={(newText: string) => this.setState({ budgetLow: newText })}
-                placeholder={"$500,000"}
-              />
-            </CardSection>
-            <SubHeader label={"Budget Highest"} fontSize={16} />
-            <CardSection>
-              <Input
-                value={budgetHigh}
-                onChangeText={(newText: string) => this.setState({ budgetHigh: newText })}
-                placeholder={"$550,000"}
-              />
-            </CardSection>
-            <SubHeader label={"Preferred Areas"} fontSize={16} />
-            <CardSection>
-              <Input
-                value={preferredAreas}
-                onChangeText={(newText: string) => this.setState({ preferredAreas: newText })}
-                placeholder={"Wrightsville Beach"}
-                autoCapitalize={"words"}
               />
             </CardSection>
             <SubHeader label={"Additional Notes"} fontSize={16} />

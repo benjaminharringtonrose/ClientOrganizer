@@ -153,7 +153,7 @@ class HomeScreen extends Component<HomeScreenProps, LocalState> {
 
   public render() {
     const loading = this.props.fetchUserLoading || this.props.deleteClientLoading;
-    const showAllClients = !this.state.filteredClients.length;
+    const showAllClients = !this.state.filteredClients.length && this.state.searchText === "";
     return (
       <View style={styles.rootContainer}>
         <StatusBar barStyle={"light-content"} />

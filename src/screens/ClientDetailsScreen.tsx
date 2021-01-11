@@ -11,7 +11,7 @@ import {
 import { Color } from "../common/styles/Colors";
 import Card from "../common/components/Card";
 import { Spacing } from "../common/styles/Spacing";
-import { Icon, colors } from "react-native-elements";
+import { Icon } from "react-native-elements";
 import CellIconActionable from "../common/components/CellIconActionable";
 import { Routes } from "../navigation/routes";
 import { connect } from "react-redux";
@@ -111,48 +111,6 @@ class ClientDetailScreen extends Component<IClientDetailScreenProps, ILocalState
                     this.setState({ editMode: false });
                     this.props.navigation.navigate(Routes.CLIENT_UPDATE_SCREEN, {
                       fieldLabel: "email",
-                      clientId,
-                    });
-                  }}
-                  disabled={editMode ? false : true}
-                  iconRightName={editMode ? "right" : undefined}
-                  iconRightSize={16}
-                />
-                <CellIconActionable
-                  label={"Budget Low"}
-                  labelRight={this.props.clients[clientId]?.budgetLow || " "}
-                  onPress={() => {
-                    this.setState({ editMode: false });
-                    this.props.navigation.navigate(Routes.CLIENT_UPDATE_SCREEN, {
-                      fieldLabel: "budgetLow",
-                      clientId,
-                    });
-                  }}
-                  disabled={editMode ? false : true}
-                  iconRightName={editMode ? "right" : undefined}
-                  iconRightSize={16}
-                />
-                <CellIconActionable
-                  label={"Budget High"}
-                  labelRight={this.props.clients[clientId]?.budgetHigh || " "}
-                  onPress={() => {
-                    this.setState({ editMode: false });
-                    this.props.navigation.navigate(Routes.CLIENT_UPDATE_SCREEN, {
-                      fieldLabel: "budgetHigh",
-                      clientId,
-                    });
-                  }}
-                  disabled={editMode ? false : true}
-                  iconRightName={editMode ? "right" : undefined}
-                  iconRightSize={16}
-                />
-                <CellIconActionable
-                  label={"Preferred Areas"}
-                  labelRight={this.props.clients[clientId]?.preferredAreas || " "}
-                  onPress={() => {
-                    this.setState({ editMode: false });
-                    this.props.navigation.navigate(Routes.CLIENT_UPDATE_SCREEN, {
-                      fieldLabel: "preferredAreas",
                       clientId,
                     });
                   }}

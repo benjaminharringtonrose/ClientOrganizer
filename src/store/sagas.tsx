@@ -81,17 +81,7 @@ function addClientFail(error: any) {
 
 export function* addClientSaga(action: any) {
   try {
-    const {
-      firstName,
-      lastName,
-      address,
-      phoneNumber,
-      email,
-      budgetLow,
-      budgetHigh,
-      preferredAreas,
-      notes,
-    } = action.payload;
+    const { firstName, lastName, address, phoneNumber, email, notes } = action.payload;
     yield console.log(" ADD CLIENT SAGA", action);
     const doc = yield getDocRef();
     doc.set(
@@ -103,9 +93,6 @@ export function* addClientSaga(action: any) {
             address,
             phoneNumber,
             email,
-            budgetLow,
-            budgetHigh,
-            preferredAreas,
             notes,
           },
         },
