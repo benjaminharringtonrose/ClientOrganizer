@@ -2,6 +2,7 @@ import * as React from "react";
 import { View, ViewProperties } from "react-native";
 import { BottomModal } from "./BottomModal";
 import CellIconActionable from "./CellIconActionable";
+import { Color } from "../styles";
 
 export interface DropdownModalProps extends ViewProperties {
   label: string;
@@ -21,12 +22,14 @@ interface LocalState {
 
 export class DropdownModal extends React.PureComponent<DropdownModalProps, LocalState> {
   public render() {
-    const placeholderText = this.props.placeholder || "Select Value";
+    const labelRightColor = this.props.value ? Color.white : Color.greyMed;
     return (
       <>
         <CellIconActionable
           label={this.props.label}
-          labelRight={this.props.value || placeholderText}
+          labelColor={Color.greyMed}
+          labelRight={this.props.value || "Select Date"}
+          labelRightColor={labelRightColor}
           onPress={this.props.onPress}
           disabled={this.props.disabled}
           iconRightName={"down"}

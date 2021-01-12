@@ -3,11 +3,18 @@ import { View, Text, StyleSheet, ScrollView, StatusBar } from "react-native";
 import { format } from "date-fns";
 import { Color, Spacing } from "../common/styles";
 import { DropdownModalCalendar } from "../common/components/DropdownModalCalendar";
+import CardSection from "../common/components/CardSection";
+import Input from "../common/components/Input";
+import SubHeader from "../common/components/SubHeader";
+import CellLabelCenterActionable from "../common/components/CellLabelCenterActionable";
+
 interface LocalState {
+  title: string;
   selectedDate: any;
 }
 export default class ScheduleScreen extends React.Component<{}, LocalState> {
   public state = {
+    title: "",
     selectedDate: undefined,
   };
   render() {
@@ -16,6 +23,13 @@ export default class ScheduleScreen extends React.Component<{}, LocalState> {
         <StatusBar barStyle={"light-content"} />
         <View style={{ paddingHorizontal: Spacing.med }}>
           <Text style={styles.headerText}>{"Create an Appointment"}</Text>
+          <CardSection>
+            <Input
+              label={"Title"}
+              value={this.state.title}
+              onChangeText={(title: string) => this.setState({ title })}
+            />
+          </CardSection>
           <DropdownModalCalendar
             label={"When"}
             onDayPress={(date) => {
@@ -26,6 +40,9 @@ export default class ScheduleScreen extends React.Component<{}, LocalState> {
             }}
             selectedDate={this.state.selectedDate}
           />
+          <View style={{ marginTop: Spacing.xlarge }}>
+            <CellLabelCenterActionable label={"Submit"} onPress={() => {}} />
+          </View>
         </View>
       </ScrollView>
     );

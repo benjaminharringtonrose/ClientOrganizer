@@ -10,6 +10,7 @@ import Button from "../common/components/Button";
 import Routes from "../navigation/routes";
 import Spinner from "../common/components/Spinner";
 import { Color, Spacing } from "../common/styles";
+import CellLabelCenterActionable from "../common/components/CellLabelCenterActionable";
 
 interface PassedProps {
   navigation: any;
@@ -76,11 +77,15 @@ class AddNewClientScreen extends Component<AddNewClientScreenProps, LocalState> 
   };
 
   private renderSaveButton = () => {
-    if (this.props.fetchUserLoading) {
-      return <Spinner size="small" />;
-    } else {
-      return <Button label={"Save"} onPress={this.onSubmit} />;
-    }
+    return (
+      <View style={{ marginTop: Spacing.xlarge }}>
+        {this.props.fetchUserLoading ? (
+          <Spinner size="small" />
+        ) : (
+          <CellLabelCenterActionable label={"Save"} onPress={this.onSubmit} />
+        )}
+      </View>
+    );
   };
 
   public render() {
@@ -143,9 +148,7 @@ class AddNewClientScreen extends Component<AddNewClientScreenProps, LocalState> 
                 autoCapitalize={"sentences"}
               />
             </CardSection>
-            <CardSection style={{ marginBottom: Spacing.xxlarge, marginTop: Spacing.med }}>
-              {this.renderSaveButton()}
-            </CardSection>
+            {this.renderSaveButton()}
           </Card>
         </ScrollView>
       </SafeAreaView>

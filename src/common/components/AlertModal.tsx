@@ -1,9 +1,10 @@
 import React from "react";
-import { View, Modal, Text, StyleSheet } from "react-native";
+import { View, Text, StyleSheet } from "react-native";
 import Card from "../components/Card";
 import CardSection from "../components/CardSection";
 import Button from "../components/Button";
 import { Color } from "../styles";
+import { Modal } from "./Modal";
 
 interface IAlertModalProps {
   label: string;
@@ -14,7 +15,7 @@ interface IAlertModalProps {
 
 export default function AlertModal(props: IAlertModalProps) {
   return (
-    <Modal animationType="slide" transparent={true} visible={props.isVisible}>
+    <Modal isVisible={props.isVisible}>
       <View style={styles.centeredView}>
         <Card>
           <View style={styles.modalView}>
@@ -41,8 +42,10 @@ const styles = StyleSheet.create({
   },
   modalView: {
     marginTop: 100,
-    backgroundColor: Color.darkThemeGrey,
+    backgroundColor: Color.darkThemeGreyDark,
     borderRadius: 3,
+    borderWidth: StyleSheet.hairlineWidth,
+    borderColor: Color.darkThemeGrey,
     padding: 40,
     alignItems: "center",
     shadowColor: "#000",

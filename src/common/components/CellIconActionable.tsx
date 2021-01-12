@@ -9,6 +9,7 @@ interface CellIconActionableProps {
   label?: string;
   labelColor?: string;
   labelRight?: string;
+  labelRightColor?: string;
   onPress: () => void;
   iconLeftName?: "plus" | "minus" | "book" | "right" | "left";
   iconLeftColor?: string;
@@ -51,7 +52,9 @@ export default class CellIconActionable extends Component<CellIconActionableProp
   public render() {
     const {
       label,
+      labelColor,
       labelRight,
+      labelRightColor,
       onPress,
       iconLeftName,
       iconRightName,
@@ -67,15 +70,26 @@ export default class CellIconActionable extends Component<CellIconActionableProp
         style={[style, styles.touchable]}
       >
         <CardSection style={[style, styles.cardSectionContainer]}>
-          {iconLeftName && this.getIcon()}
-          <Text style={styles.labelText}>{label || " "}</Text>
-          {labelRight && <Text style={styles.labelRightText}>{labelRight || " "}</Text>}
-          {iconRightName && (
+          {!!iconLeftName && this.getIcon()}
+          <Text style={[styles.labelText, labelColor ? { color: labelColor } : undefined]}>
+            {label || " "}
+          </Text>
+          {!!labelRight && (
+            <Text
+              style={[
+                styles.labelRightText,
+                labelRightColor ? { color: labelRightColor } : undefined,
+              ]}
+            >
+              {labelRight}
+            </Text>
+          )}
+          {!!iconRightName && (
             <AntDesign
               name={iconRightName}
               style={styles.icon}
               size={iconRightSize}
-              color={iconRightColor || Color.white}
+              color={iconRightColor || labelRightColor || Color.white}
             />
           )}
         </CardSection>

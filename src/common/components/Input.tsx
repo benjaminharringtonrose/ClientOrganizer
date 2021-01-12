@@ -69,7 +69,7 @@ export default class Input extends Component<InputProps> {
           keyboardType={keyboardType}
           placeholder={placeholder}
           placeholderTextColor={placeholderTextColor ? placeholderTextColor : Color.darkThemeGrey}
-          selectionColor={selectionColor}
+          selectionColor={selectionColor || Color.greyMed}
           onSubmitEditing={onSubmitEditting}
           returnKeyType={returnKeyType}
           returnKeyLabel={returnKeyLabel}
@@ -90,11 +90,11 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingRight: Spacing.small,
     paddingLeft: Spacing.small,
-    fontSize: 16,
+    fontSize: 18,
     color: Color.white,
   },
   labelText: {
-    fontSize: 16,
+    fontSize: 18,
     paddingLeft: Spacing.med,
     color: Color.greyMed,
   },

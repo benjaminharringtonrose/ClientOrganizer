@@ -37,7 +37,7 @@ export class DropdownModalCalendar extends Component<DropdownModalCalendarProps,
         <DropdownModal
           label={this.props.label}
           onPress={this.onPress}
-          value={this.props.selectedDate || "Select Date"}
+          value={this.props.selectedDate}
           isVisible={this.state.showModal}
           onBackdropPress={this.onBackdropPress}
           modalTitle={"Select Date"}

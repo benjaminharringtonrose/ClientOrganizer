@@ -117,12 +117,12 @@ class HomeScreen extends Component<HomeScreenProps, LocalState> {
             style={{ marginRight: Spacing.large }}
             name={"plus"}
             type={"antdesign"}
-            color={Color.white}
-            size={18}
+            color={Color.darkThemeGreen}
+            size={26}
           />
         </TouchableOpacity>
         <TouchableOpacity onPress={() => this.setState({ editMode: !editMode })}>
-          <Icon name={"trash"} type={"feather"} color={editMode ? "red" : Color.white} size={18} />
+          <Icon name={"trash"} type={"feather"} color={Color.remove} size={22} />
         </TouchableOpacity>
       </View>
     );
@@ -130,7 +130,7 @@ class HomeScreen extends Component<HomeScreenProps, LocalState> {
 
   private renderClientCell = ({ item }: any) => {
     const iconName = this.state.editMode ? "minuscircle" : "right";
-    const color = this.state.editMode ? "red" : Color.white;
+    const color = this.state.editMode ? Color.remove : Color.white;
     return (
       <CellIconActionable
         onPress={() => {
@@ -145,6 +145,7 @@ class HomeScreen extends Component<HomeScreenProps, LocalState> {
         label={`${item.lastName}, ${item.firstName}`}
         iconRightName={iconName}
         iconRightColor={color}
+        iconRightSize={16}
       />
     );
   };
@@ -233,7 +234,7 @@ const styles = StyleSheet.create({
     marginHorizontal: Spacing.micro,
   },
   headerText: {
-    fontSize: 26,
+    fontSize: 30,
     color: Color.white,
   },
   loadingContainer: {
