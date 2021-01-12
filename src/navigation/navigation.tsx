@@ -54,7 +54,7 @@ const DashboardTabs = () => {
         component={NotificationScreen}
         tabBarIcon={() => <Ionicons name="ios-notifications" size={24} color={Color.white} />}
         options={{
-          tabBarLabel: "Listings",
+          tabBarLabel: "Notify",
           tabBarIcon: () => <Ionicons name="ios-notifications" size={24} color={Color.white} />,
         }}
       />

@@ -2,6 +2,8 @@ import React, { Component } from "react";
 import { DropdownModal } from "./DropdownModal";
 import { Calendar } from "react-native-calendars";
 import { format } from "date-fns";
+import { Color } from "../styles";
+import { View } from "react-native";
 
 interface DropdownModalCalendarProps {
   label: string;
@@ -31,24 +33,34 @@ export class DropdownModalCalendar extends Component<DropdownModalCalendarProps,
       : { [new Date().toISOString().slice(0, 10)]: { selected: true } };
 
     return (
-      <DropdownModal
-        label={this.props.label}
-        onPress={this.onPress}
-        value={this.props.selectedDate || "Select Date"}
-        isVisible={this.state.showModal}
-        onBackdropPress={this.onBackdropPress}
-        modalTitle={"Select Date"}
-      >
-        <Calendar
-          onDayPress={(date) => {
-            this.props.onDayPress(date);
-            this.setState({
-              showModal: false,
-            });
-          }}
-          markedDates={markedDates}
-        />
-      </DropdownModal>
+      <View>
+        <DropdownModal
+          label={this.props.label}
+          onPress={this.onPress}
+          value={this.props.selectedDate || "Select Date"}
+          isVisible={this.state.showModal}
+          onBackdropPress={this.onBackdropPress}
+          modalTitle={"Select Date"}
+        >
+          <Calendar
+            onDayPress={(date) => {
+              this.props.onDayPress(date);
+              this.setState({
+                showModal: false,
+              });
+            }}
+            markedDates={markedDates}
+            theme={{
+              calendarBackground: Color.darkThemeGreyMed,
+              todayTextColor: Color.white,
+              dayTextColor: Color.white,
+              textDisabledColor: Color.greyMed,
+              arrowColor: Color.white,
+              monthTextColor: Color.white,
+            }}
+          />
+        </DropdownModal>
+      </View>
     );
   }
 }

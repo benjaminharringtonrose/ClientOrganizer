@@ -34,7 +34,7 @@ export class BottomModal extends React.Component<BottomModalProps> {
         <View
           style={[
             {
-              backgroundColor: Color.white,
+              backgroundColor: "transparent",
               borderTopLeftRadius: 8,
               borderTopRightRadius: 8,
               overflow: "hidden",
@@ -50,7 +50,7 @@ export class BottomModal extends React.Component<BottomModalProps> {
             <View
               style={{
                 paddingHorizontal: Spacing.med,
-                backgroundColor: Color.white,
+                backgroundColor: Color.darkThemeGreyMed,
                 flexDirection: "row",
                 alignItems: "center",
               }}
@@ -64,7 +64,7 @@ export class BottomModal extends React.Component<BottomModalProps> {
                   paddingHorizontal: Spacing.xlarge,
                 }}
               >
-                <Text>{title}</Text>
+                <Text style={{ color: Color.white, fontSize: 24 }}>{title}</Text>
               </View>
               {headerRight ? (
                 <View

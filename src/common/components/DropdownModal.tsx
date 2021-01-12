@@ -23,7 +23,7 @@ export class DropdownModal extends React.PureComponent<DropdownModalProps, Local
   public render() {
     const placeholderText = this.props.placeholder || "Select Value";
     return (
-      <View>
+      <>
         <CellIconActionable
           label={this.props.label}
           labelRight={this.props.value || placeholderText}
@@ -39,7 +39,7 @@ export class DropdownModal extends React.PureComponent<DropdownModalProps, Local
         >
           {this.props.children}
         </BottomModal>
-      </View>
+      </>
     );
   }
 }
