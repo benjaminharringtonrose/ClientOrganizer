@@ -9,14 +9,14 @@ import {
   ActivityIndicator,
 } from "react-native";
 import { connect } from "react-redux";
+import Routes from "../navigation/routes";
+import { IClient } from "./HomeScreen";
+
 import Card from "../common/components/Card";
 import { Icon } from "react-native-elements";
 import CellIconActionable from "../common/components/CellIconActionable";
-import Routes from "../navigation/routes";
-
-import { IClient } from "./HomeScreen";
-import { Color, Spacing } from "../common/styles";
 import CellLabelCenterActionable from "../common/components/CellLabelCenterActionable";
+import { Color, Spacing } from "../common/styles";
 import { callTelephone } from "./util";
 
 interface IPassedProps {
