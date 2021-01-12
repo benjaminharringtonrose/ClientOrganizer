@@ -16,12 +16,12 @@ export default class CardSection extends Component<CardSectionProps> {
 
 const styles = StyleSheet.create({
   containerStyle: {
+    flexDirection: "row",
     borderWidth: 1,
     borderRadius: 5,
     borderColor: Color.darkThemeGreyMed,
     backgroundColor: Color.darkThemeGreyMed,
     padding: 2,
-    flexDirection: "row",
     marginBottom: 4,
   },
 });

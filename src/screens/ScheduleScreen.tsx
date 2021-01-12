@@ -1,25 +1,16 @@
 import React from "react";
 import { View, Text, StyleSheet, ScrollView, StatusBar } from "react-native";
 import { Color, Spacing } from "../common/styles";
-import { Calendar } from "react-native-calendars";
+import { DropdownModalCalendar } from "../common/components/DropdownModalCalendar";
 
 export default class ScheduleScreen extends React.Component {
   render() {
     return (
-      <ScrollView
-        style={{
-          backgroundColor: Color.darkThemeGreyDark,
-          paddingTop: Spacing.xxlarge,
-        }}
-      >
+      <ScrollView style={styles.rootContainer}>
         <StatusBar barStyle={"light-content"} />
-        <Text style={{ textAlign: "center", color: Color.white }}>{"Schedule"}</Text>
-        <View style={{ flex: 1, borderRadius: 10 }}>
-          <Calendar
-            onDayPress={(day) => {
-              console.log("selected day", day);
-            }}
-          />
+        <View style={{ paddingHorizontal: Spacing.med }}>
+          <Text style={styles.headerText}>{"Create an Appointment"}</Text>
+          <DropdownModalCalendar />
         </View>
       </ScrollView>
     );
@@ -27,9 +18,14 @@ export default class ScheduleScreen extends React.Component {
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
+  rootContainer: {
+    backgroundColor: Color.darkThemeGreyDark,
+    paddingTop: Spacing.xxlarge,
+  },
+  headerText: {
+    fontSize: 20,
+    color: Color.white,
+    paddingVertical: Spacing.xsmall,
+    paddingLeft: Spacing.micro,
   },
 });
