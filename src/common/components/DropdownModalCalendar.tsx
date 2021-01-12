@@ -1,37 +1,50 @@
 import React, { Component } from "react";
 import { DropdownModal } from "./DropdownModal";
 import { Calendar } from "react-native-calendars";
+import { format } from "date-fns";
+
+interface DropdownModalCalendarProps {
+  label: string;
+  onDayPress: (date: any) => void;
+  selectedDate: any;
+}
 
 interface LocalState {
-  selectedDate: any;
   showModal: boolean;
 }
-export class DropdownModalCalendar extends Component<{}, LocalState> {
+export class DropdownModalCalendar extends Component<DropdownModalCalendarProps, LocalState> {
   public state = {
-    selectedDate: new Date().toISOString().slice(0, 10),
     showModal: false,
   };
+
   private onPress = () => {
     this.setState({ showModal: true });
   };
+
   private onBackdropPress = () => {
     this.setState({ showModal: false });
   };
+
   public render() {
-    const markedDates: any = this.state.selectedDate
-      ? { [this.state.selectedDate]: { selected: true } }
-      : {};
+    const markedDates: any = this.props.selectedDate
+      ? { [this.props.selectedDate!]: { selected: true } }
+      : { [new Date().toISOString().slice(0, 10)]: { selected: true } };
 
     return (
       <DropdownModal
+        label={this.props.label}
         onPress={this.onPress}
-        value={this.state.selectedDate || "Select Date"}
+        value={this.props.selectedDate || "Select Date"}
         isVisible={this.state.showModal}
         onBackdropPress={this.onBackdropPress}
+        modalTitle={"Select Date"}
       >
         <Calendar
           onDayPress={(date) => {
-            this.setState({ selectedDate: date.dateString, showModal: false });
+            this.props.onDayPress(date);
+            this.setState({
+              showModal: false,
+            });
           }}
           markedDates={markedDates}
         />

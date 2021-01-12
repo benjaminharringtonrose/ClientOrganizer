@@ -1,27 +1,16 @@
 import * as React from "react";
-import {
-  View,
-  Text,
-  TouchableOpacity,
-  ViewProperties,
-  ActivityIndicator,
-  StyleSheet,
-} from "react-native";
-import { Spacing, Color } from "../styles";
-import { Divider } from "./Divider";
-import Icon from "react-native-vector-icons/FontAwesome";
-import { Modal } from "./Modal";
+import { View, ViewProperties } from "react-native";
 import { BottomModal } from "./BottomModal";
-import CardSection from "./CardSection";
-import CellLabelLeftRight from "./CellLabelLeftRight";
 import CellIconActionable from "./CellIconActionable";
 
 export interface DropdownModalProps extends ViewProperties {
+  label: string;
   placeholder?: string;
   value?: string;
   disabled?: boolean;
   loading?: boolean;
   isVisible: boolean;
+  modalTitle: string;
   onPress: () => void;
   onBackdropPress: () => void;
 }
@@ -34,29 +23,23 @@ export class DropdownModal extends React.PureComponent<DropdownModalProps, Local
   public render() {
     const placeholderText = this.props.placeholder || "Select Value";
     return (
-      <CardSection style={{ flexDirection: "column" }}>
-        <TouchableOpacity
-          style={this.props.style}
+      <View>
+        <CellIconActionable
+          label={this.props.label}
+          labelRight={this.props.value || placeholderText}
           onPress={this.props.onPress}
           disabled={this.props.disabled}
+          iconRightName={"down"}
+          iconRightSize={16}
+        />
+        <BottomModal
+          title={this.props.modalTitle}
+          isVisible={this.props.isVisible}
+          onBackdropPress={() => this.props.onBackdropPress()}
         >
-          <CellIconActionable
-            label={"Date"}
-            labelRight={this.props.value || placeholderText}
-            onPress={this.props.onPress}
-            disabled={this.props.disabled}
-            iconRightName={"down"}
-            iconRightSize={16}
-          />
-          <BottomModal
-            title={"title"}
-            isVisible={this.props.isVisible}
-            onBackdropPress={() => this.props.onBackdropPress()}
-          >
-            {this.props.children}
-          </BottomModal>
-        </TouchableOpacity>
-      </CardSection>
+          {this.props.children}
+        </BottomModal>
+      </View>
     );
   }
 }
