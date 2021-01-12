@@ -8,14 +8,14 @@ import {
   TouchableOpacity,
   ActivityIndicator,
 } from "react-native";
-import { Color, Spacing } from "../common/styles";
+import { connect } from "react-redux";
 import Card from "../common/components/Card";
 import { Icon } from "react-native-elements";
 import CellIconActionable from "../common/components/CellIconActionable";
 import Routes from "../navigation/routes";
-import { connect } from "react-redux";
+
 import { IClient } from "./HomeScreen";
-import MapView from "react-native-maps";
+import { Color, Spacing } from "../common/styles";
 import CellLabelCenterActionable from "../common/components/CellLabelCenterActionable";
 import { callTelephone } from "./util";
 
@@ -132,24 +132,17 @@ class ClientDetailScreen extends Component<IClientDetailScreenProps, ILocalState
                   iconRightSize={16}
                 />
                 {!!client?.phoneNumber && (
-                  <CellLabelCenterActionable
-                    label={`Call ${client?.firstName}`}
-                    onPress={() => callTelephone(client?.phoneNumber)}
-                  />
+                  <View style={{ marginTop: Spacing.xlarge }}>
+                    <CellLabelCenterActionable
+                      label={`Call ${client?.firstName}`}
+                      onPress={() => callTelephone(client?.phoneNumber)}
+                    />
+                  </View>
                 )}
               </View>
             )}
           </Card>
         </ScrollView>
-        <MapView
-          style={styles.mapContainer}
-          region={{
-            latitude: 34.244968,
-            longitude: -77.95262,
-            latitudeDelta: 0.01622,
-            longitudeDelta: 0.01221,
-          }}
-        />
       </SafeAreaView>
     );
   }
