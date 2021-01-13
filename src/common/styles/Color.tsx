@@ -47,7 +47,10 @@ export const Color = Object.freeze({
   warmGrey700: "#504A40",
   warmGrey800: "#423D33",
   warmGrey900: "#27241D",
+
   peach: "#f0a626",
+  peachDark: "#b57e1f",
+
   error: "#A71930",
   success: "#0F751C",
 

@@ -54,7 +54,7 @@ export default class Input extends Component<InputProps> {
       autoCapitalize,
     } = this.props;
     return (
-      <View style={[style, styles.rootContainer]}>
+      <View style={[styles.rootContainer, style]}>
         {!!label && <Text style={styles.labelText}>{label}</Text>}
 
         <TextInput
@@ -62,7 +62,7 @@ export default class Input extends Component<InputProps> {
           secureTextEntry={secureTextEntry}
           autoCorrect={false}
           autoCapitalize={autoCapitalize || "none"}
-          style={[textStyle, styles.input]}
+          style={[styles.input, textStyle]}
           value={value}
           onChangeText={onChangeText}
           maxLength={maxLength}

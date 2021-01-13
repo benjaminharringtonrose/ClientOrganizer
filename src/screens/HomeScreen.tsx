@@ -8,7 +8,6 @@ import {
   ActivityIndicator,
   TouchableOpacity,
 } from "react-native";
-import { LinearGradient } from "expo-linear-gradient";
 import { Icon } from "react-native-elements";
 import { connect } from "react-redux";
 import firebase from "firebase";
@@ -169,7 +168,6 @@ class HomeScreen extends Component<HomeScreenProps, LocalState> {
             onChangeText={this.searchClients}
             value={this.state.searchText || ""}
             placeholder={"search clients..."}
-            keyboardType={"web-search"}
           />
         </View>
         {loading ? (
@@ -235,7 +233,7 @@ const styles = StyleSheet.create({
   },
   headerText: {
     fontSize: 30,
-    color: Color.warmGrey50,
+    color: Color.warmGrey200,
   },
   loadingContainer: {
     flex: 1,

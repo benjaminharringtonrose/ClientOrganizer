@@ -66,7 +66,7 @@ export default class CellIconActionable extends Component<CellIconActionableProp
       <TouchableOpacity
         disabled={disabled || false}
         onPress={onPress}
-        style={[style, styles.rootContainer]}
+        style={[styles.rootContainer, style]}
       >
         {!!iconLeftName && this.getIcon()}
         <Text style={[styles.labelText, labelColor ? { color: labelColor } : undefined]}>
@@ -114,7 +114,7 @@ const styles = StyleSheet.create({
     flex: 1,
     fontSize: 18,
     paddingLeft: Spacing.small,
-    color: Color.white,
+    color: Color.warmGrey50,
   },
   labelRightText: {
     fontSize: 18,

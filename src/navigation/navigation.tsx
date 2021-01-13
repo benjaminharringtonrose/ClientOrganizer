@@ -15,6 +15,7 @@ import ClientUpdateScreen from "../screens/ClientUpdateScreen";
 
 import Routes from "./routes";
 import { Ionicons } from "@expo/vector-icons";
+import { FontAwesome } from "@expo/vector-icons";
 import { Color, Spacing } from "../common/styles";
 
 const DashboardTabs = () => {
@@ -22,9 +23,10 @@ const DashboardTabs = () => {
   return (
     <Tab.Navigator
       tabBarOptions={{
-        activeTintColor: Color.white,
+        initialRouteName: Routes.HOME_SCREEN,
+        activeTintColor: Color.warmGrey50,
         activeBackgroundColor: Color.darkThemeGreyMed,
-        inactiveBackgroundColor: Color.darkThemeGreyDark,
+        inactiveBackgroundColor: Color.darkThemeGreyMed,
         labelStyle: {
           paddingBottom: Spacing.micro,
         },
@@ -34,19 +36,19 @@ const DashboardTabs = () => {
       }}
     >
       <Tab.Screen
-        name={Routes.HOME_SCREEN}
-        component={HomeScreen}
-        options={{
-          tabBarLabel: "Home",
-          tabBarIcon: () => <Ionicons name="ios-home" size={24} color={Color.white} />,
-        }}
-      />
-      <Tab.Screen
         name={Routes.SCHEDULE_SCREEN}
         component={ScheduleScreen}
         options={{
           tabBarLabel: "Schedule",
-          tabBarIcon: () => <Ionicons name="ios-calendar" size={24} color={Color.white} />,
+          tabBarIcon: () => <Ionicons name="ios-calendar" size={24} color={Color.peach} />,
+        }}
+      />
+      <Tab.Screen
+        name={Routes.HOME_SCREEN}
+        component={HomeScreen}
+        options={{
+          tabBarLabel: "Clients",
+          tabBarIcon: () => <Ionicons name="ios-person" size={24} color={Color.peach} />,
         }}
       />
       {/* <Tab.Screen
@@ -62,8 +64,8 @@ const DashboardTabs = () => {
         name={Routes.PROFILE_SCREEN}
         component={ProfileScreen}
         options={{
-          tabBarLabel: "Profile",
-          tabBarIcon: () => <Ionicons name="ios-person" size={24} color={Color.white} />,
+          tabBarLabel: "Settings",
+          tabBarIcon: () => <FontAwesome name="gear" size={24} color={Color.peach} />,
         }}
       />
     </Tab.Navigator>
