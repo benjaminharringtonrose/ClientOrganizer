@@ -8,17 +8,15 @@ import {
   ActivityIndicator,
   TouchableOpacity,
 } from "react-native";
+import { LinearGradient } from "expo-linear-gradient";
 import { Icon } from "react-native-elements";
 import { connect } from "react-redux";
-import { isEqual } from "lodash";
 import firebase from "firebase";
 import { FETCH_USER, DELETE_CLIENT } from "../store/actions/types";
 import Routes from "../navigation/routes";
 
 import SearchBar from "../common/components/SearchBar";
-import Card from "../common/components/Card";
 import CellIconActionable from "../common/components/CellIconActionable";
-import CardSection from "../common/components/CardSection";
 import AlertModal from "../common/components/AlertModal";
 
 import { mapClients } from "./util";
@@ -117,12 +115,12 @@ class HomeScreen extends Component<HomeScreenProps, LocalState> {
             style={{ marginRight: Spacing.large }}
             name={"plus"}
             type={"antdesign"}
-            color={Color.darkThemeGreen}
+            color={Color.peach}
             size={26}
           />
         </TouchableOpacity>
         <TouchableOpacity onPress={() => this.setState({ editMode: !editMode })}>
-          <Icon name={"trash"} type={"feather"} color={Color.remove} size={22} />
+          <Icon name={"trash"} type={"feather"} color={Color.peach} size={22} />
         </TouchableOpacity>
       </View>
     );
@@ -130,7 +128,7 @@ class HomeScreen extends Component<HomeScreenProps, LocalState> {
 
   private renderClientCell = ({ item }: any) => {
     const iconName = this.state.editMode ? "minuscircle" : "right";
-    const color = this.state.editMode ? Color.remove : Color.white;
+    const color = this.state.editMode ? Color.peach : Color.white;
     return (
       <CellIconActionable
         onPress={() => {
@@ -146,6 +144,7 @@ class HomeScreen extends Component<HomeScreenProps, LocalState> {
         iconRightName={iconName}
         iconRightColor={color}
         iconRightSize={16}
+        style={{ marginBottom: Spacing.small }}
       />
     );
   };
@@ -165,28 +164,29 @@ class HomeScreen extends Component<HomeScreenProps, LocalState> {
       <View style={styles.rootContainer}>
         <StatusBar barStyle={"light-content"} />
         {this.renderHeader()}
-        <Card style={{ flex: 1 }}>
-          <CardSection style={{ marginBottom: Spacing.med }}>
-            <SearchBar
-              onChangeText={this.searchClients}
-              value={this.state.searchText || ""}
-              placeholder={"search clients..."}
-              keyboardType={"web-search"}
-            />
-          </CardSection>
-          {loading ? (
-            <View style={styles.loadingContainer}>
-              <ActivityIndicator />
-            </View>
-          ) : (
+        <View style={{ paddingVertical: Spacing.large }}>
+          <SearchBar
+            onChangeText={this.searchClients}
+            value={this.state.searchText || ""}
+            placeholder={"search clients..."}
+            keyboardType={"web-search"}
+          />
+        </View>
+        {loading ? (
+          <View style={styles.loadingContainer}>
+            <ActivityIndicator />
+          </View>
+        ) : (
+          <View style={{ borderRadius: 5 }}>
             <FlatList
               data={showAllClients ? this.state.clients : this.state.filteredClients}
               keyExtractor={(item: any) => item.id}
               renderItem={({ item }) => this.renderClientCell({ item })}
               indicatorStyle={"white"}
             />
-          )}
-        </Card>
+          </View>
+        )}
+
         <AlertModal
           label={"Are you sure you want to delete this client?"}
           onDeletePress={this.onDeletePress}
@@ -224,7 +224,7 @@ export default connect(mapStateToProps, mapDispatchToProps)(HomeScreen);
 const styles = StyleSheet.create({
   rootContainer: {
     flex: 1,
-    backgroundColor: Color.darkThemeGreyDark,
+    backgroundColor: Color.darkThemeGreyMed,
     paddingHorizontal: Spacing.med,
     paddingTop: Spacing.xxlarge,
   },
@@ -235,7 +235,7 @@ const styles = StyleSheet.create({
   },
   headerText: {
     fontSize: 30,
-    color: Color.white,
+    color: Color.warmGrey50,
   },
   loadingContainer: {
     flex: 1,

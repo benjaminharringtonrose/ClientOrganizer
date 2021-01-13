@@ -9,7 +9,6 @@ import firebase from "firebase";
 import Spinner from "../common/components/Spinner";
 import Button from "../common/components/Button";
 import Card from "../common/components/Card";
-import CardSection from "../common/components/CardSection";
 import CellLabelLeftRight from "../common/components/CellLabelLeftRight";
 import { Ionicons } from "@expo/vector-icons";
 import { Color, Spacing } from "../common/styles";
@@ -89,9 +88,14 @@ class ProfileScreen extends React.Component<ProfileScreenProps, LocalState> {
           <CellLabelLeftRight
             labelLeft={"Name"}
             labelRight={`${this.props.firstName} ${this.props.lastName}`}
+            style={{ marginBottom: Spacing.small }}
           />
-          <CellLabelLeftRight labelLeft={"Email"} labelRight={this.props.email} />
-          <CardSection style={{ marginTop: Spacing.med }}>{this.renderSignOutButton()}</CardSection>
+          <CellLabelLeftRight
+            labelLeft={"Email"}
+            labelRight={this.props.email}
+            style={{ marginBottom: Spacing.large }}
+          />
+          {this.renderSignOutButton()}
         </Card>
       </ScrollView>
     );
@@ -120,7 +124,7 @@ export default connect(mapStateToProps, mapDispatchToProps)(ProfileScreen);
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: Color.darkThemeGreyDark,
+    backgroundColor: Color.darkThemeGreyMed,
     paddingTop: Spacing.xxlarge,
   },
   avatarPlaceholder: {
@@ -144,9 +148,10 @@ const styles = StyleSheet.create({
     color: Color.greyLight,
   },
   subHeaderText: {
-    fontSize: 20,
+    fontSize: 30,
     color: Color.white,
-    paddingVertical: Spacing.xsmall,
+    paddingTop: Spacing.small,
+    paddingBottom: Spacing.large,
     paddingLeft: Spacing.micro,
   },
 });

@@ -37,6 +37,17 @@ export const Color = Object.freeze({
   darkThemePrupleLight: "#D6A905",
   darkThemeBlueGrey: "#627D98",
 
+  warmGrey50: "#FAF9F7",
+  warmGrey100: "#E8E6E1",
+  warmGrey200: "#D3CEC4",
+  warmGrey300: "#B8B2A7",
+  warmGrey400: "#A39E93",
+  warmGrey500: "#857F72",
+  warmGrey600: "#625D52",
+  warmGrey700: "#504A40",
+  warmGrey800: "#423D33",
+  warmGrey900: "#27241D",
+  peach: "#f0a626",
   error: "#A71930",
   success: "#0F751C",
 

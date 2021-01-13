@@ -13,7 +13,6 @@ import UserPermissions from "../util/permissions";
 import * as ImagePicker from "expo-image-picker";
 
 import Card from "../common/components/Card";
-import CardSection from "../common/components/CardSection";
 import Input from "../common/components/Input";
 import Button from "../common/components/Button";
 import Spinner from "../common/components/Spinner";
@@ -102,11 +101,7 @@ class RegisterScreen extends Component<RegisterScreenProps, LocalState> {
 
   renderError() {
     if (this.props.authError) {
-      return (
-        <View style={styles.errorContainer}>
-          <Text style={styles.errorText}>{this.props.authError}</Text>
-        </View>
-      );
+      return <Text style={styles.errorText}>{this.props.authError}</Text>;
     }
   }
 
@@ -125,48 +120,40 @@ class RegisterScreen extends Component<RegisterScreenProps, LocalState> {
               {!!avatar && <Image source={{ uri: avatar }} style={styles.avatar} />}
               <Ionicons name="ios-add" size={40} color="#FFF" style={styles.addIcon} />
             </TouchableOpacity>
-            <CardSection>
-              <Input
-                label="First Name"
-                placeholder="John"
-                placeholderTextColor={Color.greyMedDark}
-                secureTextEntry={false}
-                autoCapitalize={"words"}
-                onChangeText={(firstName: string) => this.setState({ firstName })}
-                value={firstName}
-              />
-            </CardSection>
-            <CardSection>
-              <Input
-                label="Last Name"
-                placeholder="Smith"
-                placeholderTextColor={Color.greyMedDark}
-                secureTextEntry={false}
-                autoCapitalize={"words"}
-                onChangeText={(lastName: string) => this.setState({ lastName })}
-                value={lastName}
-              />
-            </CardSection>
-            <CardSection>
-              <Input
-                label="Email"
-                placeholder="email@gmail.com"
-                placeholderTextColor={Color.greyMedDark}
-                secureTextEntry={false}
-                onChangeText={(email: string) => this.setState({ email })}
-                value={email}
-              />
-            </CardSection>
-            <CardSection>
-              <Input
-                secureTextEntry
-                label="Password"
-                placeholder="password"
-                placeholderTextColor={Color.greyMedDark}
-                onChangeText={(password: string) => this.setState({ password })}
-                value={password}
-              />
-            </CardSection>
+            <Input
+              label="First Name"
+              placeholder="John"
+              secureTextEntry={false}
+              autoCapitalize={"words"}
+              onChangeText={(firstName: string) => this.setState({ firstName })}
+              value={firstName}
+              style={{ marginBottom: Spacing.small }}
+            />
+            <Input
+              label="Last Name"
+              placeholder="Smith"
+              secureTextEntry={false}
+              autoCapitalize={"words"}
+              onChangeText={(lastName: string) => this.setState({ lastName })}
+              value={lastName}
+              style={{ marginBottom: Spacing.small }}
+            />
+            <Input
+              label="Email"
+              placeholder="email@gmail.com"
+              secureTextEntry={false}
+              onChangeText={(email: string) => this.setState({ email })}
+              value={email}
+              style={{ marginBottom: Spacing.small }}
+            />
+            <Input
+              secureTextEntry
+              label="Password"
+              placeholder="password"
+              onChangeText={(password: string) => this.setState({ password })}
+              value={password}
+              style={{ marginBottom: Spacing.small }}
+            />
             {this.renderError()}
             {this.renderButton()}
           </Card>
@@ -207,17 +194,13 @@ export default connect(mapStateToProps, mapDispatchToProps)(RegisterScreen);
 const styles = StyleSheet.create({
   rootContainer: {
     flex: 1,
-    backgroundColor: Color.darkThemeGreyDark,
+    backgroundColor: Color.darkThemeGreyMed,
   },
   headerContainer: {
     paddingTop: Spacing.xxlarge,
   },
   button: {
     marginVertical: Spacing.med,
-    paddingVertical: Spacing.small,
-  },
-  errorContainer: {
-    backgroundColor: Color.darkThemeGreyDark,
   },
   errorText: {
     fontSize: 12,
@@ -228,9 +211,12 @@ const styles = StyleSheet.create({
     alignSelf: "center",
     width: 120,
     height: 120,
-    backgroundColor: Color.darkThemeGreyMed,
+    backgroundColor: Color.warmGrey600,
     borderRadius: 60,
-    marginVertical: Spacing.small,
+    marginTop: Spacing.small,
+    marginBottom: Spacing.xlarge,
+    borderWidth: 2,
+    borderColor: Color.peach,
   },
   avatar: {
     position: "absolute",
@@ -242,6 +228,6 @@ const styles = StyleSheet.create({
     alignSelf: "center",
     marginTop: 38,
     marginLeft: 2,
-    color: Color.greyLight,
+    color: Color.peach,
   },
 });

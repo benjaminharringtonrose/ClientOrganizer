@@ -23,16 +23,19 @@ export default class Button extends Component<ButtonProps> {
 const styles = StyleSheet.create({
   textStyle: {
     alignSelf: "center",
-    fontWeight: "600",
+    fontWeight: "800",
     paddingVertical: 10,
-    color: Color.white,
+    color: Color.peach,
   },
   buttonStyle: {
     flex: 1,
     alignSelf: "stretch",
     borderRadius: 5,
-    marginLeft: Spacing.micro,
-    marginRight: Spacing.micro,
-    backgroundColor: Color.darkThemeGreyMed,
+    backgroundColor: Color.warmGrey900,
+    shadowColor: Color.darkThemeGreyDark,
+    shadowOffset: { width: 3, height: 2 },
+    shadowOpacity: 0.4,
+    borderWidth: 2,
+    borderColor: Color.peach,
   },
 });

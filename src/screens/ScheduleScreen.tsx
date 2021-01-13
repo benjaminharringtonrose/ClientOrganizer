@@ -1,12 +1,10 @@
 import React from "react";
 import { View, Text, StyleSheet, ScrollView, StatusBar } from "react-native";
-import { format } from "date-fns";
 import { Color, Spacing } from "../common/styles";
 import { DropdownModalCalendar } from "../common/components/DropdownModalCalendar";
-import CardSection from "../common/components/CardSection";
 import Input from "../common/components/Input";
-import SubHeader from "../common/components/SubHeader";
-import CellLabelCenterActionable from "../common/components/CellLabelCenterActionable";
+import Button from "../common/components/Button";
+import Card from "../common/components/Card";
 
 interface LocalState {
   title: string;
@@ -21,15 +19,14 @@ export default class ScheduleScreen extends React.Component<{}, LocalState> {
     return (
       <ScrollView style={styles.rootContainer}>
         <StatusBar barStyle={"light-content"} />
-        <View style={{ paddingHorizontal: Spacing.med }}>
+        <Card>
           <Text style={styles.headerText}>{"Create an Appointment"}</Text>
-          <CardSection>
-            <Input
-              label={"Title"}
-              value={this.state.title}
-              onChangeText={(title: string) => this.setState({ title })}
-            />
-          </CardSection>
+          <Input
+            label={"Title"}
+            value={this.state.title}
+            onChangeText={(title: string) => this.setState({ title })}
+            style={{ marginBottom: Spacing.small }}
+          />
           <DropdownModalCalendar
             label={"When"}
             onDayPress={(date) => {
@@ -39,11 +36,10 @@ export default class ScheduleScreen extends React.Component<{}, LocalState> {
               });
             }}
             selectedDate={this.state.selectedDate}
+            style={{ marginBottom: Spacing.large }}
           />
-          <View style={{ marginTop: Spacing.xlarge }}>
-            <CellLabelCenterActionable label={"Submit"} onPress={() => {}} />
-          </View>
-        </View>
+          <Button label={"Submit"} onPress={() => {}} />
+        </Card>
       </ScrollView>
     );
   }
@@ -51,11 +47,11 @@ export default class ScheduleScreen extends React.Component<{}, LocalState> {
 
 const styles = StyleSheet.create({
   rootContainer: {
-    backgroundColor: Color.darkThemeGreyDark,
-    paddingTop: Spacing.xxlarge,
+    backgroundColor: Color.darkThemeGreyMed,
+    paddingTop: Spacing.xlarge,
   },
   headerText: {
-    fontSize: 28,
+    fontSize: 30,
     color: Color.white,
     paddingVertical: Spacing.med,
     paddingLeft: Spacing.micro,

@@ -49,7 +49,7 @@ const DashboardTabs = () => {
           tabBarIcon: () => <Ionicons name="ios-calendar" size={24} color={Color.white} />,
         }}
       />
-      <Tab.Screen
+      {/* <Tab.Screen
         name={Routes.NOTIFICATION_SCREEN}
         component={NotificationScreen}
         tabBarIcon={() => <Ionicons name="ios-notifications" size={24} color={Color.white} />}
@@ -57,7 +57,7 @@ const DashboardTabs = () => {
           tabBarLabel: "Notify",
           tabBarIcon: () => <Ionicons name="ios-notifications" size={24} color={Color.white} />,
         }}
-      />
+      /> */}
       <Tab.Screen
         name={Routes.PROFILE_SCREEN}
         component={ProfileScreen}

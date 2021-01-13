@@ -4,7 +4,6 @@ import { connect } from "react-redux";
 import { LOGIN_USER } from "../store/actions/types";
 
 import Card from "../common/components/Card";
-import CardSection from "../common/components/CardSection";
 import Input from "../common/components/Input";
 import Button from "../common/components/Button";
 import Spinner from "../common/components/Spinner";
@@ -12,6 +11,7 @@ import Header from "../common/components/Header";
 
 import { Color, Spacing } from "../common/styles";
 import Routes from "../navigation/routes";
+import { Icon } from "react-native-elements";
 
 interface PassedProps {
   navigation: any;
@@ -59,14 +59,20 @@ class LoginScreen extends Component<LoginScreenProps, LocalState> {
     if (this.props.authLoading) {
       return <Spinner size="small" />;
     } else {
-      return <Button label={"Login"} onPress={this.onLoginPress} />;
+      return (
+        <Button
+          label={"Login"}
+          onPress={this.onLoginPress}
+          style={{ marginBottom: Spacing.large }}
+        />
+      );
     }
   };
 
   private renderError = () => {
     if (this.props.authError) {
       return (
-        <View style={{ backgroundColor: "transparent", marginVertical: Spacing.small }}>
+        <View style={{ marginVertical: Spacing.small }}>
           <Text style={styles.errorTextStyle}>{this.props.authError}</Text>
         </View>
       );
@@ -79,37 +85,36 @@ class LoginScreen extends Component<LoginScreenProps, LocalState> {
         <StatusBar barStyle={"light-content"} />
         <Header title={"ClientManager"} description={"Welcome back!"} style={styles.greeting} />
         <ScrollView>
-          <Card style={{ flex: 1 }}>
-            <CardSection>
-              <Input
-                secureTextEntry={false}
-                label="Email"
-                onChangeText={(email: string) => this.setState({ email })}
-                value={this.state.email}
-                selectionColor={Color.greyMed}
-                returnKeyType={"next"}
-              />
-            </CardSection>
-            <CardSection>
-              <Input
-                secureTextEntry
-                label="Password"
-                onChangeText={(password: string) => this.setState({ password })}
-                value={this.state.password}
-                selectionColor={Color.greyMed}
-                onSubmitEditting={() => this.onLoginPress()}
-                returnKeyType={"go"}
-              />
-            </CardSection>
+          <Card>
+            <Input
+              secureTextEntry={false}
+              label="Email"
+              onChangeText={(email: string) => this.setState({ email })}
+              value={this.state.email}
+              selectionColor={Color.greyMed}
+              returnKeyType={"next"}
+              style={{ marginBottom: Spacing.small }}
+            />
+            <Input
+              secureTextEntry
+              label="Password"
+              onChangeText={(password: string) => this.setState({ password })}
+              value={this.state.password}
+              selectionColor={Color.greyMed}
+              onSubmitEditting={() => this.onLoginPress()}
+              returnKeyType={"go"}
+              style={{ marginBottom: Spacing.large }}
+            />
             {this.renderError()}
-            <CardSection>{this.renderLoginButton()}</CardSection>
-            <TouchableOpacity>
-              <Text
-                style={{ color: "white" }}
-                onPress={() => this.props.navigation.navigate(Routes.REGISTER_SCREEN)}
-              >
+            {this.renderLoginButton()}
+            <TouchableOpacity
+              onPress={() => this.props.navigation.navigate(Routes.REGISTER_SCREEN)}
+              style={{ alignItems: "center", flexDirection: "row", justifyContent: "flex-end" }}
+            >
+              <Text style={{ color: Color.warmGrey50, textAlign: "right", fontSize: 16 }}>
                 {"Register here"}
               </Text>
+              <Icon name={"arrow-forward"} color={Color.warmGrey50} size={18} />
             </TouchableOpacity>
           </Card>
         </ScrollView>
@@ -140,7 +145,7 @@ const styles = StyleSheet.create({
   mainContainer: {
     flex: 1,
     justifyContent: "center",
-    backgroundColor: Color.darkThemeGreyDark,
+    backgroundColor: Color.darkThemeGreyMed,
   },
   errorTextStyle: {
     fontSize: 20,

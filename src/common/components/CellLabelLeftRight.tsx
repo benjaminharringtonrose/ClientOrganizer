@@ -1,7 +1,6 @@
 import React, { Component } from "react";
-import { Text, StyleProp, ViewStyle, View } from "react-native";
+import { Text, StyleProp, ViewStyle, View, StyleSheet } from "react-native";
 import { Color, Spacing } from "../styles";
-import CardSection from "./CardSection";
 import Spinner from "./Spinner";
 
 interface CellLabelLeftRightProps {
@@ -15,11 +14,11 @@ export default class CellLabelLeftRight extends Component<CellLabelLeftRightProp
   public render() {
     const { labelLeft, labelRight, loading, style } = this.props;
     return (
-      <View style={style}>
+      <View style={[styles.rootContainer, style]}>
         {loading ? (
           <Spinner size={800} color={Color.white} />
         ) : (
-          <CardSection style={{ paddingVertical: Spacing.small }}>
+          <>
             <Text
               style={{
                 flex: 1,
@@ -33,9 +32,21 @@ export default class CellLabelLeftRight extends Component<CellLabelLeftRightProp
             <Text style={{ color: Color.white, paddingRight: Spacing.small, fontSize: 18 }}>
               {labelRight}
             </Text>
-          </CardSection>
+          </>
         )}
       </View>
     );
   }
 }
+
+const styles = StyleSheet.create({
+  rootContainer: {
+    flex: 1,
+    flexDirection: "row",
+    alignItems: "center",
+    minHeight: 45,
+    backgroundColor: Color.warmGrey800,
+    borderRadius: 5,
+    paddingVertical: Spacing.xsmall,
+  },
+});

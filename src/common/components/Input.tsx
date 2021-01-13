@@ -68,8 +68,8 @@ export default class Input extends Component<InputProps> {
           maxLength={maxLength}
           keyboardType={keyboardType}
           placeholder={placeholder}
-          placeholderTextColor={placeholderTextColor ? placeholderTextColor : Color.darkThemeGrey}
-          selectionColor={selectionColor || Color.greyMed}
+          placeholderTextColor={placeholderTextColor ? placeholderTextColor : Color.warmGrey300}
+          selectionColor={selectionColor || Color.warmGrey50}
           onSubmitEditing={onSubmitEditting}
           returnKeyType={returnKeyType}
           returnKeyLabel={returnKeyLabel}
@@ -85,18 +85,24 @@ const styles = StyleSheet.create({
     minHeight: 40,
     flexDirection: "row",
     alignItems: "center",
+    backgroundColor: Color.warmGrey800,
+    borderRadius: 5,
+    paddingVertical: Spacing.small,
+    shadowColor: Color.darkThemeGreyDark,
+    shadowOffset: { width: 3, height: 2 },
+    shadowOpacity: 0.4,
   },
   input: {
     flex: 1,
     paddingRight: Spacing.small,
     paddingLeft: Spacing.small,
     fontSize: 18,
-    color: Color.white,
+    color: Color.warmGrey50,
   },
   labelText: {
     fontSize: 18,
     paddingLeft: Spacing.med,
-    color: Color.greyMed,
+    color: Color.warmGrey50,
   },
   valueStyle: {
     fontSize: 16,

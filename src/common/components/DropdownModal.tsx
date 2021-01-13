@@ -27,7 +27,6 @@ export class DropdownModal extends React.PureComponent<DropdownModalProps, Local
       <>
         <CellIconActionable
           label={this.props.label}
-          labelColor={Color.greyMed}
           labelRight={this.props.value || "Select Date"}
           labelRightColor={labelRightColor}
           onPress={this.props.onPress}

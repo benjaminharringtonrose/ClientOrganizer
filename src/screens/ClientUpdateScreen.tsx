@@ -53,8 +53,8 @@ class ClientUpdateScreen extends Component<IClientUpdateScreenProps, ILocalState
   };
 
   public componentDidMount() {
-    const clientId = this.props.route?.["params"]?.["clientId"];
-    const fieldLabel = this.props.route?.["params"]?.["fieldLabel"];
+    const clientId = this.props.route?.params?.["clientId"];
+    const fieldLabel = this.props.route?.params?.["fieldLabel"];
     this.getInitialFieldValue(fieldLabel, this.props.clients[clientId]);
   }
 
@@ -104,21 +104,17 @@ class ClientUpdateScreen extends Component<IClientUpdateScreenProps, ILocalState
 
   public render() {
     return (
-      <SafeAreaView style={{ flex: 1, backgroundColor: Color.darkThemeGreyDark }}>
-        <ScrollView style={styles.rootContainer}>
+      <SafeAreaView style={{ flex: 1, backgroundColor: Color.darkThemeGreyMed }}>
+        <ScrollView>
           {this.renderHeader()}
           <Card>
-            <CardSection>
-              <Input
-                value={this.state.updatedFieldValue}
-                onChangeText={(newValue: string) => this.setState({ updatedFieldValue: newValue })}
-                placeholder={this.state.fieldValue}
-                selectionColor={Color.greyMed}
-              />
-            </CardSection>
-            <CardSection>
-              <Button label={"Save"} onPress={this.onSave} />
-            </CardSection>
+            <Input
+              value={this.state.updatedFieldValue}
+              onChangeText={(newValue: string) => this.setState({ updatedFieldValue: newValue })}
+              placeholder={this.state.fieldValue}
+              style={{ marginBottom: Spacing.med }}
+            />
+            <Button label={"Save"} onPress={this.onSave} />
           </Card>
         </ScrollView>
       </SafeAreaView>
@@ -146,19 +142,17 @@ const mapDispatchToProps = (dispatch: any) => ({
 export default connect(mapStateToProps, mapDispatchToProps)(ClientUpdateScreen);
 
 const styles = StyleSheet.create({
-  rootContainer: {
-    backgroundColor: Color.darkThemeGreyDark,
-    paddingTop: Spacing.xxlarge,
-  },
   headerContainer: {
     flexDirection: "row",
     alignItems: "center",
     marginHorizontal: Spacing.micro,
     paddingLeft: Spacing.small,
+    paddingTop: Spacing.xxlarge,
+    paddingBottom: Spacing.small,
   },
   headerText: {
-    fontSize: 26,
-    color: Color.white,
+    fontSize: 30,
+    color: Color.warmGrey100,
   },
   loadingContainer: {
     flex: 1,

@@ -3,10 +3,11 @@ import { DropdownModal } from "./DropdownModal";
 import { Calendar } from "react-native-calendars";
 import { format } from "date-fns";
 import { Color } from "../styles";
-import { View } from "react-native";
+import { View, StyleProp, ViewStyle } from "react-native";
 
 interface DropdownModalCalendarProps {
   label: string;
+  style?: StyleProp<ViewStyle>;
   onDayPress: (date: any) => void;
   selectedDate: any;
 }
@@ -33,7 +34,7 @@ export class DropdownModalCalendar extends Component<DropdownModalCalendarProps,
       : { [new Date().toISOString().slice(0, 10)]: { selected: true } };
 
     return (
-      <View>
+      <View style={this.props.style}>
         <DropdownModal
           label={this.props.label}
           onPress={this.onPress}

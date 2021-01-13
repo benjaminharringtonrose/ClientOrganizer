@@ -10,7 +10,6 @@ import Button from "../common/components/Button";
 import Routes from "../navigation/routes";
 import Spinner from "../common/components/Spinner";
 import { Color, Spacing } from "../common/styles";
-import CellLabelCenterActionable from "../common/components/CellLabelCenterActionable";
 
 interface PassedProps {
   navigation: any;
@@ -82,7 +81,7 @@ class AddNewClientScreen extends Component<AddNewClientScreenProps, LocalState> 
         {this.props.fetchUserLoading ? (
           <Spinner size="small" />
         ) : (
-          <CellLabelCenterActionable label={"Save"} onPress={this.onSubmit} />
+          <Button label={"Save"} onPress={this.onSubmit} />
         )}
       </View>
     );
@@ -91,7 +90,7 @@ class AddNewClientScreen extends Component<AddNewClientScreenProps, LocalState> 
   public render() {
     const { firstName, lastName, address, phoneNumber, email, notes } = this.state;
     return (
-      <SafeAreaView style={{ flex: 1, backgroundColor: Color.darkThemeGreyDark }}>
+      <SafeAreaView style={{ flex: 1, backgroundColor: Color.darkThemeGreyMed }}>
         <ScrollView style={styles.rootContainer}>
           <StatusBar barStyle={"light-content"} />
           {this.renderHeader()}
@@ -172,17 +171,16 @@ export default connect(mapStateToProps, mapDispatchToProps)(AddNewClientScreen);
 
 const styles = StyleSheet.create({
   rootContainer: {
-    backgroundColor: Color.darkThemeGreyDark,
     paddingTop: Spacing.xxlarge,
     paddingHorizontal: Spacing.micro,
   },
   headerContainer: {
     flexDirection: "row",
     alignItems: "center",
-    marginHorizontal: Spacing.micro,
+    marginLeft: Spacing.small,
   },
   headerText: {
-    fontSize: 26,
-    color: Color.white,
+    fontSize: 32,
+    color: Color.warmGrey100,
   },
 });

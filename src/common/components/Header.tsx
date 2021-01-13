@@ -29,26 +29,22 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     height: 60,
-    position: "relative",
-    backgroundColor: Color.darkThemeGreyDark,
-    borderBottomWidth: 1,
-    borderBottomColor: Color.white,
   },
   // TEXTS //
   titleText: {
     fontSize: 30,
-    color: Color.greyLight,
+    color: Color.warmGrey50,
     fontWeight: "bold",
   },
   descriptionText: {
     fontSize: 18,
-    color: Color.darkThemeBlueGrey,
+    color: Color.warmGrey500,
     textAlign: "center",
+    fontWeight: "600",
   },
   subdescriptionText: {
     fontSize: 16,
     color: Color.greyLight,
     textAlign: "center",
-    marginTop: Spacing.small,
   },
 });

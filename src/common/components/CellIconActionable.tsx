@@ -2,7 +2,6 @@ import React, { Component } from "react";
 import { Text, TouchableOpacity, StyleSheet, ViewStyle, View } from "react-native";
 import { Icon } from "react-native-elements";
 import { AntDesign } from "@expo/vector-icons";
-import CardSection from "../components/CardSection";
 import { Color, Spacing } from "../styles";
 
 interface CellIconActionableProps {
@@ -67,49 +66,49 @@ export default class CellIconActionable extends Component<CellIconActionableProp
       <TouchableOpacity
         disabled={disabled || false}
         onPress={onPress}
-        style={[style, styles.touchable]}
+        style={[style, styles.rootContainer]}
       >
-        <CardSection style={[style, styles.cardSectionContainer]}>
-          {!!iconLeftName && this.getIcon()}
-          <Text style={[styles.labelText, labelColor ? { color: labelColor } : undefined]}>
-            {label || " "}
+        {!!iconLeftName && this.getIcon()}
+        <Text style={[styles.labelText, labelColor ? { color: labelColor } : undefined]}>
+          {label || " "}
+        </Text>
+        {!!labelRight && (
+          <Text
+            style={[
+              styles.labelRightText,
+              labelRightColor ? { color: labelRightColor } : undefined,
+            ]}
+          >
+            {labelRight}
           </Text>
-          {!!labelRight && (
-            <Text
-              style={[
-                styles.labelRightText,
-                labelRightColor ? { color: labelRightColor } : undefined,
-              ]}
-            >
-              {labelRight}
-            </Text>
-          )}
-          {!!iconRightName && (
-            <AntDesign
-              name={iconRightName}
-              style={styles.icon}
-              size={iconRightSize}
-              color={iconRightColor || labelRightColor || Color.white}
-            />
-          )}
-        </CardSection>
+        )}
+        {!!iconRightName && (
+          <AntDesign
+            name={iconRightName}
+            style={styles.icon}
+            size={iconRightSize}
+            color={iconRightColor || labelRightColor || Color.white}
+          />
+        )}
       </TouchableOpacity>
     );
   }
 }
 
 const styles = StyleSheet.create({
-  cardSectionContainer: {
-    alignItems: "center",
-    justifyContent: "center",
-    paddingVertical: Spacing.small,
-  },
   icon: {
     paddingRight: Spacing.small,
     justifyContent: "flex-end",
   },
-  touchable: {
-    backgroundColor: "transparent",
+  rootContainer: {
+    flex: 1,
+    flexDirection: "row",
+    minHeight: 45,
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: Color.warmGrey800,
+    borderRadius: 5,
+    paddingVertical: Spacing.xsmall,
   },
   labelText: {
     flex: 1,

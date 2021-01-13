@@ -10,16 +10,13 @@ interface CardProps {
 export default class Card extends Component<CardProps> {
   public render() {
     const { children, style } = this.props;
-    return (
-      <View style={{ flex: 1 }}>
-        <View style={[style, styles.containerStyle]}>{children}</View>
-      </View>
-    );
+    return <View style={[style, styles.containerStyle]}>{children}</View>;
   }
 }
 
 const styles = {
   containerStyle: {
+    flex: 1,
     borderWidth: 1,
     borderRadius: 2,
     borderColor: "transparent",
@@ -29,7 +26,7 @@ const styles = {
     shadowOpacity: 0.1,
     shadowRadius: 2,
     elevation: 1,
-    marginTop: 10,
-    marginHorizontal: Spacing.micro,
+    marginTop: Spacing.small,
+    marginHorizontal: Spacing.small,
   },
 };
