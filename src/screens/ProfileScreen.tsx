@@ -149,7 +149,7 @@ const styles = StyleSheet.create({
   },
   subHeaderText: {
     fontSize: 30,
-    color: Color.white,
+    color: Color.warmGrey200,
     paddingTop: Spacing.small,
     paddingBottom: Spacing.large,
     paddingLeft: Spacing.micro,

@@ -52,7 +52,7 @@ const styles = StyleSheet.create({
   },
   headerText: {
     fontSize: 30,
-    color: Color.white,
+    color: Color.warmGrey200,
     paddingVertical: Spacing.med,
     paddingLeft: Spacing.micro,
   },
