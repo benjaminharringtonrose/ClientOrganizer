@@ -12,6 +12,7 @@ import Header from "../common/components/Header";
 import { Color, Spacing } from "../common/styles";
 import Routes from "../navigation/routes";
 import { Icon } from "react-native-elements";
+import firebase from "firebase";
 
 interface PassedProps {
   navigation: any;
@@ -38,7 +39,22 @@ class LoginScreen extends Component<LoginScreenProps, LocalState> {
     password: "",
   };
 
-  componentDidUpdate(oldProps: any) {
+  public componentDidMount() {
+    firebase
+      .auth()
+      .signInWithEmailAndPassword("brtest@test.com", "password")
+      .then(() => {
+        // Signed in
+        console.log("signed in");
+        this.props.navigation.navigate(Routes.DASHBOARD_TABS);
+      })
+      .catch((error) => {
+        var errorCode = error.code;
+        var errorMessage = error.message;
+      });
+  }
+
+  public componentDidUpdate(oldProps: any) {
     if (oldProps.authLoading && !this.props.authLoading && !this.props.authError) {
       this.setState({ email: "", password: "" });
       this.props.navigation.navigate(Routes.DASHBOARD_TABS);

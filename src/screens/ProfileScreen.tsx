@@ -103,7 +103,7 @@ class ProfileScreen extends React.Component<ProfileScreenProps, LocalState> {
 }
 
 const mapStateToProps = (state: any) => {
-  console.log("PROFILE SCREEN STATE", state);
+  // console.log("PROFILE SCREEN STATE", state);
   return {
     avatar: state.user.user.avatar,
     firstName: state.user.user.firstName,

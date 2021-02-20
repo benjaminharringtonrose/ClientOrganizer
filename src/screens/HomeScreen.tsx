@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import {
   StyleSheet,
   StatusBar,
@@ -9,7 +9,7 @@ import {
   TouchableOpacity,
 } from "react-native";
 import { Icon } from "react-native-elements";
-import { connect } from "react-redux";
+import { connect, useSelector } from "react-redux";
 import firebase from "firebase";
 import { FETCH_USER, DELETE_CLIENT } from "../store/actions/types";
 import Routes from "../navigation/routes";
@@ -20,6 +20,7 @@ import AlertModal from "../common/components/AlertModal";
 
 import { mapClients } from "./util";
 import { Color, Spacing } from "../common/styles";
+import { isEqual } from "lodash";
 
 export interface IClient {
   firstName: string;
@@ -37,10 +38,10 @@ interface PassedProps {
 
 interface PropsFromState {
   clients: any;
-  fetchUserLoading: boolean;
-  fetchUserError: string;
-  deleteClientLoading: boolean;
-  deleteClientError: string;
+  fetchUserLoading?: boolean;
+  fetchUserError?: string;
+  deleteClientLoading?: boolean;
+  deleteClientError?: string;
 }
 
 interface DispatchFromState {
@@ -60,56 +61,49 @@ interface LocalState {
 
 type HomeScreenProps = PropsFromState & DispatchFromState & PassedProps;
 
-class HomeScreen extends Component<HomeScreenProps, LocalState> {
-  public state = {
+function HomeScreen(props: HomeScreenProps) {
+  const [state, setState] = React.useState<LocalState>({
     clients: [],
     filteredClients: [],
-    database: undefined,
     modalVisible: false,
     editMode: false,
     clientId: undefined,
     searchText: "",
-  };
+  });
 
-  public componentDidMount() {
+  useEffect(() => {
     const uid = firebase.auth().currentUser?.uid;
     if (uid) {
-      this.props.dispatchFetchUser(uid);
+      props.dispatchFetchUser(uid);
     }
-  }
+  }, []);
 
-  public componentDidUpdate(oldProps: any) {
-    if (oldProps.fetchUserLoading && !this.props.fetchUserLoading && !this.props.fetchUserError) {
-      if (oldProps.clients !== this.props.clients) {
-        const mappedClients = mapClients(this.props.clients);
-        if (mappedClients) {
-          this.setState({ clients: [...mappedClients] });
-        }
+  useEffect(() => {
+    if (!props.fetchUserLoading && !props.fetchUserError && !props.deleteClientLoading) {
+      if (!isEqual(props.clients, state.clients)) {
+        const mappedClients = mapClients(props.clients);
+        setState({ ...state, clients: mappedClients });
       }
     }
-  }
+  }, [props.clients, props.fetchUserLoading, props.fetchUserError, props.deleteClientLoading]);
 
-  private onAddNewClientPress = () => {
-    this.setState({ editMode: false });
-    this.props.navigation.navigate(Routes.ADD_NEW_CLIENT_SCREEN);
+  const onAddNewClientPress = () => {
+    setState({ ...state, editMode: false });
+    props.navigation.navigate(Routes.ADD_NEW_CLIENT_SCREEN);
   };
 
-  private onDeletePress = () => {
-    this.props.dispatchDeleteClient(this.state.clientId!);
-    this.setState({
-      modalVisible: !this.state.modalVisible,
-      editMode: !this.state.editMode,
-    });
+  const onDeletePress = () => {
+    props.dispatchDeleteClient(state.clientId!);
+    setState({ ...state, modalVisible: !state.modalVisible, editMode: !state.editMode });
   };
 
-  private renderHeader = () => {
-    const { editMode } = this.state;
+  const renderHeader = () => {
     return (
       <View style={styles.headerContainer}>
         <View style={{ flex: 1 }}>
           <Text style={styles.headerText}>{"Client Manager"}</Text>
         </View>
-        <TouchableOpacity onPress={this.onAddNewClientPress}>
+        <TouchableOpacity onPress={onAddNewClientPress}>
           <Icon
             style={{ marginRight: Spacing.large }}
             name={"plus"}
@@ -118,23 +112,23 @@ class HomeScreen extends Component<HomeScreenProps, LocalState> {
             size={26}
           />
         </TouchableOpacity>
-        <TouchableOpacity onPress={() => this.setState({ editMode: !editMode })}>
+        <TouchableOpacity onPress={() => setState({ ...state, editMode: !state.editMode })}>
           <Icon name={"trash"} type={"feather"} color={Color.peach} size={22} />
         </TouchableOpacity>
       </View>
     );
   };
 
-  private renderClientCell = ({ item }: any) => {
-    const iconName = this.state.editMode ? "minuscircle" : "right";
-    const color = this.state.editMode ? Color.peach : Color.white;
+  const renderClientCell = ({ item }: any) => {
+    const iconName = state.editMode ? "minuscircle" : "right";
+    const color = state.editMode ? Color.peach : Color.white;
     return (
       <CellIconActionable
         onPress={() => {
-          if (this.state.editMode) {
-            this.setState({ modalVisible: true, clientId: item.id });
+          if (state.editMode) {
+            setState({ ...state, modalVisible: true, clientId: item.id });
           } else {
-            this.props.navigation.navigate(Routes.CLIENT_DETAIL_SCREEN, {
+            props.navigation.navigate(Routes.CLIENT_DETAIL_SCREEN, {
               client: item,
             });
           }
@@ -148,57 +142,53 @@ class HomeScreen extends Component<HomeScreenProps, LocalState> {
     );
   };
 
-  private searchClients = (searchText: string) => {
-    this.setState({ searchText });
-    const filteredClients = this.state.clients.filter(
+  const searchClients = (searchText: string) => {
+    setState({ ...state, searchText });
+    const filteredClients = state.clients.filter(
       (client: any) => client.lastName.includes(searchText) || client.firstName.includes(searchText)
     );
-    this.setState({ filteredClients });
+    setState({ ...state, filteredClients });
   };
 
-  public render() {
-    const loading = this.props.fetchUserLoading || this.props.deleteClientLoading;
-    const showAllClients = !this.state.filteredClients.length && this.state.searchText === "";
-    return (
-      <View style={styles.rootContainer}>
-        <StatusBar barStyle={"light-content"} />
-        {this.renderHeader()}
-        <View style={{ paddingVertical: Spacing.large }}>
-          <SearchBar
-            onChangeText={this.searchClients}
-            value={this.state.searchText || ""}
-            placeholder={"search clients..."}
-          />
-        </View>
-        {loading ? (
-          <View style={styles.loadingContainer}>
-            <ActivityIndicator />
-          </View>
-        ) : (
-          <View style={{ borderRadius: 5 }}>
-            <FlatList
-              data={showAllClients ? this.state.clients : this.state.filteredClients}
-              keyExtractor={(item: any) => item.id}
-              renderItem={({ item }) => this.renderClientCell({ item })}
-              indicatorStyle={"white"}
-            />
-          </View>
-        )}
+  const loading = !!props.fetchUserLoading || !!props.deleteClientLoading;
+  const showAllClients = !!!state.filteredClients.length && state.searchText === "";
 
-        <AlertModal
-          label={"Are you sure you want to delete this client?"}
-          onDeletePress={this.onDeletePress}
-          onCancelPress={() => {
-            this.setState({
-              modalVisible: !this.state.modalVisible,
-              editMode: !this.state.editMode,
-            });
-          }}
-          isVisible={this.state.modalVisible}
+  return (
+    <View style={styles.rootContainer}>
+      <StatusBar barStyle={"light-content"} />
+      {renderHeader()}
+      <View style={{ paddingVertical: Spacing.large }}>
+        <SearchBar
+          onChangeText={searchClients}
+          value={state.searchText}
+          placeholder={"search clients..."}
         />
       </View>
-    );
-  }
+      {loading ? (
+        <View style={styles.loadingContainer}>
+          <ActivityIndicator />
+        </View>
+      ) : (
+        <View style={{ borderRadius: 5 }}>
+          <FlatList
+            data={showAllClients ? state.clients : state.filteredClients}
+            keyExtractor={(item: any) => item.id}
+            renderItem={({ item }) => renderClientCell({ item })}
+            indicatorStyle={"white"}
+          />
+        </View>
+      )}
+
+      <AlertModal
+        label={"Are you sure you want to delete this client?"}
+        onDeletePress={onDeletePress}
+        onCancelPress={() => {
+          setState({ ...state, modalVisible: !state.modalVisible, editMode: !state.modalVisible });
+        }}
+        isVisible={state.modalVisible}
+      />
+    </View>
+  );
 }
 
 const mapStateToProps = (state: any) => {
