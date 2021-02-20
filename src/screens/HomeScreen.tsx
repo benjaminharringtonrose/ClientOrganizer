@@ -9,7 +9,7 @@ import {
   TouchableOpacity,
 } from "react-native";
 import { Icon } from "react-native-elements";
-import { connect, useSelector } from "react-redux";
+import { connect } from "react-redux";
 import firebase from "firebase";
 import { FETCH_USER, DELETE_CLIENT } from "../store/actions/types";
 import Routes from "../navigation/routes";
