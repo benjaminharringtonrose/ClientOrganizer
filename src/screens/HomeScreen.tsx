@@ -18,9 +18,8 @@ import SearchBar from "../common/components/SearchBar";
 import CellIconActionable from "../common/components/CellIconActionable";
 import AlertModal from "../common/components/AlertModal";
 
-import { mapClients } from "./util";
 import { Color, Spacing } from "../common/styles";
-import { isEqual } from "lodash";
+import { useClients } from "../hooks/useClients";
 
 export interface IClient {
   firstName: string;
@@ -78,14 +77,11 @@ function HomeScreen(props: HomeScreenProps) {
     }
   }, []);
 
-  useEffect(() => {
-    if (!props.fetchUserLoading && !props.fetchUserError) {
-      if (!isEqual(props.clients, state.clients)) {
-        const mappedClients = mapClients(props.clients);
-        setState({ ...state, clients: mappedClients });
-      }
-    }
-  }, [props.clients, props.fetchUserLoading, props.fetchUserError]);
+  const clients = useClients({
+    clients: props.clients,
+    fetchUserLoading: props.fetchUserLoading,
+    fetchUserError: props.fetchUserError,
+  });
 
   const onAddNewClientPress = () => {
     setState({ ...state, editMode: false });
@@ -130,7 +126,11 @@ function HomeScreen(props: HomeScreenProps) {
       <CellIconActionable
         onPress={() => {
           if (state.editMode) {
-            setState({ ...state, modalVisible: true, clientId: item.id });
+            setState({
+              ...state,
+              modalVisible: true,
+              clientId: item.id,
+            });
           } else {
             props.navigation.navigate(Routes.CLIENT_DETAIL_SCREEN, {
               client: item,
@@ -147,7 +147,7 @@ function HomeScreen(props: HomeScreenProps) {
   };
 
   const searchClients = (searchText: string) => {
-    const filteredClients = state.clients.filter(
+    const filteredClients = clients.filter(
       (client: any) => client.lastName.includes(searchText) || client.firstName.includes(searchText)
     );
     setState({
@@ -158,8 +158,7 @@ function HomeScreen(props: HomeScreenProps) {
   };
 
   const loading = !!props.fetchUserLoading || !!props.deleteClientLoading;
-  const showAllClients = !state.filteredClients && state.searchText === "";
-  console.log(state);
+  const showAllClients = !state.filteredClients.length && state.searchText === "";
   return (
     <View style={styles.rootContainer}>
       <StatusBar barStyle={"light-content"} />
@@ -178,7 +177,7 @@ function HomeScreen(props: HomeScreenProps) {
       ) : (
         <View style={{ borderRadius: 5 }}>
           <FlatList
-            data={showAllClients ? state.clients : state.filteredClients}
+            data={showAllClients ? clients : state.filteredClients}
             keyExtractor={(item: any) => item.id}
             renderItem={({ item }) => renderClientCell({ item })}
             indicatorStyle={"white"}
