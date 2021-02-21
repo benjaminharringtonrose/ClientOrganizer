@@ -62,7 +62,7 @@ interface LocalState {
 type HomeScreenProps = PropsFromState & DispatchFromState & PassedProps;
 
 function HomeScreen(props: HomeScreenProps) {
-  const [state, setState] = React.useState<LocalState>({
+  const [state, setState] = useState<LocalState>({
     clients: [],
     filteredClients: [],
     modalVisible: false,
@@ -79,13 +79,13 @@ function HomeScreen(props: HomeScreenProps) {
   }, []);
 
   useEffect(() => {
-    if (!props.fetchUserLoading && !props.fetchUserError && !props.deleteClientLoading) {
+    if (!props.fetchUserLoading && !props.fetchUserError) {
       if (!isEqual(props.clients, state.clients)) {
         const mappedClients = mapClients(props.clients);
         setState({ ...state, clients: mappedClients });
       }
     }
-  }, [props.clients, props.fetchUserLoading, props.fetchUserError, props.deleteClientLoading]);
+  }, [props.clients, props.fetchUserLoading, props.fetchUserError]);
 
   const onAddNewClientPress = () => {
     setState({ ...state, editMode: false });
@@ -94,7 +94,11 @@ function HomeScreen(props: HomeScreenProps) {
 
   const onDeletePress = () => {
     props.dispatchDeleteClient(state.clientId!);
-    setState({ ...state, modalVisible: !state.modalVisible, editMode: !state.editMode });
+    setState({
+      ...state,
+      modalVisible: !state.modalVisible,
+      editMode: !state.editMode,
+    });
   };
 
   const renderHeader = () => {
@@ -143,16 +147,19 @@ function HomeScreen(props: HomeScreenProps) {
   };
 
   const searchClients = (searchText: string) => {
-    setState({ ...state, searchText });
     const filteredClients = state.clients.filter(
       (client: any) => client.lastName.includes(searchText) || client.firstName.includes(searchText)
     );
-    setState({ ...state, filteredClients });
+    setState({
+      ...state,
+      searchText,
+      filteredClients,
+    });
   };
 
   const loading = !!props.fetchUserLoading || !!props.deleteClientLoading;
-  const showAllClients = !!!state.filteredClients.length && state.searchText === "";
-
+  const showAllClients = !state.filteredClients && state.searchText === "";
+  console.log(state);
   return (
     <View style={styles.rootContainer}>
       <StatusBar barStyle={"light-content"} />
@@ -183,7 +190,11 @@ function HomeScreen(props: HomeScreenProps) {
         label={"Are you sure you want to delete this client?"}
         onDeletePress={onDeletePress}
         onCancelPress={() => {
-          setState({ ...state, modalVisible: !state.modalVisible, editMode: !state.modalVisible });
+          setState({
+            ...state,
+            modalVisible: !state.modalVisible,
+            editMode: !state.modalVisible,
+          });
         }}
         isVisible={state.modalVisible}
       />
