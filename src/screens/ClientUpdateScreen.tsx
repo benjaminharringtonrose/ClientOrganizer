@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component, useState, useEffect } from "react";
 import { StyleSheet, ScrollView, Text, SafeAreaView, View, TouchableOpacity } from "react-native";
 import { Color, Spacing } from "../common/styles";
 import Card from "../common/components/Card";
@@ -10,6 +10,7 @@ import { UPDATE_CLIENT, FETCH_USER } from "../store/actions";
 import { connect } from "react-redux";
 import Routes from "../navigation/routes";
 import firebase from "firebase";
+import { usePrevious } from "../hooks/usePrevious";
 
 interface PassedProps {
   navigation: any;
@@ -45,56 +46,54 @@ enum ClientFieldKey {
 
 type IClientUpdateScreenProps = PassedProps & DispatchFromState & IPropsFromState;
 
-class ClientUpdateScreen extends Component<IClientUpdateScreenProps, ILocalState> {
-  public state = {
-    fieldLabel: undefined,
-    fieldValue: undefined,
+function ClientUpdateScreen(props: IClientUpdateScreenProps) {
+  const [state, setState] = useState<ILocalState>({
+    fieldLabel: "",
+    fieldValue: "",
     updatedFieldValue: "",
-  };
+  });
 
-  public componentDidMount() {
-    const clientId = this.props.route?.params?.["clientId"];
-    const fieldLabel = this.props.route?.params?.["fieldLabel"];
-    this.getInitialFieldValue(fieldLabel, this.props.clients[clientId]);
-  }
+  const prevProps = usePrevious(props);
 
-  public componentDidUpdate(oldProps: IClientUpdateScreenProps) {
-    if (
-      oldProps.updateClientLoading &&
-      !this.props.updateClientLoading &&
-      !this.props.updateClientError
-    ) {
+  useEffect(() => {
+    const clientId = props.route?.params?.["clientId"];
+    const fieldLabel = props.route?.params?.["fieldLabel"];
+    getInitialFieldValue(fieldLabel, props.clients[clientId]);
+  }, []);
+
+  useEffect(() => {
+    if (prevProps?.updateClientLoading && !props.updateClientLoading && !props.updateClientError) {
       const uid = firebase.auth().currentUser?.uid;
-      this.props.dispatchFetchUser(uid);
-      this.props.navigation.navigate(Routes.CLIENT_DETAIL_SCREEN);
+      props.dispatchFetchUser(uid);
+      props.navigation.navigate(Routes.CLIENT_DETAIL_SCREEN);
     }
-  }
+  }, [props.updateClientLoading, props.updateClientError]);
 
-  private getInitialFieldValue = (fieldLabel: FieldLabel, client: IClient) => {
+  const getInitialFieldValue = (fieldLabel: FieldLabel, client: IClient) => {
     if (!fieldLabel) {
       return "";
     }
     switch (fieldLabel) {
       case ClientFieldKey.address:
-        this.setState({ fieldLabel: "Address", fieldValue: client.address });
+        setState({ ...state, fieldLabel: "Address", fieldValue: client.address });
         return;
       case ClientFieldKey.phoneNumber:
-        this.setState({ fieldLabel: "Phone Number", fieldValue: client.phoneNumber });
+        setState({ ...state, fieldLabel: "Phone Number", fieldValue: client.phoneNumber });
         return;
       case ClientFieldKey.email:
-        this.setState({ fieldLabel: "Email", fieldValue: client.email });
+        setState({ ...state, fieldLabel: "Email", fieldValue: client.email });
         return;
     }
   };
 
-  private onSave = () => {
-    const clientId: string = this.props.route?.["params"]?.["clientId"];
-    const fieldLabel: string = this.props.route?.["params"]?.["fieldLabel"];
-    const { updatedFieldValue } = this.state;
-    this.props.dispatchUpdateClient({ clientId, fieldLabel, updatedFieldValue });
+  const onSave = () => {
+    const clientId: string = props.route?.["params"]?.["clientId"];
+    const fieldLabel: string = props.route?.["params"]?.["fieldLabel"];
+    const { updatedFieldValue } = state;
+    props.dispatchUpdateClient({ clientId, fieldLabel, updatedFieldValue });
   };
 
-  private renderHeader = () => {
+  const renderHeader = () => {
     return (
       <View style={styles.headerContainer}>
         <Text style={styles.headerText}>{`Update Client Information`}</Text>
@@ -102,24 +101,22 @@ class ClientUpdateScreen extends Component<IClientUpdateScreenProps, ILocalState
     );
   };
 
-  public render() {
-    return (
-      <SafeAreaView style={{ flex: 1, backgroundColor: Color.darkThemeGreyMed }}>
-        <ScrollView>
-          {this.renderHeader()}
-          <Card>
-            <Input
-              value={this.state.updatedFieldValue}
-              onChangeText={(newValue: string) => this.setState({ updatedFieldValue: newValue })}
-              placeholder={this.state.fieldValue}
-              style={{ marginBottom: Spacing.med }}
-            />
-            <Button label={"Save"} onPress={this.onSave} />
-          </Card>
-        </ScrollView>
-      </SafeAreaView>
-    );
-  }
+  return (
+    <SafeAreaView style={{ flex: 1, backgroundColor: Color.darkThemeGreyMed }}>
+      <ScrollView>
+        {renderHeader()}
+        <Card>
+          <Input
+            value={state.updatedFieldValue}
+            onChangeText={(newValue: string) => setState({ updatedFieldValue: newValue })}
+            placeholder={state.fieldValue}
+            style={{ marginBottom: Spacing.med }}
+          />
+          <Button label={"Save"} onPress={onSave} />
+        </Card>
+      </ScrollView>
+    </SafeAreaView>
+  );
 }
 
 const mapStateToProps = (state: any) => {

@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { useState } from "react";
 import {
   StyleSheet,
   ScrollView,
@@ -35,19 +35,19 @@ interface IPropsFromState {
 
 type IClientDetailScreenProps = IPassedProps & IPropsFromState;
 
-class ClientDetailScreen extends Component<IClientDetailScreenProps, ILocalState> {
-  public state = {
+function ClientDetailScreen(props: IClientDetailScreenProps) {
+  const [state, setState] = useState<ILocalState>({
     editMode: false,
-  };
+  });
 
-  private renderHeader = (firstName: string, lastName: string) => {
-    const { editMode } = this.state;
+  const renderHeader = (firstName: string, lastName: string) => {
+    const { editMode } = state;
     return (
       <View style={styles.headerContainer}>
         <View style={{ paddingLeft: Spacing.small }}>
           <Text style={styles.headerText}>{`${firstName} ${lastName}`}</Text>
         </View>
-        <TouchableOpacity onPress={() => this.setState({ editMode: !editMode })}>
+        <TouchableOpacity onPress={() => setState({ editMode: !editMode })}>
           <Icon
             style={{ marginRight: Spacing.large }}
             name={"edit"}
@@ -60,92 +60,90 @@ class ClientDetailScreen extends Component<IClientDetailScreenProps, ILocalState
     );
   };
 
-  public render() {
-    const { editMode } = this.state;
-    const clientId = this.props.route?.["params"]?.["client"]?.["id"];
-    const client = this.props.clients[clientId];
-    return (
-      <SafeAreaView style={styles.rootContainer}>
-        {this.renderHeader(client?.firstName, client?.lastName)}
-        <ScrollView>
-          {this.props.fetchUserLoading ? (
-            <View style={styles.loadingContainer}>
-              <ActivityIndicator />
-            </View>
-          ) : (
-            <Card>
-              <CellIconActionable
-                label={"Address"}
-                labelRight={client?.address || " "}
-                onPress={() => {
-                  this.setState({ editMode: false });
-                  this.props.navigation.navigate(Routes.CLIENT_UPDATE_SCREEN, {
-                    fieldLabel: "address", // todo - enum
-                    clientId,
-                  });
-                }}
-                disabled={editMode ? false : true}
-                iconRightName={editMode ? "right" : undefined}
-                iconRightSize={16}
-                style={{ marginBottom: Spacing.small }}
+  const { editMode } = state;
+  const clientId = props.route?.["params"]?.["client"]?.["id"];
+  const client = props.clients[clientId];
+  return (
+    <SafeAreaView style={styles.rootContainer}>
+      {renderHeader(client?.firstName, client?.lastName)}
+      <ScrollView>
+        {props.fetchUserLoading ? (
+          <View style={styles.loadingContainer}>
+            <ActivityIndicator />
+          </View>
+        ) : (
+          <Card>
+            <CellIconActionable
+              label={"Address"}
+              labelRight={client?.address || " "}
+              onPress={() => {
+                setState({ editMode: false });
+                props.navigation.navigate(Routes.CLIENT_UPDATE_SCREEN, {
+                  fieldLabel: "address", // todo - enum
+                  clientId,
+                });
+              }}
+              disabled={editMode ? false : true}
+              iconRightName={editMode ? "right" : undefined}
+              iconRightSize={16}
+              style={{ marginBottom: Spacing.small }}
+            />
+            <CellIconActionable
+              label={"Phone Number"}
+              labelRight={client?.phoneNumber || " "}
+              onPress={() => {
+                setState({ editMode: false });
+                props.navigation.navigate(Routes.CLIENT_UPDATE_SCREEN, {
+                  fieldLabel: "phoneNumber",
+                  clientId,
+                });
+              }}
+              disabled={editMode ? false : true}
+              iconRightName={editMode ? "right" : undefined}
+              iconRightSize={16}
+              style={{ marginBottom: Spacing.small }}
+            />
+            <CellIconActionable
+              label={"Email"}
+              labelRight={client?.email || " "}
+              onPress={() => {
+                setState({ editMode: false });
+                props.navigation.navigate(Routes.CLIENT_UPDATE_SCREEN, {
+                  fieldLabel: "email",
+                  clientId,
+                });
+              }}
+              disabled={editMode ? false : true}
+              iconRightName={editMode ? "right" : undefined}
+              iconRightSize={16}
+              style={{ marginBottom: Spacing.small }}
+            />
+            <CellIconActionable
+              label={"Notes"}
+              labelRight={client?.notes || " "}
+              onPress={() => {
+                setState({ editMode: false });
+                props.navigation.navigate(Routes.CLIENT_UPDATE_SCREEN, {
+                  fieldLabel: "notes",
+                  clientId,
+                });
+              }}
+              disabled={editMode ? false : true}
+              iconRightName={editMode ? "right" : undefined}
+              iconRightSize={16}
+              style={{ marginBottom: Spacing.large }}
+            />
+            {!!client?.phoneNumber && (
+              <Button
+                label={`Call ${client?.firstName}`}
+                onPress={() => callTelephone(client?.phoneNumber)}
               />
-              <CellIconActionable
-                label={"Phone Number"}
-                labelRight={client?.phoneNumber || " "}
-                onPress={() => {
-                  this.setState({ editMode: false });
-                  this.props.navigation.navigate(Routes.CLIENT_UPDATE_SCREEN, {
-                    fieldLabel: "phoneNumber",
-                    clientId,
-                  });
-                }}
-                disabled={editMode ? false : true}
-                iconRightName={editMode ? "right" : undefined}
-                iconRightSize={16}
-                style={{ marginBottom: Spacing.small }}
-              />
-              <CellIconActionable
-                label={"Email"}
-                labelRight={client?.email || " "}
-                onPress={() => {
-                  this.setState({ editMode: false });
-                  this.props.navigation.navigate(Routes.CLIENT_UPDATE_SCREEN, {
-                    fieldLabel: "email",
-                    clientId,
-                  });
-                }}
-                disabled={editMode ? false : true}
-                iconRightName={editMode ? "right" : undefined}
-                iconRightSize={16}
-                style={{ marginBottom: Spacing.small }}
-              />
-              <CellIconActionable
-                label={"Notes"}
-                labelRight={client?.notes || " "}
-                onPress={() => {
-                  this.setState({ editMode: false });
-                  this.props.navigation.navigate(Routes.CLIENT_UPDATE_SCREEN, {
-                    fieldLabel: "notes",
-                    clientId,
-                  });
-                }}
-                disabled={editMode ? false : true}
-                iconRightName={editMode ? "right" : undefined}
-                iconRightSize={16}
-                style={{ marginBottom: Spacing.large }}
-              />
-              {!!client?.phoneNumber && (
-                <Button
-                  label={`Call ${client?.firstName}`}
-                  onPress={() => callTelephone(client?.phoneNumber)}
-                />
-              )}
-            </Card>
-          )}
-        </ScrollView>
-      </SafeAreaView>
-    );
-  }
+            )}
+          </Card>
+        )}
+      </ScrollView>
+    </SafeAreaView>
+  );
 }
 
 const mapStateToProps = (state: any) => {

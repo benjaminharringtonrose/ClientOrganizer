@@ -1,5 +1,5 @@
-import React from "react";
-import { Text, StyleSheet, ScrollView, Image, TouchableOpacity } from "react-native";
+import React, { useState, useEffect } from "react";
+import { Text, StyleSheet, ScrollView, Image, TouchableOpacity, View } from "react-native";
 import { connect } from "react-redux";
 import UserPermissions from "../util/permissions";
 import * as ImagePicker from "expo-image-picker";
@@ -13,6 +13,7 @@ import CellLabelLeftRight from "../common/components/CellLabelLeftRight";
 import { Ionicons } from "@expo/vector-icons";
 import { Color, Spacing } from "../common/styles";
 import Routes from "../navigation/routes";
+import { usePrevious } from "../hooks/usePrevious";
 
 interface PassedProps {
   navigation: any;
@@ -26,9 +27,7 @@ interface PropsFromState {
   lastName: string;
   email: string;
 }
-interface LocalState {
-  user?: firebase.firestore.DocumentData;
-}
+
 interface DispatchFromState {
   dispatchLogoutRequest: (object: any) => any;
   dispatchChangeAvatar: (text: string) => any;
@@ -36,74 +35,52 @@ interface DispatchFromState {
 
 type ProfileScreenProps = PropsFromState & DispatchFromState & PassedProps;
 
-class ProfileScreen extends React.Component<ProfileScreenProps, LocalState> {
-  public state = {
-    user: {
-      avatar: undefined,
-      firstName: undefined,
-      lastName: undefined,
-      email: undefined,
-    },
-  };
+function ProfileScreen(props: ProfileScreenProps) {
+  const prevProps = usePrevious(props);
 
-  public componentDidUpdate(oldProps: any) {
-    if (oldProps.loading && !this.props.loading && !this.props.error) {
-      this.props.navigation.navigate(Routes.LOGIN_SCREEN);
+  useEffect(() => {
+    if (prevProps?.loading && !props.loading && !props.error) {
+      props.navigation.navigate(Routes.LOGIN_SCREEN);
     }
-  }
+  }, [props.loading, props.error]);
 
-  private onPickAvatar = async () => {
-    UserPermissions.getCameraPermission();
-    let result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.Images,
-      allowsEditing: true,
-      aspect: [4, 3],
-    });
-    if (!result.cancelled) {
-      this.props.dispatchChangeAvatar(result.uri);
-    }
+  const onLogoutPress = () => {
+    props.dispatchLogoutRequest(LOGOUT_USER.REQUESTED);
   };
 
-  private onLogoutPress = () => {
-    this.props.dispatchLogoutRequest(LOGOUT_USER.REQUESTED);
-  };
-
-  private renderSignOutButton = () => {
-    if (this.props.loading) {
+  const renderSignOutButton = () => {
+    if (props.loading) {
       return <Spinner size="small" />;
     } else {
-      return <Button label={"Sign Out"} onPress={this.onLogoutPress} />;
+      return <Button label={"Sign Out"} onPress={onLogoutPress} />;
     }
   };
 
-  public render() {
-    return (
-      <ScrollView style={styles.container}>
-        <Card>
-          <TouchableOpacity style={styles.avatarPlaceholder} onPress={() => {}}>
-            <Image source={{ uri: this.props.avatar }} style={styles.avatar} />
-            <Ionicons name="ios-add" size={40} color="#FFF" style={styles.addIcon} />
-          </TouchableOpacity>
-          <Text style={styles.subHeaderText}>{"User Information"}</Text>
-          <CellLabelLeftRight
-            labelLeft={"Name"}
-            labelRight={`${this.props.firstName} ${this.props.lastName}`}
-            style={{ marginBottom: Spacing.small }}
-          />
-          <CellLabelLeftRight
-            labelLeft={"Email"}
-            labelRight={this.props.email}
-            style={{ marginBottom: Spacing.large }}
-          />
-          {this.renderSignOutButton()}
-        </Card>
-      </ScrollView>
-    );
-  }
+  return (
+    <ScrollView style={styles.container}>
+      <Card>
+        <View style={styles.avatarPlaceholder}>
+          <Image source={{ uri: props.avatar }} style={styles.avatar} />
+          <Ionicons name="ios-add" size={40} color="#FFF" style={styles.addIcon} />
+        </View>
+        <Text style={styles.subHeaderText}>{"User Information"}</Text>
+        <CellLabelLeftRight
+          labelLeft={"Name"}
+          labelRight={`${props.firstName} ${props.lastName}`}
+          style={{ marginBottom: Spacing.small }}
+        />
+        <CellLabelLeftRight
+          labelLeft={"Email"}
+          labelRight={props.email}
+          style={{ marginBottom: Spacing.large }}
+        />
+        {renderSignOutButton()}
+      </Card>
+    </ScrollView>
+  );
 }
 
 const mapStateToProps = (state: any) => {
-  // console.log("PROFILE SCREEN STATE", state);
   return {
     avatar: state.user.user.avatar,
     firstName: state.user.user.firstName,
@@ -116,7 +93,6 @@ const mapStateToProps = (state: any) => {
 
 const mapDispatchToProps = (dispatch: any) => ({
   dispatchLogoutRequest: () => dispatch({ type: LOGOUT_USER.REQUESTED }),
-  dispatchChangeAvatar: (result: string) => dispatch(avatarChanged(result)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(ProfileScreen);

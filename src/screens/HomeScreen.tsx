@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import {
   StyleSheet,
   StatusBar,
@@ -159,6 +159,7 @@ function HomeScreen(props: HomeScreenProps) {
 
   const loading = !!props.fetchUserLoading || !!props.deleteClientLoading;
   const showAllClients = !state.filteredClients.length && state.searchText === "";
+
   return (
     <View style={styles.rootContainer}>
       <StatusBar barStyle={"light-content"} />

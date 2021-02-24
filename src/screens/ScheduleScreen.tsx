@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { View, Text, StyleSheet, ScrollView, StatusBar } from "react-native";
 import { Color, Spacing } from "../common/styles";
 import { DropdownModalCalendar } from "../common/components/DropdownModalCalendar";
@@ -10,39 +10,39 @@ interface LocalState {
   title: string;
   selectedDate: any;
 }
-export default class ScheduleScreen extends React.Component<{}, LocalState> {
-  public state = {
+export default function ScheduleScreen() {
+  const [state, setState] = useState<LocalState>({
     title: "",
     selectedDate: undefined,
-  };
-  render() {
-    return (
-      <ScrollView style={styles.rootContainer}>
-        <StatusBar barStyle={"light-content"} />
-        <Card>
-          <Text style={styles.headerText}>{"Create an Appointment"}</Text>
-          <Input
-            label={"Title"}
-            value={this.state.title}
-            onChangeText={(title: string) => this.setState({ title })}
-            style={{ marginBottom: Spacing.small }}
-          />
-          <DropdownModalCalendar
-            label={"When"}
-            onDayPress={(date) => {
-              console.log(date);
-              this.setState({
-                selectedDate: date.dateString,
-              });
-            }}
-            selectedDate={this.state.selectedDate}
-            style={{ marginBottom: Spacing.large }}
-          />
-          <Button label={"Submit"} onPress={() => {}} />
-        </Card>
-      </ScrollView>
-    );
-  }
+  });
+
+  return (
+    <ScrollView style={styles.rootContainer}>
+      <StatusBar barStyle={"light-content"} />
+      <Card>
+        <Text style={styles.headerText}>{"Create an Appointment"}</Text>
+        <Input
+          label={"Title"}
+          value={state.title}
+          onChangeText={(title: string) => setState({ ...state, title })}
+          style={{ marginBottom: Spacing.small }}
+        />
+        <DropdownModalCalendar
+          label={"When"}
+          onDayPress={(date) => {
+            console.log(date);
+            setState({
+              ...state,
+              selectedDate: date.dateString,
+            });
+          }}
+          selectedDate={state.selectedDate}
+          style={{ marginBottom: Spacing.large }}
+        />
+        <Button label={"Submit"} onPress={() => {}} />
+      </Card>
+    </ScrollView>
+  );
 }
 
 const styles = StyleSheet.create({

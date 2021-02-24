@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component, useState, useEffect } from "react";
 import {
   View,
   Text,
@@ -25,6 +25,8 @@ import { Color, Spacing } from "../common/styles";
 
 import Routes from "../navigation/routes";
 
+import { usePrevious } from "../hooks/usePrevious";
+
 interface PassedProps {
   navigation: any;
 }
@@ -40,6 +42,10 @@ interface DispatchFromState {
   dispatchRegisterRequest: (object: any) => any;
 }
 
+export interface IStringMap<T> {
+  [x: string]: T;
+}
+
 interface LocalState {
   firstName: string;
   lastName: string;
@@ -49,25 +55,27 @@ interface LocalState {
 
 type RegisterScreenProps = PropsFromState & DispatchFromState & PassedProps;
 
-class RegisterScreen extends Component<RegisterScreenProps, LocalState> {
-  public state = {
+function RegisterScreen(props: RegisterScreenProps) {
+  const [state, setState] = useState<LocalState>({
     firstName: "",
     lastName: "",
     email: "",
     password: "",
-  };
+  });
 
-  componentDidUpdate(oldProps: any) {
-    if (oldProps.authLoading && !this.props.authLoading && !this.props.authError) {
-      this.props.navigation.navigate(Routes.DASHBOARD_TABS);
+  const oldProps = usePrevious(props);
+
+  useEffect(() => {
+    if (oldProps?.authLoading && !props.authLoading && !props.authError) {
+      props.navigation.navigate(Routes.DASHBOARD_TABS);
     }
-  }
+  }, [props.authLoading, props.authError]);
 
-  private onRegisterPress = () => {
-    const { email, password, firstName, lastName } = this.state;
-    const { avatar } = this.props;
+  const onRegisterPress = () => {
+    const { email, password, firstName, lastName } = state;
+    const { avatar } = props;
 
-    this.props.dispatchRegisterRequest({
+    props.dispatchRegisterRequest({
       email,
       password,
       firstName,
@@ -76,7 +84,7 @@ class RegisterScreen extends Component<RegisterScreenProps, LocalState> {
     });
   };
 
-  onPickAvatar = async () => {
+  const onPickAvatar = async () => {
     try {
       UserPermissions.getCameraPermission();
       let result = await ImagePicker.launchImageLibraryAsync({
@@ -85,82 +93,80 @@ class RegisterScreen extends Component<RegisterScreenProps, LocalState> {
         aspect: [4, 3],
       });
       if (!result.cancelled) {
-        this.props.dispatchChangeAvatar(result.uri);
+        props.dispatchChangeAvatar(result.uri);
       }
     } catch (error) {
       console.log(error);
     }
   };
 
-  private renderButton = () => {
-    if (this.props.authLoading) {
+  const renderButton = () => {
+    if (props.authLoading) {
       return <Spinner size="large" style={{ marginTop: Spacing.med }} />;
     }
-    return <Button label={"Signup"} onPress={this.onRegisterPress} style={styles.button} />;
+    return <Button label={"Signup"} onPress={onRegisterPress} style={styles.button} />;
   };
 
-  renderError() {
-    if (this.props.authError) {
-      return <Text style={styles.errorText}>{this.props.authError}</Text>;
+  const renderError = () => {
+    if (props.authError) {
+      return <Text style={styles.errorText}>{props.authError}</Text>;
     }
-  }
+  };
 
-  render() {
-    const { firstName, lastName, email, password } = this.state;
-    const { avatar } = this.props;
+  const { firstName, lastName, email, password } = state;
+  const { avatar } = props;
 
-    return (
-      <SafeAreaView style={styles.rootContainer}>
-        <ScrollView>
-          <View style={styles.headerContainer}>
-            <Header title={"Welcome!"} description={"Sign up to get started."} />
-          </View>
-          <Card>
-            <TouchableOpacity style={styles.avatarPlaceholder} onPress={this.onPickAvatar}>
-              {!!avatar && <Image source={{ uri: avatar }} style={styles.avatar} />}
-              <Ionicons name="ios-add" size={40} color="#FFF" style={styles.addIcon} />
-            </TouchableOpacity>
-            <Input
-              label="First Name"
-              placeholder="John"
-              secureTextEntry={false}
-              autoCapitalize={"words"}
-              onChangeText={(firstName: string) => this.setState({ firstName })}
-              value={firstName}
-              style={{ marginBottom: Spacing.small }}
-            />
-            <Input
-              label="Last Name"
-              placeholder="Smith"
-              secureTextEntry={false}
-              autoCapitalize={"words"}
-              onChangeText={(lastName: string) => this.setState({ lastName })}
-              value={lastName}
-              style={{ marginBottom: Spacing.small }}
-            />
-            <Input
-              label="Email"
-              placeholder="email@gmail.com"
-              secureTextEntry={false}
-              onChangeText={(email: string) => this.setState({ email })}
-              value={email}
-              style={{ marginBottom: Spacing.small }}
-            />
-            <Input
-              secureTextEntry
-              label="Password"
-              placeholder="password"
-              onChangeText={(password: string) => this.setState({ password })}
-              value={password}
-              style={{ marginBottom: Spacing.small }}
-            />
-            {this.renderError()}
-            {this.renderButton()}
-          </Card>
-        </ScrollView>
-      </SafeAreaView>
-    );
-  }
+  return (
+    <SafeAreaView style={styles.rootContainer}>
+      <ScrollView>
+        <View style={styles.headerContainer}>
+          <Header title={"Welcome!"} description={"Sign up to get started."} />
+        </View>
+        <Card>
+          <TouchableOpacity style={styles.avatarPlaceholder} onPress={onPickAvatar}>
+            {!!avatar && <Image source={{ uri: avatar }} style={styles.avatar} />}
+            <Ionicons name="ios-add" size={40} color="#FFF" style={styles.addIcon} />
+          </TouchableOpacity>
+          <Input
+            label="First Name"
+            placeholder="John"
+            secureTextEntry={false}
+            autoCapitalize={"words"}
+            onChangeText={(firstName: string) => setState({ ...state, firstName })}
+            value={firstName}
+            style={{ marginBottom: Spacing.small }}
+          />
+          <Input
+            label="Last Name"
+            placeholder="Smith"
+            secureTextEntry={false}
+            autoCapitalize={"words"}
+            onChangeText={(lastName: string) => setState({ ...state, lastName })}
+            value={lastName}
+            style={{ marginBottom: Spacing.small }}
+          />
+          <Input
+            label="Email"
+            placeholder="email@gmail.com"
+            secureTextEntry={false}
+            onChangeText={(email: string) => setState({ ...state, email })}
+            value={email}
+            style={{ marginBottom: Spacing.small }}
+          />
+          <Input
+            secureTextEntry
+            label="Password"
+            placeholder="password"
+            onChangeText={(password: string) => setState({ ...state, password })}
+            value={password}
+            style={{ marginBottom: Spacing.small }}
+          />
+          {renderError()}
+          {renderButton()}
+        </Card>
+      </ScrollView>
+    </SafeAreaView>
+  );
 }
 
 const mapStateToProps = ({ auth }: any) => {

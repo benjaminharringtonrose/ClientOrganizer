@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component, useState, useEffect } from "react";
 import { connect } from "react-redux";
 import { StyleSheet, ScrollView, StatusBar, SafeAreaView, View, Text } from "react-native";
 import { FETCH_USER, ADD_CLIENT } from "../store/actions/types";
@@ -10,6 +10,7 @@ import Button from "../common/components/Button";
 import Routes from "../navigation/routes";
 import Spinner from "../common/components/Spinner";
 import { Color, Spacing } from "../common/styles";
+import { usePrevious } from "../hooks/usePrevious";
 
 interface PassedProps {
   navigation: any;
@@ -36,26 +37,27 @@ interface LocalState {
 
 type AddNewClientScreenProps = PassedProps & PropsFromState & DispatchFromState;
 
-class AddNewClientScreen extends Component<AddNewClientScreenProps, LocalState> {
-  public state = {
+function AddNewClientScreen(props: AddNewClientScreenProps) {
+  const [state, setState] = useState<LocalState>({
     firstName: "",
     lastName: "",
     address: "",
     phoneNumber: "",
     email: "",
     notes: "",
-  };
+  });
 
-  public componentDidUpdate(oldProps: any) {
-    if (oldProps.fetchUserLoading && !this.props.fetchUserLoading && !this.props.fetchUserError) {
-      this.props.navigation.navigate(Routes.HOME_SCREEN);
+  const oldProps = usePrevious(props);
+
+  useEffect(() => {
+    if (oldProps?.fetchUserLoading && !props.fetchUserLoading && !props.fetchUserError) {
+      props.navigation.navigate(Routes.HOME_SCREEN);
     }
-  }
+  }, [props.fetchUserLoading, props.fetchUserError]);
 
-  private onSubmit = () => {
-    const { firstName, lastName, address, phoneNumber, email, notes } = this.state;
-
-    this.props.dispatchAddClient({
+  const onSubmit = () => {
+    const { firstName, lastName, address, phoneNumber, email, notes } = state;
+    props.dispatchAddClient({
       firstName,
       lastName,
       address,
@@ -65,7 +67,7 @@ class AddNewClientScreen extends Component<AddNewClientScreenProps, LocalState> 
     });
   };
 
-  private renderHeader = () => {
+  const renderHeader = () => {
     return (
       <View style={styles.headerContainer}>
         <View style={{ flex: 1 }}>
@@ -75,84 +77,82 @@ class AddNewClientScreen extends Component<AddNewClientScreenProps, LocalState> 
     );
   };
 
-  private renderSaveButton = () => {
+  const renderSaveButton = () => {
     return (
       <View style={{ marginTop: Spacing.xlarge }}>
-        {this.props.fetchUserLoading ? (
+        {props.fetchUserLoading ? (
           <Spinner size="small" />
         ) : (
-          <Button label={"Save"} onPress={this.onSubmit} />
+          <Button label={"Save"} onPress={onSubmit} />
         )}
       </View>
     );
   };
 
-  public render() {
-    const { firstName, lastName, address, phoneNumber, email, notes } = this.state;
-    return (
-      <SafeAreaView style={{ flex: 1, backgroundColor: Color.darkThemeGreyMed }}>
-        <ScrollView style={styles.rootContainer}>
-          <StatusBar barStyle={"light-content"} />
-          {this.renderHeader()}
-          <Card>
-            <SubHeader label={"FirstName"} fontSize={16} />
-            <CardSection>
-              <Input
-                value={firstName}
-                onChangeText={(newText: string) => this.setState({ firstName: newText })}
-                placeholder={"John"}
-                autoCapitalize={"words"}
-              />
-            </CardSection>
-            <SubHeader label={"Last Name"} fontSize={14} />
-            <CardSection>
-              <Input
-                value={lastName}
-                onChangeText={(newText: string) => this.setState({ lastName: newText })}
-                placeholder={"Smith"}
-                autoCapitalize={"words"}
-              />
-            </CardSection>
-            <SubHeader label={"Street Address"} fontSize={16} />
-            <CardSection>
-              <Input
-                value={address}
-                onChangeText={(newText: string) => this.setState({ address: newText })}
-                placeholder={"123 Beachside Ln"}
-                autoCapitalize={"words"}
-              />
-            </CardSection>
-            <SubHeader label={"Phone number"} fontSize={16} />
-            <CardSection>
-              <Input
-                value={phoneNumber}
-                onChangeText={(newText: string) => this.setState({ phoneNumber: newText })}
-                placeholder={"(555) 555-5555"}
-              />
-            </CardSection>
-            <SubHeader label={"Email Address"} fontSize={16} />
-            <CardSection>
-              <Input
-                value={email}
-                onChangeText={(newText: string) => this.setState({ email: newText })}
-                placeholder={"johnsmith@gmail.com"}
-              />
-            </CardSection>
-            <SubHeader label={"Additional Notes"} fontSize={16} />
-            <CardSection>
-              <Input
-                value={notes}
-                onChangeText={(newText: string) => this.setState({ notes: newText })}
-                placeholder={".............."}
-                autoCapitalize={"sentences"}
-              />
-            </CardSection>
-            {this.renderSaveButton()}
-          </Card>
-        </ScrollView>
-      </SafeAreaView>
-    );
-  }
+  const { firstName, lastName, address, phoneNumber, email, notes } = state;
+  return (
+    <SafeAreaView style={{ flex: 1, backgroundColor: Color.darkThemeGreyMed }}>
+      <ScrollView style={styles.rootContainer}>
+        <StatusBar barStyle={"light-content"} />
+        {renderHeader()}
+        <Card>
+          <SubHeader label={"FirstName"} fontSize={16} />
+          <CardSection>
+            <Input
+              value={firstName}
+              onChangeText={(newText: string) => setState({ ...state, firstName: newText })}
+              placeholder={"John"}
+              autoCapitalize={"words"}
+            />
+          </CardSection>
+          <SubHeader label={"Last Name"} fontSize={14} />
+          <CardSection>
+            <Input
+              value={lastName}
+              onChangeText={(newText: string) => setState({ ...state, lastName: newText })}
+              placeholder={"Smith"}
+              autoCapitalize={"words"}
+            />
+          </CardSection>
+          <SubHeader label={"Street Address"} fontSize={16} />
+          <CardSection>
+            <Input
+              value={address}
+              onChangeText={(newText: string) => setState({ ...state, address: newText })}
+              placeholder={"123 Beachside Ln"}
+              autoCapitalize={"words"}
+            />
+          </CardSection>
+          <SubHeader label={"Phone number"} fontSize={16} />
+          <CardSection>
+            <Input
+              value={phoneNumber}
+              onChangeText={(newText: string) => setState({ ...state, phoneNumber: newText })}
+              placeholder={"(555) 555-5555"}
+            />
+          </CardSection>
+          <SubHeader label={"Email Address"} fontSize={16} />
+          <CardSection>
+            <Input
+              value={email}
+              onChangeText={(newText: string) => setState({ ...state, email: newText })}
+              placeholder={"johnsmith@gmail.com"}
+            />
+          </CardSection>
+          <SubHeader label={"Additional Notes"} fontSize={16} />
+          <CardSection>
+            <Input
+              value={notes}
+              onChangeText={(newText: string) => setState({ ...state, notes: newText })}
+              placeholder={".............."}
+              autoCapitalize={"sentences"}
+            />
+          </CardSection>
+          {renderSaveButton()}
+        </Card>
+      </ScrollView>
+    </SafeAreaView>
+  );
 }
 
 const mapStateToProps = (state: any) => {
