@@ -22,29 +22,14 @@ export const getUserById = (): any => {
     });
 };
 
-export function mapClients(clients: any) {
-  if (isEqual(clients, {})) {
+export function mapPosts(posts: any) {
+  if (isEqual(posts, {})) {
     return undefined;
   }
   let acc: any = [];
-  for (const [key, value] of Object.entries(clients)) {
+  for (const [key, value] of Object.entries(posts)) {
     acc = acc.concat({ ...(value as Object), id: key });
   }
-  acc.sort(function (a: any, b: any) {
-    if (!a || !b) {
-      return 0;
-    }
-    var nameA = a.lastName.toUpperCase(); // ignore upper and lowercase
-    var nameB = b.lastName.toUpperCase(); // ignore upper and lowercase
-    if (nameA < nameB) {
-      return -1;
-    }
-    if (nameA > nameB) {
-      return 1;
-    }
-    // names must be equal
-    return 0;
-  });
   return acc;
 }
 

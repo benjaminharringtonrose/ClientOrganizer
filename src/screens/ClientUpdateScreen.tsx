@@ -1,11 +1,11 @@
 import React, { Component, useState, useEffect } from "react";
 import { StyleSheet, ScrollView, Text, SafeAreaView, View, TouchableOpacity } from "react-native";
-import { Color, Spacing } from "../common/styles";
-import Card from "../common/components/Card";
-import Input from "../common/components/Input";
-import CardSection from "../common/components/CardSection";
-import Button from "../common/components/Button";
-import { IClient } from "./HomeScreen";
+import { Color, Spacing } from "../styles";
+import Card from "../components/Card";
+import Input from "../components/Input";
+import CardSection from "../components/CardSection";
+import Button from "../components/Button";
+import { IClient } from "./FeedScreen";
 import { UPDATE_CLIENT, FETCH_USER } from "../store/actions";
 import { connect } from "react-redux";
 import Routes from "../navigation/routes";

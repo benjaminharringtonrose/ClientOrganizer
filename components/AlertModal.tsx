@@ -1,9 +1,9 @@
 import React from "react";
 import { View, Text, StyleSheet } from "react-native";
-import Card from "../components/Card";
-import CardSection from "../components/CardSection";
-import Button from "../components/Button";
-import { Color } from "../styles";
+import Card from "./Card";
+import CardSection from "./CardSection";
+import Button from "./Button";
+import { Color } from "../../styles";
 import { Modal } from "./Modal";
 
 interface IAlertModalProps {

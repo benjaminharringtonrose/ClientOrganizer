@@ -3,13 +3,13 @@ import { View, Text, StyleSheet, ScrollView, TouchableOpacity, StatusBar } from 
 import { connect } from "react-redux";
 import { LOGIN_USER } from "../store/actions/types";
 
-import Card from "../common/components/Card";
-import Input from "../common/components/Input";
-import Button from "../common/components/Button";
-import Spinner from "../common/components/Spinner";
-import Header from "../common/components/Header";
+import Card from "../components/Card";
+import Input from "../components/Input";
+import Button from "../components/Button";
+import Spinner from "../components/Spinner";
+import Header from "../components/Header";
 
-import { Color, Spacing } from "../common/styles";
+import { Color, Spacing } from "../styles";
 import Routes from "../navigation/routes";
 import { Icon } from "react-native-elements";
 import firebase from "firebase";

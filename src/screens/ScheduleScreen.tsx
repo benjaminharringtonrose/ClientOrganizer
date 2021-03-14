@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 import { View, Text, StyleSheet, ScrollView, StatusBar } from "react-native";
-import { Color, Spacing } from "../common/styles";
-import { DropdownModalCalendar } from "../common/components/DropdownModalCalendar";
-import Input from "../common/components/Input";
-import Button from "../common/components/Button";
-import Card from "../common/components/Card";
+import { Color, Spacing } from "../styles";
+import { DropdownModalCalendar } from "../components/DropdownModalCalendar";
+import Input from "../components/Input";
+import Button from "../components/Button";
+import Card from "../components/Card";
 
 interface LocalState {
   title: string;

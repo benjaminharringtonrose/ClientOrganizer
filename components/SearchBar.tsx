@@ -1,8 +1,8 @@
 import React, { Component } from "react";
-import { Color, Spacing } from "../styles";
+import { Color, Spacing } from "../../styles";
 import { FontAwesome } from "@expo/vector-icons";
 import Input from "./Input";
-import { IKeyboard } from "../types";
+import { IKeyboard } from "../../types";
 import { StyleProp, ViewStyle, View, StyleSheet } from "react-native";
 
 interface ISearchBarProps {

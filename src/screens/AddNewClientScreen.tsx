@@ -2,14 +2,14 @@ import React, { Component, useState, useEffect } from "react";
 import { connect } from "react-redux";
 import { StyleSheet, ScrollView, StatusBar, SafeAreaView, View, Text } from "react-native";
 import { FETCH_USER, ADD_CLIENT } from "../store/actions/types";
-import SubHeader from "../common/components/SubHeader";
-import Input from "../common/components/Input";
-import CardSection from "../common/components/CardSection";
-import Card from "../common/components/Card";
-import Button from "../common/components/Button";
+import SubHeader from "../components/SubHeader";
+import Input from "../components/Input";
+import CardSection from "../components/CardSection";
+import Card from "../components/Card";
+import Button from "../components/Button";
 import Routes from "../navigation/routes";
-import Spinner from "../common/components/Spinner";
-import { Color, Spacing } from "../common/styles";
+import Spinner from "../components/Spinner";
+import { Color, Spacing } from "../styles";
 import { usePrevious } from "../hooks/usePrevious";
 
 interface PassedProps {

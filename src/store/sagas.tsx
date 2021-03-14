@@ -11,6 +11,7 @@ import {
   UPDATE_CLIENT,
   ADD_CLIENT,
   AVATAR_CHANGED,
+  FETCH_POSTS,
 } from "./actions/types";
 import { getDocRef } from "../screens/util";
 import uuid from "uuid-random";
@@ -53,6 +54,42 @@ export function* fetchUserSaga(action: any) {
   }
 }
 
+// FETCH POSTS - ACTIONS
+
+function fetchPostsSuccess(data: any) {
+  return {
+    type: FETCH_POSTS.SUCCEEDED,
+    payload: data,
+  };
+}
+function fetchPostsFail(error: any) {
+  return {
+    type: FETCH_POSTS.FAILED,
+    payload: error,
+  };
+}
+
+// FETCH POSTS - SAGA
+
+export function* fetchPostsSaga() {
+  try {
+    const posts: firebase.firestore.DocumentData[] = [];
+    yield firebase
+      .firestore()
+      .collection("posts")
+      .get()
+      .then(function (querySnapshot) {
+        querySnapshot.forEach((doc) => {
+          const post = doc.data();
+          posts.push(post);
+        });
+      });
+    yield put(fetchPostsSuccess(posts));
+  } catch (error) {
+    yield put(fetchPostsFail({ error }));
+  }
+}
+
 function addClientSuccess() {
   return {
     type: ADD_CLIENT.SUCCEEDED,
@@ -64,6 +101,8 @@ function addClientFail(error: any) {
     payload: error,
   };
 }
+
+// ADD CLIENT - SAGA
 
 export function* addClientSaga(action: any) {
   try {
@@ -313,6 +352,7 @@ const addAvatarAsync = async (data: any) => {
 
 function* watchUserAuthentication() {
   yield takeLatest(FETCH_USER.REQUESTED, fetchUserSaga);
+  yield takeLatest(FETCH_POSTS.REQUESTED, fetchPostsSaga);
   yield takeLatest(ADD_CLIENT.REQUESTED, addClientSaga);
   yield takeLatest(UPDATE_CLIENT.REQUESTED, updateClientSaga);
   yield takeLatest(DELETE_CLIENT.REQUESTED, deleteClientSaga);

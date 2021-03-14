@@ -10,14 +10,13 @@ import {
 } from "react-native";
 import { connect } from "react-redux";
 import Routes from "../navigation/routes";
-import { IClient } from "./HomeScreen";
 
 import { Icon } from "react-native-elements";
-import CellIconActionable from "../common/components/CellIconActionable";
-import { Color, Spacing } from "../common/styles";
+import CellIconActionable from "../components/CellIconActionable";
+import { Color, Spacing } from "../styles";
 import { callTelephone } from "./util";
-import Button from "../common/components/Button";
-import Card from "../common/components/Card";
+import Button from "../components/Button";
+import Card from "../components/Card";
 
 interface IPassedProps {
   navigation: any;
@@ -28,7 +27,7 @@ interface ILocalState {
 }
 
 interface IPropsFromState {
-  clients: IClient[];
+  clients: any[];
   fetchUserLoading: boolean;
   fetchUserError: boolean;
 }

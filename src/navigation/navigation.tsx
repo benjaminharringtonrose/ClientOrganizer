@@ -5,7 +5,7 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 
 import LoginScreen from "../screens/LoginScreen";
 import RegisterScreen from "../screens/RegisterScreen";
-import HomeScreen from "../screens/HomeScreen";
+import FeedScreen from "../screens/FeedScreen";
 import ScheduleScreen from "../screens/ScheduleScreen";
 import NotificationScreen from "../screens/NotificationScreen";
 import ProfileScreen from "../screens/ProfileScreen";
@@ -16,14 +16,15 @@ import ClientUpdateScreen from "../screens/ClientUpdateScreen";
 import Routes from "./routes";
 import { Ionicons } from "@expo/vector-icons";
 import { FontAwesome } from "@expo/vector-icons";
-import { Color, Spacing } from "../common/styles";
+import { Color, Spacing } from "../styles";
+import PostScreen from "../screens/PostScreen";
 
 const DashboardTabs = () => {
   const Tab = createBottomTabNavigator();
   return (
     <Tab.Navigator
       tabBarOptions={{
-        initialRouteName: Routes.HOME_SCREEN,
+        initialRouteName: Routes.FEED_SCREEN,
         activeTintColor: Color.warmGrey50,
         activeBackgroundColor: Color.darkThemeGreyMed,
         inactiveBackgroundColor: Color.darkThemeGreyMed,
@@ -36,6 +37,14 @@ const DashboardTabs = () => {
       }}
     >
       <Tab.Screen
+        name={Routes.POST_SCREEN}
+        component={PostScreen}
+        options={{
+          tabBarLabel: "Post",
+          tabBarIcon: () => <Ionicons name="ios-person" size={24} color={Color.peach} />,
+        }}
+      />
+      <Tab.Screen
         name={Routes.SCHEDULE_SCREEN}
         component={ScheduleScreen}
         options={{
@@ -44,8 +53,8 @@ const DashboardTabs = () => {
         }}
       />
       <Tab.Screen
-        name={Routes.HOME_SCREEN}
-        component={HomeScreen}
+        name={Routes.FEED_SCREEN}
+        component={FeedScreen}
         options={{
           tabBarLabel: "Clients",
           tabBarIcon: () => <Ionicons name="ios-person" size={24} color={Color.peach} />,

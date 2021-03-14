@@ -3,10 +3,10 @@ import { ViewProps, TouchableOpacity, StyleSheet, Text, View } from "react-nativ
 import { Calendar } from "react-native-calendars";
 
 import { Color, Font, Spacing } from "../../common/style";
-import { BottomModal } from "../../common/components/BottomModal";
-import { ButtonBottom } from "../../common/components/ButtonBottom";
-import { formatDateForDisplay } from "../../common/utilDates";
-import { Icon } from "../../common/components/Icon";
+import { BottomModal } from "./BottomModal";
+import { ButtonBottom } from "./ButtonBottom";
+import { formatDateForDisplay } from "../util/utilDates";
+import { Icon } from "./Icon";
 import moment from "moment";
 
 interface IMarkedDates {

@@ -1,11 +1,5 @@
 import React, { FC } from "react";
-import {
-  TouchableOpacity,
-  StyleProp,
-  StyleSheet,
-  TextStyle,
-  ViewStyle,
-} from "react-native";
+import { TouchableOpacity, StyleProp, StyleSheet, TextStyle, ViewStyle } from "react-native";
 import { Text } from "react-native";
 import { Spacing } from "../styles/Spacing";
 

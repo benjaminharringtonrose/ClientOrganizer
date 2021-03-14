@@ -3,9 +3,9 @@ import { View, StatusBar } from "react-native";
 import { Provider } from "react-redux";
 import store from "./src/store/store";
 import firebase from "firebase";
-import { Color } from "./src/common/styles";
+import { Color } from "./src/styles";
 import { Navigator } from "./src/navigation/navigation";
-import Firebase from "./src/api/firebase";
+import Firebase from "./Firebase";
 
 class App extends Component {
   componentDidMount() {

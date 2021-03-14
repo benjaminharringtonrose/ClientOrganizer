@@ -12,16 +12,16 @@ import { connect } from "react-redux";
 import UserPermissions from "../util/permissions";
 import * as ImagePicker from "expo-image-picker";
 
-import Card from "../common/components/Card";
-import Input from "../common/components/Input";
-import Button from "../common/components/Button";
-import Spinner from "../common/components/Spinner";
-import Header from "../common/components/Header";
+import Card from "../components/Card";
+import Input from "../components/Input";
+import Button from "../components/Button";
+import Spinner from "../components/Spinner";
+import Header from "../components/Header";
 import { Ionicons } from "@expo/vector-icons";
 
 import { REGISTER_USER } from "../store/actions/types";
 import { avatarChanged } from "../store/actions";
-import { Color, Spacing } from "../common/styles";
+import { Color, Spacing } from "../styles";
 
 import Routes from "../navigation/routes";
 

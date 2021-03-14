@@ -6,12 +6,12 @@ import * as ImagePicker from "expo-image-picker";
 import { avatarChanged } from "../store/actions";
 import { LOGOUT_USER } from "../store/actions/types";
 import firebase from "firebase";
-import Spinner from "../common/components/Spinner";
-import Button from "../common/components/Button";
-import Card from "../common/components/Card";
-import CellLabelLeftRight from "../common/components/CellLabelLeftRight";
+import Spinner from "../components/Spinner";
+import Button from "../components/Button";
+import Card from "../components/Card";
+import CellLabelLeftRight from "../components/CellLabelLeftRight";
 import { Ionicons } from "@expo/vector-icons";
-import { Color, Spacing } from "../common/styles";
+import { Color, Spacing } from "../styles";
 import Routes from "../navigation/routes";
 import { usePrevious } from "../hooks/usePrevious";
 
