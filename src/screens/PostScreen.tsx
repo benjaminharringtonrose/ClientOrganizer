@@ -16,12 +16,8 @@ import { connect } from "react-redux";
 import Routes from "../navigation/routes";
 
 interface ILocalState {
-  user: {
-    name: string;
-    avatar: string;
-    text: string;
-    image?: string;
-  };
+  text: string;
+  image?: string;
 }
 
 interface IPassedProps {
@@ -41,40 +37,21 @@ type IPostScreenProps = IPropsFromState & IPassedProps;
 
 class PostScreen extends React.Component<IPostScreenProps, ILocalState> {
   public state = {
-    user: {
-      name: "",
-      avatar: "",
-      text: "",
-      image: undefined,
-    },
+    text: "",
+    image: undefined,
   };
-
-  show = null;
-  componentDidMount() {
-    console.log(this.props);
-    const user = Firebase.shared.uid;
-
-    this.show = Firebase.shared.firestore
-      .collection("users")
-      .doc(user)
-      .onSnapshot((doc: { data: () => any }) => {
-        this.setState({ user: doc.data() });
-      });
-  }
 
   handlePost = () => {
     Firebase.shared
       .addPost({
         firstName: this.props.firstName,
         lastName: this.props.lastName,
-        text: this.state.user.text.trim(),
-        localUri: this.state.user.image,
-        uri: this.state.user.avatar,
+        avatar: this.props.avatar,
+        text: this.state.text.trim(),
+        image: this.state.image,
       })
       .then(() => {
-        this.setState({
-          user: { ...this.state.user, text: "", image: undefined, avatar: this.state.user.avatar },
-        });
+        this.setState({ text: "", image: undefined });
         this.props.navigation.navigate(Routes.FEED_SCREEN);
       })
       .catch((error: any) => {
@@ -90,7 +67,7 @@ class PostScreen extends React.Component<IPostScreenProps, ILocalState> {
     });
 
     if (!result.cancelled) {
-      this.setState({ user: { ...this.state.user, image: result.uri } });
+      this.setState({ image: result.uri });
     }
   };
 
@@ -109,8 +86,8 @@ class PostScreen extends React.Component<IPostScreenProps, ILocalState> {
         <View style={styles.inputContainer}>
           <Image
             source={
-              this.state?.user?.avatar
-                ? { uri: this.state.user.avatar }
+              this.props?.avatar
+                ? { uri: this.props.avatar }
                 : require("../assets/defaultAvatar.png")
             }
             style={styles.avatar}
@@ -121,18 +98,19 @@ class PostScreen extends React.Component<IPostScreenProps, ILocalState> {
             numberOfLines={4}
             style={{ flex: 1 }}
             placeholder="Want to share something?"
-            onChangeText={(text) => this.setState({ user: { ...this.state.user, text: text } })}
-            value={this.state.user?.text}
+            onChangeText={(text) => this.setState({ text })}
+            value={this.state.text}
           ></TextInput>
         </View>
 
         <TouchableOpacity style={styles.photo} onPress={this.pickImage}>
           <Ionicons name="md-camera" size={32} color="#D8D9DB" />
         </TouchableOpacity>
-
-        <View style={{ marginHorizontal: 32, marginTop: 32, height: 250 }}>
-          <Image source={{ uri: this.state.user?.image }} style={styles.image} />
-        </View>
+        {this.state.image && (
+          <View style={{ marginHorizontal: 32, marginTop: 32, height: 250 }}>
+            <Image source={{ uri: this.state.image }} style={styles.image} />
+          </View>
+        )}
       </SafeAreaView>
     );
   }

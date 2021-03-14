@@ -1,11 +1,8 @@
-import React, { useState, useEffect } from "react";
-import { View, Text, StyleSheet, Image, FlatList, RefreshControl } from "react-native";
-import { Ionicons } from "@expo/vector-icons";
-import moment from "moment";
+import React, { useEffect } from "react";
+import { View, Text, StyleSheet, FlatList, RefreshControl } from "react-native";
 import { connect } from "react-redux";
 require("firebase/firestore");
 import { FETCH_POSTS, FETCH_USER } from "../store/actions/types";
-import { usePosts } from "../hooks/usePosts";
 import firebase from "firebase";
 import { PostCard } from "../components/PostCard";
 
@@ -42,7 +39,7 @@ function FeedScreen(props: IFeedScreenProps) {
       return (
         <PostCard
           avatar={item.avatar}
-          name={item.name}
+          name={`${item.firstName} ${item.lastName}`}
           timestamp={item.timestamp}
           text={item.text}
           image={item.image}
@@ -74,7 +71,6 @@ function FeedScreen(props: IFeedScreenProps) {
         showsVerticalScrollIndicator={false}
         refreshControl={refreshControl()}
       />
-      {/* )} */}
     </View>
   );
 }
@@ -104,40 +100,6 @@ const styles = StyleSheet.create({
   },
   feed: {
     marginHorizontal: 16,
-  },
-  postContainer: {
-    backgroundColor: "#FFF",
-    borderRadius: 5,
-    padding: 8,
-    flexDirection: "row",
-    marginVertical: 8,
-  },
-  avatar: {
-    width: 36,
-    height: 36,
-    borderRadius: 18,
-    marginRight: 16,
-  },
-  name: {
-    fontSize: 15,
-    fontWeight: "500",
-    color: "#454D65",
-  },
-  timestamp: {
-    fontSize: 11,
-    color: "#C4C6CE",
-    marginTop: 4,
-  },
-  post: {
-    marginTop: 16,
-    fontSize: 14,
-    color: "#838899",
-  },
-  postImage: {
-    width: undefined,
-    height: 150,
-    borderRadius: 5,
-    marginVertical: 16,
   },
 });
 
