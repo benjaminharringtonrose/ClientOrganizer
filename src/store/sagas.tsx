@@ -232,6 +232,8 @@ export function* loginUserSaga(action: any) {
     const auth = firebase.auth();
     const data = yield call([auth, auth.signInWithEmailAndPassword], email, password);
     yield put(loginUserSuccess(data));
+    const uid = yield firebase.auth().currentUser?.uid;
+    yield fetchUserSaga({ type: FETCH_USER.REQUESTED, payload: uid });
   } catch (error) {
     yield put(loginUserFail(error));
   }

@@ -68,7 +68,7 @@ function ProfileScreen(props: ProfileScreenProps) {
       <Card>
         <View style={styles.avatarPlaceholder}>
           {props.avatar && <Image source={{ uri: props?.avatar }} style={styles.avatar} />}
-          <Ionicons name="ios-add" size={40} color="#FFF" style={styles.addIcon} />
+          {/* <Ionicons name="ios-add" size={40} color="#FFF" style={styles.addIcon} /> */}
         </View>
         <Text style={styles.subHeaderText}>{"User Information"}</Text>
         <CellLabelLeftRight
@@ -90,12 +90,12 @@ function ProfileScreen(props: ProfileScreenProps) {
 const mapStateToProps = (state: any) => {
   // console.log("STATE", state.user.user.avatar);
   return {
-    avatar: state.user.user.avatar,
-    firstName: state.user.user.firstName,
-    lastName: state.user.user.lastName,
-    email: state.user.user.email,
+    avatar: state.user?.user?.avatar,
+    firstName: state.user?.user?.firstName,
+    lastName: state.user?.user?.lastName,
+    email: state.user?.user?.email,
     loading: state.auth.loading,
-    error: state.auth.error,
+    error: state.auth?.error,
   };
 };
 

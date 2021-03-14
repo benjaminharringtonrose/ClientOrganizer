@@ -34,9 +34,9 @@ function FeedScreen(props: IFeedScreenProps) {
   useEffect(() => {
     props.dispatchFetchPosts();
   }, []);
+
   const renderPost = (post: any) => {
     if (post) {
-      console.log(post.avatar);
       return (
         <View style={styles.postContainer}>
           <Image source={{ uri: post.avatar }} style={styles.avatar} />
@@ -80,13 +80,11 @@ function FeedScreen(props: IFeedScreenProps) {
   function refreshListView() {
     //Start Rendering Spinner
     setState({ ...state, refreshing: true });
-
-    // TODO: Updating the dataSource with new data
+    props.dispatchFetchPosts();
 
     setState({ ...state, refreshing: false }); //Stop Rendering Spinner
   }
 
-  console.log("posts", props.posts);
   return (
     <View style={styles.container}>
       <View style={styles.header}>

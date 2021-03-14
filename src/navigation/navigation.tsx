@@ -37,6 +37,14 @@ const DashboardTabs = () => {
       }}
     >
       <Tab.Screen
+        name={Routes.FEED_SCREEN}
+        component={FeedScreen}
+        options={{
+          tabBarLabel: "Feed",
+          tabBarIcon: () => <Ionicons name="ios-person" size={24} color={Color.peach} />,
+        }}
+      />
+      <Tab.Screen
         name={Routes.POST_SCREEN}
         component={PostScreen}
         options={{
@@ -44,22 +52,15 @@ const DashboardTabs = () => {
           tabBarIcon: () => <Ionicons name="ios-person" size={24} color={Color.peach} />,
         }}
       />
-      <Tab.Screen
+      {/* <Tab.Screen
         name={Routes.SCHEDULE_SCREEN}
         component={ScheduleScreen}
         options={{
           tabBarLabel: "Schedule",
           tabBarIcon: () => <Ionicons name="ios-calendar" size={24} color={Color.peach} />,
         }}
-      />
-      <Tab.Screen
-        name={Routes.FEED_SCREEN}
-        component={FeedScreen}
-        options={{
-          tabBarLabel: "Clients",
-          tabBarIcon: () => <Ionicons name="ios-person" size={24} color={Color.peach} />,
-        }}
-      />
+      /> */}
+
       {/* <Tab.Screen
         name={Routes.NOTIFICATION_SCREEN}
         component={NotificationScreen}

@@ -12,6 +12,8 @@ import { Ionicons } from "@expo/vector-icons";
 import Firebase from "../../Firebase";
 import * as ImagePicker from "expo-image-picker";
 import UserPermissions from "../utilities/UserPermissions";
+import { connect } from "react-redux";
+import Routes from "../navigation/routes";
 
 interface ILocalState {
   user: {
@@ -26,11 +28,18 @@ interface IPassedProps {
   navigation: any;
 }
 
-interface IPropsFromState {}
+interface IPropsFromState {
+  loading: boolean;
+  error: boolean;
+  avatar: string;
+  firstName: string;
+  lastName: string;
+  email: string;
+}
 
 type IPostScreenProps = IPropsFromState & IPassedProps;
 
-export default class PostScreen extends React.Component<IPostScreenProps, ILocalState> {
+class PostScreen extends React.Component<IPostScreenProps, ILocalState> {
   public state = {
     user: {
       name: "",
@@ -53,24 +62,22 @@ export default class PostScreen extends React.Component<IPostScreenProps, ILocal
       });
   }
   handlePost = () => {
-    console.log("handlePost");
+    console.log("handlePost", this.props.firstName);
     Firebase.shared
       .addPost({
-        name: this.state.user.name,
+        firstName: this.props.firstName,
+        lastName: this.props.lastName,
         text: this.state.user.text.trim(),
         localUri: this.state.user.image,
         uri: this.state.user.avatar,
       })
-      .then((ref: any) => {
-        this.setState({ user: { ...this.state.user, text: "" } });
-        this.setState({ user: { ...this.state.user, image: undefined } });
+      .then(() => {
         this.setState({
-          user: { ...this.state.user, avatar: this.state.user.avatar },
+          user: { ...this.state.user, text: "", image: undefined, avatar: this.state.user.avatar },
         });
-        this.props.navigation.navigate("Home");
+        this.props.navigation.navigate(Routes.FEED_SCREEN);
       })
       .catch((error: any) => {
-        // alert(error);
         console.log(error);
       });
   };
@@ -130,6 +137,20 @@ export default class PostScreen extends React.Component<IPostScreenProps, ILocal
     );
   }
 }
+
+const mapStateToProps = (state: any) => {
+  console.log("STATE", state);
+  return {
+    avatar: state.user?.user?.avatar,
+    firstName: state.user?.user?.firstName,
+    lastName: state.user?.user?.lastName,
+    email: state.user?.user?.email,
+    loading: state.auth.loading,
+    error: state.auth?.error,
+  };
+};
+
+export default connect(mapStateToProps, {})(PostScreen);
 
 const styles = StyleSheet.create({
   container: {
