@@ -296,7 +296,6 @@ export function* registerUserSaga(action: any) {
       email,
       avatar,
     });
-    // yield addAvatarAsync(avatar);
     yield put(registerUserSuccess(data));
   } catch (error) {
     console.log(error);

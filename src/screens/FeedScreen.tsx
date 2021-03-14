@@ -1,5 +1,13 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, StyleSheet, Image, FlatList, RefreshControl } from "react-native";
+import {
+  View,
+  Text,
+  StyleSheet,
+  Image,
+  FlatList,
+  RefreshControl,
+  ActivityIndicator,
+} from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import moment from "moment";
 import { connect } from "react-redux";
@@ -21,14 +29,14 @@ interface IDispatchFromState {
 }
 
 interface ILocalState {
-  refreshing: boolean;
+  loading: boolean;
 }
 
 type IFeedScreenProps = IPropsFromState & IDispatchFromState & IPassedProps;
 
 function FeedScreen(props: IFeedScreenProps) {
   const [state, setState] = useState<ILocalState>({
-    refreshing: false,
+    loading: false,
   });
 
   useEffect(() => {
@@ -78,11 +86,9 @@ function FeedScreen(props: IFeedScreenProps) {
     );
   }
   function refreshListView() {
-    //Start Rendering Spinner
-    setState({ ...state, refreshing: true });
+    setState({ ...state, loading: true });
     props.dispatchFetchPosts();
-
-    setState({ ...state, refreshing: false }); //Stop Rendering Spinner
+    setState({ ...state, loading: false }); //Stop Rendering Spinner
   }
 
   return (
@@ -90,6 +96,7 @@ function FeedScreen(props: IFeedScreenProps) {
       <View style={styles.header}>
         <Text style={styles.headerTitle}>Feed</Text>
       </View>
+
       <FlatList
         style={styles.feed}
         data={props.posts}
@@ -97,7 +104,8 @@ function FeedScreen(props: IFeedScreenProps) {
         keyExtractor={(item) => String(item.timestamp)}
         showsVerticalScrollIndicator={false}
         refreshControl={refreshControl()}
-      ></FlatList>
+      />
+      {/* )} */}
     </View>
   );
 }
@@ -165,11 +173,11 @@ const styles = StyleSheet.create({
 });
 
 const mapStateToProps = (state: any) => {
-  // console.log("STATE", state);
+  console.log("STATE", state.feed);
   return {
     posts: state.feed.posts,
-    fetchPostsLoading: state.feed.fetchUserLoading,
-    fetchPostsError: state.feed.fetchUserError,
+    fetchPostsLoading: state.feed.fetchPostsLoading,
+    fetchPostsError: state.feed.fetchPostsError,
   };
 };
 
