@@ -45,10 +45,7 @@ export function* fetchUserSaga(action: any) {
     const uid = action.payload;
     // yield console.log("FETCH USER SAGA - UID", uid);
     const doc = yield firebase.firestore().collection("users").doc(uid).get();
-    const user = {
-      ...doc.data(),
-    };
-    yield put(fetchUserSuccess(user));
+    yield put(fetchUserSuccess(doc.data()));
   } catch (error) {
     yield put(fetchUserFail({ error }));
   }

@@ -1,22 +1,20 @@
 import { FETCH_USER, DELETE_CLIENT, UPDATE_CLIENT, ADD_CLIENT } from "../actions/types";
 
 const INITIAL_STATE = {
-  user: {
-    searchText: undefined,
-    user: undefined,
-    fetchUserLoading: false,
-    fetchUserError: false,
-    deleteClientLoading: false,
-    deleteClientError: false,
-    updateClientLoading: false,
-    updateClientError: false,
-    addClientLoading: false,
-    addClientError: false,
-  },
+  searchText: undefined,
+  user: undefined,
+  fetchUserLoading: false,
+  fetchUserError: false,
+  deleteClientLoading: false,
+  deleteClientError: false,
+  updateClientLoading: false,
+  updateClientError: false,
+  addClientLoading: false,
+  addClientError: false,
 };
 
 const UserReducer = (state = INITIAL_STATE, action: any) => {
-  console.log(action);
+  // console.log(action);
   switch (action.type) {
     case FETCH_USER.REQUESTED:
       return {

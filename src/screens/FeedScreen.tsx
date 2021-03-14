@@ -34,9 +34,9 @@ function FeedScreen(props: IFeedScreenProps) {
   useEffect(() => {
     props.dispatchFetchPosts();
   }, []);
-
   const renderPost = (post: any) => {
     if (post) {
+      console.log(post.avatar);
       return (
         <View style={styles.postContainer}>
           <Image source={{ uri: post.avatar }} style={styles.avatar} />
@@ -167,7 +167,7 @@ const styles = StyleSheet.create({
 });
 
 const mapStateToProps = (state: any) => {
-  console.log("STATE", state);
+  // console.log("STATE", state);
   return {
     posts: state.feed.posts,
     fetchPostsLoading: state.feed.fetchUserLoading,

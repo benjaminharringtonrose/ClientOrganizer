@@ -4,7 +4,7 @@ import { connect } from "react-redux";
 import UserPermissions from "../util/permissions";
 import * as ImagePicker from "expo-image-picker";
 import { avatarChanged } from "../store/actions";
-import { LOGOUT_USER } from "../store/actions/types";
+import { LOGOUT_USER, FETCH_USER } from "../store/actions/types";
 import firebase from "firebase";
 import Spinner from "../components/Spinner";
 import Button from "../components/Button";
@@ -29,6 +29,7 @@ interface PropsFromState {
 }
 
 interface DispatchFromState {
+  dispatchFetchUser: (uid: string) => any;
   dispatchLogoutRequest: (object: any) => any;
   dispatchChangeAvatar: (text: string) => any;
 }
@@ -43,10 +44,16 @@ function ProfileScreen(props: ProfileScreenProps) {
       props.navigation.navigate(Routes.LOGIN_SCREEN);
     }
   }, [props.loading, props.error]);
-
   const onLogoutPress = () => {
     props.dispatchLogoutRequest(LOGOUT_USER.REQUESTED);
   };
+
+  useEffect(() => {
+    const uid = firebase.auth().currentUser?.uid;
+    if (uid) {
+      props.dispatchFetchUser(uid);
+    }
+  }, []);
 
   const renderSignOutButton = () => {
     if (props.loading) {
@@ -55,12 +62,12 @@ function ProfileScreen(props: ProfileScreenProps) {
       return <Button label={"Sign Out"} onPress={onLogoutPress} />;
     }
   };
-
+  console.log("props.avatar", props.avatar);
   return (
     <ScrollView style={styles.container}>
       <Card>
         <View style={styles.avatarPlaceholder}>
-          <Image source={{ uri: props.avatar }} style={styles.avatar} />
+          {props.avatar && <Image source={{ uri: props?.avatar }} style={styles.avatar} />}
           <Ionicons name="ios-add" size={40} color="#FFF" style={styles.addIcon} />
         </View>
         <Text style={styles.subHeaderText}>{"User Information"}</Text>
@@ -81,6 +88,7 @@ function ProfileScreen(props: ProfileScreenProps) {
 }
 
 const mapStateToProps = (state: any) => {
+  // console.log("STATE", state.user.user.avatar);
   return {
     avatar: state.user.user.avatar,
     firstName: state.user.user.firstName,
@@ -92,6 +100,7 @@ const mapStateToProps = (state: any) => {
 };
 
 const mapDispatchToProps = (dispatch: any) => ({
+  dispatchFetchUser: (uid: any) => dispatch({ type: FETCH_USER.REQUESTED, payload: uid }),
   dispatchLogoutRequest: () => dispatch({ type: LOGOUT_USER.REQUESTED }),
 });
 

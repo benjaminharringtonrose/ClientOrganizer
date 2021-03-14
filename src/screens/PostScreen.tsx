@@ -14,15 +14,27 @@ import * as ImagePicker from "expo-image-picker";
 import UserPermissions from "../utilities/UserPermissions";
 
 interface ILocalState {
-  text: string;
-  image: string;
+  user: {
+    name: string;
+    avatar: string;
+    text: string;
+    image?: string;
+  };
+}
+
+interface IPassedProps {
+  navigation: any;
 }
 
 interface IPropsFromState {}
 
-export default class PostScreen extends React.Component<ILocalState> {
-  state = {
+type IPostScreenProps = IPropsFromState & IPassedProps;
+
+export default class PostScreen extends React.Component<IPostScreenProps, ILocalState> {
+  public state = {
     user: {
+      name: "",
+      avatar: "",
       text: "",
       image: undefined,
     },
@@ -36,20 +48,20 @@ export default class PostScreen extends React.Component<ILocalState> {
     this.show = Firebase.shared.firestore
       .collection("users")
       .doc(user)
-      .onSnapshot((doc) => {
+      .onSnapshot((doc: { data: () => any }) => {
         this.setState({ user: doc.data() });
       });
   }
   handlePost = () => {
+    console.log("handlePost");
     Firebase.shared
       .addPost({
         name: this.state.user.name,
         text: this.state.user.text.trim(),
         localUri: this.state.user.image,
         uri: this.state.user.avatar,
-        // id: id
       })
-      .then((ref) => {
+      .then((ref: any) => {
         this.setState({ user: { ...this.state.user, text: "" } });
         this.setState({ user: { ...this.state.user, image: undefined } });
         this.setState({
@@ -57,8 +69,9 @@ export default class PostScreen extends React.Component<ILocalState> {
         });
         this.props.navigation.navigate("Home");
       })
-      .catch((error) => {
-        alert(error);
+      .catch((error: any) => {
+        // alert(error);
+        console.log(error);
       });
   };
 
