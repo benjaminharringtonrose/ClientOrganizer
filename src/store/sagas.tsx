@@ -81,7 +81,10 @@ export function* fetchPostsSaga() {
           posts.push(post);
         });
       });
-    yield put(fetchPostsSuccess(posts));
+
+    const sortedPosts = posts.sort((a, b) => b.timestamp - a.timestamp);
+
+    yield put(fetchPostsSuccess(sortedPosts));
   } catch (error) {
     yield put(fetchPostsFail({ error }));
   }

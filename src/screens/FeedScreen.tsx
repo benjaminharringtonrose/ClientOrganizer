@@ -1,18 +1,11 @@
 import React, { useState, useEffect } from "react";
-import {
-  View,
-  Text,
-  StyleSheet,
-  Image,
-  FlatList,
-  RefreshControl,
-  ActivityIndicator,
-} from "react-native";
+import { View, Text, StyleSheet, Image, FlatList, RefreshControl } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import moment from "moment";
 import { connect } from "react-redux";
 require("firebase/firestore");
 import { FETCH_POSTS } from "../store/actions/types";
+import { usePosts } from "../hooks/usePosts";
 
 interface IPassedProps {
   navigation: any;
@@ -28,26 +21,20 @@ interface IDispatchFromState {
   dispatchFetchPosts: () => void;
 }
 
-interface ILocalState {
-  loading: boolean;
-}
+interface ILocalState {}
 
 type IFeedScreenProps = IPropsFromState & IDispatchFromState & IPassedProps;
 
 function FeedScreen(props: IFeedScreenProps) {
-  const [state, setState] = useState<ILocalState>({
-    loading: false,
-  });
-
   useEffect(() => {
     props.dispatchFetchPosts();
   }, []);
 
-  const renderPost = (post: any) => {
-    if (post) {
+  const renderPost = ({ item }: any) => {
+    if (item) {
       return (
         <View style={styles.postContainer}>
-          <Image source={{ uri: post.avatar }} style={styles.avatar} />
+          <Image source={{ uri: item.avatar }} style={styles.avatar} />
           <View style={{ flex: 1 }}>
             <View
               style={{
@@ -57,14 +44,14 @@ function FeedScreen(props: IFeedScreenProps) {
               }}
             >
               <View>
-                <Text style={styles.name}>{post.name}</Text>
-                <Text style={styles.timestamp}>{moment(post.timestamp).fromNow()}</Text>
+                <Text style={styles.name}>{item.name}</Text>
+                <Text style={styles.timestamp}>{moment(item.timestamp).fromNow()}</Text>
               </View>
 
               <Ionicons name="ellipsis-horizontal" size={24} color="#73788B" />
             </View>
-            <Text style={styles.post}>{post.text}</Text>
-            <Image source={{ uri: post.image }} style={styles.postImage} resizeMode="cover" />
+            <Text style={styles.post}>{item.text}</Text>
+            <Image source={{ uri: item.image }} style={styles.postImage} resizeMode="cover" />
             <View style={{ flexDirection: "row" }}>
               <Ionicons
                 name="heart-outline"
@@ -85,10 +72,9 @@ function FeedScreen(props: IFeedScreenProps) {
       <RefreshControl refreshing={props.fetchPostsLoading} onRefresh={() => refreshListView()} />
     );
   }
+
   function refreshListView() {
-    setState({ ...state, loading: true });
     props.dispatchFetchPosts();
-    setState({ ...state, loading: false }); //Stop Rendering Spinner
   }
 
   return (
@@ -96,11 +82,10 @@ function FeedScreen(props: IFeedScreenProps) {
       <View style={styles.header}>
         <Text style={styles.headerTitle}>Feed</Text>
       </View>
-
       <FlatList
         style={styles.feed}
         data={props.posts}
-        renderItem={({ item }: any) => renderPost(item)}
+        renderItem={renderPost}
         keyExtractor={(item) => String(item.timestamp)}
         showsVerticalScrollIndicator={false}
         refreshControl={refreshControl()}
@@ -176,7 +161,7 @@ const mapStateToProps = (state: any) => {
   console.log("STATE", state.feed);
   return {
     posts: state.feed.posts,
-    fetchPostsLoading: state.feed.fetchPostsLoading,
+    fetchPostsLoading: state.feed.fetchPostsLoading || false,
     fetchPostsError: state.feed.fetchPostsError,
   };
 };
