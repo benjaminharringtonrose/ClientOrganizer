@@ -51,7 +51,7 @@ class PostScreen extends React.Component<IPostScreenProps, ILocalState> {
 
   show = null;
   componentDidMount() {
-    UserPermissions.getCameraPermission;
+    console.log(this.props);
     const user = Firebase.shared.uid;
 
     this.show = Firebase.shared.firestore
@@ -61,8 +61,8 @@ class PostScreen extends React.Component<IPostScreenProps, ILocalState> {
         this.setState({ user: doc.data() });
       });
   }
+
   handlePost = () => {
-    console.log("handlePost", this.props.firstName);
     Firebase.shared
       .addPost({
         firstName: this.props.firstName,
@@ -109,7 +109,7 @@ class PostScreen extends React.Component<IPostScreenProps, ILocalState> {
         <View style={styles.inputContainer}>
           <Image
             source={
-              this.state.user.avatar
+              this.state?.user?.avatar
                 ? { uri: this.state.user.avatar }
                 : require("../assets/defaultAvatar.png")
             }
@@ -122,7 +122,7 @@ class PostScreen extends React.Component<IPostScreenProps, ILocalState> {
             style={{ flex: 1 }}
             placeholder="Want to share something?"
             onChangeText={(text) => this.setState({ user: { ...this.state.user, text: text } })}
-            value={this.state.user.text}
+            value={this.state.user?.text}
           ></TextInput>
         </View>
 
@@ -131,7 +131,7 @@ class PostScreen extends React.Component<IPostScreenProps, ILocalState> {
         </TouchableOpacity>
 
         <View style={{ marginHorizontal: 32, marginTop: 32, height: 250 }}>
-          <Image source={{ uri: this.state.user.image }} style={styles.image} />
+          <Image source={{ uri: this.state.user?.image }} style={styles.image} />
         </View>
       </SafeAreaView>
     );
@@ -139,7 +139,7 @@ class PostScreen extends React.Component<IPostScreenProps, ILocalState> {
 }
 
 const mapStateToProps = (state: any) => {
-  console.log("STATE", state);
+  console.log("STATE", state.user);
   return {
     avatar: state.user?.user?.avatar,
     firstName: state.user?.user?.firstName,

@@ -93,7 +93,7 @@ function LoginScreen(props: LoginScreenProps) {
   return (
     <View style={styles.mainContainer}>
       <StatusBar barStyle={"light-content"} />
-      <Header title={"CyberSocial"} description={"Welcome back!"} style={styles.greeting} />
+      <Header title={"Chatty"} description={"Welcome back!"} style={styles.greeting} />
       <ScrollView>
         <Card>
           <Input

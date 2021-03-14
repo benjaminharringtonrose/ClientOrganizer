@@ -74,6 +74,7 @@ export function* fetchPostsSaga() {
     yield firebase
       .firestore()
       .collection("posts")
+      .orderBy("timestamp", "desc")
       .get()
       .then(function (querySnapshot) {
         querySnapshot.forEach((doc) => {
@@ -82,9 +83,7 @@ export function* fetchPostsSaga() {
         });
       });
 
-    const sortedPosts = posts.sort((a, b) => b.timestamp - a.timestamp);
-
-    yield put(fetchPostsSuccess(sortedPosts));
+    yield put(fetchPostsSuccess(posts));
   } catch (error) {
     yield put(fetchPostsFail({ error }));
   }

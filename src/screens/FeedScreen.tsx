@@ -4,8 +4,9 @@ import { Ionicons } from "@expo/vector-icons";
 import moment from "moment";
 import { connect } from "react-redux";
 require("firebase/firestore");
-import { FETCH_POSTS } from "../store/actions/types";
+import { FETCH_POSTS, FETCH_USER } from "../store/actions/types";
 import { usePosts } from "../hooks/usePosts";
+import firebase from "firebase";
 
 interface IPassedProps {
   navigation: any;
@@ -18,6 +19,7 @@ interface IPropsFromState {
 }
 
 interface IDispatchFromState {
+  dispatchFetchUser: (uid: string) => any;
   dispatchFetchPosts: () => void;
 }
 
@@ -28,6 +30,10 @@ type IFeedScreenProps = IPropsFromState & IDispatchFromState & IPassedProps;
 function FeedScreen(props: IFeedScreenProps) {
   useEffect(() => {
     props.dispatchFetchPosts();
+    const uid = firebase.auth().currentUser?.uid;
+    if (uid) {
+      props.dispatchFetchUser(uid);
+    }
   }, []);
 
   const renderPost = ({ item }: any) => {
@@ -65,16 +71,16 @@ function FeedScreen(props: IFeedScreenProps) {
         </View>
       );
     }
+    return null;
   };
 
   function refreshControl() {
     return (
-      <RefreshControl refreshing={props.fetchPostsLoading} onRefresh={() => refreshListView()} />
+      <RefreshControl
+        refreshing={props.fetchPostsLoading}
+        onRefresh={() => props.dispatchFetchPosts()}
+      />
     );
-  }
-
-  function refreshListView() {
-    props.dispatchFetchPosts();
   }
 
   return (
@@ -167,6 +173,7 @@ const mapStateToProps = (state: any) => {
 };
 
 const mapDispatchToProps = (dispatch: any) => ({
+  dispatchFetchUser: (uid: any) => dispatch({ type: FETCH_USER.REQUESTED, payload: uid }),
   dispatchFetchPosts: () => dispatch({ type: FETCH_POSTS.REQUESTED }),
 });
 
