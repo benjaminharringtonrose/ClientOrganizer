@@ -7,6 +7,7 @@ require("firebase/firestore");
 import { FETCH_POSTS, FETCH_USER } from "../store/actions/types";
 import { usePosts } from "../hooks/usePosts";
 import firebase from "firebase";
+import { PostCard } from "../components/PostCard";
 
 interface IPassedProps {
   navigation: any;
@@ -39,36 +40,13 @@ function FeedScreen(props: IFeedScreenProps) {
   const renderPost = ({ item }: any) => {
     if (item) {
       return (
-        <View style={styles.postContainer}>
-          <Image source={{ uri: item.avatar }} style={styles.avatar} />
-          <View style={{ flex: 1 }}>
-            <View
-              style={{
-                flexDirection: "row",
-                justifyContent: "space-between",
-                alignItems: "center",
-              }}
-            >
-              <View>
-                <Text style={styles.name}>{item.name}</Text>
-                <Text style={styles.timestamp}>{moment(item.timestamp).fromNow()}</Text>
-              </View>
-
-              <Ionicons name="ellipsis-horizontal" size={24} color="#73788B" />
-            </View>
-            <Text style={styles.post}>{item.text}</Text>
-            <Image source={{ uri: item.image }} style={styles.postImage} resizeMode="cover" />
-            <View style={{ flexDirection: "row" }}>
-              <Ionicons
-                name="heart-outline"
-                size={24}
-                color="#73788B"
-                style={{ marginRight: 16 }}
-              />
-              <Ionicons name="chatbox-ellipses-outline" size={24} color="#73788B" />
-            </View>
-          </View>
-        </View>
+        <PostCard
+          avatar={item.avatar}
+          name={item.name}
+          timestamp={item.timestamp}
+          text={item.text}
+          image={item.image}
+        />
       );
     }
     return null;

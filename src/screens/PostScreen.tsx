@@ -139,7 +139,7 @@ class PostScreen extends React.Component<IPostScreenProps, ILocalState> {
 }
 
 const mapStateToProps = (state: any) => {
-  console.log("STATE", state.user);
+  console.log("STATE POSTSCREEN", state.user);
   return {
     avatar: state.user?.user?.avatar,
     firstName: state.user?.user?.firstName,
