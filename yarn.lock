@@ -3053,6 +3053,13 @@
   resolved "https://registry.yarnpkg.com/@redux-saga/types/-/types-1.1.0.tgz#0e81ce56b4883b4b2a3001ebe1ab298b84237204"
   integrity sha512-afmTuJrylUU/0OtqzaRkbyYFFNgCF73Bvel/sw90pvGrWIZ+vyoIJqA6eMSoA6+nb443kTmulmBtC9NerXboNg==
 
+"@types/@react-navigation/stack", react-navigation-stack@react-navigation/stack:
+  version "2.1.1"
+  resolved "https://codeload.github.com/react-navigation/stack/tar.gz/3389391b24ff58957c33b41c102e5bf9afafa991"
+  dependencies:
+    color "^3.1.2"
+    react-native-iphone-x-helper "^1.2.1"
+
 "@types/bytebuffer@^5.0.40":
   version "5.0.41"
   resolved "https://registry.yarnpkg.com/@types/bytebuffer/-/bytebuffer-5.0.41.tgz#6850dba4d4cd2846596b4842874d5bfc01cd3db1"
@@ -7817,13 +7824,6 @@ react-navigation-stack@^1.7.3:
   integrity sha512-1gksFi/g/Lg9sBhgLlD0OiEB5xnatHb4C0eNMA5tli9cTVlhq375XNPIqOiTyftibBmjdApAsZFj5srUCoOu/w==
   dependencies:
     prop-types "^15.7.2"
-
-react-navigation-stack@react-navigation/stack:
-  version "2.1.1"
-  resolved "https://codeload.github.com/react-navigation/stack/tar.gz/3389391b24ff58957c33b41c102e5bf9afafa991"
-  dependencies:
-    color "^3.1.2"
-    react-native-iphone-x-helper "^1.2.1"
 
 react-navigation-tabs@^2.5.2:
   version "2.9.0"

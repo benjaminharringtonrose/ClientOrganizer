@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useAuthState } from "../hooks/useAuthState";
 import { NavigationContainer, DarkTheme } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
@@ -7,79 +8,30 @@ import LoginScreen from "../screens/LoginScreen";
 import RegisterScreen from "../screens/RegisterScreen";
 import FeedScreen from "../screens/FeedScreen";
 import ProfileScreen from "../screens/ProfileScreen";
+import PostScreen from "../screens/PostScreen";
 
 import Routes from "./routes";
-import { Ionicons } from "@expo/vector-icons";
-import { FontAwesome } from "@expo/vector-icons";
-import { Color, Spacing } from "../styles";
-import PostScreen from "../screens/PostScreen";
-import firebase from "firebase";
+import { TabBar } from "./components/TabBar";
 
 const DashboardTabs = () => {
   const Tab = createBottomTabNavigator();
   return (
-    <Tab.Navigator
-      tabBarOptions={{
-        initialRouteName: Routes.FEED_SCREEN,
-        activeTintColor: Color.warmGrey50,
-        activeBackgroundColor: Color.darkThemeGreyMed,
-        inactiveBackgroundColor: Color.darkThemeGreyDark,
-        labelStyle: {
-          paddingBottom: Spacing.micro,
-        },
-        style: {
-          backgroundColor: Color.darkThemeGreyDark,
-        },
-      }}
-    >
-      <Tab.Screen
-        name={Routes.FEED_SCREEN}
-        component={FeedScreen}
-        options={{
-          tabBarLabel: "Feed",
-          tabBarIcon: () => <Ionicons name="ios-person" size={24} color={Color.white} />,
-        }}
-      />
-      <Tab.Screen
-        name={Routes.POST_SCREEN}
-        component={PostScreen}
-        options={{
-          tabBarLabel: "Post",
-          tabBarIcon: () => <Ionicons name="ios-person" size={24} color={Color.white} />,
-        }}
-      />
-      <Tab.Screen
-        name={Routes.PROFILE_SCREEN}
-        component={ProfileScreen}
-        options={{
-          tabBarLabel: "Settings",
-          tabBarIcon: () => <FontAwesome name="gear" size={24} color={Color.white} />,
-        }}
-      />
+    <Tab.Navigator tabBar={(props: any) => <TabBar {...props} />}>
+      <Tab.Screen name={Routes.FEED_SCREEN} component={FeedScreen} />
+      <Tab.Screen name={Routes.POST_SCREEN} component={PostScreen} />
+      <Tab.Screen name={Routes.PROFILE_SCREEN} component={ProfileScreen} />
     </Tab.Navigator>
   );
 };
 
 export const Navigator = () => {
-  const [state, setState] = useState({
-    isLoggedIn: false,
-  });
   const Stack = createStackNavigator();
-
-  useEffect(() => {
-    firebase.auth().onAuthStateChanged(function (user) {
-      if (user) {
-        setState({ ...state, isLoggedIn: true });
-      } else {
-        setState({ ...state, isLoggedIn: false });
-      }
-    });
-  }, []);
+  const isLoggedin = useAuthState();
 
   return (
     <NavigationContainer theme={DarkTheme}>
       <Stack.Navigator>
-        {state.isLoggedIn ? (
+        {isLoggedin ? (
           <Stack.Screen
             name={Routes.DASHBOARD_TABS}
             component={DashboardTabs}
