@@ -10,7 +10,7 @@ interface SpinnerProps {
   style?: StyleProp<ViewStyle>;
 }
 
-export default class Spinner extends Component<SpinnerProps> {
+export class Spinner extends Component<SpinnerProps> {
   public render() {
     const { size, color, style } = this.props;
     return (

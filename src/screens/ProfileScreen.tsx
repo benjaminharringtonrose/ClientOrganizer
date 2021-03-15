@@ -1,19 +1,19 @@
-import React, { useState, useEffect } from "react";
-import { Text, StyleSheet, ScrollView, Image, TouchableOpacity, View } from "react-native";
-import { connect } from "react-redux";
-import UserPermissions from "../util/permissions";
-import * as ImagePicker from "expo-image-picker";
-import { avatarChanged } from "../store/actions";
-import { LOGOUT_USER, FETCH_USER } from "../store/actions/types";
+import React, { useEffect } from "react";
+import { Text, StyleSheet, Image, View } from "react-native";
 import firebase from "firebase";
-import Spinner from "../components/Spinner";
-import Button from "../components/Button";
-import Card from "../components/Card";
-import CellLabelLeftRight from "../components/CellLabelLeftRight";
-import { Ionicons } from "@expo/vector-icons";
+import { connect } from "react-redux";
+import { LOGOUT_USER, FETCH_USER } from "../store/actions/types";
+
+import {
+  ScreenContainer,
+  Card,
+  CardSection,
+  Spinner,
+  Button,
+  CellLabelLeftRight,
+} from "../components";
+
 import { Color, Spacing } from "../styles";
-import Routes from "../navigation/routes";
-import { usePrevious } from "../hooks/usePrevious";
 
 interface PassedProps {
   navigation: any;
@@ -37,13 +37,6 @@ interface DispatchFromState {
 type ProfileScreenProps = PropsFromState & DispatchFromState & PassedProps;
 
 function ProfileScreen(props: ProfileScreenProps) {
-  const prevProps = usePrevious(props);
-
-  // useEffect(() => {
-  //   if (prevProps?.loading && !props.loading && !props.error) {
-  //     props.navigation.navigate(Routes.LOGIN_SCREEN);
-  //   }
-  // }, [props.loading, props.error]);
   const onLogoutPress = () => {
     props.dispatchLogoutRequest(LOGOUT_USER.REQUESTED);
   };
@@ -59,30 +52,39 @@ function ProfileScreen(props: ProfileScreenProps) {
     if (props.loading) {
       return <Spinner size="small" color={Color.white} />;
     } else {
-      return <Button label={"Sign Out"} onPress={onLogoutPress} />;
+      return (
+        <CardSection>
+          <Button label={"Sign Out"} onPress={onLogoutPress} />
+        </CardSection>
+      );
     }
   };
-  console.log("props.avatar", props.avatar);
+
   return (
-    <ScrollView style={styles.container}>
+    <ScreenContainer>
       <Card>
         <View style={styles.avatarPlaceholder}>
           {props.avatar && <Image source={{ uri: props?.avatar }} style={styles.avatar} />}
         </View>
         <Text style={styles.subHeaderText}>{"User Information"}</Text>
-        <CellLabelLeftRight
-          labelLeft={"Name"}
-          labelRight={`${props.firstName} ${props.lastName}`}
-          style={{ marginBottom: Spacing.micro }}
-        />
-        <CellLabelLeftRight
-          labelLeft={"Email"}
-          labelRight={props.email}
-          style={{ marginBottom: Spacing.large }}
-        />
+        <CardSection>
+          <CellLabelLeftRight
+            labelLeft={"Name"}
+            labelRight={`${props.firstName} ${props.lastName}`}
+            style={{ marginBottom: Spacing.micro }}
+          />
+        </CardSection>
+        <CardSection>
+          <CellLabelLeftRight
+            labelLeft={"Email"}
+            labelRight={props.email}
+            style={{ marginBottom: Spacing.large }}
+          />
+        </CardSection>
+
         {renderSignOutButton()}
       </Card>
-    </ScrollView>
+    </ScreenContainer>
   );
 }
 

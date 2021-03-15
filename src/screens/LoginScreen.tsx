@@ -1,19 +1,12 @@
-import React, { useState, useEffect } from "react";
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity, StatusBar } from "react-native";
+import React, { useState } from "react";
+import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import { connect } from "react-redux";
 import { LOGIN_USER } from "../store/actions/types";
-
-import Card from "../components/Card";
-import Input from "../components/Input";
-import Button from "../components/Button";
-import Spinner from "../components/Spinner";
 
 import { Color, Spacing } from "../styles";
 import Routes from "../navigation/routes";
 import { Icon } from "react-native-elements";
-import CardSection from "../components/CardSection";
-import { ScreenContainer } from "../components/ScreenContainer";
-import { Header } from "../components";
+import { Card, CardSection, ScreenContainer, Header, Input, Button, Spinner } from "../components";
 
 interface IPassedProps {
   navigation: any;

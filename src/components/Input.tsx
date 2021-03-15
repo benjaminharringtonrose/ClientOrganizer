@@ -34,7 +34,7 @@ interface InputProps {
   autoCapitalize?: "words" | "characters" | "sentences";
 }
 
-export default class Input extends Component<InputProps> {
+export class Input extends Component<InputProps> {
   public render() {
     const {
       label,

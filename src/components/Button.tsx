@@ -9,7 +9,7 @@ interface ButtonProps {
   style?: StyleProp<ViewStyle>;
 }
 
-export default class Button extends Component<ButtonProps> {
+export class Button extends Component<ButtonProps> {
   public render() {
     const { label, labelSize, onPress, style } = this.props;
     return (

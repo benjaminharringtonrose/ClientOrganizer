@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { Text, StyleProp, ViewStyle, View, StyleSheet } from "react-native";
 import { Color, Spacing } from "../styles";
-import Spinner from "./Spinner";
+import { Spinner } from "./Spinner";
 
 interface CellLabelLeftRightProps {
   labelLeft?: string;
@@ -10,7 +10,7 @@ interface CellLabelLeftRightProps {
   style?: StyleProp<ViewStyle>;
 }
 
-export default class CellLabelLeftRight extends Component<CellLabelLeftRightProps> {
+export class CellLabelLeftRight extends Component<CellLabelLeftRightProps> {
   public render() {
     const { labelLeft, labelRight, loading, style } = this.props;
     return (
