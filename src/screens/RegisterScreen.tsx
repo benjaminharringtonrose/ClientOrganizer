@@ -9,13 +9,10 @@ import {
   Image,
 } from "react-native";
 import { connect } from "react-redux";
-import UserPermissions from "../util/permissions";
+import UserPermissions from "../utilities/UserPermissions";
 import * as ImagePicker from "expo-image-picker";
 
-import Card from "../components/Card";
-import Input from "../components/Input";
-import Button from "../components/Button";
-import Spinner from "../components/Spinner";
+import { Card, Input, Button, Spinner } from "../components";
 import { Ionicons } from "@expo/vector-icons";
 
 import { REGISTER_USER } from "../store/actions/types";

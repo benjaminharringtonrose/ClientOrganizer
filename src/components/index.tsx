@@ -7,3 +7,5 @@ export * from "./Spinner";
 export * from "./ScreenContainer";
 export * from "./PostCard";
 export * from "./CellLabelLeftRight";
+export * from "./ButtonText";
+export * from "./ButtonBack";

@@ -1,9 +1,11 @@
-import { FETCH_POSTS } from "../actions/types";
+import { FETCH_POSTS, ADD_POST } from "../actions/types";
 
 const INITIAL_STATE = {
   posts: undefined,
   fetchPostsLoading: false,
-  fetchPostsError: false,
+  fetchPostsError: undefined,
+  addPostLoading: false,
+  addPostError: undefined,
 };
 
 const FeedReducer = (state = INITIAL_STATE, action: any) => {
@@ -25,6 +27,22 @@ const FeedReducer = (state = INITIAL_STATE, action: any) => {
         ...state,
         fetchPostsError: action.payload.message,
         fetchPostsLoading: false,
+      };
+    case ADD_POST.REQUESTED:
+      return {
+        ...state,
+        addPostLoading: true,
+      };
+    case ADD_POST.SUCCEEDED:
+      return {
+        ...state,
+        addPostLoading: false,
+      };
+    case ADD_POST.FAILED:
+      return {
+        ...state,
+        addPostError: action.payload.message,
+        addPostLoading: false,
       };
     default:
       return state;

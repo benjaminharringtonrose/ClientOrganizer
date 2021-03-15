@@ -1,10 +1,10 @@
 import React, { useEffect } from "react";
-import { View, Text, StyleSheet, FlatList, RefreshControl, StatusBar } from "react-native";
+import { FlatList, RefreshControl } from "react-native";
 import firebase from "firebase";
 import { connect } from "react-redux";
 import { FETCH_POSTS, FETCH_USER } from "../store/actions/types";
-import { Color, TextStyles, ViewStyles } from "../styles";
 import { Header, ScreenContainer, PostCard } from "../components";
+import { Color, TextStyles, ViewStyles } from "../styles";
 
 interface IPassedProps {
   navigation: any;

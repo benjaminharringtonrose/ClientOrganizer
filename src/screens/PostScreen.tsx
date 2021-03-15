@@ -1,23 +1,12 @@
 import React, { useState } from "react";
-import {
-  View,
-  Text,
-  StyleSheet,
-  TouchableOpacity,
-  SafeAreaView,
-  TextInput,
-  Image,
-} from "react-native";
+import { View, StyleSheet, TouchableOpacity, TextInput, Image } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import Firebase from "../../Firebase";
 import * as ImagePicker from "expo-image-picker";
 import { connect } from "react-redux";
 import Routes from "../navigation/routes";
-import { Color, TextStyles, ViewStyles } from "../styles";
-import { ScreenContainer } from "../components/ScreenContainer";
-import { Header } from "../components";
-import { ButtonText } from "../components/ButtonText";
-import { ButtonBack } from "../components/ButtonBack";
+import { Color } from "../styles";
+import { ScreenContainer, Header, ButtonText, ButtonBack } from "../components";
 
 interface ILocalState {
   text: string;
@@ -69,7 +58,6 @@ function PostScreen(props: IPostScreenProps) {
       allowsEditing: true,
       aspect: [4, 3],
     });
-
     if (!result.cancelled) {
       setState({ ...state, image: result.uri });
     }
