@@ -12,6 +12,7 @@ import PostScreen from "../screens/PostScreen";
 
 import Routes from "./routes";
 import { TabBar } from "./components/TabBar";
+import FindFriendsScreen from "../screens/FindFriendsScreen";
 
 const DashboardTabs = () => {
   const Tab = createBottomTabNavigator();
@@ -19,6 +20,7 @@ const DashboardTabs = () => {
     <Tab.Navigator tabBar={(props: any) => <TabBar {...props} />}>
       <Tab.Screen name={Routes.FEED_SCREEN} component={FeedScreen} />
       <Tab.Screen name={Routes.POST_SCREEN} component={PostScreen} />
+      <Tab.Screen name={Routes.FIND_FRIENDS_SCREEN} component={FindFriendsScreen} />
       <Tab.Screen name={Routes.PROFILE_SCREEN} component={ProfileScreen} />
     </Tab.Navigator>
   );

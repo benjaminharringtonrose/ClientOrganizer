@@ -1,49 +1,50 @@
-import React, { Component } from "react";
-import { View, Text, StyleSheet, ViewStyle, StyleProp, TextStyle } from "react-native";
-import { Color, Spacing } from "../styles";
+import React from "react";
+import { View, Text, StyleSheet, StyleProp, TextStyle, ViewStyle } from "react-native";
+import { Spacing, Color, TextStyles } from "../styles";
 
-interface HeaderProps {
-  title: string;
-  description: string;
-  subdescription?: string;
-  style?: StyleProp<ViewStyle>;
-  titleTextStyle?: StyleProp<TextStyle>;
-  descriptionTextStyle?: StyleProp<TextStyle>;
+interface IHeaderProps {
+  headerLeft?: JSX.Element | null;
+  title?: string;
+  headerRight?: JSX.Element | null;
+  titleStyle?: StyleProp<TextStyle>;
+  containerStyle?: StyleProp<ViewStyle>;
 }
 
-export default class Header extends Component<HeaderProps> {
-  render() {
-    const { title, description, subdescription, style } = this.props;
-    return (
-      <View style={[style, styles.headerContainer]}>
-        <Text style={[styles.titleText]}>{title}</Text>
-        <Text style={[styles.descriptionText]}>{description}</Text>
-        <Text style={[styles.subdescriptionText]}>{subdescription}</Text>
+export function Header(props: IHeaderProps) {
+  return (
+    <View style={[styles.rootContainer, props.containerStyle]}>
+      <View style={styles.leftContainer}>{props.headerLeft}</View>
+      <View style={styles.centerContainer}>
+        <Text style={[TextStyles.header, props.titleStyle]}>{props.title}</Text>
       </View>
-    );
-  }
+      <View style={styles.rightContainer}>{props.headerRight}</View>
+    </View>
+  );
 }
 
 const styles = StyleSheet.create({
-  headerContainer: {
-    justifyContent: "center",
+  rootContainer: {
+    flexDirection: "row",
+    minHeight: 50,
+    justifyContent: "space-between",
+    paddingBottom: Spacing.small,
+    borderBottomColor: Color.darkThemeGreyMed,
+    borderBottomWidth: 1,
+  },
+  leftContainer: {
+    flex: 1,
     alignItems: "center",
-    height: 60,
+    justifyContent: "center",
   },
-  // TEXTS //
-  titleText: {
-    fontSize: 30,
-    color: Color.white,
+  centerContainer: {
+    flex: 3,
+    alignItems: "center",
+    justifyContent: "center",
   },
-  descriptionText: {
-    fontSize: 18,
-    color: Color.white,
-    textAlign: "center",
-    fontWeight: "600",
+  rightContainer: {
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "center",
   },
-  subdescriptionText: {
-    fontSize: 16,
-    color: Color.greyLight,
-    textAlign: "center",
-  },
+  titleStyle: { fontWeight: "500", color: Color.white },
 });

@@ -13,7 +13,11 @@ import Firebase from "../../Firebase";
 import * as ImagePicker from "expo-image-picker";
 import { connect } from "react-redux";
 import Routes from "../navigation/routes";
-import { Color } from "../styles";
+import { Color, TextStyles, ViewStyles } from "../styles";
+import { ScreenContainer } from "../components/ScreenContainer";
+import { Header } from "../components";
+import { ButtonText } from "../components/ButtonText";
+import { ButtonBack } from "../components/ButtonBack";
 
 interface ILocalState {
   text: string;
@@ -72,16 +76,23 @@ function PostScreen(props: IPostScreenProps) {
   };
 
   return (
-    <SafeAreaView style={styles.container}>
-      <View style={styles.header}>
-        <TouchableOpacity onPress={() => props.navigation.goBack()}>
-          <Ionicons name="md-arrow-back" size={24} color={Color.white} />
-        </TouchableOpacity>
-        <TouchableOpacity onPress={handlePost}>
-          <Text style={{ fontWeight: "500", color: Color.white }}>{"Post"}</Text>
-        </TouchableOpacity>
-      </View>
-
+    <ScreenContainer>
+      <Header
+        headerLeft={
+          <ButtonBack
+            onPress={() => props.navigation.goBack()}
+            iconSize={24}
+            iconColor={Color.white}
+          />
+        }
+        headerRight={
+          <ButtonText
+            text={"Post"}
+            onPress={handlePost}
+            textStyle={{ fontWeight: "500", color: Color.white }}
+          />
+        }
+      />
       <View style={styles.inputContainer}>
         <Image
           source={{ uri: props.avatar } || require("../assets/defaultAvatar.png")}
@@ -102,12 +113,12 @@ function PostScreen(props: IPostScreenProps) {
       <TouchableOpacity style={styles.photo} onPress={pickImage}>
         <Ionicons name="md-camera" size={32} color={Color.darkThemeGrey} />
       </TouchableOpacity>
-      {!!state.image && (
+      {!!state.image ? (
         <View style={{ marginHorizontal: 32, marginTop: 32, height: 250 }}>
           <Image source={{ uri: state.image }} style={styles.image} />
         </View>
-      )}
-    </SafeAreaView>
+      ) : null}
+    </ScreenContainer>
   );
 }
 

@@ -7,53 +7,38 @@ import Card from "../components/Card";
 import Input from "../components/Input";
 import Button from "../components/Button";
 import Spinner from "../components/Spinner";
-import Header from "../components/Header";
 
 import { Color, Spacing } from "../styles";
 import Routes from "../navigation/routes";
 import { Icon } from "react-native-elements";
-import firebase from "firebase";
-import { usePrevious } from "../hooks/usePrevious";
+import CardSection from "../components/CardSection";
+import { ScreenContainer } from "../components/ScreenContainer";
+import { Header } from "../components";
 
-interface PassedProps {
+interface IPassedProps {
   navigation: any;
 }
 
-interface PropsFromState {
+interface IPropsFromState {
   authLoading: boolean;
   authError: boolean;
 }
-interface DispatchFromState {
+interface IDispatchFromState {
   dispatchLoginRequest: (object: any) => any;
 }
 
-interface LocalState {
+interface ILocalState {
   email: string;
   password: string;
 }
 
-type LoginScreenProps = PropsFromState & DispatchFromState & PassedProps;
+type LoginScreenProps = IPropsFromState & IDispatchFromState & IPassedProps;
 
 function LoginScreen(props: LoginScreenProps) {
-  const [state, setState] = useState<LocalState>({
+  const [state, setState] = useState<ILocalState>({
     email: "",
     password: "",
   });
-
-  const oldProps = usePrevious(props);
-
-  // useEffect(() => {
-  //   firebase
-  //     .auth()
-  //     .signInWithEmailAndPassword("brtest@test.com", "password")
-  //     .then(() => {
-  //       console.log("Logged in");
-  //       props.navigation.navigate(Routes.DASHBOARD_TABS);
-  //     })
-  //     .catch((error) => {
-  //       console.log(error.message);
-  //     });
-  // }, []);
 
   const onLoginPress = () => {
     const { email, password } = state;
@@ -66,7 +51,9 @@ function LoginScreen(props: LoginScreenProps) {
       return <Spinner size="small" color={Color.white} />;
     } else {
       return (
-        <Button label={"Login"} onPress={onLoginPress} style={{ marginBottom: Spacing.large }} />
+        <CardSection>
+          <Button label={"Login"} onPress={onLoginPress} style={{ marginBottom: Spacing.small }} />
+        </CardSection>
       );
     }
   };
@@ -80,15 +67,12 @@ function LoginScreen(props: LoginScreenProps) {
       );
     }
   };
-  if (props.authLoading) {
-    return null;
-  }
+
   return (
-    <View style={styles.rootContainer}>
-      <StatusBar barStyle={"light-content"} />
-      <Header title={"Chatty"} description={"Welcome back!"} style={styles.greeting} />
-      <ScrollView>
-        <Card>
+    <ScreenContainer>
+      <Header title={"Welcome!"} containerStyle={{ marginBottom: Spacing.xxlarge }} />
+      <Card>
+        <CardSection>
           <Input
             secureTextEntry={false}
             label="Email"
@@ -96,8 +80,10 @@ function LoginScreen(props: LoginScreenProps) {
             value={state.email}
             selectionColor={Color.greyMed}
             returnKeyType={"next"}
-            style={{ marginBottom: Spacing.small }}
+            style={{ marginBottom: Spacing.micro }}
           />
+        </CardSection>
+        <CardSection>
           <Input
             secureTextEntry
             label="Password"
@@ -106,22 +92,22 @@ function LoginScreen(props: LoginScreenProps) {
             selectionColor={Color.greyMed}
             onSubmitEditting={() => onLoginPress()}
             returnKeyType={"go"}
-            style={{ marginBottom: Spacing.large }}
+            style={{ marginBottom: Spacing.small }}
           />
-          {renderError()}
-          {renderLoginButton()}
-          <TouchableOpacity
-            onPress={() => props.navigation.navigate(Routes.REGISTER_SCREEN)}
-            style={{ alignItems: "center", flexDirection: "row", justifyContent: "flex-end" }}
-          >
-            <Text style={{ color: Color.warmGrey50, textAlign: "right", fontSize: 16 }}>
-              {"Register here"}
-            </Text>
-            <Icon name={"arrow-forward"} color={Color.warmGrey50} size={18} />
-          </TouchableOpacity>
-        </Card>
-      </ScrollView>
-    </View>
+        </CardSection>
+        {renderError()}
+        {renderLoginButton()}
+        <TouchableOpacity
+          onPress={() => props.navigation.navigate(Routes.REGISTER_SCREEN)}
+          style={{ alignItems: "center", flexDirection: "row", justifyContent: "flex-end" }}
+        >
+          <Text style={{ color: Color.warmGrey50, textAlign: "right", fontSize: 16 }}>
+            {"Register here"}
+          </Text>
+          <Icon name={"arrow-forward"} color={Color.warmGrey50} size={18} />
+        </TouchableOpacity>
+      </Card>
+    </ScreenContainer>
   );
 }
 
@@ -144,28 +130,9 @@ const mapDispatchToProps = (dispatch: any) => ({
 export default connect(mapStateToProps, mapDispatchToProps)(LoginScreen);
 
 const styles = StyleSheet.create({
-  rootContainer: {
-    flex: 1,
-    justifyContent: "center",
-    backgroundColor: Color.darkThemeGreyDark,
-  },
   errorTextStyle: {
     fontSize: 20,
     alignSelf: "center",
     color: Color.error,
-  },
-  greeting: {
-    flex: 0.4,
-    textAlign: "center",
-    paddingTop: Spacing.xxlarge,
-  },
-  button: {
-    marginVertical: Spacing.med,
-    paddingVertical: Spacing.small,
-  },
-  getStartedTouchableContainer: {
-    justifyContent: "center",
-    alignSelf: "center",
-    paddingBottom: Spacing.xxlarge,
   },
 });

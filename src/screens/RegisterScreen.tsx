@@ -16,7 +16,6 @@ import Card from "../components/Card";
 import Input from "../components/Input";
 import Button from "../components/Button";
 import Spinner from "../components/Spinner";
-import Header from "../components/Header";
 import { Ionicons } from "@expo/vector-icons";
 
 import { REGISTER_USER } from "../store/actions/types";
@@ -119,9 +118,6 @@ function RegisterScreen(props: RegisterScreenProps) {
   return (
     <SafeAreaView style={styles.rootContainer}>
       <ScrollView>
-        <View style={styles.headerContainer}>
-          <Header title={"Welcome!"} description={"Sign up to get started."} />
-        </View>
         <Card>
           <TouchableOpacity style={styles.avatarPlaceholder} onPress={onPickAvatar}>
             {!!avatar && <Image source={{ uri: avatar }} style={styles.avatar} />}

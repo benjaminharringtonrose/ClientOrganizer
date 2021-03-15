@@ -9,7 +9,6 @@ export function TabBar({ state, navigation }: any) {
     <View
       style={{
         flexDirection: "row",
-        backgroundColor: Color.darkThemeGreyDark,
         borderTopColor: Color.darkThemeGreyMed,
         borderTopWidth: 0.5,
         height: 70,
@@ -33,11 +32,13 @@ export function TabBar({ state, navigation }: any) {
         const getIconName = () => {
           switch (route.name) {
             case Routes.FEED_SCREEN:
-              return "ios-person";
+              return "ios-home-outline";
             case Routes.POST_SCREEN:
-              return "ios-add";
+              return "ios-add-circle-outline";
             case Routes.PROFILE_SCREEN:
               return "ios-settings-outline";
+            case Routes.FIND_FRIENDS_SCREEN:
+              return "ios-person-add-outline";
           }
         };
 
@@ -47,11 +48,7 @@ export function TabBar({ state, navigation }: any) {
             onPress={onPress}
             style={{ flex: 1, alignItems: "center" }}
           >
-            <Ionicons
-              name={getIconName()}
-              color={"white"}
-              size={route.name === Routes.POST_SCREEN ? 40 : 20}
-            />
+            <Ionicons name={getIconName()} color={"white"} size={20} />
           </TouchableOpacity>
         );
       })}

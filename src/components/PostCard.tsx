@@ -52,7 +52,6 @@ export function PostCard(props: IPostCardProps) {
 const styles = StyleSheet.create({
   rootContainer: {
     flex: 1,
-    backgroundColor: Color.darkThemeGreyDark,
     borderRadius: 7,
     borderColor: Color.darkThemeGreyMed,
     borderWidth: 0.5,
