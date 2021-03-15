@@ -2,7 +2,7 @@ import React from "react";
 import { View, Image, Text, StyleSheet } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import moment from "moment";
-import { Spacing } from "../styles";
+import { Spacing, Color } from "../styles";
 
 interface IPostCardProps {
   avatar?: string;
@@ -14,15 +14,7 @@ interface IPostCardProps {
 
 export function PostCard(props: IPostCardProps) {
   return (
-    <View
-      style={{
-        flex: 1,
-        backgroundColor: "white",
-        borderRadius: 5,
-        paddingVertical: 8,
-        marginVertical: 8,
-      }}
-    >
+    <View style={styles.rootContainer}>
       <View style={{ flexDirection: "row" }}>
         {!!props.avatar && (
           <Image
@@ -42,7 +34,7 @@ export function PostCard(props: IPostCardProps) {
           <Text style={styles.timestamp}>{moment(props.timestamp).fromNow()}</Text>
         </View>
         <View style={{ marginRight: Spacing.small }}>
-          <Ionicons name="ellipsis-horizontal" size={24} color="#73788B" />
+          <Ionicons name="ellipsis-horizontal" size={24} color={Color.white} />
         </View>
       </View>
       {!!props.image && (
@@ -50,20 +42,22 @@ export function PostCard(props: IPostCardProps) {
       )}
       {!!props.text && <Text style={styles.post}>{props.text}</Text>}
       <View style={{ flexDirection: "row", marginLeft: Spacing.small }}>
-        <Ionicons name="heart-outline" size={24} color="#73788B" style={{ marginRight: 16 }} />
-        <Ionicons name="chatbox-ellipses-outline" size={24} color="#73788B" />
+        <Ionicons name="heart-outline" size={24} color={Color.white} style={{ marginRight: 16 }} />
+        <Ionicons name="chatbox-ellipses-outline" size={24} color={Color.white} />
       </View>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  postContainer: {
-    backgroundColor: "white",
+  rootContainer: {
+    flex: 1,
+    backgroundColor: Color.darkThemeGreyDark,
     borderRadius: 5,
-    padding: 8,
-    flexDirection: "row",
-    marginVertical: 8,
+    borderColor: Color.darkThemeGreyDark,
+    borderWidth: 1,
+    paddingVertical: Spacing.small,
+    marginBottom: Spacing.micro,
   },
   avatar: {
     width: 36,
@@ -74,17 +68,17 @@ const styles = StyleSheet.create({
   name: {
     fontSize: 15,
     fontWeight: "500",
-    color: "#454D65",
+    color: Color.white,
   },
   timestamp: {
     fontSize: 11,
-    color: "#C4C6CE",
+    color: Color.white,
     marginTop: Spacing.xsmall,
     marginBottom: Spacing.small,
   },
   post: {
     fontSize: 14,
-    color: "#838899",
+    color: Color.white,
     marginBottom: Spacing.small,
     marginLeft: Spacing.small,
   },

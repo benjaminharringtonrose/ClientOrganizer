@@ -45,7 +45,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     minHeight: 45,
-    backgroundColor: Color.warmGrey800,
+    backgroundColor: Color.darkThemeGreyMed,
     borderRadius: 5,
     paddingVertical: Spacing.xsmall,
   },

@@ -14,11 +14,11 @@ import firebase from "firebase";
 import { FETCH_USER, DELETE_CLIENT } from "../store/actions/types";
 import Routes from "../navigation/routes";
 
-import SearchBar from "../common/components/SearchBar";
-import CellIconActionable from "../common/components/CellIconActionable";
-import AlertModal from "../common/components/AlertModal";
+import SearchBar from "../components/SearchBar";
+import CellIconActionable from "../components/CellIconActionable";
+import AlertModal from "../components/AlertModal";
 
-import { Color, Spacing } from "../common/styles";
+import { Color, Spacing } from "../styles";
 import { useClients } from "../hooks/useClients";
 
 export interface IClient {

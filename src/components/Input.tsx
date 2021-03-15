@@ -85,7 +85,7 @@ const styles = StyleSheet.create({
     minHeight: 40,
     flexDirection: "row",
     alignItems: "center",
-    backgroundColor: Color.warmGrey800,
+    backgroundColor: Color.darkThemeGreyMed,
     borderRadius: 5,
     paddingVertical: Spacing.small,
     shadowColor: Color.darkThemeGreyDark,
@@ -97,12 +97,12 @@ const styles = StyleSheet.create({
     paddingRight: Spacing.small,
     paddingLeft: Spacing.small,
     fontSize: 18,
-    color: Color.warmGrey50,
+    color: Color.white,
   },
   labelText: {
     fontSize: 18,
     paddingLeft: Spacing.med,
-    color: Color.warmGrey50,
+    color: Color.white,
   },
   valueStyle: {
     fontSize: 16,

@@ -91,7 +91,7 @@ function LoginScreen(props: LoginScreenProps) {
     return null;
   }
   return (
-    <View style={styles.mainContainer}>
+    <View style={styles.rootContainer}>
       <StatusBar barStyle={"light-content"} />
       <Header title={"Chatty"} description={"Welcome back!"} style={styles.greeting} />
       <ScrollView>
@@ -151,10 +151,10 @@ const mapDispatchToProps = (dispatch: any) => ({
 export default connect(mapStateToProps, mapDispatchToProps)(LoginScreen);
 
 const styles = StyleSheet.create({
-  mainContainer: {
+  rootContainer: {
     flex: 1,
     justifyContent: "center",
-    backgroundColor: Color.darkThemeGreyMed,
+    backgroundColor: Color.darkThemeGreyDark,
   },
   errorTextStyle: {
     fontSize: 20,

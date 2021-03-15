@@ -200,7 +200,7 @@ export default connect(mapStateToProps, mapDispatchToProps)(RegisterScreen);
 const styles = StyleSheet.create({
   rootContainer: {
     flex: 1,
-    backgroundColor: Color.darkThemeGreyMed,
+    backgroundColor: Color.darkThemeGreyDark,
   },
   headerContainer: {
     paddingTop: Spacing.xxlarge,
@@ -217,12 +217,10 @@ const styles = StyleSheet.create({
     alignSelf: "center",
     width: 120,
     height: 120,
-    backgroundColor: Color.warmGrey600,
+    backgroundColor: Color.darkThemeGreyMed,
     borderRadius: 60,
     marginTop: Spacing.small,
     marginBottom: Spacing.xlarge,
-    borderWidth: 2,
-    borderColor: Color.peach,
   },
   avatar: {
     position: "absolute",
@@ -234,6 +232,6 @@ const styles = StyleSheet.create({
     alignSelf: "center",
     marginTop: 38,
     marginLeft: 2,
-    color: Color.peach,
+    color: Color.white,
   },
 });

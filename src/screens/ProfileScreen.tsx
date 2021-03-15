@@ -74,7 +74,7 @@ function ProfileScreen(props: ProfileScreenProps) {
         <CellLabelLeftRight
           labelLeft={"Name"}
           labelRight={`${props.firstName} ${props.lastName}`}
-          style={{ marginBottom: Spacing.small }}
+          style={{ marginBottom: Spacing.micro }}
         />
         <CellLabelLeftRight
           labelLeft={"Email"}
@@ -109,7 +109,7 @@ export default connect(mapStateToProps, mapDispatchToProps)(ProfileScreen);
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: Color.darkThemeGreyMed,
+    backgroundColor: Color.darkThemeGreyDark,
     paddingTop: Spacing.xxlarge,
   },
   avatarPlaceholder: {

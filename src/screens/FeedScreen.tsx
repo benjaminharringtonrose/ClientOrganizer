@@ -1,10 +1,11 @@
 import React, { useEffect } from "react";
-import { View, Text, StyleSheet, FlatList, RefreshControl } from "react-native";
+import { View, Text, StyleSheet, FlatList, RefreshControl, StatusBar } from "react-native";
 import { connect } from "react-redux";
 require("firebase/firestore");
 import { FETCH_POSTS, FETCH_USER } from "../store/actions/types";
 import firebase from "firebase";
 import { PostCard } from "../components/PostCard";
+import { Color, Spacing } from "../styles";
 
 interface IPassedProps {
   navigation: any;
@@ -64,12 +65,12 @@ function FeedScreen(props: IFeedScreenProps) {
         <Text style={styles.headerTitle}>Feed</Text>
       </View>
       <FlatList
-        style={styles.feed}
         data={props.posts}
         renderItem={renderPost}
         keyExtractor={(item) => String(item.timestamp)}
         showsVerticalScrollIndicator={false}
         refreshControl={refreshControl()}
+        // style={{ marginHorizontal: Spacing.micro }}
       />
     </View>
   );
@@ -78,28 +79,21 @@ function FeedScreen(props: IFeedScreenProps) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#EBECF4",
+    backgroundColor: Color.darkThemeGreyMed,
   },
   header: {
     paddingTop: 64,
     paddingBottom: 16,
-    backgroundColor: "#FFF",
+    backgroundColor: Color.darkThemeGreyDark,
     alignItems: "center",
     justifyContent: "center",
+    borderBottomColor: Color.darkThemeGreyMed,
     borderBottomWidth: 1,
-    borderBottomColor: "#EBECF4",
-    shadowColor: "#454D65",
-    shadowOffset: { width: 5, height: 5 },
-    shadowRadius: 15,
-    shadowOpacity: 0.2,
-    zIndex: 10,
   },
   headerTitle: {
     fontSize: 20,
     fontWeight: "500",
-  },
-  feed: {
-    marginHorizontal: 16,
+    color: Color.white,
   },
 });
 

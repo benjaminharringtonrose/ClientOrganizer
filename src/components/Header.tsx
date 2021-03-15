@@ -33,12 +33,11 @@ const styles = StyleSheet.create({
   // TEXTS //
   titleText: {
     fontSize: 30,
-    color: Color.warmGrey50,
-    fontWeight: "bold",
+    color: Color.white,
   },
   descriptionText: {
     fontSize: 18,
-    color: Color.warmGrey500,
+    color: Color.white,
     textAlign: "center",
     fontWeight: "600",
   },

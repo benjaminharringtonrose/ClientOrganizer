@@ -13,6 +13,7 @@ import Firebase from "../../Firebase";
 import * as ImagePicker from "expo-image-picker";
 import { connect } from "react-redux";
 import Routes from "../navigation/routes";
+import { Color } from "../styles";
 
 interface ILocalState {
   text: string;
@@ -74,10 +75,10 @@ function PostScreen(props: IPostScreenProps) {
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>
         <TouchableOpacity onPress={() => props.navigation.goBack()}>
-          <Ionicons name="md-arrow-back" size={24} color="#D8D9DB" />
+          <Ionicons name="md-arrow-back" size={24} color={Color.white} />
         </TouchableOpacity>
         <TouchableOpacity onPress={handlePost}>
-          <Text style={{ fontWeight: "500" }}>Post</Text>
+          <Text style={{ fontWeight: "500", color: Color.white }}>{"Post"}</Text>
         </TouchableOpacity>
       </View>
 
@@ -90,15 +91,16 @@ function PostScreen(props: IPostScreenProps) {
           autoFocus={true}
           multiline={true}
           numberOfLines={4}
-          style={{ flex: 1 }}
+          style={{ flex: 1, color: Color.white }}
           placeholder="Want to share something?"
+          placeholderTextColor={Color.darkThemeGrey}
           onChangeText={(text) => setState({ ...state, text })}
           value={state.text}
         />
       </View>
 
       <TouchableOpacity style={styles.photo} onPress={pickImage}>
-        <Ionicons name="md-camera" size={32} color="#D8D9DB" />
+        <Ionicons name="md-camera" size={32} color={Color.darkThemeGrey} />
       </TouchableOpacity>
       {!!state.image && (
         <View style={{ marginHorizontal: 32, marginTop: 32, height: 250 }}>
@@ -125,14 +127,15 @@ export default connect(mapStateToProps, {})(PostScreen);
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: Color.darkThemeGreyDark,
   },
   header: {
     flexDirection: "row",
     justifyContent: "space-between",
     paddingHorizontal: 32,
     paddingVertical: 12,
-    borderBottomWidth: 1,
-    borderBottomColor: "#D8D9DB",
+    borderBottomWidth: StyleSheet.hairlineWidth,
+    borderBottomColor: Color.darkThemeGreyMed,
   },
   inputContainer: {
     margin: 32,
