@@ -53,11 +53,10 @@ const styles = StyleSheet.create({
   rootContainer: {
     flex: 1,
     backgroundColor: Color.darkThemeGreyDark,
-    borderRadius: 5,
-    borderColor: Color.darkThemeGreyDark,
-    borderWidth: 1,
+    borderRadius: 7,
+    borderColor: Color.darkThemeGreyMed,
+    borderWidth: 0.5,
     paddingVertical: Spacing.small,
-    marginBottom: Spacing.micro,
   },
   avatar: {
     width: 36,

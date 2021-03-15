@@ -42,35 +42,28 @@ function LoginScreen(props: LoginScreenProps) {
 
   const oldProps = usePrevious(props);
 
-  useEffect(() => {
-    firebase
-      .auth()
-      .signInWithEmailAndPassword("brtest@test.com", "password")
-      .then(() => {
-        console.log("Logged in");
-        props.navigation.navigate(Routes.DASHBOARD_TABS);
-      })
-      .catch((error) => {
-        console.log(error.message);
-      });
-  }, []);
-
-  useEffect(() => {
-    if (oldProps?.authLoading && !props.authLoading && !props.authError) {
-      setState({ ...state, email: "", password: "" });
-      props.navigation.navigate(Routes.DASHBOARD_TABS);
-    }
-  }, [props.authLoading, props.authError]);
+  // useEffect(() => {
+  //   firebase
+  //     .auth()
+  //     .signInWithEmailAndPassword("brtest@test.com", "password")
+  //     .then(() => {
+  //       console.log("Logged in");
+  //       props.navigation.navigate(Routes.DASHBOARD_TABS);
+  //     })
+  //     .catch((error) => {
+  //       console.log(error.message);
+  //     });
+  // }, []);
 
   const onLoginPress = () => {
     const { email, password } = state;
     props.dispatchLoginRequest({ email, password });
-    setState({ ...state, email: "", password: "" });
+    setState({ ...state, password: "" });
   };
 
   const renderLoginButton = () => {
     if (props.authLoading) {
-      return <Spinner size="small" />;
+      return <Spinner size="small" color={Color.white} />;
     } else {
       return (
         <Button label={"Login"} onPress={onLoginPress} style={{ marginBottom: Spacing.large }} />

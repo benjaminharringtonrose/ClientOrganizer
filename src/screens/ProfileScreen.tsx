@@ -39,11 +39,11 @@ type ProfileScreenProps = PropsFromState & DispatchFromState & PassedProps;
 function ProfileScreen(props: ProfileScreenProps) {
   const prevProps = usePrevious(props);
 
-  useEffect(() => {
-    if (prevProps?.loading && !props.loading && !props.error) {
-      props.navigation.navigate(Routes.LOGIN_SCREEN);
-    }
-  }, [props.loading, props.error]);
+  // useEffect(() => {
+  //   if (prevProps?.loading && !props.loading && !props.error) {
+  //     props.navigation.navigate(Routes.LOGIN_SCREEN);
+  //   }
+  // }, [props.loading, props.error]);
   const onLogoutPress = () => {
     props.dispatchLogoutRequest(LOGOUT_USER.REQUESTED);
   };
@@ -57,7 +57,7 @@ function ProfileScreen(props: ProfileScreenProps) {
 
   const renderSignOutButton = () => {
     if (props.loading) {
-      return <Spinner size="small" />;
+      return <Spinner size="small" color={Color.white} />;
     } else {
       return <Button label={"Sign Out"} onPress={onLogoutPress} />;
     }
@@ -68,7 +68,6 @@ function ProfileScreen(props: ProfileScreenProps) {
       <Card>
         <View style={styles.avatarPlaceholder}>
           {props.avatar && <Image source={{ uri: props?.avatar }} style={styles.avatar} />}
-          {/* <Ionicons name="ios-add" size={40} color="#FFF" style={styles.addIcon} /> */}
         </View>
         <Text style={styles.subHeaderText}>{"User Information"}</Text>
         <CellLabelLeftRight

@@ -55,6 +55,7 @@ function FeedScreen(props: IFeedScreenProps) {
       <RefreshControl
         refreshing={props.fetchPostsLoading}
         onRefresh={() => props.dispatchFetchPosts()}
+        tintColor={Color.white}
       />
     );
   }
