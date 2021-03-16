@@ -193,7 +193,7 @@ export function* addPostSaga(action: any) {
         timestamp: Date.now(),
         image: imageUri || "",
       });
-    yield put(fetchUserRequested(uid));
+    yield put(fetchPostsRequested());
     yield put(addPostSucceeded());
   } catch (err) {
     yield put(addPostFailed({ err }));

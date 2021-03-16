@@ -102,7 +102,7 @@ function PostScreen(props: IPostScreenProps) {
         }
       />
       <View style={styles.inputContainer}>
-        {!!props.avatar && props.avatar !== null ? (
+        {!!props.avatar ? (
           <Image source={{ uri: props.avatar }} style={styles.avatar} />
         ) : (
           <Ionicons

@@ -41,10 +41,13 @@ interface DispatchFromState {
 type ProfileScreenProps = PropsFromState & DispatchFromState & PassedProps;
 
 interface ILocalState {
-  avatarUri?: string;
+  imageLoading: boolean;
 }
 
 function ProfileScreen(props: ProfileScreenProps) {
+  const [state, setState] = useState<ILocalState>({
+    imageLoading: false,
+  });
   useEffect(() => {
     const uid = firebase.auth().currentUser?.uid;
     if (uid) {
@@ -88,7 +91,11 @@ function ProfileScreen(props: ProfileScreenProps) {
     <ScreenContainer>
       <Card>
         <TouchableOpacity style={styles.avatarPlaceholder} onPress={onPickAvatar}>
-          {!!props.avatar && <Image source={{ uri: props.avatar }} style={styles.avatar} />}
+          {state.imageLoading ? (
+            <ActivityIndicator />
+          ) : (
+            <Image source={{ uri: props.avatar }} style={styles.avatar} />
+          )}
 
           <View
             style={{
