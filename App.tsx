@@ -17,9 +17,7 @@ class App extends Component {
     return (
       <Provider store={store}>
         <StatusBar barStyle={"light-content"} />
-        <View style={{ flex: 1, backgroundColor: Color.darkThemeGreyDark }}>
-          <Navigator />
-        </View>
+        <Navigator />
       </Provider>
     );
   }

@@ -10,6 +10,7 @@ interface IPostCardProps {
   name?: string;
   bio?: number;
   icon?: "ellipsis-horizontal";
+  onPress?: () => void;
 }
 
 interface ILocalState {
@@ -45,7 +46,7 @@ export function UserCard(props: IPostCardProps) {
           <Text style={styles.name}>{props.name}</Text>
           <Text style={styles.timestamp}>{props.bio}</Text>
         </View>
-        <TouchableOpacity style={{ marginRight: Spacing.small }}>
+        <TouchableOpacity style={{ marginRight: Spacing.small }} onPress={props.onPress}>
           <Ionicons name={props.icon} size={24} color={Color.white} />
         </TouchableOpacity>
       </View>

@@ -9,7 +9,7 @@ const INITIAL_STATE = {
 };
 
 const FriendReducer = (state = INITIAL_STATE, action: any) => {
-  console.log(action);
+  // console.log(action);
   switch (action.type) {
     case ADD_FRIEND.REQUESTED:
       return {

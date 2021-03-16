@@ -3,6 +3,7 @@ import { put } from "redux-saga/effects";
 import firebase from "firebase";
 import uuid from "uuid-random";
 import { getDocRef } from "../../screens/util";
+import { fetchUserRequested } from "./UserSagas";
 
 // FETCH ALL FRIENDS - ACTIONS AND SAGA
 
@@ -35,7 +36,8 @@ export const addFriendFailed = (error: any) => ({
 
 export function* addFriendSaga(action: any) {
   try {
-    const { firstName, lastName, email } = action.payload;
+    const { firstName, lastName, email, avatar } = action.payload;
+    const uid = yield firebase.auth().currentUser?.uid;
     const doc = yield getDocRef();
     doc.set(
       {
@@ -44,12 +46,14 @@ export function* addFriendSaga(action: any) {
             firstName,
             lastName,
             email,
+            avatar,
           },
         },
       },
       { merge: true }
     );
     yield put(addFriendSucceeded());
+    yield put(fetchUserRequested(uid));
   } catch (error) {
     yield put(addFriendFailed({ error }));
   }
@@ -66,10 +70,10 @@ export const deleteFriendFailed = (error: any) => ({
   payload: error,
 });
 
-export function* deleteFriendSaga() {
+export function* deleteFriendSaga(action: any) {
   try {
+    const { id } = action.payload;
     const uid = yield firebase.auth().currentUser?.uid;
-    const friendID = uuid();
     yield firebase
       .firestore()
       .collection("users")
@@ -77,11 +81,13 @@ export function* deleteFriendSaga() {
       .set(
         {
           friends: {
-            [friendID!]: firebase.firestore.FieldValue.delete(),
+            [id!]: firebase.firestore.FieldValue.delete(),
           },
         },
         { merge: true }
       );
+    yield put(deleteFriendSucceeded());
+    yield put(fetchUserRequested(uid));
   } catch (error) {
     yield put(deleteFriendFailed({ error }));
   }

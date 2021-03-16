@@ -6,10 +6,11 @@ import {
   FlatList,
   RefreshControl,
   TouchableOpacity,
+  Dimensions,
   Alert,
 } from "react-native";
 import { connect } from "react-redux";
-import { Header, ScreenContainer, CardSection } from "../components";
+import { Header, ScreenContainer, CardSection, Button, Card } from "../components";
 import { Color, Spacing } from "../styles";
 import { UserCard } from "../components/UserCard";
 import firebase from "firebase";
@@ -17,6 +18,7 @@ import { IStringMap } from "./RegisterScreen";
 import { FETCH_ALL_USERS, ADD_FRIEND } from "../store/types";
 import SearchBar from "../components/SearchBar";
 import AlertModal from "../components/AlertModal";
+import { BottomModal } from "../components/BottomModal";
 
 interface IPassedProps {
   navigation: any;
@@ -30,14 +32,14 @@ interface IPropsFromState {
 
 interface IDispatchFromState {
   dispatchFetchAllUsers: () => void;
-  dispatchAddFriend: ({ firstName, lastName, email }: any) => void;
+  dispatchAddFriend: ({ firstName, lastName, email, avatar }: any) => void;
 }
 
 type IFindFriendsProps = IPassedProps & IPropsFromState & IDispatchFromState;
 
 interface ILocalState {
   showModal: boolean;
-  selectedUser: any;
+  selectedUser?: IStringMap<any>;
 }
 
 function FindFriendsScreen(props: IFindFriendsProps) {
@@ -55,6 +57,7 @@ function FindFriendsScreen(props: IFindFriendsProps) {
           firstName: item.firstName,
           lastName: item.lastName,
           email: item.email,
+          avatar: item.avatar,
         },
       });
     };
@@ -82,6 +85,8 @@ function FindFriendsScreen(props: IFindFriendsProps) {
       />
     );
   }
+
+  const modalHeight = Dimensions.get("screen").height / 4;
   return (
     <ScreenContainer>
       <View style={{ paddingLeft: Spacing.large, paddingTop: Spacing.med }}>
@@ -97,27 +102,42 @@ function FindFriendsScreen(props: IFindFriendsProps) {
         showsVerticalScrollIndicator={false}
         refreshControl={refreshControl()}
       />
-      <AlertModal
+      <BottomModal
+        title={"Add a Friend"}
         isVisible={state.showModal}
-        label={`Add ${state.selectedUser?.firstName}?`}
-        actions={[
-          {
-            buttonLabel: "Add",
-            onPress: () => {
-              props.dispatchAddFriend({
-                firstName: state.selectedUser?.firstName,
-                lastName: state.selectedUser?.lastName,
-                email: state.selectedUser?.email,
-              });
-              setState({ ...state, showModal: false });
-            },
-          },
-          {
-            buttonLabel: "Cancel",
-            onPress: () => setState({ ...state, showModal: false }),
-          },
-        ]}
-      />
+        onBackdropPress={() => setState({ ...state, showModal: false })}
+      >
+        <View style={{ minHeight: modalHeight }}>
+          <Card>
+            {state.selectedUser && (
+              <CardSection>
+                <UserCard
+                  avatar={state.selectedUser.avatar}
+                  name={`${state.selectedUser.firstName} ${state.selectedUser.lastName}`}
+                  bio={state.selectedUser.bio}
+                  icon={"ellipsis-horizontal"}
+                />
+              </CardSection>
+            )}
+
+            <CardSection>
+              <Button
+                label={"Add"}
+                onPress={() => {
+                  props.dispatchAddFriend({
+                    firstName: state.selectedUser?.firstName,
+                    lastName: state.selectedUser?.lastName,
+                    email: state.selectedUser?.email,
+                    avatar: state.selectedUser?.avatar,
+                  });
+                  setState({ ...state, showModal: false });
+                }}
+                style={{ marginBottom: Spacing.med }}
+              />
+            </CardSection>
+          </Card>
+        </View>
+      </BottomModal>
     </ScreenContainer>
   );
 }
@@ -132,8 +152,8 @@ const mapStateToProps = (state: any) => {
 
 const mapDispatchToProps = (dispatch: any) => ({
   dispatchFetchAllUsers: () => dispatch({ type: FETCH_ALL_USERS.REQUESTED }),
-  dispatchAddFriend: ({ firstName, lastName, email }: any) =>
-    dispatch({ type: ADD_FRIEND.REQUESTED, payload: { firstName, lastName, email } }),
+  dispatchAddFriend: ({ firstName, lastName, email, avatar }: any) =>
+    dispatch({ type: ADD_FRIEND.REQUESTED, payload: { firstName, lastName, email, avatar } }),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(FindFriendsScreen);

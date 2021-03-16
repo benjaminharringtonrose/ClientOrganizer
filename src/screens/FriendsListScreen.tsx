@@ -1,24 +1,49 @@
-import React, { useState } from "react";
-import { View, Text, StyleSheet, FlatList, RefreshControl } from "react-native";
+import React, { useState, useEffect } from "react";
+import { View, Text, StyleSheet, FlatList, RefreshControl, Dimensions } from "react-native";
 import { connect } from "react-redux";
-import { Header, ScreenContainer } from "../components";
+import { Header, ScreenContainer, Card, CardSection, Button } from "../components";
 import { Color, Spacing } from "../styles";
 import { UserCard } from "../components/UserCard";
+import { mapFriends } from "./util";
+import AlertModal from "../components/AlertModal";
+import { IStringMap } from "./RegisterScreen";
+import { BottomModal } from "../components/BottomModal";
+import { DELETE_FRIEND } from "../store/types";
 
 interface IPassedProps {
   navigation: any;
 }
 
-interface IPropsFromState {}
+interface IPropsFromState {
+  friends: any;
+}
 
-interface IDispatchFromState {}
+interface IDispatchFromState {
+  dispatchDeleteFriend: (id: any) => void;
+}
 
 type IFindFriendsProps = IPassedProps & IPropsFromState & IDispatchFromState;
 
-interface ILocalState {}
+interface ILocalState {
+  mappedFriends: any;
+  showModal: boolean;
+  selectedFriend?: IStringMap<any>;
+}
 
 function FriendsListScreen(props: IFindFriendsProps) {
-  const [state, setState] = useState<ILocalState>({});
+  const [state, setState] = useState<ILocalState>({
+    mappedFriends: undefined,
+    showModal: false,
+    selectedFriend: undefined,
+  });
+
+  useEffect(() => {
+    setState({ ...state, mappedFriends: mapFriends(props.friends) });
+  }, []);
+
+  useEffect(() => {
+    setState({ ...state, mappedFriends: mapFriends(props.friends) });
+  }, [props.friends]);
 
   const renderUser = ({ item }: any) => {
     if (item) {
@@ -28,21 +53,25 @@ function FriendsListScreen(props: IFindFriendsProps) {
           name={`${item.firstName} ${item.lastName}`}
           bio={item.bio}
           icon={"ellipsis-horizontal"}
+          onPress={() =>
+            setState({
+              ...state,
+              showModal: true,
+              selectedFriend: {
+                id: item.id,
+                firstName: item.firstName,
+                lastName: item.lastName,
+                email: item.email,
+                avatar: item.avatar,
+              },
+            })
+          }
         />
       );
     }
     return null;
   };
-
-  // function refreshControl() {
-  //   return (
-  //     <RefreshControl
-  //       refreshing={props.fetchAllUsersLoading}
-  //       onRefresh={() => props.dispatchFetchAllUsers()}
-  //       tintColor={Color.white}
-  //     />
-  //   );
-  // }
+  const modalHeight = Dimensions.get("screen").height / 4;
 
   return (
     <ScreenContainer>
@@ -50,61 +79,56 @@ function FriendsListScreen(props: IFindFriendsProps) {
         <Text style={{ color: Color.white, fontSize: 40 }}>{"Friends List"}</Text>
       </View>
       <FlatList
-        data={[
-          {
-            avatar: undefined,
-            firstName: "John",
-            lastName: "Smith",
-            bio: "I'm John and I drink tea.",
-            uid: "1",
-          },
-          {
-            avatar: undefined,
-            firstName: "Bill",
-            lastName: "Nye",
-            bio: "Nerdin out",
-            uid: "2",
-          },
-          {
-            avatar: undefined,
-            firstName: "Carl",
-            lastName: "Rogers",
-            bio: "It's a wonderful life.",
-            uid: "3",
-          },
-        ]}
+        data={state.mappedFriends}
         renderItem={renderUser}
         keyExtractor={(item, index) => String(index)}
         showsVerticalScrollIndicator={false}
-        // refreshControl={refreshControl()}
       />
+      <BottomModal
+        title={"Details"}
+        isVisible={state.showModal}
+        onBackdropPress={() => setState({ ...state, showModal: false })}
+      >
+        <View style={{ backgroundColor: Color.black, minHeight: modalHeight }}>
+          <Card>
+            {state.selectedFriend && (
+              <CardSection>
+                <UserCard
+                  avatar={state.selectedFriend.avatar}
+                  name={`${state.selectedFriend.firstName} ${state.selectedFriend.lastName}`}
+                  bio={state.selectedFriend.bio}
+                  icon={"ellipsis-horizontal"}
+                />
+              </CardSection>
+            )}
+
+            <CardSection>
+              <Button
+                label={"Remove"}
+                onPress={() => {
+                  props.dispatchDeleteFriend({
+                    id: state.selectedFriend?.id,
+                  });
+                  setState({ ...state, showModal: false });
+                }}
+                style={{ marginBottom: Spacing.med }}
+              />
+            </CardSection>
+          </Card>
+        </View>
+      </BottomModal>
     </ScreenContainer>
   );
 }
 
 const mapStateToProps = (state: any) => {
-  return {};
+  return {
+    friends: state.user?.user?.friends,
+  };
 };
 
-export default connect(mapStateToProps, {})(FriendsListScreen);
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: Color.darkThemeGreyDark,
-  },
-  header: {
-    paddingTop: 64,
-    paddingBottom: 16,
-    backgroundColor: Color.darkThemeGreyDark,
-    alignItems: "center",
-    justifyContent: "center",
-    borderBottomColor: Color.darkThemeGreyMed,
-    borderBottomWidth: 1,
-  },
-  headerTitle: {
-    fontSize: 20,
-    fontWeight: "500",
-    color: Color.white,
-  },
+const mapDispatchToProps = (dispatch: any) => ({
+  dispatchDeleteFriend: (id: any) => dispatch({ type: DELETE_FRIEND.REQUESTED, payload: id }),
 });
+
+export default connect(mapStateToProps, mapDispatchToProps)(FriendsListScreen);

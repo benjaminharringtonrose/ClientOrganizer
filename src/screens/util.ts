@@ -22,7 +22,7 @@ export const getUserById = (): any => {
     });
 };
 
-export function mapPosts(posts: any) {
+export function mapFriends(posts: any) {
   if (isEqual(posts, {})) {
     return undefined;
   }
