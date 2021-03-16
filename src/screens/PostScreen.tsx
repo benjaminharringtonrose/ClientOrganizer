@@ -11,7 +11,7 @@ import { Ionicons } from "@expo/vector-icons";
 import * as ImagePicker from "expo-image-picker";
 import { connect } from "react-redux";
 import Routes from "../navigation/routes";
-import { Color } from "../styles";
+import { Color, Spacing } from "../styles";
 import { ScreenContainer, Header, ButtonText, ButtonBack } from "../components";
 import { ADD_POST } from "../store/types";
 import { usePrevious } from "../hooks/usePrevious";
@@ -55,10 +55,11 @@ function PostScreen(props: IPostScreenProps) {
   }, [props.addPostLoading, props.addPostError]);
 
   const handlePost = () => {
+    console.log("PROPS", props);
     props.dispatchAddPost({
       firstName: props.firstName,
       lastName: props.lastName,
-      avatar: props.avatar,
+      avatar: props.avatar || "",
       text: state.text.trim(),
       image: state.image,
     });
@@ -78,7 +79,7 @@ function PostScreen(props: IPostScreenProps) {
   if (props.addPostLoading) {
     return (
       <ScreenContainer style={{ alignItems: "center", justifyContent: "center" }}>
-        <ActivityIndicator color={Color.white} />
+        <ActivityIndicator color={Color.white} size={"large"} />
       </ScreenContainer>
     );
   }
@@ -101,10 +102,16 @@ function PostScreen(props: IPostScreenProps) {
         }
       />
       <View style={styles.inputContainer}>
-        <Image
-          source={{ uri: props.avatar } || require("../assets/defaultAvatar.png")}
-          style={styles.avatar}
-        />
+        {props.avatar ? (
+          <Image source={{ uri: props.avatar }} style={styles.avatar} />
+        ) : (
+          <Ionicons
+            name={"person-circle-outline"}
+            color={Color.white}
+            size={40}
+            style={{ marginRight: Spacing.small }}
+          />
+        )}
         <TextInput
           autoFocus={true}
           multiline={true}
@@ -161,6 +168,7 @@ const styles = StyleSheet.create({
     borderBottomColor: Color.darkThemeGreyMed,
   },
   inputContainer: {
+    alignItems: "center",
     margin: 32,
     flexDirection: "row",
   },

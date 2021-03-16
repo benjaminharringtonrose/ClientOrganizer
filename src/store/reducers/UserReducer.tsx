@@ -2,7 +2,7 @@ import { FETCH_USER, ADD_POST, UPLOAD_AVATAR } from "../types";
 
 const INITIAL_STATE = {
   searchText: undefined,
-  user: undefined,
+  user: {},
   fetchUserLoading: false,
   fetchUserError: undefined,
   addPostLoading: false,
@@ -57,6 +57,10 @@ const UserReducer = (state = INITIAL_STATE, action: any) => {
       return {
         ...state,
         uploadAvatarLoading: false,
+        user: {
+          ...state.user,
+          avatar: action.payload,
+        },
       };
     case UPLOAD_AVATAR.FAILED:
       return {

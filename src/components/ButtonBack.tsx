@@ -11,7 +11,7 @@ interface IButtonBackProps {
 
 export function ButtonBack(props: IButtonBackProps) {
   return (
-    <TouchableOpacity onPress={useLinkProps.onPress}>
+    <TouchableOpacity onPress={props.onPress}>
       <Ionicons name="md-arrow-back" size={props.iconSize} color={props.iconColor} />
     </TouchableOpacity>
   );

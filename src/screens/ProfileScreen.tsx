@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Text, StyleSheet, Image, View, TouchableOpacity } from "react-native";
+import { Text, StyleSheet, Image, View, TouchableOpacity, ActivityIndicator } from "react-native";
 import firebase from "firebase";
 import { connect } from "react-redux";
 import { LOGOUT_USER, FETCH_USER, UPLOAD_AVATAR } from "../store/types";
@@ -23,12 +23,13 @@ interface PassedProps {
 }
 
 interface PropsFromState {
-  loading: boolean;
-  error: boolean;
   avatar: string;
   firstName: string;
   lastName: string;
   email: string;
+  authLoading: boolean;
+  uploadAvatarLoading: boolean;
+  uploadAvatarError?: any;
 }
 
 interface DispatchFromState {
@@ -56,7 +57,7 @@ function ProfileScreen(props: ProfileScreenProps) {
   };
 
   const renderSignOutButton = () => {
-    if (props.loading) {
+    if (props.authLoading) {
       return <Spinner size="small" color={Color.white} />;
     } else {
       return (
@@ -88,7 +89,29 @@ function ProfileScreen(props: ProfileScreenProps) {
       <Card>
         <TouchableOpacity style={styles.avatarPlaceholder} onPress={onPickAvatar}>
           {!!props.avatar && <Image source={{ uri: props.avatar }} style={styles.avatar} />}
-          <Ionicons name="ios-add" size={40} color="#FFF" style={styles.addIcon} />
+
+          <View
+            style={{
+              flex: 1,
+              alignItems: "flex-end",
+              justifyContent: "flex-end",
+            }}
+          >
+            <View
+              style={{
+                backgroundColor: props.uploadAvatarLoading ? Color.black : Color.primary,
+                borderRadius: 20,
+                borderColor: Color.black,
+                borderWidth: 5,
+              }}
+            >
+              {props.uploadAvatarLoading ? (
+                <ActivityIndicator size={30} color={Color.white} />
+              ) : (
+                <Ionicons name="ios-add" size={30} color={Color.white} style={styles.addIcon} />
+              )}
+            </View>
+          </View>
         </TouchableOpacity>
         <Text style={styles.subHeaderText}>{"User Information"}</Text>
         <CardSection>
@@ -119,8 +142,10 @@ const mapStateToProps = (state: any) => {
     firstName: state.user?.user?.firstName,
     lastName: state.user?.user?.lastName,
     email: state.user?.user?.email,
-    loading: state.auth.loading,
-    error: state.auth?.error,
+    authLoading: state.auth.loading,
+    authError: state.auth?.error,
+    uploadAvatarLoading: state.user?.uploadAvatarLoading,
+    uploadAvatarError: state.user?.uploadAvatarError,
   };
 };
 
@@ -140,9 +165,9 @@ const styles = StyleSheet.create({
     paddingTop: Spacing.xxlarge,
   },
   avatarPlaceholder: {
-    alignSelf: "center",
     width: 120,
     height: 120,
+    alignSelf: "center",
     backgroundColor: Color.darkThemeGreyMed,
     borderRadius: 60,
     marginVertical: Spacing.small,
@@ -154,9 +179,6 @@ const styles = StyleSheet.create({
     borderRadius: 60,
   },
   addIcon: {
-    alignSelf: "center",
-    marginTop: 38,
-    marginLeft: 2,
     color: Color.greyLight,
   },
   subHeaderText: {

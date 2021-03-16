@@ -115,9 +115,10 @@ export function uploadAvatarRequested() {
   };
 }
 
-export function uploadAvatarSucceeded() {
+export function uploadAvatarSucceeded(avatarUri: string) {
   return {
     type: UPLOAD_AVATAR.SUCCEEDED,
+    payload: avatarUri,
   };
 }
 export function uploadAvatarFailed(error: any) {
@@ -133,13 +134,17 @@ export function* uploadAvatarSaga(action: any) {
   try {
     const uri = action.payload;
     const uid = firebase.auth().currentUser?.uid;
-    const avatarUri = yield uploadPhotoAsync(uri, `users/${uid}/avatar`);
-    const db = getDocRef();
-    yield db.set({
-      avatar: avatarUri,
-    });
-    yield put(uploadAvatarSucceeded());
-  } catch (error) {}
+    const avatarUri = yield uploadPhotoAsync(uri, `avatars/${uid}`);
+    yield firebase.firestore().collection("users").doc(uid).set(
+      {
+        avatar: avatarUri,
+      },
+      { merge: true }
+    );
+    yield put(uploadAvatarSucceeded(avatarUri));
+  } catch (error) {
+    yield put(uploadAvatarFailed({ error }));
+  }
 }
 
 // ADD POST - ACTIONS
@@ -171,9 +176,9 @@ export function* addPostSaga(action: any) {
     const postID = uuid();
     let imageUri: unknown;
     if (image) {
-      imageUri = yield uploadPhotoAsync(image, `posts/${postID}/image`);
+      imageUri = yield uploadPhotoAsync(image, `images/${postID}`);
     }
-    const avatarUri = yield uploadPhotoAsync(avatar, `posts/${postID}/avatar`);
+    const avatarUri = yield uploadPhotoAsync(avatar, `posts/avatars/${uid}`);
     firebase
       .firestore()
       .collection("posts")
@@ -187,6 +192,7 @@ export function* addPostSaga(action: any) {
         timestamp: Date.now(),
         image: imageUri || "",
       });
+    yield put(fetchUserRequested(uid));
     yield put(addPostSucceeded());
   } catch (err) {
     yield put(addPostFailed({ err }));
