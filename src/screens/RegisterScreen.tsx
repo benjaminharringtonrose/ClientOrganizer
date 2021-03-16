@@ -97,7 +97,7 @@ function RegisterScreen(props: RegisterScreenProps) {
   return (
     <ScreenContainer>
       <Header
-        title={"Register"}
+        title={"Chatty"}
         headerLeft={
           <ButtonBack
             onPress={() => props.navigation.goBack()}
