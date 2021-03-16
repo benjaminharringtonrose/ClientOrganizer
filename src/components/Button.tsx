@@ -23,7 +23,6 @@ export class Button extends Component<ButtonProps> {
 const styles = StyleSheet.create({
   textStyle: {
     alignSelf: "center",
-    fontWeight: "800",
     paddingVertical: 10,
     color: Color.white,
   },

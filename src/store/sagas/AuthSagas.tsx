@@ -2,7 +2,7 @@ import { REGISTER_USER, LOGIN_USER, FETCH_USER, LOGOUT_USER } from "../types";
 import firebase from "firebase";
 import { call, put } from "redux-saga/effects";
 import { getDocRef } from "../../screens/util";
-import { fetchUserSaga } from "./UserSagas";
+import { fetchUserSaga, fetchAllUsersRequested } from "./UserSagas";
 
 // LOGIN USER - ACTIONS
 
@@ -30,6 +30,7 @@ export function* loginUserSaga(action: any) {
     yield put(loginUserSuccess(data));
     const uid = yield firebase.auth().currentUser?.uid;
     yield fetchUserSaga({ type: FETCH_USER.REQUESTED, payload: uid });
+    yield put(fetchAllUsersRequested());
   } catch (error) {
     yield put(loginUserFail(error));
   }
@@ -82,7 +83,6 @@ function registerUserFail(error: any) {
 export function* registerUserSaga(action: any) {
   try {
     const { firstName, lastName, email, password } = action.payload;
-    // yield console.log("action.payload - regster saga", action.payload);
     const auth = firebase.auth();
     const data = yield call([auth, auth.createUserWithEmailAndPassword], email, password);
     const db = getDocRef();

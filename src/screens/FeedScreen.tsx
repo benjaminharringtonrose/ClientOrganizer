@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import { FlatList, RefreshControl } from "react-native";
 import firebase from "firebase";
 import { connect } from "react-redux";
-import { FETCH_POSTS, FETCH_USER } from "../store/types";
+import { FETCH_POSTS, FETCH_USER, FETCH_ALL_USERS } from "../store/types";
 import { Header, ScreenContainer, PostCard } from "../components";
 import { Color, TextStyles, ViewStyles } from "../styles";
 
@@ -17,7 +17,8 @@ interface IPropsFromState {
 }
 
 interface IDispatchFromState {
-  dispatchFetchUser: (uid: string) => any;
+  dispatchFetchUser: (uid: string) => void;
+  dispatchFetchAllUsers: () => void;
   dispatchFetchPosts: () => void;
 }
 
@@ -26,6 +27,7 @@ type IFeedScreenProps = IPropsFromState & IDispatchFromState & IPassedProps;
 function FeedScreen(props: IFeedScreenProps) {
   useEffect(() => {
     props.dispatchFetchPosts();
+    props.dispatchFetchAllUsers();
     const uid = firebase.auth().currentUser?.uid;
     if (uid) {
       props.dispatchFetchUser(uid);
@@ -81,6 +83,7 @@ const mapStateToProps = (state: any) => {
 
 const mapDispatchToProps = (dispatch: any) => ({
   dispatchFetchUser: (uid: any) => dispatch({ type: FETCH_USER.REQUESTED, payload: uid }),
+  dispatchFetchAllUsers: () => dispatch({ type: FETCH_ALL_USERS.REQUESTED }),
   dispatchFetchPosts: () => dispatch({ type: FETCH_POSTS.REQUESTED }),
 });
 

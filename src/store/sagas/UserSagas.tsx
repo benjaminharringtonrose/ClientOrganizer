@@ -2,7 +2,7 @@ import { put } from "redux-saga/effects";
 import * as firebase from "firebase";
 require("firebase/firestore");
 import uuid from "uuid-random";
-import { FETCH_USER, FETCH_POSTS, ADD_POST, UPLOAD_AVATAR } from "../types";
+import { FETCH_USER, FETCH_POSTS, ADD_POST, UPLOAD_AVATAR, FETCH_ALL_USERS } from "../types";
 import { getDocRef } from "../../screens/util";
 
 // FETCH USER - ACTIONS
@@ -36,6 +36,46 @@ export function* fetchUserSaga(action: any) {
     yield put(fetchUserSucceeded(doc.data()));
   } catch (error) {
     yield put(fetchUserFailed({ error }));
+  }
+}
+
+// FETCH ALL USERS - ACTIONS
+
+export function fetchAllUsersRequested() {
+  return {
+    type: FETCH_ALL_USERS.REQUESTED,
+  };
+}
+
+export function fetchAllUsersSucceeded(data: any) {
+  return {
+    type: FETCH_ALL_USERS.SUCCEEDED,
+    payload: data,
+  };
+}
+export function fetchAllUsersFailed(error: any) {
+  return {
+    type: FETCH_ALL_USERS.FAILED,
+    payload: error,
+  };
+}
+
+export function* fetchAllUsersSaga() {
+  try {
+    const users: firebase.firestore.DocumentData[] = [];
+    yield firebase
+      .firestore()
+      .collection("users")
+      .get()
+      .then(function (querySnapshot) {
+        querySnapshot.forEach((doc) => {
+          const user = doc.data();
+          users.push(user);
+        });
+      });
+    yield put(fetchAllUsersSucceeded(users));
+  } catch (error) {
+    yield put(fetchAllUsersFailed({ error }));
   }
 }
 

@@ -1,4 +1,4 @@
-import { LOGIN_USER, REGISTER_USER, LOGOUT_USER, AVATAR_CHANGED } from "../types";
+import { LOGIN_USER, REGISTER_USER, LOGOUT_USER } from "../types";
 
 const INITIAL_STATE = {
   avatar: "",
@@ -59,7 +59,6 @@ const AuthReducer = (state = INITIAL_STATE, action: any) => {
       return {
         ...state,
         user: action.payload,
-        clients: {},
         loading: false,
         error: undefined,
       };
@@ -68,11 +67,6 @@ const AuthReducer = (state = INITIAL_STATE, action: any) => {
         ...state,
         error: action.payload.message,
         loading: false,
-      };
-    case AVATAR_CHANGED:
-      return {
-        ...state,
-        avatar: action.payload,
       };
     default:
       return state;

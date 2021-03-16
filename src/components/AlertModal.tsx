@@ -1,15 +1,15 @@
 import React from "react";
 import { View, Text, StyleSheet } from "react-native";
-import Card from "./Card";
-import CardSection from "./CardSection";
-import Button from "./Button";
-import { Color } from "../styles";
+import { Card } from "./Card";
+import { CardSection } from "./CardSection";
+import { Button } from "./Button";
+import { Color, Spacing } from "../styles";
 import { Modal } from "./Modal";
+import { IStringMap } from "../screens/RegisterScreen";
 
 interface IAlertModalProps {
   label: string;
-  onDeletePress: () => void;
-  onCancelPress: () => void;
+  actions: IStringMap<any>[];
   isVisible: boolean;
 }
 
@@ -20,12 +20,13 @@ export default function AlertModal(props: IAlertModalProps) {
         <Card>
           <View style={styles.modalView}>
             <Text style={styles.modalText}>{props.label}</Text>
-            <CardSection>
-              <Button label={"Delete"} onPress={props.onDeletePress} />
-            </CardSection>
-            <CardSection>
-              <Button label={"Cancel"} onPress={props.onCancelPress} />
-            </CardSection>
+            {props.actions.map((action) => {
+              return (
+                <CardSection>
+                  <Button label={action.buttonLabel} onPress={action.onPress} />
+                </CardSection>
+              );
+            })}
           </View>
         </Card>
       </View>
@@ -37,25 +38,14 @@ const styles = StyleSheet.create({
   centeredView: {
     flex: 1,
     justifyContent: "center",
-    alignItems: "center",
     marginTop: 22,
   },
   modalView: {
     marginTop: 100,
-    backgroundColor: Color.darkThemeGreyDark,
+    backgroundColor: Color.darkThemeGreyMed,
     borderRadius: 3,
-    borderWidth: StyleSheet.hairlineWidth,
-    borderColor: Color.darkThemeGrey,
     padding: 40,
-    alignItems: "center",
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
-    elevation: 5,
+    marginHorizontal: Spacing.small,
   },
   openButton: {
     borderRadius: 20,

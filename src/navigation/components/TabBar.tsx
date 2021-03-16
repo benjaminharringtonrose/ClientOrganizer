@@ -10,7 +10,6 @@ interface IPropsFromState {
 }
 
 function TabBar(props: any) {
-  console.log(props.state.routes);
   return (
     <SafeAreaView
       style={{

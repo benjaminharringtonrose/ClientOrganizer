@@ -1,10 +1,13 @@
-import { FETCH_USER, ADD_POST, UPLOAD_AVATAR } from "../types";
+import { FETCH_USER, ADD_POST, UPLOAD_AVATAR, FETCH_ALL_USERS } from "../types";
 
 const INITIAL_STATE = {
   searchText: undefined,
   user: {},
+  users: [],
   fetchUserLoading: false,
   fetchUserError: undefined,
+  fetchAllUsersLoading: false,
+  ftchAllUsersError: undefined,
   addPostLoading: false,
   addPostError: undefined,
   uploadAvatarLoading: false,
@@ -29,8 +32,24 @@ const UserReducer = (state = INITIAL_STATE, action: any) => {
       return {
         ...state,
         fetchUserError: action.payload.message,
-        password: "",
         fetchUserLoading: false,
+      };
+    case FETCH_ALL_USERS.REQUESTED:
+      return {
+        ...state,
+        fetchAllUsersLoading: true,
+      };
+    case FETCH_ALL_USERS.SUCCEEDED:
+      return {
+        ...state,
+        users: action.payload,
+        fetchAllUsersLoading: false,
+      };
+    case FETCH_ALL_USERS.FAILED:
+      return {
+        ...state,
+        fetchAllUsersError: action.payload.message,
+        fetchAllUsersLoading: false,
       };
     case ADD_POST.REQUESTED:
       return {

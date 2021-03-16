@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { Color, Spacing } from "../styles";
 import { FontAwesome } from "@expo/vector-icons";
-import Input from "./Input";
+import { Input } from "./Input";
 import { IKeyboard } from "../../types";
 import { StyleProp, ViewStyle, View, StyleSheet } from "react-native";
 
@@ -20,21 +20,20 @@ export default class SearchBar extends Component<ISearchBarProps> {
         <FontAwesome
           name={"search"}
           size={18}
-          color={Color.peach}
+          color={Color.white}
           style={{ paddingLeft: Spacing.small }}
         />
         <Input
-          label={""}
           value={value}
           onChangeText={onChangeText}
           placeholder={placeholder ? placeholder : "Search"}
-          placeholderTextColor={Color.peachDark}
+          placeholderTextColor={Color.greyMed}
           secureTextEntry={false}
           keyboardType={keyboardType}
           autoCapitalize={"words"}
-          selectionColor={Color.peach}
-          textStyle={{ color: Color.peach }}
-          style={{ backgroundColor: Color.warmGrey900 }}
+          selectionColor={Color.white}
+          textStyle={{ color: Color.white }}
+          style={{ backgroundColor: Color.darkThemeGreyMed }}
         />
       </View>
     );
@@ -45,9 +44,7 @@ const styles = StyleSheet.create({
   rootContainer: {
     flexDirection: "row",
     alignItems: "center",
-    backgroundColor: Color.warmGrey900,
+    backgroundColor: Color.darkThemeGreyMed,
     borderRadius: 5,
-    borderWidth: 2,
-    borderColor: Color.peach,
   },
 });
