@@ -17,7 +17,7 @@ type IFindFriendsProps = IPassedProps & IPropsFromState & IDispatchFromState;
 
 interface ILocalState {}
 
-function FindFriendsScreen(props: IFindFriendsProps) {
+function FriendsListScreen(props: IFindFriendsProps) {
   const [state, setState] = useState<ILocalState>({});
 
   const renderUser = ({ item }: any) => {
@@ -47,29 +47,29 @@ function FindFriendsScreen(props: IFindFriendsProps) {
   return (
     <ScreenContainer>
       <View style={{ paddingLeft: Spacing.large, paddingVertical: Spacing.med }}>
-        <Text style={{ color: Color.white, fontSize: 40 }}>{"Find Friends"}</Text>
+        <Text style={{ color: Color.white, fontSize: 40 }}>{"Friends List"}</Text>
       </View>
       <FlatList
         data={[
           {
             avatar: undefined,
-            firstName: "Sally",
-            lastName: "May",
-            bio: "Hello there!",
+            firstName: "John",
+            lastName: "Smith",
+            bio: "I'm John and I drink tea.",
             uid: "1",
           },
           {
             avatar: undefined,
-            firstName: "Sally",
-            lastName: "May",
-            bio: "Hello there!",
+            firstName: "Bill",
+            lastName: "Nye",
+            bio: "Nerdin out",
             uid: "2",
           },
           {
             avatar: undefined,
-            firstName: "Sally",
-            lastName: "May",
-            bio: "Hello there!",
+            firstName: "Carl",
+            lastName: "Rogers",
+            bio: "It's a wonderful life.",
             uid: "3",
           },
         ]}
@@ -86,7 +86,7 @@ const mapStateToProps = (state: any) => {
   return {};
 };
 
-export default connect(mapStateToProps, {})(FindFriendsScreen);
+export default connect(mapStateToProps, {})(FriendsListScreen);
 
 const styles = StyleSheet.create({
   container: {

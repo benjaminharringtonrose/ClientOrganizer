@@ -3,36 +3,28 @@ import { View, Image, Text, StyleSheet, TouchableOpacity } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import moment from "moment";
 import { Spacing, Color } from "../styles";
+import { CommentModal } from "./CommentModal";
 
 interface IPostCardProps {
   avatar?: string;
   name?: string;
-  timestamp?: number;
-  text?: string;
-  image?: string;
+  bio?: number;
+  icon?: "ellipsis-horizontal";
 }
 
 interface ILocalState {
   commentModalVisible: boolean;
 }
 
-export function PostCard(props: IPostCardProps) {
+export function UserCard(props: IPostCardProps) {
   const [state, setState] = useState<ILocalState>({
     commentModalVisible: false,
   });
 
-  const onMorePress = () => {};
-
-  const onLikePress = () => {};
-
-  const onCommentPress = () => {
-    setState({ ...state, commentModalVisible: true });
-  };
-
   return (
     <View style={styles.rootContainer}>
       <View style={{ flexDirection: "row" }}>
-        {!!props.avatar && (
+        {props.avatar ? (
           <Image
             source={{ uri: props.avatar }}
             style={{
@@ -43,31 +35,18 @@ export function PostCard(props: IPostCardProps) {
               marginLeft: Spacing.small,
             }}
           />
+        ) : (
+          <View style={{ paddingHorizontal: Spacing.small }}>
+            <Ionicons name={"person-circle"} color={Color.white} size={30} />
+          </View>
         )}
 
         <View style={{ flex: 1 }}>
           <Text style={styles.name}>{props.name}</Text>
-          <Text style={styles.timestamp}>{moment(props.timestamp).fromNow()}</Text>
+          <Text style={styles.timestamp}>{props.bio}</Text>
         </View>
-        <TouchableOpacity style={{ marginRight: Spacing.small }} onPress={onMorePress}>
-          <Ionicons name="ellipsis-horizontal" size={24} color={Color.white} />
-        </TouchableOpacity>
-      </View>
-      {!!props.image && (
-        <Image source={{ uri: props.image }} style={styles.postImage} resizeMode="cover" />
-      )}
-      {!!props.text && <Text style={styles.post}>{props.text}</Text>}
-      <View style={{ flexDirection: "row", marginLeft: Spacing.small }}>
-        <TouchableOpacity onPress={onLikePress}>
-          <Ionicons
-            name="heart-outline"
-            size={24}
-            color={Color.white}
-            style={{ marginRight: 16 }}
-          />
-        </TouchableOpacity>
-        <TouchableOpacity onPress={onCommentPress}>
-          <Ionicons name="chatbox-ellipses-outline" size={24} color={Color.white} />
+        <TouchableOpacity style={{ marginRight: Spacing.small }}>
+          <Ionicons name={props.icon} size={24} color={Color.white} />
         </TouchableOpacity>
       </View>
     </View>

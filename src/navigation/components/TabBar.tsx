@@ -1,6 +1,6 @@
 import React from "react";
-import { View, TouchableOpacity, Image } from "react-native";
-import { Color } from "../../styles";
+import { View, TouchableOpacity, Image, SafeAreaView } from "react-native";
+import { Color, Spacing } from "../../styles";
 import { Ionicons } from "@expo/vector-icons";
 import Routes from "../routes";
 import { connect } from "react-redux";
@@ -10,20 +10,23 @@ interface IPropsFromState {
 }
 
 function TabBar(props: any) {
+  console.log(props.state.routes);
   return (
-    <View
+    <SafeAreaView
       style={{
         flexDirection: "row",
         borderTopColor: Color.darkThemeGreyMed,
         borderTopWidth: 0.5,
+        borderBottomColor: Color.darkThemeGreyMed,
+        borderBottomWidth: 0.5,
         height: 70,
         justifyContent: "center",
         alignItems: "center",
+        marginVertical: Spacing.med,
       }}
     >
       {props.state.routes.map((route: any, index: any) => {
         const isFocused = props.state.index === index;
-
         const onPress = () => {
           const event = props.navigation.emit({
             type: "tabPress",
@@ -44,6 +47,10 @@ function TabBar(props: any) {
               return <Ionicons name={"ios-settings-outline"} color={"white"} size={20} />;
             case Routes.FIND_FRIENDS_SCREEN:
               return <Ionicons name={"ios-person-add-outline"} color={"white"} size={20} />;
+            case Routes.FRIENDS_LIST_SCREEN:
+              return <Ionicons name={"people-outline"} color={"white"} size={20} />;
+            case Routes.FRIENDS_TABS:
+              return <Ionicons name={"ios-person-add-outline"} color={"white"} size={20} />;
           }
         };
 
@@ -57,7 +64,7 @@ function TabBar(props: any) {
           </TouchableOpacity>
         );
       })}
-    </View>
+    </SafeAreaView>
   );
 }
 

@@ -3,12 +3,14 @@ import { useAuthState } from "../hooks/useAuthState";
 import { NavigationContainer, DarkTheme } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
 
 import LoginScreen from "../screens/LoginScreen";
 import RegisterScreen from "../screens/RegisterScreen";
 import FeedScreen from "../screens/FeedScreen";
 import ProfileScreen from "../screens/ProfileScreen";
 import PostScreen from "../screens/PostScreen";
+import FriendsListScreen from "../screens/FriendsListScreen";
 
 import Routes from "./routes";
 import TabBar from "./components/TabBar";
@@ -20,8 +22,18 @@ const DashboardTabs = () => {
     <Tab.Navigator tabBar={(props: any) => <TabBar {...props} />}>
       <Tab.Screen name={Routes.FEED_SCREEN} component={FeedScreen} />
       <Tab.Screen name={Routes.POST_SCREEN} component={PostScreen} />
-      <Tab.Screen name={Routes.FIND_FRIENDS_SCREEN} component={FindFriendsScreen} />
+      <Tab.Screen name={Routes.FRIENDS_TABS} component={MaterialTopTabs} />
       <Tab.Screen name={Routes.PROFILE_SCREEN} component={ProfileScreen} />
+    </Tab.Navigator>
+  );
+};
+
+const MaterialTopTabs = () => {
+  const Tab = createMaterialTopTabNavigator();
+  return (
+    <Tab.Navigator tabBar={(props: any) => <TabBar {...props} />}>
+      <Tab.Screen name={Routes.FIND_FRIENDS_SCREEN} component={FindFriendsScreen} />
+      <Tab.Screen name={Routes.FRIENDS_LIST_SCREEN} component={FriendsListScreen} />
     </Tab.Navigator>
   );
 };
@@ -34,15 +46,17 @@ export const Navigator = () => {
     <NavigationContainer theme={DarkTheme}>
       <Stack.Navigator>
         {isLoggedin ? (
-          <Stack.Screen
-            name={Routes.DASHBOARD_TABS}
-            component={DashboardTabs}
-            options={{
-              headerTransparent: true,
-              headerShown: false,
-              headerTitle: "",
-            }}
-          />
+          <>
+            <Stack.Screen
+              name={Routes.DASHBOARD_TABS}
+              component={DashboardTabs}
+              options={{
+                headerTransparent: true,
+                headerShown: false,
+                headerTitle: "",
+              }}
+            />
+          </>
         ) : (
           <>
             <Stack.Screen
