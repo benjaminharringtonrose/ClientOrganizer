@@ -5,12 +5,12 @@ import store from "./src/store/store";
 import firebase from "firebase";
 import { Color } from "./src/styles";
 import { Navigator } from "./src/navigation/navigation";
-import Firebase from "./Firebase";
+import FirebaseKeys from "./src/api/FirebaseKeys";
 
 class App extends Component {
   componentDidMount() {
     if (!firebase.apps.length) {
-      Firebase;
+      firebase.initializeApp(FirebaseKeys);
     }
   }
   render() {
