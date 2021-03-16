@@ -1,12 +1,22 @@
-import React, { useState } from "react";
-import { View, StyleSheet, TouchableOpacity, TextInput, Image } from "react-native";
+import React, { useState, useEffect } from "react";
+import {
+  View,
+  StyleSheet,
+  TouchableOpacity,
+  TextInput,
+  Image,
+  ActivityIndicator,
+} from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import Firebase from "../../Firebase";
 import * as ImagePicker from "expo-image-picker";
 import { connect } from "react-redux";
 import Routes from "../navigation/routes";
 import { Color } from "../styles";
-import { ScreenContainer, Header, ButtonText, ButtonBack } from "../components";
+import { ScreenContainer, Header, ButtonText, ButtonBack, Spinner } from "../components";
+import { ADD_POST } from "../store/actions/types";
+import { usePrevious } from "../hooks/usePrevious";
+import { useNavTrigger } from "../hooks/useNavTrigger";
 
 interface ILocalState {
   text: string;
@@ -18,15 +28,19 @@ interface IPassedProps {
 }
 
 interface IPropsFromState {
-  loading: boolean;
-  error: boolean;
   avatar: string;
   firstName: string;
   lastName: string;
   email: string;
+  addPostLoading: boolean;
+  addPostError?: any;
 }
 
-type IPostScreenProps = IPropsFromState & IPassedProps;
+interface IDispatchFromState {
+  dispatchAddPost: (object: any) => any;
+}
+
+type IPostScreenProps = IPropsFromState & IPassedProps & IDispatchFromState;
 
 function PostScreen(props: IPostScreenProps) {
   const [state, setState] = useState<ILocalState>({
@@ -34,22 +48,22 @@ function PostScreen(props: IPostScreenProps) {
     image: undefined,
   });
 
+  const oldProps = usePrevious(props);
+
+  useEffect(() => {
+    if (oldProps?.addPostLoading && !props.addPostLoading && !props.addPostError) {
+      props.navigation.navigate(Routes.FEED_SCREEN);
+    }
+  }, [props.addPostLoading, props.addPostError]);
+
   const handlePost = () => {
-    Firebase.shared
-      .addPost({
-        firstName: props.firstName,
-        lastName: props.lastName,
-        avatar: props.avatar,
-        text: state.text.trim(),
-        image: state.image,
-      })
-      .then(() => {
-        setState({ ...state, text: "", image: undefined });
-        props.navigation.navigate(Routes.FEED_SCREEN);
-      })
-      .catch((error: any) => {
-        console.log(error);
-      });
+    props.dispatchAddPost({
+      firstName: props.firstName,
+      lastName: props.lastName,
+      avatar: props.avatar,
+      text: state.text.trim(),
+      image: state.image,
+    });
   };
 
   const pickImage = async () => {
@@ -63,6 +77,13 @@ function PostScreen(props: IPostScreenProps) {
     }
   };
 
+  if (props.addPostLoading) {
+    return (
+      <ScreenContainer style={{ alignItems: "center", justifyContent: "center" }}>
+        <ActivityIndicator color={Color.white} />
+      </ScreenContainer>
+    );
+  }
   return (
     <ScreenContainer>
       <Header
@@ -111,17 +132,22 @@ function PostScreen(props: IPostScreenProps) {
 }
 
 const mapStateToProps = (state: any) => {
+  console.log(state.user);
   return {
     avatar: state.user?.user?.avatar,
     firstName: state.user?.user?.firstName,
     lastName: state.user?.user?.lastName,
     email: state.user?.user?.email,
-    loading: state.auth.loading,
-    error: state.auth?.error,
+    addPostLoading: state.user?.addPostLoading,
+    addPostError: state.user?.addPostError,
   };
 };
 
-export default connect(mapStateToProps, {})(PostScreen);
+const mapDispatchToProps = (dispatch: any) => ({
+  dispatchAddPost: (object: any) => dispatch({ type: ADD_POST.REQUESTED, payload: object }),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(PostScreen);
 
 const styles = StyleSheet.create({
   container: {

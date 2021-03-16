@@ -1,9 +1,8 @@
-import { fork, takeLatest } from "redux-saga/effects";
-import { put, call } from "redux-saga/effects";
-import firebase from "firebase";
+import { put } from "redux-saga/effects";
+import * as firebase from "firebase";
 require("firebase/firestore");
 import uuid from "uuid-random";
-import { FETCH_USER, FETCH_POSTS } from "../actions/types";
+import { FETCH_USER, FETCH_POSTS, ADD_POST, UPLOAD_PHOTO } from "../actions/types";
 
 // FETCH USER - ACTIONS
 
@@ -82,45 +81,84 @@ export function* fetchPostsSaga() {
   }
 }
 
+// UPLOAD PHOTO - ACTIONS
+
+export function uploadPhotoRequested() {
+  return {
+    type: UPLOAD_PHOTO.REQUESTED,
+  };
+}
+
+export function uploadPhotoSucceeded(data: any) {
+  return {
+    type: UPLOAD_PHOTO.SUCCEEDED,
+    payload: data,
+  };
+}
+export function uploadPhotoFailed(error: any) {
+  return {
+    type: UPLOAD_PHOTO.FAILED,
+    payload: error,
+  };
+}
+
 // PHOTO UPLOAD - ASYNC
 
-export const uploadPhotoAsync = (
-  uri: RequestInfo,
-  filename: string | undefined
-): Promise<unknown> => {
+export const uploadPhotoAsync = async (uri: RequestInfo, filename: string | undefined) => {
   return new Promise(async (res, rej) => {
-    try {
-      const response = await fetch(uri);
-      const file = await response.blob();
-      let upload = firebase.storage().ref(filename).put(file);
-      upload.on(
-        "state_changed",
-        (snapshot) => {},
-        (err) => {
-          rej(err);
-        },
-        async () => {
-          const url = await upload.snapshot.ref.getDownloadURL();
-          res(url);
-        }
-      );
-    } catch (error) {
-      console.log(error);
-    }
+    const response = await fetch(uri);
+    const file = await response.blob();
+
+    let upload = firebase.storage().ref(filename).put(file);
+
+    upload.on(
+      "state_changed",
+      (snapshot) => {},
+      (err) => {
+        rej(err);
+      },
+      async () => {
+        const url = await upload.snapshot.ref.getDownloadURL();
+        res(url);
+      }
+    );
+  }).catch((error) => {
+    console.error(error);
   });
 };
 
+// ADD POST - ACTIONS
+
+export function addPostRequested() {
+  return {
+    type: ADD_POST.REQUESTED,
+  };
+}
+
+export function addPostSucceeded() {
+  return {
+    type: ADD_POST.SUCCEEDED,
+  };
+}
+export function addPostFailed(error: any) {
+  return {
+    type: ADD_POST.FAILED,
+    payload: error,
+  };
+}
+
 // ADD POST - SAGA
 
-export async function addPostSaga({ firstName, lastName, avatar, text, image }: any) {
-  const uid = firebase.auth().currentUser;
-  const postID = uuid();
-  let imageUri: unknown = undefined;
-  if (image) {
-    imageUri = await uploadPhotoAsync(image, `posts/${postID}/image`);
-  }
-  const avatarUri = await uploadPhotoAsync(avatar, `posts/${postID}/avatar`);
-  return new Promise((res, rej) => {
+export function* addPostSaga(action: any) {
+  try {
+    const { firstName, lastName, avatar, text, image } = action.payload;
+    const uid = yield firebase.auth().currentUser?.uid;
+    const postID = uuid();
+    let imageUri: unknown = undefined;
+    if (image) {
+      imageUri = yield uploadPhotoAsync(image, `posts/${postID}/image`);
+    }
+    const avatarUri = yield uploadPhotoAsync(avatar, `posts/${postID}/avatar`);
     firebase
       .firestore()
       .collection("posts")
@@ -133,12 +171,9 @@ export async function addPostSaga({ firstName, lastName, avatar, text, image }: 
         uid,
         timestamp: Date.now(),
         image: imageUri || "",
-      })
-      .then((ref: any) => {
-        res(ref);
-      })
-      .catch((error: any) => {
-        rej(error);
       });
-  });
+    yield put(addPostSucceeded());
+  } catch (err) {
+    yield put(addPostFailed({ err }));
+  }
 }

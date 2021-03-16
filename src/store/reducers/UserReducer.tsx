@@ -1,20 +1,18 @@
-import { FETCH_USER, DELETE_CLIENT, UPDATE_CLIENT, ADD_CLIENT } from "../actions/types";
+import { FETCH_USER, UPLOAD_PHOTO, ADD_POST } from "../actions/types";
 
 const INITIAL_STATE = {
   searchText: undefined,
   user: undefined,
   fetchUserLoading: false,
-  fetchUserError: false,
-  deleteClientLoading: false,
-  deleteClientError: false,
-  updateClientLoading: false,
-  updateClientError: false,
-  addClientLoading: false,
-  addClientError: false,
+  fetchUserError: undefined,
+  uploadPhotoLoading: false,
+  uploadPhotoError: undefined,
+  addPostLoading: false,
+  addPostError: undefined,
 };
 
 const UserReducer = (state = INITIAL_STATE, action: any) => {
-  // console.log(action);
+  console.log(action);
   switch (action.type) {
     case FETCH_USER.REQUESTED:
       return {
@@ -34,53 +32,37 @@ const UserReducer = (state = INITIAL_STATE, action: any) => {
         password: "",
         fetchUserLoading: false,
       };
-    case DELETE_CLIENT.REQUESTED:
+    case ADD_POST.REQUESTED:
       return {
         ...state,
-        deleteClientLoading: true,
+        addPostLoading: true,
       };
-    case DELETE_CLIENT.SUCCEEDED:
+    case ADD_POST.SUCCEEDED:
       return {
         ...state,
-        deleteClientLoading: false,
+        addPostLoading: false,
       };
-    case DELETE_CLIENT.FAILED:
+    case ADD_POST.FAILED:
       return {
         ...state,
-        deleteClientLoading: false,
-        deleteClientError: action.payload.message,
+        addPostError: action.payload.message,
+        addPostLoading: false,
       };
-    case UPDATE_CLIENT.REQUESTED:
+    case UPLOAD_PHOTO.REQUESTED:
       return {
         ...state,
-        updateClientLoading: true,
+        uploadPhotoLoading: true,
       };
-    case UPDATE_CLIENT.SUCCEEDED:
+    case UPLOAD_PHOTO.SUCCEEDED:
       return {
         ...state,
-        updateClientLoading: false,
+        uploadPhotoLoading: false,
       };
-    case UPDATE_CLIENT.FAILED:
+    case UPLOAD_PHOTO.FAILED:
       return {
         ...state,
-        updateClientLoading: false,
-        updateClientError: action.payload.message,
-      };
-    case ADD_CLIENT.REQUESTED:
-      return {
-        ...state,
-        addClientLoading: true,
-      };
-    case ADD_CLIENT.SUCCEEDED:
-      return {
-        ...state,
-        addClientLoading: false,
-      };
-    case ADD_CLIENT.FAILED:
-      return {
-        ...state,
-        addClientLoading: false,
-        addClientError: action.payload.message,
+        uploadPhotoError: action.payload.message,
+        uploadPhotoLoading: false,
       };
     default:
       return state;

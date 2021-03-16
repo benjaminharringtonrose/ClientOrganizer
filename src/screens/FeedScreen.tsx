@@ -72,7 +72,6 @@ function FeedScreen(props: IFeedScreenProps) {
 }
 
 const mapStateToProps = (state: any) => {
-  // console.log("STATE", state.feed);
   return {
     posts: state.feed.posts,
     fetchPostsLoading: state.feed.fetchPostsLoading || false,
