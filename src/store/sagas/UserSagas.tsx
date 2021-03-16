@@ -174,11 +174,12 @@ export function* addPostSaga(action: any) {
     const { firstName, lastName, avatar, text, image } = action.payload;
     const uid = yield firebase.auth().currentUser?.uid;
     const postID = uuid();
+    const imageID = uuid();
     let imageUri: unknown;
     if (image) {
       imageUri = yield uploadPhotoAsync(image, `images/${postID}`);
     }
-    const avatarUri = yield uploadPhotoAsync(avatar, `avatars/${uid}`);
+    const avatarUri = yield uploadPhotoAsync(avatar, `avatars/${imageID}`);
     firebase
       .firestore()
       .collection("posts")

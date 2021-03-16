@@ -59,7 +59,7 @@ function PostScreen(props: IPostScreenProps) {
     props.dispatchAddPost({
       firstName: props.firstName,
       lastName: props.lastName,
-      avatar: props.avatar || "",
+      avatar: props.avatar,
       text: state.text.trim(),
       image: state.image,
     });
@@ -102,7 +102,7 @@ function PostScreen(props: IPostScreenProps) {
         }
       />
       <View style={styles.inputContainer}>
-        {props.avatar ? (
+        {!!props.avatar && props.avatar !== null ? (
           <Image source={{ uri: props.avatar }} style={styles.avatar} />
         ) : (
           <Ionicons
@@ -137,7 +137,7 @@ function PostScreen(props: IPostScreenProps) {
 }
 
 const mapStateToProps = (state: any) => {
-  console.log(state.user);
+  console.log("state.user", state.user);
   return {
     avatar: state.user?.user?.avatar,
     firstName: state.user?.user?.firstName,
