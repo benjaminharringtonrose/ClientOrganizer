@@ -63,7 +63,7 @@ function LoginScreen(props: LoginScreenProps) {
 
   return (
     <ScreenContainer>
-      <Header title={"Welcome!"} containerStyle={{ marginBottom: Spacing.xxlarge }} />
+      <Header title={"Chatty"} containerStyle={{ marginBottom: Spacing.xxlarge }} />
       <Card>
         <CardSection>
           <Input
