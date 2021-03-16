@@ -1,19 +1,17 @@
-import React, { Component, useState, useEffect } from "react";
-import {
-  View,
-  Text,
-  StyleSheet,
-  ScrollView,
-  SafeAreaView,
-  TouchableOpacity,
-  Image,
-} from "react-native";
+import React, { useState, useEffect } from "react";
+import { Text, StyleSheet } from "react-native";
 import { connect } from "react-redux";
-import UserPermissions from "../utilities/UserPermissions";
-import * as ImagePicker from "expo-image-picker";
 
-import { Card, Input, Button, Spinner } from "../components";
-import { Ionicons } from "@expo/vector-icons";
+import {
+  Card,
+  Input,
+  Button,
+  Spinner,
+  ButtonBack,
+  Header,
+  CardSection,
+  ScreenContainer,
+} from "../components";
 
 import { REGISTER_USER, UPLOAD_AVATAR } from "../store/types";
 import { Color, Spacing } from "../styles";
@@ -70,10 +68,10 @@ function RegisterScreen(props: RegisterScreenProps) {
     const { email, password, firstName, lastName } = state;
 
     props.dispatchRegisterRequest({
-      email,
-      password,
       firstName,
       lastName,
+      email,
+      password,
     });
   };
 
@@ -81,7 +79,11 @@ function RegisterScreen(props: RegisterScreenProps) {
     if (props.authLoading) {
       return <Spinner size="large" style={{ marginTop: Spacing.med }} />;
     }
-    return <Button label={"Signup"} onPress={onRegisterPress} style={styles.button} />;
+    return (
+      <CardSection>
+        <Button label={"Signup"} onPress={onRegisterPress} style={styles.button} />
+      </CardSection>
+    );
   };
 
   const renderError = () => {
@@ -91,12 +93,22 @@ function RegisterScreen(props: RegisterScreenProps) {
   };
 
   const { firstName, lastName, email, password } = state;
-  const { avatar } = props;
 
   return (
-    <SafeAreaView style={styles.rootContainer}>
-      <ScrollView>
-        <Card>
+    <ScreenContainer>
+      <Header
+        title={"Register"}
+        headerLeft={
+          <ButtonBack
+            onPress={() => props.navigation.goBack()}
+            iconSize={24}
+            iconColor={Color.white}
+          />
+        }
+      />
+      <Card>
+        <Text style={styles.subHeaderText}>{"Register Here"}</Text>
+        <CardSection>
           <Input
             label="First Name"
             placeholder="John"
@@ -106,6 +118,8 @@ function RegisterScreen(props: RegisterScreenProps) {
             value={firstName}
             style={{ marginBottom: Spacing.small }}
           />
+        </CardSection>
+        <CardSection>
           <Input
             label="Last Name"
             placeholder="Smith"
@@ -115,6 +129,8 @@ function RegisterScreen(props: RegisterScreenProps) {
             value={lastName}
             style={{ marginBottom: Spacing.small }}
           />
+        </CardSection>
+        <CardSection>
           <Input
             label="Email"
             placeholder="email@gmail.com"
@@ -123,6 +139,8 @@ function RegisterScreen(props: RegisterScreenProps) {
             value={email}
             style={{ marginBottom: Spacing.small }}
           />
+        </CardSection>
+        <CardSection>
           <Input
             secureTextEntry
             label="Password"
@@ -131,11 +149,12 @@ function RegisterScreen(props: RegisterScreenProps) {
             value={password}
             style={{ marginBottom: Spacing.small }}
           />
-          {renderError()}
-          {renderButton()}
-        </Card>
-      </ScrollView>
-    </SafeAreaView>
+        </CardSection>
+
+        {renderError()}
+        {renderButton()}
+      </Card>
+    </ScreenContainer>
   );
 }
 
@@ -152,14 +171,14 @@ const mapStateToProps = ({ auth }: any) => {
 const mapDispatchToProps = (dispatch: any) => ({
   dispatchUploadAvatar: (result: string) =>
     dispatch({ type: UPLOAD_AVATAR.REQUESTED, payload: result }),
-  dispatchRegisterRequest: ({ email, password, firstName, lastName }: any) => {
+  dispatchRegisterRequest: ({ firstName, lastName, email, password }: any) => {
     dispatch({
       type: REGISTER_USER.REQUESTED,
       payload: {
-        email,
-        password,
         firstName,
         lastName,
+        email,
+        password,
       },
     });
   },
@@ -203,5 +222,12 @@ const styles = StyleSheet.create({
     marginTop: 38,
     marginLeft: 2,
     color: Color.white,
+  },
+  subHeaderText: {
+    fontSize: 30,
+    color: Color.warmGrey200,
+    paddingTop: Spacing.small,
+    paddingBottom: Spacing.large,
+    paddingLeft: Spacing.micro,
   },
 });

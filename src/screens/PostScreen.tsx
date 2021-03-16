@@ -55,7 +55,6 @@ function PostScreen(props: IPostScreenProps) {
   }, [props.addPostLoading, props.addPostError]);
 
   const handlePost = () => {
-    console.log("PROPS", props);
     props.dispatchAddPost({
       firstName: props.firstName,
       lastName: props.lastName,
@@ -137,7 +136,6 @@ function PostScreen(props: IPostScreenProps) {
 }
 
 const mapStateToProps = (state: any) => {
-  console.log("state.user", state.user);
   return {
     avatar: state.user?.user?.avatar,
     firstName: state.user?.user?.firstName,

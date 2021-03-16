@@ -1,8 +1,9 @@
-import React from "react";
-import { View, Image, Text, StyleSheet } from "react-native";
+import React, { useState } from "react";
+import { View, Image, Text, StyleSheet, TouchableOpacity } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import moment from "moment";
 import { Spacing, Color } from "../styles";
+import { CommentModal } from "./CommentModal";
 
 interface IPostCardProps {
   avatar?: string;
@@ -12,7 +13,23 @@ interface IPostCardProps {
   image?: string;
 }
 
+interface ILocalState {
+  commentModalVisible: boolean;
+}
+
 export function PostCard(props: IPostCardProps) {
+  const [state, setState] = useState<ILocalState>({
+    commentModalVisible: false,
+  });
+
+  const onMorePress = () => {};
+
+  const onLikePress = () => {};
+
+  const onCommentPress = () => {
+    setState({ ...state, commentModalVisible: true });
+  };
+
   return (
     <View style={styles.rootContainer}>
       <View style={{ flexDirection: "row" }}>
@@ -33,17 +50,26 @@ export function PostCard(props: IPostCardProps) {
           <Text style={styles.name}>{props.name}</Text>
           <Text style={styles.timestamp}>{moment(props.timestamp).fromNow()}</Text>
         </View>
-        <View style={{ marginRight: Spacing.small }}>
+        <TouchableOpacity style={{ marginRight: Spacing.small }} onPress={onMorePress}>
           <Ionicons name="ellipsis-horizontal" size={24} color={Color.white} />
-        </View>
+        </TouchableOpacity>
       </View>
       {!!props.image && (
         <Image source={{ uri: props.image }} style={styles.postImage} resizeMode="cover" />
       )}
       {!!props.text && <Text style={styles.post}>{props.text}</Text>}
       <View style={{ flexDirection: "row", marginLeft: Spacing.small }}>
-        <Ionicons name="heart-outline" size={24} color={Color.white} style={{ marginRight: 16 }} />
-        <Ionicons name="chatbox-ellipses-outline" size={24} color={Color.white} />
+        <TouchableOpacity onPress={onLikePress}>
+          <Ionicons
+            name="heart-outline"
+            size={24}
+            color={Color.white}
+            style={{ marginRight: 16 }}
+          />
+        </TouchableOpacity>
+        <TouchableOpacity onPress={onCommentPress}>
+          <Ionicons name="chatbox-ellipses-outline" size={24} color={Color.white} />
+        </TouchableOpacity>
       </View>
     </View>
   );

@@ -81,7 +81,7 @@ function registerUserFail(error: any) {
 
 export function* registerUserSaga(action: any) {
   try {
-    const { email, password, firstName, lastName } = action.payload;
+    const { firstName, lastName, email, password } = action.payload;
     // yield console.log("action.payload - regster saga", action.payload);
     const auth = firebase.auth();
     const data = yield call([auth, auth.createUserWithEmailAndPassword], email, password);

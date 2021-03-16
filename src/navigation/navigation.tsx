@@ -50,13 +50,18 @@ export const Navigator = () => {
               component={LoginScreen}
               options={{
                 headerTransparent: true,
+                headerShown: false,
                 headerTitle: "",
               }}
             />
             <Stack.Screen
               name={Routes.REGISTER_SCREEN}
               component={RegisterScreen}
-              options={{ headerTransparent: true, headerTitle: "", headerTintColor: "white" }}
+              options={{
+                headerTransparent: true,
+                headerTitle: "",
+                headerShown: false,
+              }}
             />
           </>
         )}
