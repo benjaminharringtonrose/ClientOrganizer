@@ -2,7 +2,8 @@ import { put } from "redux-saga/effects";
 import * as firebase from "firebase";
 require("firebase/firestore");
 import uuid from "uuid-random";
-import { FETCH_USER, FETCH_POSTS, ADD_POST, UPLOAD_PHOTO } from "../actions/types";
+import { FETCH_USER, FETCH_POSTS, ADD_POST, UPLOAD_AVATAR } from "../types";
+import { getDocRef } from "../../screens/util";
 
 // FETCH USER - ACTIONS
 
@@ -81,28 +82,7 @@ export function* fetchPostsSaga() {
   }
 }
 
-// UPLOAD PHOTO - ACTIONS
-
-export function uploadPhotoRequested() {
-  return {
-    type: UPLOAD_PHOTO.REQUESTED,
-  };
-}
-
-export function uploadPhotoSucceeded(data: any) {
-  return {
-    type: UPLOAD_PHOTO.SUCCEEDED,
-    payload: data,
-  };
-}
-export function uploadPhotoFailed(error: any) {
-  return {
-    type: UPLOAD_PHOTO.FAILED,
-    payload: error,
-  };
-}
-
-// PHOTO UPLOAD - ASYNC
+// UPLOAD PHOTO - ASYNC
 
 export const uploadPhotoAsync = async (uri: RequestInfo, filename: string | undefined) => {
   return new Promise(async (res, rej) => {
@@ -126,6 +106,41 @@ export const uploadPhotoAsync = async (uri: RequestInfo, filename: string | unde
     console.error(error);
   });
 };
+
+// UPLOAD AVATAR - ACTIONS
+
+export function uploadAvatarRequested() {
+  return {
+    type: UPLOAD_AVATAR.REQUESTED,
+  };
+}
+
+export function uploadAvatarSucceeded() {
+  return {
+    type: UPLOAD_AVATAR.SUCCEEDED,
+  };
+}
+export function uploadAvatarFailed(error: any) {
+  return {
+    type: UPLOAD_AVATAR.FAILED,
+    payload: error,
+  };
+}
+
+// UPLOAD AVATAR - SAGA
+
+export function* uploadAvatarSaga(action: any) {
+  try {
+    const uri = action.payload;
+    const uid = firebase.auth().currentUser?.uid;
+    const avatarUri = yield uploadPhotoAsync(uri, `users/${uid}/avatar`);
+    const db = getDocRef();
+    yield db.set({
+      avatar: avatarUri,
+    });
+    yield put(uploadAvatarSucceeded());
+  } catch (error) {}
+}
 
 // ADD POST - ACTIONS
 
@@ -154,7 +169,7 @@ export function* addPostSaga(action: any) {
     const { firstName, lastName, avatar, text, image } = action.payload;
     const uid = yield firebase.auth().currentUser?.uid;
     const postID = uuid();
-    let imageUri: unknown = undefined;
+    let imageUri: unknown;
     if (image) {
       imageUri = yield uploadPhotoAsync(image, `posts/${postID}/image`);
     }

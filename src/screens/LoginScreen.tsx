@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import { connect } from "react-redux";
-import { LOGIN_USER } from "../store/actions/types";
+import { LOGIN_USER } from "../store/types";
 
 import { Color, Spacing } from "../styles";
 import Routes from "../navigation/routes";

@@ -15,8 +15,7 @@ import * as ImagePicker from "expo-image-picker";
 import { Card, Input, Button, Spinner } from "../components";
 import { Ionicons } from "@expo/vector-icons";
 
-import { REGISTER_USER } from "../store/actions/types";
-import { avatarChanged } from "../store/actions";
+import { REGISTER_USER, UPLOAD_AVATAR } from "../store/types";
 import { Color, Spacing } from "../styles";
 
 import Routes from "../navigation/routes";
@@ -34,7 +33,7 @@ interface PropsFromState {
   authError: boolean;
 }
 interface DispatchFromState {
-  dispatchChangeAvatar: (text: string) => any;
+  dispatchUploadAvatar: (uri: string) => any;
   dispatchRegisterRequest: (object: any) => any;
 }
 
@@ -69,31 +68,13 @@ function RegisterScreen(props: RegisterScreenProps) {
 
   const onRegisterPress = () => {
     const { email, password, firstName, lastName } = state;
-    const { avatar } = props;
 
     props.dispatchRegisterRequest({
       email,
       password,
       firstName,
       lastName,
-      avatar,
     });
-  };
-
-  const onPickAvatar = async () => {
-    try {
-      UserPermissions.getCameraPermission();
-      let result = await ImagePicker.launchImageLibraryAsync({
-        mediaTypes: ImagePicker.MediaTypeOptions.Images,
-        allowsEditing: true,
-        aspect: [4, 3],
-      });
-      if (!result.cancelled) {
-        props.dispatchChangeAvatar(result.uri);
-      }
-    } catch (error) {
-      console.log(error);
-    }
   };
 
   const renderButton = () => {
@@ -116,10 +97,6 @@ function RegisterScreen(props: RegisterScreenProps) {
     <SafeAreaView style={styles.rootContainer}>
       <ScrollView>
         <Card>
-          <TouchableOpacity style={styles.avatarPlaceholder} onPress={onPickAvatar}>
-            {!!avatar && <Image source={{ uri: avatar }} style={styles.avatar} />}
-            <Ionicons name="ios-add" size={40} color="#FFF" style={styles.addIcon} />
-          </TouchableOpacity>
           <Input
             label="First Name"
             placeholder="John"
@@ -173,8 +150,9 @@ const mapStateToProps = ({ auth }: any) => {
 };
 
 const mapDispatchToProps = (dispatch: any) => ({
-  dispatchChangeAvatar: (result: string) => dispatch(avatarChanged(result)),
-  dispatchRegisterRequest: ({ email, password, firstName, lastName, avatar }: any) => {
+  dispatchUploadAvatar: (result: string) =>
+    dispatch({ type: UPLOAD_AVATAR.REQUESTED, payload: result }),
+  dispatchRegisterRequest: ({ email, password, firstName, lastName }: any) => {
     dispatch({
       type: REGISTER_USER.REQUESTED,
       payload: {
@@ -182,7 +160,6 @@ const mapDispatchToProps = (dispatch: any) => ({
         password,
         firstName,
         lastName,
-        avatar,
       },
     });
   },

@@ -10,8 +10,8 @@ import {
   LOGOUT_USER,
   REGISTER_USER,
   ADD_POST,
-  UPLOAD_PHOTO,
-} from "./actions";
+  UPLOAD_AVATAR,
+} from "./types";
 import {
   fetchUserSaga,
   fetchPostsSaga,
@@ -19,7 +19,7 @@ import {
   logoutUserSaga,
   registerUserSaga,
   addPostSaga,
-  uploadPhotoAsync,
+  uploadAvatarSaga,
 } from "./sagas";
 
 // ACTION LISTENER
@@ -28,7 +28,7 @@ function* watchUserAuthentication() {
   yield takeLatest(FETCH_USER.REQUESTED, fetchUserSaga);
   yield takeLatest(FETCH_POSTS.REQUESTED, fetchPostsSaga);
   yield takeLatest(ADD_POST.REQUESTED, addPostSaga);
-  yield takeLatest(UPLOAD_PHOTO.REQUESTED, uploadPhotoAsync);
+  yield takeLatest(UPLOAD_AVATAR.REQUESTED, uploadAvatarSaga);
   yield takeLatest(LOGIN_USER.REQUESTED, loginUserSaga);
   yield takeLatest(LOGOUT_USER.REQUESTED, logoutUserSaga);
   yield takeLatest(REGISTER_USER.REQUESTED, registerUserSaga);

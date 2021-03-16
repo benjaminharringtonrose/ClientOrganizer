@@ -1,14 +1,14 @@
-import { FETCH_USER, UPLOAD_PHOTO, ADD_POST } from "../actions/types";
+import { FETCH_USER, ADD_POST, UPLOAD_AVATAR } from "../types";
 
 const INITIAL_STATE = {
   searchText: undefined,
   user: undefined,
   fetchUserLoading: false,
   fetchUserError: undefined,
-  uploadPhotoLoading: false,
-  uploadPhotoError: undefined,
   addPostLoading: false,
   addPostError: undefined,
+  uploadAvatarLoading: false,
+  uploadAvatarError: undefined,
 };
 
 const UserReducer = (state = INITIAL_STATE, action: any) => {
@@ -48,21 +48,21 @@ const UserReducer = (state = INITIAL_STATE, action: any) => {
         addPostError: action.payload.message,
         addPostLoading: false,
       };
-    case UPLOAD_PHOTO.REQUESTED:
+    case UPLOAD_AVATAR.REQUESTED:
       return {
         ...state,
-        uploadPhotoLoading: true,
+        uploadAvatarLoading: true,
       };
-    case UPLOAD_PHOTO.SUCCEEDED:
+    case UPLOAD_AVATAR.SUCCEEDED:
       return {
         ...state,
-        uploadPhotoLoading: false,
+        uploadAvatarLoading: false,
       };
-    case UPLOAD_PHOTO.FAILED:
+    case UPLOAD_AVATAR.FAILED:
       return {
         ...state,
-        uploadPhotoError: action.payload.message,
-        uploadPhotoLoading: false,
+        uploadAvatarError: action.payload.message,
+        uploadAvatarLoading: false,
       };
     default:
       return state;

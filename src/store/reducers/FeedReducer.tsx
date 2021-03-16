@@ -1,4 +1,4 @@
-import { FETCH_POSTS, ADD_POST } from "../actions/types";
+import { FETCH_POSTS, ADD_POST } from "../types";
 
 const INITIAL_STATE = {
   posts: undefined,

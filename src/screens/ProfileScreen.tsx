@@ -1,8 +1,10 @@
-import React, { useEffect } from "react";
-import { Text, StyleSheet, Image, View } from "react-native";
+import React, { useEffect, useState } from "react";
+import { Text, StyleSheet, Image, View, TouchableOpacity } from "react-native";
 import firebase from "firebase";
 import { connect } from "react-redux";
-import { LOGOUT_USER, FETCH_USER } from "../store/actions/types";
+import { LOGOUT_USER, FETCH_USER, UPLOAD_AVATAR } from "../store/types";
+import * as ImagePicker from "expo-image-picker";
+import { Ionicons } from "@expo/vector-icons";
 
 import {
   ScreenContainer,
@@ -14,6 +16,7 @@ import {
 } from "../components";
 
 import { Color, Spacing } from "../styles";
+import UserPermissions from "../utilities/UserPermissions";
 
 interface PassedProps {
   navigation: any;
@@ -31,22 +34,26 @@ interface PropsFromState {
 interface DispatchFromState {
   dispatchFetchUser: (uid: string) => any;
   dispatchLogoutRequest: (object: any) => any;
-  dispatchChangeAvatar: (text: string) => any;
+  dispatchUploadAvatar: (avatarUri: string) => any;
 }
 
 type ProfileScreenProps = PropsFromState & DispatchFromState & PassedProps;
 
-function ProfileScreen(props: ProfileScreenProps) {
-  const onLogoutPress = () => {
-    props.dispatchLogoutRequest(LOGOUT_USER.REQUESTED);
-  };
+interface ILocalState {
+  avatarUri?: string;
+}
 
+function ProfileScreen(props: ProfileScreenProps) {
   useEffect(() => {
     const uid = firebase.auth().currentUser?.uid;
     if (uid) {
       props.dispatchFetchUser(uid);
     }
   }, []);
+
+  const onLogoutPress = () => {
+    props.dispatchLogoutRequest(LOGOUT_USER.REQUESTED);
+  };
 
   const renderSignOutButton = () => {
     if (props.loading) {
@@ -60,12 +67,29 @@ function ProfileScreen(props: ProfileScreenProps) {
     }
   };
 
+  const onPickAvatar = async () => {
+    try {
+      UserPermissions.getCameraPermission();
+      let result = await ImagePicker.launchImageLibraryAsync({
+        mediaTypes: ImagePicker.MediaTypeOptions.Images,
+        allowsEditing: true,
+        aspect: [4, 3],
+      });
+      if (!result.cancelled) {
+        props.dispatchUploadAvatar(result.uri);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <ScreenContainer>
       <Card>
-        <View style={styles.avatarPlaceholder}>
-          {props.avatar && <Image source={{ uri: props?.avatar }} style={styles.avatar} />}
-        </View>
+        <TouchableOpacity style={styles.avatarPlaceholder} onPress={onPickAvatar}>
+          {!!props.avatar && <Image source={{ uri: props.avatar }} style={styles.avatar} />}
+          <Ionicons name="ios-add" size={40} color="#FFF" style={styles.addIcon} />
+        </TouchableOpacity>
         <Text style={styles.subHeaderText}>{"User Information"}</Text>
         <CardSection>
           <CellLabelLeftRight
@@ -103,6 +127,8 @@ const mapStateToProps = (state: any) => {
 const mapDispatchToProps = (dispatch: any) => ({
   dispatchFetchUser: (uid: any) => dispatch({ type: FETCH_USER.REQUESTED, payload: uid }),
   dispatchLogoutRequest: () => dispatch({ type: LOGOUT_USER.REQUESTED }),
+  dispatchUploadAvatar: (avatarUri: any) =>
+    dispatch({ type: UPLOAD_AVATAR.REQUESTED, payload: avatarUri }),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(ProfileScreen);

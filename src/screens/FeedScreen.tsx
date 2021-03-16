@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import { FlatList, RefreshControl } from "react-native";
 import firebase from "firebase";
 import { connect } from "react-redux";
-import { FETCH_POSTS, FETCH_USER } from "../store/actions/types";
+import { FETCH_POSTS, FETCH_USER } from "../store/types";
 import { Header, ScreenContainer, PostCard } from "../components";
 import { Color, TextStyles, ViewStyles } from "../styles";
 

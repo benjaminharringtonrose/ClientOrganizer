@@ -8,15 +8,13 @@ import {
   ActivityIndicator,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
-import Firebase from "../../Firebase";
 import * as ImagePicker from "expo-image-picker";
 import { connect } from "react-redux";
 import Routes from "../navigation/routes";
 import { Color } from "../styles";
-import { ScreenContainer, Header, ButtonText, ButtonBack, Spinner } from "../components";
-import { ADD_POST } from "../store/actions/types";
+import { ScreenContainer, Header, ButtonText, ButtonBack } from "../components";
+import { ADD_POST } from "../store/types";
 import { usePrevious } from "../hooks/usePrevious";
-import { useNavTrigger } from "../hooks/useNavTrigger";
 
 interface ILocalState {
   text: string;

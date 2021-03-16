@@ -1,4 +1,4 @@
-import { REGISTER_USER, LOGIN_USER, FETCH_USER, LOGOUT_USER } from "../actions";
+import { REGISTER_USER, LOGIN_USER, FETCH_USER, LOGOUT_USER } from "../types";
 import firebase from "firebase";
 import { call, put } from "redux-saga/effects";
 import { getDocRef } from "../../screens/util";
@@ -81,7 +81,7 @@ function registerUserFail(error: any) {
 
 export function* registerUserSaga(action: any) {
   try {
-    const { email, password, firstName, lastName, avatar } = action.payload;
+    const { email, password, firstName, lastName } = action.payload;
     // yield console.log("action.payload - regster saga", action.payload);
     const auth = firebase.auth();
     const data = yield call([auth, auth.createUserWithEmailAndPassword], email, password);
@@ -90,7 +90,6 @@ export function* registerUserSaga(action: any) {
       firstName,
       lastName,
       email,
-      avatar,
     });
     yield put(registerUserSuccess(data));
   } catch (error) {

@@ -1,7 +1,7 @@
 import { put } from "redux-saga/effects";
 import firebase from "firebase";
 require("firebase/firestore");
-import { DELETE_CLIENT, UPDATE_CLIENT, ADD_CLIENT } from "../actions/types";
+import { DELETE_CLIENT, UPDATE_CLIENT, ADD_CLIENT } from "../types";
 import { getDocRef } from "../../screens/util";
 import uuid from "uuid-random";
 import { fetchUserRequested } from "./UserSagas";

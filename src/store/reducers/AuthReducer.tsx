@@ -1,4 +1,4 @@
-import { LOGIN_USER, REGISTER_USER, LOGOUT_USER, AVATAR_CHANGED } from "../actions/types";
+import { LOGIN_USER, REGISTER_USER, LOGOUT_USER, AVATAR_CHANGED } from "../types";
 
 const INITIAL_STATE = {
   avatar: "",
