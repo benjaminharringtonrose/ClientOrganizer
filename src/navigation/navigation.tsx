@@ -11,7 +11,7 @@ import ProfileScreen from "../screens/ProfileScreen";
 import PostScreen from "../screens/PostScreen";
 
 import Routes from "./routes";
-import { TabBar } from "./components/TabBar";
+import TabBar from "./components/TabBar";
 import FindFriendsScreen from "../screens/FindFriendsScreen";
 
 const DashboardTabs = () => {

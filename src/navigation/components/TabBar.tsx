@@ -1,10 +1,15 @@
 import React from "react";
-import { View, TouchableOpacity } from "react-native";
+import { View, TouchableOpacity, Image } from "react-native";
 import { Color } from "../../styles";
 import { Ionicons } from "@expo/vector-icons";
 import Routes from "../routes";
+import { connect } from "react-redux";
 
-export function TabBar({ state, navigation }: any) {
+interface IPropsFromState {
+  avatar: string;
+}
+
+function TabBar(props: any) {
   return (
     <View
       style={{
@@ -16,29 +21,29 @@ export function TabBar({ state, navigation }: any) {
         alignItems: "center",
       }}
     >
-      {state.routes.map((route: any, index: any) => {
-        const isFocused = state.index === index;
+      {props.state.routes.map((route: any, index: any) => {
+        const isFocused = props.state.index === index;
 
         const onPress = () => {
-          const event = navigation.emit({
+          const event = props.navigation.emit({
             type: "tabPress",
             target: route.key,
           });
           if (!isFocused && !event.defaultPrevented) {
-            navigation.navigate(route.name);
+            props.navigation.navigate(route.name);
           }
         };
 
-        const getIconName = () => {
+        const getIcon = () => {
           switch (route.name) {
             case Routes.FEED_SCREEN:
-              return "ios-home-outline";
+              return <Ionicons name={"ios-home-outline"} color={"white"} size={20} />;
             case Routes.POST_SCREEN:
-              return "ios-add-circle-outline";
+              return <Ionicons name={"ios-add-circle-outline"} color={"white"} size={20} />;
             case Routes.PROFILE_SCREEN:
-              return "ios-settings-outline";
+              return <Ionicons name={"ios-settings-outline"} color={"white"} size={20} />;
             case Routes.FIND_FRIENDS_SCREEN:
-              return "ios-person-add-outline";
+              return <Ionicons name={"ios-person-add-outline"} color={"white"} size={20} />;
           }
         };
 
@@ -48,10 +53,18 @@ export function TabBar({ state, navigation }: any) {
             onPress={onPress}
             style={{ flex: 1, alignItems: "center" }}
           >
-            <Ionicons name={getIconName()} color={"white"} size={20} />
+            {getIcon()}
           </TouchableOpacity>
         );
       })}
     </View>
   );
 }
+
+const mapStateToProps = (state: any) => {
+  return {
+    avatar: state.user?.user?.avatar,
+  };
+};
+
+export default connect(mapStateToProps, {})(TabBar);
