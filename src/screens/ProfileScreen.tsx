@@ -80,7 +80,7 @@ function ProfileScreen(props: ProfileScreenProps) {
         props.dispatchUploadAvatar(result.uri);
       }
     } catch (error) {
-      console.log(error);
+      console.warn(error);
     }
   };
 
@@ -135,7 +135,7 @@ function ProfileScreen(props: ProfileScreenProps) {
 }
 
 const mapStateToProps = (state: any) => {
-  console.log("STATE", state.user);
+  // console.log("STATE", state.user);
   return {
     avatar: state.user?.user?.avatar,
     firstName: state.user?.user?.firstName,

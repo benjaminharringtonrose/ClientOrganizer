@@ -2,18 +2,19 @@ import React, { useEffect } from "react";
 import { FlatList, RefreshControl } from "react-native";
 import firebase from "firebase";
 import { connect } from "react-redux";
-import { FETCH_POSTS, FETCH_USER, FETCH_ALL_USERS } from "../store/types";
+import { FETCH_POSTS, FETCH_USER, FETCH_ALL_USERS, IError } from "../store/types";
 import { Header, ScreenContainer, PostCard } from "../components";
 import { Color, TextStyles, ViewStyles } from "../styles";
+import { IStoreState } from "../store/store";
 
 interface IPassedProps {
   navigation: any;
 }
 
 interface IPropsFromState {
-  posts: any;
+  posts?: any;
   fetchPostsLoading: boolean;
-  fetchPostsError?: string;
+  fetchPostsError?: IError;
 }
 
 interface IDispatchFromState {
@@ -34,21 +35,6 @@ function FeedScreen(props: IFeedScreenProps) {
     }
   }, []);
 
-  const renderPost = ({ item }: any) => {
-    if (item) {
-      return (
-        <PostCard
-          avatar={item.avatar}
-          name={`${item.firstName} ${item.lastName}`}
-          timestamp={item.timestamp}
-          text={item.text}
-          image={item.image}
-        />
-      );
-    }
-    return null;
-  };
-
   function refreshControl() {
     return (
       <RefreshControl
@@ -64,7 +50,20 @@ function FeedScreen(props: IFeedScreenProps) {
       <Header title={"Feed"} titleStyle={TextStyles.header} containerStyle={ViewStyles.header} />
       <FlatList
         data={props.posts}
-        renderItem={renderPost}
+        renderItem={({ item }) => {
+          if (item) {
+            return (
+              <PostCard
+                avatar={item.avatar}
+                name={`${item.firstName} ${item.lastName}`}
+                timestamp={item.timestamp}
+                text={item.text}
+                image={item.image}
+              />
+            );
+          }
+          return null;
+        }}
         keyExtractor={(item) => String(item.timestamp)}
         showsVerticalScrollIndicator={false}
         refreshControl={refreshControl()}
@@ -73,7 +72,7 @@ function FeedScreen(props: IFeedScreenProps) {
   );
 }
 
-const mapStateToProps = (state: any) => {
+const mapStateToProps = (state: IStoreState) => {
   return {
     posts: state.feed.posts,
     fetchPostsLoading: state.feed.fetchPostsLoading || false,
@@ -82,7 +81,7 @@ const mapStateToProps = (state: any) => {
 };
 
 const mapDispatchToProps = (dispatch: any) => ({
-  dispatchFetchUser: (uid: any) => dispatch({ type: FETCH_USER.REQUESTED, payload: uid }),
+  dispatchFetchUser: (uid: string) => dispatch({ type: FETCH_USER.REQUESTED, payload: uid }),
   dispatchFetchAllUsers: () => dispatch({ type: FETCH_ALL_USERS.REQUESTED }),
   dispatchFetchPosts: () => dispatch({ type: FETCH_POSTS.REQUESTED }),
 });

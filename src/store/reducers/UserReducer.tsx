@@ -26,7 +26,7 @@ const DefaultUserState: IUserState = {
 };
 
 const UserReducer = (state = DefaultUserState, action: any) => {
-  console.log(action);
+  // console.log(action);
   switch (action.type) {
     case FETCH_USER.REQUESTED:
       return {

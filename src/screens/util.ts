@@ -14,17 +14,17 @@ export const getUserById = (): any => {
       if (doc.exists) {
         return doc.data();
       } else {
-        console.log("No such document!");
+        console.warn("getUserById: No such document!");
       }
     })
     .catch(function (error) {
-      console.log("Error getting document:", error);
+      console.warn("getUserById - Error getting document:", error);
     });
 };
 
 export function mapFriends(posts: any) {
-  if (isEqual(posts, {})) {
-    return undefined;
+  if (!posts) {
+    return;
   }
   let acc: any = [];
   for (const [key, value] of Object.entries(posts)) {
@@ -48,5 +48,5 @@ export function callTelephone(phoneNumber: string) {
         console.warn("Phone number is not supported.");
       }
     })
-    .catch((e) => console.log(e));
+    .catch((e) => console.warn(e));
 }

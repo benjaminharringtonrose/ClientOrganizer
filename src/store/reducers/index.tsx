@@ -12,3 +12,8 @@ const rootReducer = combineReducers({
 });
 
 export default rootReducer;
+
+export { IAuthState } from "./AuthReducer";
+export { IFeedState } from "./FeedReducer";
+export { IFriendState } from "./FriendReducer";
+export { IUserState } from "./UserReducer";

@@ -2,30 +2,14 @@ import { put } from "redux-saga/effects";
 import * as firebase from "firebase";
 require("firebase/firestore");
 import uuid from "uuid-random";
-import { FETCH_USER, FETCH_POSTS, ADD_POST, UPLOAD_AVATAR, FETCH_ALL_USERS } from "../types";
-import { getDocRef } from "../../screens/util";
-
-// FETCH USER - ACTIONS
-
-export function fetchUserRequested(data: any) {
-  return {
-    type: FETCH_USER.REQUESTED,
-    payload: data,
-  };
-}
-
-export function fetchUserSucceeded(data: any) {
-  return {
-    type: FETCH_USER.SUCCEEDED,
-    payload: data,
-  };
-}
-export function fetchUserFailed(error: any) {
-  return {
-    type: FETCH_USER.FAILED,
-    payload: error,
-  };
-}
+import { ADD_POST, UPLOAD_AVATAR } from "../types";
+import { fetchPostsRequested } from "../actions/FeedActions";
+import {
+  fetchUserSucceeded,
+  fetchUserFailed,
+  fetchAllUsersSucceeded,
+  fetchAllUsersFailed,
+} from "../actions";
 
 // FETCH USER - SAGA
 
@@ -37,27 +21,6 @@ export function* fetchUserSaga(action: any) {
   } catch (error) {
     yield put(fetchUserFailed({ error }));
   }
-}
-
-// FETCH ALL USERS - ACTIONS
-
-export function fetchAllUsersRequested() {
-  return {
-    type: FETCH_ALL_USERS.REQUESTED,
-  };
-}
-
-export function fetchAllUsersSucceeded(data: any) {
-  return {
-    type: FETCH_ALL_USERS.SUCCEEDED,
-    payload: data,
-  };
-}
-export function fetchAllUsersFailed(error: any) {
-  return {
-    type: FETCH_ALL_USERS.FAILED,
-    payload: error,
-  };
 }
 
 export function* fetchAllUsersSaga() {
@@ -76,49 +39,6 @@ export function* fetchAllUsersSaga() {
     yield put(fetchAllUsersSucceeded(users));
   } catch (error) {
     yield put(fetchAllUsersFailed({ error }));
-  }
-}
-
-// FETCH POSTS - ACTIONS
-function fetchPostsRequested() {
-  return {
-    type: FETCH_POSTS.REQUESTED,
-  };
-}
-
-function fetchPostsSucceeded(data: any) {
-  return {
-    type: FETCH_POSTS.SUCCEEDED,
-    payload: data,
-  };
-}
-function fetchPostsFailed(error: any) {
-  return {
-    type: FETCH_POSTS.FAILED,
-    payload: error,
-  };
-}
-
-// FETCH POSTS - SAGA
-
-export function* fetchPostsSaga() {
-  try {
-    const posts: firebase.firestore.DocumentData[] = [];
-    yield firebase
-      .firestore()
-      .collection("posts")
-      .orderBy("timestamp", "desc")
-      .get()
-      .then(function (querySnapshot) {
-        querySnapshot.forEach((doc) => {
-          const post = doc.data();
-          posts.push(post);
-        });
-      });
-
-    yield put(fetchPostsSucceeded(posts));
-  } catch (error) {
-    yield put(fetchPostsFailed({ error }));
   }
 }
 

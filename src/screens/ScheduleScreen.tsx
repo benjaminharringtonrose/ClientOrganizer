@@ -28,7 +28,6 @@ export default function ScheduleScreen() {
         <DropdownModalCalendar
           label={"When"}
           onDayPress={(date) => {
-            console.log(date);
             setState({
               ...state,
               selectedDate: date.dateString,

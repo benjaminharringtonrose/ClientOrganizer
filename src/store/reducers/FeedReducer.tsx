@@ -14,7 +14,7 @@ export const DefaultFeedState: IFeedState = {
 };
 
 const FeedReducer = (state = DefaultFeedState, action: any) => {
-  console.log(action);
+  // console.log(action);
   switch (action.type) {
     case FETCH_POSTS.REQUESTED:
       return {
