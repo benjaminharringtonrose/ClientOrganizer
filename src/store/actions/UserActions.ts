@@ -1,44 +1,64 @@
-import { FETCH_USER, FETCH_ALL_USERS } from "../types";
+import { Action } from "redux";
+import { FETCH_USER, FETCH_ALL_USERS, IError } from "../types";
+import { IStringMap } from "../../screens/RegisterScreen";
 
-// FETCH USER - ACTIONS
+export type IUserActions =
+  | IFetchUserRequested
+  | IFetchUserSucceeded
+  | IFetchUserFailed
+  | IFetchAllUsersRequested
+  | IFetchAllUsersSucceeded
+  | IFetchAllUsersFailed;
 
-export function fetchUserRequested(data: any) {
-  return {
-    type: FETCH_USER.REQUESTED,
-    payload: data,
-  };
+export interface IFetchUserRequested extends Action<FETCH_USER.REQUESTED> {
+  payload: string;
 }
 
-export function fetchUserSucceeded(data: any) {
+export const fetchUserRequested = (payload: string): IFetchUserRequested => ({
+  type: FETCH_USER.REQUESTED,
+  payload,
+});
+
+export interface IFetchUserSucceeded extends Action<FETCH_USER.SUCCEEDED> {
+  payload: IStringMap<any>;
+}
+
+export const fetchUserSucceeded = (payload: IStringMap<any>): IFetchUserSucceeded => {
   return {
     type: FETCH_USER.SUCCEEDED,
-    payload: data,
+    payload,
   };
-}
-export function fetchUserFailed(error: any) {
-  return {
-    type: FETCH_USER.FAILED,
-    payload: error,
-  };
+};
+
+export interface IFetchUserFailed extends Action<FETCH_USER.FAILED> {
+  payload: IError;
 }
 
-// FETCH ALL USERS - ACTIONS
+export const fetchUserFailed = (error: IError): IFetchUserFailed => ({
+  type: FETCH_USER.FAILED,
+  payload: error,
+});
 
-export function fetchAllUsersRequested() {
-  return {
-    type: FETCH_ALL_USERS.REQUESTED,
-  };
+export interface IFetchAllUsersRequested extends Action<FETCH_ALL_USERS.REQUESTED> {}
+
+export const fetchAllUsersRequested = (): IFetchAllUsersRequested => ({
+  type: FETCH_ALL_USERS.REQUESTED,
+});
+
+export interface IFetchAllUsersSucceeded extends Action<FETCH_ALL_USERS.SUCCEEDED> {
+  payload: IStringMap<any>;
 }
 
-export function fetchAllUsersSucceeded(data: any) {
-  return {
-    type: FETCH_ALL_USERS.SUCCEEDED,
-    payload: data,
-  };
+export const fetchAllUsersSucceeded = (payload: IStringMap<any>): IFetchAllUsersSucceeded => ({
+  type: FETCH_ALL_USERS.SUCCEEDED,
+  payload,
+});
+
+export interface IFetchAllUsersFailed extends Action<FETCH_ALL_USERS.FAILED> {
+  payload: IError;
 }
-export function fetchAllUsersFailed(error: any) {
-  return {
-    type: FETCH_ALL_USERS.FAILED,
-    payload: error,
-  };
-}
+
+export const fetchAllUsersFailed = (error: IError): IFetchAllUsersFailed => ({
+  type: FETCH_ALL_USERS.FAILED,
+  payload: error,
+});

@@ -1,31 +1,56 @@
-import { put } from "redux-saga/effects";
-import { FETCH_ALL_FRIENDS, ADD_FRIEND, DELETE_FRIEND } from "../types";
+import { Action } from "redux";
+import { FETCH_ALL_FRIENDS, ADD_FRIEND, DELETE_FRIEND, IError } from "../types";
+import { IStringMap } from "../../screens/RegisterScreen";
 
-// FETCH ALL FRIENDS - ACTIONS AND SAGA
+export type IFriendActions =
+  | IAddFriendSucceeded
+  | IAddFriendFailed
+  | IFetchAllFriendsSucceeded
+  | IFetchAllFriendsFailed
+  | IDeleteFriendSucceeded
+  | IDeleteFriendFailed;
 
-export const addFriendSucceeded = () => ({
+export interface IAddFriendSucceeded extends Action<ADD_FRIEND.SUCCEEDED> {}
+
+export const addFriendSucceeded = (): IAddFriendSucceeded => ({
   type: ADD_FRIEND.SUCCEEDED,
 });
 
-export const addFriendFailed = (error: any) => ({
+export interface IAddFriendFailed extends Action<ADD_FRIEND.FAILED> {
+  payload: IStringMap<any>;
+}
+
+export const addFriendFailed = (error: IError): IAddFriendFailed => ({
   type: ADD_FRIEND.FAILED,
   payload: error,
 });
 
-export const fetchAllFriendsSucceeded = () => ({
+export interface IFetchAllFriendsSucceeded extends Action<FETCH_ALL_FRIENDS.SUCCEEDED> {}
+
+export const fetchAllFriendsSucceeded = (): IFetchAllFriendsSucceeded => ({
   type: FETCH_ALL_FRIENDS.SUCCEEDED,
 });
 
-export const fetchAllFriendsFailed = (error: any) => ({
+export interface IFetchAllFriendsFailed extends Action<FETCH_ALL_FRIENDS.FAILED> {
+  payload: IError;
+}
+
+export const fetchAllFriendsFailed = (error: IError): IFetchAllFriendsFailed => ({
   type: FETCH_ALL_FRIENDS.FAILED,
   payload: error,
 });
 
-export const deleteFriendSucceeded = () => ({
+export interface IDeleteFriendSucceeded extends Action<DELETE_FRIEND.SUCCEEDED> {}
+
+export const deleteFriendSucceeded = (): IDeleteFriendSucceeded => ({
   type: DELETE_FRIEND.SUCCEEDED,
 });
 
-export const deleteFriendFailed = (error: any) => ({
+export interface IDeleteFriendFailed extends Action<DELETE_FRIEND.FAILED> {
+  payload: IError;
+}
+
+export const deleteFriendFailed = (error: IError): IDeleteFriendFailed => ({
   type: DELETE_FRIEND.FAILED,
   payload: error,
 });

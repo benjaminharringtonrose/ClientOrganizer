@@ -1,22 +1,38 @@
-import { LOGIN_USER, LOGOUT_USER, REGISTER_USER } from "../types";
+import { Action } from "redux";
+import { LOGIN_USER, LOGOUT_USER, REGISTER_USER, IError } from "../types";
+import { IStringMap } from "../../screens/RegisterScreen";
 
-// LOGIN USER - ACTIONS
+export type IAuthActions =
+  | ILoginUserSucceeded
+  | ILoginUserFailed
+  | ILogoutUserSucceeded
+  | ILogoutUserFailed
+  | IRegisterUserSucceeded
+  | IRegisterUserFailed;
 
-export function loginUserSucceeded(data: any) {
+export interface ILoginUserSucceeded extends Action<LOGIN_USER.SUCCEEDED> {
+  payload: IStringMap<any>;
+}
+
+export function loginUserSucceeded(payload: IStringMap<any>): ILoginUserSucceeded {
   return {
     type: LOGIN_USER.SUCCEEDED,
-    payload: data,
+    payload,
   };
 }
 
-export function loginUserFailed(error: any) {
+export interface ILoginUserFailed extends Action<LOGIN_USER.FAILED> {
+  payload: IError;
+}
+
+export function loginUserFailed(payload: IError) {
   return {
     type: LOGIN_USER.FAILED,
-    payload: error,
+    payload,
   };
 }
 
-// LOGOUT USER - ACTIONS
+export interface ILogoutUserSucceeded extends Action<LOGOUT_USER.SUCCEEDED> {}
 
 export function logoutUserSucceeded() {
   return {
@@ -24,23 +40,33 @@ export function logoutUserSucceeded() {
   };
 }
 
-export function logoutUserFailed(error: any) {
+export interface ILogoutUserFailed extends Action<LOGOUT_USER.FAILED> {
+  payload: IError;
+}
+
+export function logoutUserFailed(error: IError) {
   return {
     type: LOGOUT_USER.FAILED,
     payload: error,
   };
 }
 
-// REGISTER USER - ACTIONS
+export interface IRegisterUserSucceeded extends Action<REGISTER_USER.SUCCEEDED> {
+  payload: IStringMap<any>;
+}
 
-export function registerUserSucceeded(data: any) {
+export function registerUserSucceeded(data: IStringMap<any>) {
   return {
     type: REGISTER_USER.SUCCEEDED,
     payload: data,
   };
 }
 
-export function registerUserFailed(error: any) {
+export interface IRegisterUserFailed extends Action<REGISTER_USER.FAILED> {
+  payload: IError;
+}
+
+export function registerUserFailed(error: IError) {
   return {
     type: REGISTER_USER.FAILED,
     payload: error,

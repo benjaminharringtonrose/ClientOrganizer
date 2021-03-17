@@ -34,6 +34,7 @@ import AuthReducer from "./reducers/AuthReducer";
 import UserReducer from "./reducers/UserReducer";
 import FeedReducer from "./reducers/FeedReducer";
 import FriendReducer from "./reducers/FriendReducer";
+import { IAuthActions, IFeedActions, IFriendActions, IUserActions } from "./actions";
 
 export interface IStoreState {
   readonly auth: IAuthState;
@@ -41,6 +42,8 @@ export interface IStoreState {
   readonly friend: IFriendState;
   readonly feed: IFeedState;
 }
+
+export type IActions = IAuthActions | IFeedActions | IFriendActions | IUserActions;
 
 // ROOT ACTION LISTENER
 
@@ -70,7 +73,7 @@ function* rootSaga() {
 
 // ROOT REDUCER
 
-const rootReducer: Reducer<IStoreState> = combineReducers({
+const rootReducer: Reducer<IStoreState, IActions> = combineReducers({
   auth: AuthReducer,
   user: UserReducer,
   feed: FeedReducer,
