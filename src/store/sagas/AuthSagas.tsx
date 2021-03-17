@@ -11,7 +11,6 @@ import {
   registerUserSucceeded,
   registerUserFailed,
 } from "../actions";
-import { IActions } from "../store";
 
 // LOGIN USER - SAGA
 
