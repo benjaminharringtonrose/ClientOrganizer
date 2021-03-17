@@ -5,7 +5,6 @@ import { Header, ScreenContainer, Card, CardSection, Button } from "../component
 import { Color, Spacing } from "../styles";
 import { UserCard } from "../components/UserCard";
 import { mapFriends } from "./util";
-import AlertModal from "../components/AlertModal";
 import { IStringMap } from "./RegisterScreen";
 import { BottomModal } from "../components/BottomModal";
 import { DELETE_FRIEND } from "../store/types";
@@ -15,7 +14,7 @@ interface IPassedProps {
 }
 
 interface IPropsFromState {
-  friends: any;
+  friends?: IStringMap<any>;
 }
 
 interface IDispatchFromState {
@@ -25,7 +24,7 @@ interface IDispatchFromState {
 type IFindFriendsProps = IPassedProps & IPropsFromState & IDispatchFromState;
 
 interface ILocalState {
-  mappedFriends: any;
+  mappedFriends?: IStringMap<any>[];
   showModal: boolean;
   selectedFriend?: IStringMap<any>;
 }
@@ -38,11 +37,11 @@ function FriendsListScreen(props: IFindFriendsProps) {
   });
 
   useEffect(() => {
-    setState({ ...state, mappedFriends: mapFriends(props.friends) });
+    setState({ ...state, mappedFriends: mapFriends(props?.friends) });
   }, []);
 
   useEffect(() => {
-    setState({ ...state, mappedFriends: mapFriends(props.friends) });
+    setState({ ...state, mappedFriends: mapFriends(props?.friends) });
   }, [props.friends]);
 
   const renderUser = ({ item }: any) => {

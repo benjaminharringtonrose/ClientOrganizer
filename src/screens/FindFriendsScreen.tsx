@@ -7,17 +7,14 @@ import {
   RefreshControl,
   TouchableOpacity,
   Dimensions,
-  Alert,
 } from "react-native";
 import { connect } from "react-redux";
-import { Header, ScreenContainer, CardSection, Button, Card } from "../components";
+import { ScreenContainer, CardSection, Button, Card } from "../components";
 import { Color, Spacing } from "../styles";
 import { UserCard } from "../components/UserCard";
-import firebase from "firebase";
 import { IStringMap } from "./RegisterScreen";
 import { FETCH_ALL_USERS, ADD_FRIEND } from "../store/types";
 import SearchBar from "../components/SearchBar";
-import AlertModal from "../components/AlertModal";
 import { BottomModal } from "../components/BottomModal";
 
 interface IPassedProps {
@@ -26,8 +23,8 @@ interface IPassedProps {
 
 interface IPropsFromState {
   fetchAllUsersLoading: boolean;
-  fetchAllUsersError: any;
-  users: IStringMap<any>[];
+  fetchAllUsersError?: any;
+  users?: IStringMap<any>[];
 }
 
 interface IDispatchFromState {
@@ -145,8 +142,8 @@ function FindFriendsScreen(props: IFindFriendsProps) {
 const mapStateToProps = (state: any) => {
   return {
     fetchAllUsersLoading: state.user.fetchAllUsersLoading,
-    fetchAllUsersError: state.user.fetchAllUsersError,
-    users: state.user.users,
+    fetchAllUsersError: state.user?.fetchAllUsersError,
+    users: state.user?.users,
   };
 };
 

@@ -23,8 +23,8 @@ export const getUserById = (): any => {
 };
 
 export function mapFriends(posts: any) {
-  if (isEqual(posts, {})) {
-    return undefined;
+  if (!posts) {
+    return;
   }
   let acc: any = [];
   for (const [key, value] of Object.entries(posts)) {
