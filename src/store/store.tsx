@@ -29,6 +29,11 @@ import {
   deleteFriendSaga,
   fetchAllFriendsSaga,
 } from "./sagas";
+import { IAuthState } from "./reducers/AuthReducer";
+
+export interface IStoreState {
+  readonly accounts: IAuthState;
+}
 
 // ACTION LISTENER
 

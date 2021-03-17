@@ -1,20 +1,31 @@
-import { FETCH_USER, ADD_POST, UPLOAD_AVATAR, FETCH_ALL_USERS } from "../types";
+import { FETCH_USER, ADD_POST, UPLOAD_AVATAR, FETCH_ALL_USERS, IError } from "../types";
+import { IStringMap } from "../../screens/RegisterScreen";
 
-const INITIAL_STATE = {
-  searchText: undefined,
-  user: {},
-  users: [],
+export interface IUserState {
+  readonly user?: IStringMap<any>;
+  readonly fetchUserLoading: boolean;
+  readonly fetchUserError?: IError;
+  readonly fetchAllUsersLoading: boolean;
+  readonly fetchAllUsersError?: IError;
+  readonly addPostLoading: boolean;
+  readonly addPostError?: IError;
+  readonly uploadAvatarLoading: boolean;
+  readonly uploadAvatarError?: IError;
+}
+
+const DefaultUserState: IUserState = {
+  user: undefined,
   fetchUserLoading: false,
   fetchUserError: undefined,
   fetchAllUsersLoading: false,
-  ftchAllUsersError: undefined,
+  fetchAllUsersError: undefined,
   addPostLoading: false,
   addPostError: undefined,
   uploadAvatarLoading: false,
   uploadAvatarError: undefined,
 };
 
-const UserReducer = (state = INITIAL_STATE, action: any) => {
+const UserReducer = (state = DefaultUserState, action: any) => {
   console.log(action);
   switch (action.type) {
     case FETCH_USER.REQUESTED:

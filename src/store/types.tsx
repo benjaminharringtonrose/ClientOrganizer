@@ -1,3 +1,14 @@
+export interface IError {
+  message: string;
+  code?: number;
+  stack?: any;
+  description?: string;
+  type?: string;
+  remediation?: string;
+  request?: any;
+  response?: any;
+}
+
 export enum LOGIN_USER {
   REQUESTED = "LOGIN_USER_REQUESTED",
   SUCCEEDED = "LOGIN_USER_SUCCEEDED",

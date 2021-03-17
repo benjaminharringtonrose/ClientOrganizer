@@ -106,8 +106,8 @@ function LoginScreen(props: LoginScreenProps) {
 
 const mapStateToProps = (state: any) => {
   return {
-    authError: state.auth.error,
-    authLoading: state.auth.loading,
+    authError: state.auth.authError,
+    authLoading: state.auth.authLoading,
   };
 };
 

@@ -159,11 +159,11 @@ function RegisterScreen(props: RegisterScreenProps) {
 }
 
 const mapStateToProps = ({ auth }: any) => {
-  const { avatar, error, loading, user } = auth;
+  const { avatar, authError, authLoading, user } = auth;
   return {
     avatar,
-    authError: error,
-    authLoading: loading,
+    authError: authError,
+    authLoading: authLoading,
     user,
   };
 };

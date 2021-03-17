@@ -61,7 +61,7 @@ function FeedScreen(props: IFeedScreenProps) {
 
   return (
     <ScreenContainer>
-      {/* <Header title={"Feed"} titleStyle={TextStyles.header} containerStyle={ViewStyles.header} /> */}
+      <Header title={"Feed"} titleStyle={TextStyles.header} containerStyle={ViewStyles.header} />
       <FlatList
         data={props.posts}
         renderItem={renderPost}

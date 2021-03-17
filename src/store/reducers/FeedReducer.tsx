@@ -1,12 +1,19 @@
-import { FETCH_POSTS, ADD_POST } from "../types";
+import { FETCH_POSTS, IError } from "../types";
+import { IStringMap } from "../../screens/RegisterScreen";
 
-const INITIAL_STATE = {
+export interface IFeedState {
+  readonly posts?: IStringMap<any>;
+  readonly fetchPostsLoading: boolean;
+  readonly fetchPostsError?: IError;
+}
+
+export const DefaultFeedState: IFeedState = {
   posts: undefined,
   fetchPostsLoading: false,
   fetchPostsError: undefined,
 };
 
-const FeedReducer = (state = INITIAL_STATE, action: any) => {
+const FeedReducer = (state = DefaultFeedState, action: any) => {
   console.log(action);
   switch (action.type) {
     case FETCH_POSTS.REQUESTED:

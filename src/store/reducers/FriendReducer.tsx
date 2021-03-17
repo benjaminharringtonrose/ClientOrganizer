@@ -1,6 +1,15 @@
-import { FETCH_POSTS, ADD_POST, ADD_FRIEND, DELETE_FRIEND } from "../types";
+import { ADD_FRIEND, DELETE_FRIEND, IError } from "../types";
+import { IStringMap } from "../../screens/RegisterScreen";
 
-const INITIAL_STATE = {
+export interface IFriendState {
+  readonly friends?: IStringMap<any>;
+  readonly addFriendLoading: boolean;
+  readonly addFriendError?: IError;
+  readonly deleteFriendLoading: boolean;
+  readonly deleteFriendError?: IError;
+}
+
+export const DefaultFriendState: IFriendState = {
   friends: undefined,
   addFriendLoading: false,
   addFriendError: undefined,
@@ -8,7 +17,7 @@ const INITIAL_STATE = {
   deleteFriendError: undefined,
 };
 
-const FriendReducer = (state = INITIAL_STATE, action: any) => {
+const FriendReducer = (state = DefaultFriendState, action: any) => {
   // console.log(action);
   switch (action.type) {
     case ADD_FRIEND.REQUESTED:
