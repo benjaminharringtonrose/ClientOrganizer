@@ -39,17 +39,53 @@ function TabBar(props: any) {
         const getIcon = () => {
           switch (route.name) {
             case Routes.FEED_SCREEN:
-              return <Ionicons name={"ios-home-outline"} color={"white"} size={20} />;
+              return (
+                <Ionicons
+                  name={isFocused ? "ios-home" : "ios-home-outline"}
+                  color={isFocused ? Color.white : Color.greyMed}
+                  size={20}
+                />
+              );
             case Routes.POST_SCREEN:
-              return <Ionicons name={"ios-add-circle-outline"} color={"white"} size={20} />;
+              return (
+                <Ionicons
+                  name={isFocused ? "ios-add-circle" : "ios-add-circle-outline"}
+                  color={isFocused ? Color.white : Color.greyMed}
+                  size={20}
+                />
+              );
             case Routes.PROFILE_SCREEN:
-              return <Ionicons name={"ios-settings-outline"} color={"white"} size={20} />;
+              return (
+                <Ionicons
+                  name={isFocused ? "ios-settings" : "ios-settings-outline"}
+                  color={isFocused ? Color.white : Color.greyMed}
+                  size={20}
+                />
+              );
             case Routes.FIND_FRIENDS_SCREEN:
-              return <Ionicons name={"ios-person-add-outline"} color={"white"} size={20} />;
+              return (
+                <Ionicons
+                  name={isFocused ? "ios-person-add" : "ios-person-add-outline"}
+                  color={isFocused ? Color.white : Color.greyMed}
+                  size={20}
+                />
+              );
             case Routes.FRIENDS_LIST_SCREEN:
-              return <Ionicons name={"people-outline"} color={"white"} size={20} />;
+              return (
+                <Ionicons
+                  name={isFocused ? "people" : "people-outline"}
+                  color={isFocused ? Color.white : Color.greyMed}
+                  size={20}
+                />
+              );
             case Routes.FRIENDS_TABS:
-              return <Ionicons name={"ios-person-add-outline"} color={"white"} size={20} />;
+              return (
+                <Ionicons
+                  name={isFocused ? "ios-person-add" : "ios-person-add-outline"}
+                  color={isFocused ? Color.white : Color.greyMed}
+                  size={20}
+                />
+              );
           }
         };
 
