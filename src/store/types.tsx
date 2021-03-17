@@ -9,6 +9,15 @@ export interface IError {
   response?: any;
 }
 
+export interface IPost {
+  avatar: string;
+  firstName: string;
+  lastName: string;
+  timestamp: number;
+  text: string;
+  image?: string;
+}
+
 export enum LOGIN_USER {
   REQUESTED = "LOGIN_USER_REQUESTED",
   SUCCEEDED = "LOGIN_USER_SUCCEEDED",
