@@ -8101,6 +8101,11 @@ react-native-elements@^2.1.0:
     react-native-ratings "^7.2.0"
     react-native-status-bar-height "^2.5.0"
 
+react-native-fast-image@^8.3.4:
+  version "8.3.4"
+  resolved "https://registry.yarnpkg.com/react-native-fast-image/-/react-native-fast-image-8.3.4.tgz#79edca177e30311b19d59ff335625bcbe22650d7"
+  integrity sha512-LpzAdjUphihUpVEBn5fEv5AILe55rHav0YiZroPZ1rumKDhAl4u2cG01ku2Pb7l8sayjTsNu7FuURAlXUUDsow==
+
 react-native-firebase@^5.6.0:
   version "5.6.0"
   resolved "https://registry.yarnpkg.com/react-native-firebase/-/react-native-firebase-5.6.0.tgz#6f6123f53cb73477915dd55c55f3e1de91db38d2"
@@ -8125,6 +8130,11 @@ react-native-get-random-values@^1.4.0:
   integrity sha512-NnmEZcC5zfz+QEytFPM/fw818Hodw/BNbv7jGxU4pla4K2K9DCzG83IReMJqQ2wo552AYKguqrBG2SSn/U6rbA==
   dependencies:
     fast-base64-decode "^1.0.0"
+
+react-native-image-blur-loading@^1.1.4:
+  version "1.1.4"
+  resolved "https://registry.yarnpkg.com/react-native-image-blur-loading/-/react-native-image-blur-loading-1.1.4.tgz#45bf14ac131aa2ee5a741dca9590c9ca9a58a71a"
+  integrity sha512-kkNBQk2SpEm1fI7vkyn6vbqgZ3OeUWFo9urI/yye8biB3pouyPxaa+JXqO0qcYx51ZYeMUe0IYtrcrEYMdRZNw==
 
 react-native-in-app-notification@^3.1.0:
   version "3.1.0"

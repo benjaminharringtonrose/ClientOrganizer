@@ -1,9 +1,7 @@
 import React, { useState } from "react";
-import { View, Image, Text, StyleSheet, TouchableOpacity } from "react-native";
+import { View, Image, Text, StyleSheet, TouchableOpacity, ActivityIndicator } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
-import moment from "moment";
 import { Spacing, Color } from "../styles";
-import { CommentModal } from "./CommentModal";
 
 interface IPostCardProps {
   avatar?: string;
@@ -15,27 +13,46 @@ interface IPostCardProps {
 
 interface ILocalState {
   commentModalVisible: boolean;
+  imageLoading: boolean;
 }
 
 export function UserCard(props: IPostCardProps) {
   const [state, setState] = useState<ILocalState>({
     commentModalVisible: false,
+    imageLoading: true,
   });
+
+  const onLoadEnd = () => {
+    setState({
+      ...state,
+      imageLoading: false,
+    });
+  };
 
   return (
     <View style={styles.rootContainer}>
       <View style={{ flexDirection: "row" }}>
         {props.avatar ? (
-          <Image
-            source={{ uri: props.avatar }}
-            style={{
-              width: 36,
-              height: 36,
-              borderRadius: 18,
-              marginRight: 16,
-              marginLeft: Spacing.small,
-            }}
-          />
+          <View>
+            <Image
+              style={{
+                width: 36,
+                height: 36,
+                borderRadius: 18,
+                marginRight: 16,
+                marginLeft: Spacing.small,
+              }}
+              onLoadEnd={onLoadEnd}
+              source={{ uri: props.avatar }}
+            />
+            {state.imageLoading && (
+              <ActivityIndicator
+                animating={state.imageLoading}
+                color={Color.white}
+                style={{ position: "absolute", left: 20, top: 8 }}
+              />
+            )}
+          </View>
         ) : (
           <View style={{ paddingHorizontal: Spacing.small }}>
             <Ionicons name={"person-circle"} color={Color.white} size={30} />

@@ -19,6 +19,7 @@ import { usePrevious } from "../hooks/usePrevious";
 interface ILocalState {
   text: string;
   image?: string;
+  imageLoading: boolean;
 }
 
 interface IPassedProps {
@@ -44,6 +45,7 @@ function PostScreen(props: IPostScreenProps) {
   const [state, setState] = useState<ILocalState>({
     text: "",
     image: undefined,
+    imageLoading: true,
   });
 
   const oldProps = usePrevious(props);
@@ -76,6 +78,10 @@ function PostScreen(props: IPostScreenProps) {
     }
   };
 
+  const onLoadEnd = () => {
+    setState({ ...state, imageLoading: false });
+  };
+
   if (props.addPostLoading) {
     return (
       <ScreenContainer style={{ alignItems: "center", justifyContent: "center" }}>
@@ -103,7 +109,16 @@ function PostScreen(props: IPostScreenProps) {
       />
       <View style={styles.inputContainer}>
         {!!props.avatar ? (
-          <Image source={{ uri: props.avatar }} style={styles.avatar} />
+          <View>
+            <Image style={styles.avatar} onLoadEnd={onLoadEnd} source={{ uri: props.avatar }} />
+            {state.imageLoading && (
+              <ActivityIndicator
+                animating={state.imageLoading}
+                color={Color.white}
+                style={{ position: "absolute", left: 14, top: 14 }}
+              />
+            )}
+          </View>
         ) : (
           <Ionicons
             name={"person-circle-outline"}
@@ -128,7 +143,7 @@ function PostScreen(props: IPostScreenProps) {
         <Ionicons name="md-camera" size={32} color={Color.darkThemeGrey} />
       </TouchableOpacity>
       {!!state.image ? (
-        <View style={{ marginHorizontal: 32, marginTop: 32, height: 250 }}>
+        <View style={{ marginTop: 32, height: 300 }}>
           <Image source={{ uri: state.image }} style={styles.image} />
         </View>
       ) : null}
@@ -184,6 +199,6 @@ const styles = StyleSheet.create({
   image: {
     width: "100%",
     height: "100%",
-    borderRadius: 10,
+    borderRadius: 3,
   },
 });

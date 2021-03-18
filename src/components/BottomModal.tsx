@@ -7,7 +7,7 @@ import { SafeAreaView } from "react-navigation";
 import { Divider } from "./Divider";
 
 export interface BottomModalProps {
-  title: string;
+  title?: string;
   testID?: string;
   isVisible: boolean;
   onBackdropPress: () => void;
@@ -55,17 +55,20 @@ export class BottomModal extends React.Component<BottomModalProps> {
                 alignItems: "center",
               }}
             >
-              <View
-                style={{
-                  flex: 1,
-                  justifyContent: "center",
-                  alignItems: "center",
-                  marginVertical: Spacing.med,
-                  paddingHorizontal: Spacing.xlarge,
-                }}
-              >
-                <Text style={{ color: Color.white, fontSize: 24 }}>{title}</Text>
-              </View>
+              {!!title && (
+                <View
+                  style={{
+                    flex: 1,
+                    justifyContent: "center",
+                    alignItems: "center",
+                    marginVertical: Spacing.med,
+                    paddingHorizontal: Spacing.xlarge,
+                  }}
+                >
+                  <Text style={{ color: Color.white, fontSize: 24 }}>{title}</Text>
+                </View>
+              )}
+
               {headerRight ? (
                 <View
                   style={{

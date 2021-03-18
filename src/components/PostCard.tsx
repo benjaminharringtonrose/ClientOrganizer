@@ -108,7 +108,7 @@ const styles = StyleSheet.create({
   postImage: {
     flex: 1,
     width: undefined,
-    height: 150,
+    height: 250,
     marginBottom: Spacing.small,
   },
 });

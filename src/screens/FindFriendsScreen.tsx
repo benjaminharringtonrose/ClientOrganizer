@@ -101,11 +101,10 @@ function FindFriendsScreen(props: IFindFriendsProps) {
         refreshControl={refreshControl()}
       />
       <BottomModal
-        title={"Add a Friend"}
         isVisible={state.showModal}
         onBackdropPress={() => setState({ ...state, showModal: false })}
       >
-        <View style={{ minHeight: modalHeight }}>
+        <View style={{ minHeight: modalHeight, backgroundColor: Color.black }}>
           <Card>
             {state.selectedUser && (
               <CardSection>

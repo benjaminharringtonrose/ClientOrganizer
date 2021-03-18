@@ -45,6 +45,10 @@ interface ILocalState {
 }
 
 function ProfileScreen(props: ProfileScreenProps) {
+  const [state, setState] = useState<ILocalState>({
+    imageLoading: true,
+  });
+
   useEffect(() => {
     const uid = firebase.auth().currentUser?.uid;
     if (uid) {
@@ -84,11 +88,30 @@ function ProfileScreen(props: ProfileScreenProps) {
     }
   };
 
+  const onLoadEnd = () => {
+    setState({ ...state, imageLoading: false });
+  };
+
   return (
     <ScreenContainer>
       <Card>
         <TouchableOpacity style={styles.avatarPlaceholder} onPress={onPickAvatar}>
-          <Image source={{ uri: props.avatar }} style={styles.avatar} />
+          <View>
+            <Image style={styles.avatar} onLoadEnd={onLoadEnd} source={{ uri: props.avatar }} />
+            {state.imageLoading && (
+              <ActivityIndicator
+                animating={state.imageLoading}
+                color={Color.white}
+                style={{
+                  flex: 1,
+                  marginTop: 60,
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
+              />
+            )}
+          </View>
+
           <View
             style={{
               flex: 1,
@@ -167,7 +190,6 @@ const styles = StyleSheet.create({
     width: 120,
     height: 120,
     alignSelf: "center",
-    backgroundColor: Color.darkThemeGreyMed,
     borderRadius: 60,
     marginVertical: Spacing.small,
   },
