@@ -10,13 +10,14 @@ import { fetchAllFriendsFailed, addFriendSucceeded, addFriendFailed } from "../a
 
 export function* addFriendSaga(action: any) {
   try {
-    const { firstName, lastName, email, avatar } = action.payload;
+    const { friendUID, firstName, lastName, email, avatar } = action.payload;
     const uid = yield firebase.auth().currentUser?.uid;
     const doc = yield getDocRef();
     doc.set(
       {
         friends: {
           [uuid()]: {
+            uid: friendUID,
             firstName,
             lastName,
             email,

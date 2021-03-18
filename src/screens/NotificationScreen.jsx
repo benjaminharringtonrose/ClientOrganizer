@@ -15,8 +15,8 @@ Notifications.setNotificationHandler({
 export default function NotificationScreen() {
   const [expoPushToken, setExpoPushToken] = useState("");
   const [notification, setNotification] = useState(false);
-  const notificationListener = useRef<any>();
-  const responseListener = useRef<any>();
+  const notificationListener = useRef();
+  const responseListener = useRef();
 
   useEffect(() => {
     registerForPushNotificationsAsync().then((token) => {
@@ -68,7 +68,7 @@ export default function NotificationScreen() {
 }
 
 // Can use this function below, OR use Expo's Push Notification Tool-> https://expo.io/notifications
-async function sendPushNotification(expoPushToken: string) {
+async function sendPushNotification(expoPushToken) {
   const message = {
     to: expoPushToken,
     sound: "default",

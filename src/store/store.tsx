@@ -14,6 +14,7 @@ import {
   ADD_FRIEND,
   DELETE_FRIEND,
   FETCH_ALL_FRIENDS,
+  SET_USER_ID,
 } from "./types";
 import {
   fetchUserSaga,
@@ -34,7 +35,7 @@ import AuthReducer from "./reducers/AuthReducer";
 import UserReducer from "./reducers/UserReducer";
 import FeedReducer from "./reducers/FeedReducer";
 import FriendReducer from "./reducers/FriendReducer";
-import { IAuthActions, IFeedActions, IFriendActions, IUserActions } from "./actions";
+import { IAuthActions, IFeedActions, IFriendActions, IUserActions, setUserId } from "./actions";
 
 export interface IStoreState {
   readonly auth: IAuthState;
@@ -63,6 +64,8 @@ function* rootActionListener() {
   yield takeLatest(ADD_FRIEND.REQUESTED, addFriendSaga);
   yield takeLatest(DELETE_FRIEND.REQUESTED, deleteFriendSaga);
   yield takeLatest(FETCH_ALL_FRIENDS.REQUESTED, fetchAllFriendsSaga);
+
+  yield takeLatest(SET_USER_ID.SET, setUserId);
 }
 
 // ROOT SAGA

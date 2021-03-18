@@ -1,7 +1,16 @@
-import { FETCH_USER, ADD_POST, UPLOAD_AVATAR, FETCH_ALL_USERS, IError } from "../types";
+import {
+  FETCH_USER,
+  ADD_POST,
+  UPLOAD_AVATAR,
+  FETCH_ALL_USERS,
+  IError,
+  SET_USER_ID,
+} from "../types";
+import * as firebase from "firebase";
 import { IStringMap } from "../../screens/RegisterScreen";
 
 export interface IUserState {
+  readonly uid?: string;
   readonly user?: IStringMap<any>;
   readonly fetchUserLoading: boolean;
   readonly fetchUserError?: IError;
@@ -14,6 +23,7 @@ export interface IUserState {
 }
 
 const DefaultUserState: IUserState = {
+  uid: undefined,
   user: undefined,
   fetchUserLoading: false,
   fetchUserError: undefined,
@@ -26,7 +36,7 @@ const DefaultUserState: IUserState = {
 };
 
 const UserReducer = (state = DefaultUserState, action: any) => {
-  // console.log(action);
+  console.log(action);
   switch (action.type) {
     case FETCH_USER.REQUESTED:
       return {
@@ -97,6 +107,11 @@ const UserReducer = (state = DefaultUserState, action: any) => {
         ...state,
         uploadAvatarError: action.payload.message,
         uploadAvatarLoading: false,
+      };
+    case SET_USER_ID.SET:
+      return {
+        ...state,
+        uid: action.payload,
       };
     default:
       return state;

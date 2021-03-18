@@ -1,5 +1,5 @@
 import { Action } from "redux";
-import { FETCH_USER, FETCH_ALL_USERS, IError } from "../types";
+import { FETCH_USER, FETCH_ALL_USERS, IError, SET_USER_ID } from "../types";
 import { IStringMap } from "../../screens/RegisterScreen";
 
 export type IUserActions =
@@ -11,10 +11,10 @@ export type IUserActions =
   | IFetchAllUsersFailed;
 
 export interface IFetchUserRequested extends Action<FETCH_USER.REQUESTED> {
-  payload: string;
+  payload?: string;
 }
 
-export const fetchUserRequested = (payload: string): IFetchUserRequested => ({
+export const fetchUserRequested = (payload?: string): IFetchUserRequested => ({
   type: FETCH_USER.REQUESTED,
   payload,
 });
@@ -62,3 +62,14 @@ export const fetchAllUsersFailed = (error: IError): IFetchAllUsersFailed => ({
   type: FETCH_ALL_USERS.FAILED,
   payload: error,
 });
+
+export interface ISetUserId extends Action<SET_USER_ID.SET> {
+  payload?: string;
+}
+
+export const setUserId = (payload?: string): ISetUserId => {
+  return {
+    type: SET_USER_ID.SET,
+    payload,
+  };
+};

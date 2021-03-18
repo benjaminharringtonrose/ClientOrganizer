@@ -17,6 +17,11 @@
     "ios": {
       "supportsTablet": true
     },
+    "expo": {
+      "android": {
+        "useNextNotificationsApi": true
+      }
+    },
     "web": {
       "favicon": "./assets/favicon.png"
     },

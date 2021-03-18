@@ -29,7 +29,7 @@ interface IPropsFromState {
 
 interface IDispatchFromState {
   dispatchFetchAllUsers: () => void;
-  dispatchAddFriend: ({ firstName, lastName, email, avatar }: any) => void;
+  dispatchAddFriend: ({ friendUID, firstName, lastName, email, avatar }: any) => void;
 }
 
 type IFindFriendsProps = IPassedProps & IPropsFromState & IDispatchFromState;
@@ -51,6 +51,7 @@ function FindFriendsScreen(props: IFindFriendsProps) {
         ...state,
         showModal: true,
         selectedUser: {
+          uid: item?.uid,
           firstName: item.firstName,
           lastName: item.lastName,
           email: item.email,
@@ -122,6 +123,7 @@ function FindFriendsScreen(props: IFindFriendsProps) {
                 label={"Add"}
                 onPress={() => {
                   props.dispatchAddFriend({
+                    friendUID: state.selectedUser?.uid,
                     firstName: state.selectedUser?.firstName,
                     lastName: state.selectedUser?.lastName,
                     email: state.selectedUser?.email,
@@ -149,8 +151,11 @@ const mapStateToProps = (state: any) => {
 
 const mapDispatchToProps = (dispatch: any) => ({
   dispatchFetchAllUsers: () => dispatch({ type: FETCH_ALL_USERS.REQUESTED }),
-  dispatchAddFriend: ({ firstName, lastName, email, avatar }: any) =>
-    dispatch({ type: ADD_FRIEND.REQUESTED, payload: { firstName, lastName, email, avatar } }),
+  dispatchAddFriend: ({ friendUID, firstName, lastName, email, avatar }: any) =>
+    dispatch({
+      type: ADD_FRIEND.REQUESTED,
+      payload: { friendUID, firstName, lastName, email, avatar },
+    }),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(FindFriendsScreen);

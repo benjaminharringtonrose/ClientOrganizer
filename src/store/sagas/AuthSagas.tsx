@@ -10,6 +10,7 @@ import {
   fetchAllUsersRequested,
   registerUserSucceeded,
   registerUserFailed,
+  setUserId,
 } from "../actions";
 
 // LOGIN USER - SAGA
@@ -21,6 +22,12 @@ export function* loginUserSaga(action: any) {
     const data = yield call([auth, auth.signInWithEmailAndPassword], email, password);
     yield put(loginUserSucceeded(data));
     const uid = yield firebase.auth().currentUser?.uid;
+    yield firebase.firestore().collection("users").doc(uid).set(
+      {
+        uid: uid,
+      },
+      { merge: true }
+    );
     yield put(fetchUserRequested(uid));
     yield put(fetchAllUsersRequested());
   } catch (error) {
@@ -42,6 +49,14 @@ export function* registerUserSaga(action: any) {
       email,
     });
     yield put(registerUserSucceeded(data));
+    const uid = firebase.auth().currentUser?.uid;
+    yield db.set(
+      {
+        uid,
+      },
+      { merge: true }
+    );
+    yield put(fetchUserRequested(uid));
   } catch (error) {
     console.warn(error);
     yield put(registerUserFailed(error));
