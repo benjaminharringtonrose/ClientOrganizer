@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { StyleSheet, StyleProp, ViewStyle, Image, View } from "react-native";
 import { Color } from "../styles";
-import Spinner from "./Spinner";
+import { Spinner } from "../components";
 
 interface AvatarProps {
   uri?: string;

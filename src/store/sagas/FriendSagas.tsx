@@ -30,7 +30,7 @@ export function* addFriendSaga(action: any) {
     yield put(addFriendSucceeded());
     yield put(fetchUserRequested(uid));
   } catch (error) {
-    yield put(addFriendFailed({ error }));
+    yield put(addFriendFailed(error));
   }
 }
 
@@ -53,13 +53,13 @@ export function* deleteFriendSaga(action: any) {
     yield put(deleteFriendSucceeded());
     yield put(fetchUserRequested(uid));
   } catch (error) {
-    yield put(deleteFriendFailed({ error }));
+    yield put(deleteFriendFailed(error));
   }
 }
 
 export function* fetchAllFriendsSaga() {
   try {
   } catch (error) {
-    yield put(fetchAllFriendsFailed({ error }));
+    yield put(fetchAllFriendsFailed(error));
   }
 }

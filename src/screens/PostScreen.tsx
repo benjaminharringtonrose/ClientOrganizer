@@ -10,17 +10,11 @@ import {
 import { Ionicons } from "@expo/vector-icons";
 import * as ImagePicker from "expo-image-picker";
 import { connect } from "react-redux";
-import Routes from "../navigation/routes";
+import { Routes } from "../navigation/routes";
 import { Color, Spacing } from "../styles";
 import { ScreenContainer, Header, ButtonText, ButtonBack } from "../components";
 import { ADD_POST } from "../store/types";
 import { usePrevious } from "../hooks/usePrevious";
-
-interface ILocalState {
-  text: string;
-  image?: string;
-  imageLoading: boolean;
-}
 
 interface IPassedProps {
   navigation: any;
@@ -40,6 +34,12 @@ interface IDispatchFromState {
 }
 
 type IPostScreenProps = IPropsFromState & IPassedProps & IDispatchFromState;
+
+interface ILocalState {
+  text: string;
+  image?: string;
+  imageLoading: boolean;
+}
 
 function PostScreen(props: IPostScreenProps) {
   const [state, setState] = useState<ILocalState>({

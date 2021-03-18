@@ -4,7 +4,7 @@ require("firebase/firestore");
 import { DELETE_CLIENT, UPDATE_CLIENT, ADD_CLIENT } from "../types";
 import { getDocRef } from "../../screens/util";
 import uuid from "uuid-random";
-import { fetchUserRequested } from "./UserSagas";
+import { fetchUserRequested } from "../actions/UserActions";
 
 // ADD CLIENT - ACTIONS
 

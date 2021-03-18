@@ -1,8 +1,7 @@
 import React, { Component } from "react";
 import { Text, TouchableOpacity, StyleProp, ViewStyle, View } from "react-native";
 import { Color, Spacing } from "../styles";
-import CardSection from "./CardSection";
-import Spinner from "./Spinner";
+import { CardSection, Spinner } from "../components";
 
 interface CellLabelCenterActionableProps {
   label: string;

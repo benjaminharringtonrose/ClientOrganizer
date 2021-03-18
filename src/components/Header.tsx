@@ -5,6 +5,7 @@ import { Spacing, Color, TextStyles } from "../styles";
 interface IHeaderProps {
   headerLeft?: JSX.Element | null;
   title?: string;
+  headerCenter?: JSX.Element | null;
   headerRight?: JSX.Element | null;
   titleStyle?: StyleProp<TextStyle>;
   containerStyle?: StyleProp<ViewStyle>;

@@ -6,7 +6,6 @@ import {
   IError,
   SET_USER_ID,
 } from "../types";
-import * as firebase from "firebase";
 import { IStringMap } from "../../screens/RegisterScreen";
 
 export interface IUserState {

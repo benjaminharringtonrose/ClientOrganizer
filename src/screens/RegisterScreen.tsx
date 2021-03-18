@@ -16,7 +16,7 @@ import {
 import { REGISTER_USER, UPLOAD_AVATAR } from "../store/types";
 import { Color, Spacing } from "../styles";
 
-import Routes from "../navigation/routes";
+import { Routes } from "../navigation/routes";
 
 import { usePrevious } from "../hooks/usePrevious";
 
@@ -60,7 +60,7 @@ function RegisterScreen(props: RegisterScreenProps) {
 
   useEffect(() => {
     if (oldProps?.authLoading && !props.authLoading && !props.authError) {
-      props.navigation.navigate(Routes.DASHBOARD_TABS);
+      props.navigation.navigate(Routes.DASHBOARD_TAB_NAVIGATOR);
     }
   }, [props.authLoading, props.authError]);
 

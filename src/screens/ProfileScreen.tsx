@@ -13,6 +13,7 @@ import {
   Spinner,
   Button,
   CellLabelLeftRight,
+  Header,
 } from "../components";
 
 import { Color, Spacing } from "../styles";
@@ -94,6 +95,7 @@ function ProfileScreen(props: ProfileScreenProps) {
 
   return (
     <ScreenContainer>
+      <Header />
       <Card>
         <TouchableOpacity style={styles.avatarPlaceholder} onPress={onPickAvatar}>
           <View>

@@ -20,7 +20,7 @@ export default class SearchBar extends Component<ISearchBarProps> {
         <FontAwesome
           name={"search"}
           size={18}
-          color={Color.white}
+          color={Color.greyMed}
           style={{ paddingLeft: Spacing.small }}
         />
         <Input

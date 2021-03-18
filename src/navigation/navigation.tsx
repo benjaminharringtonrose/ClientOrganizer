@@ -11,20 +11,44 @@ import FeedScreen from "../screens/FeedScreen";
 import ProfileScreen from "../screens/ProfileScreen";
 import PostScreen from "../screens/PostScreen";
 import FriendsListScreen from "../screens/FriendsListScreen";
-
-import Routes from "./routes";
 import TabBar from "./components/TabBar";
 import FindFriendsScreen from "../screens/FindFriendsScreen";
+import MessageScreen from "../screens/MessageScreen";
+import MessageDetailsScreen from "../screens/MessageDetailsScreen";
+import { Routes } from "./routes";
 
-const DashboardTabs = () => {
+export const defaultNavigationOptions = { headerTransparent: true, headerShown: false };
+
+const MessageNavigator = () => {
+  const Stack = createStackNavigator();
+  return (
+    <Stack.Navigator screenOptions={defaultNavigationOptions}>
+      <Stack.Screen name={Routes.MESSAGE_SCREEN} component={MessageScreen} />
+      <Stack.Screen name={Routes.MESSAGE_DETAILS_SCREEN} component={MessageDetailsScreen} />
+    </Stack.Navigator>
+  );
+};
+
+const DashboardTabNavigator = () => {
   const Tab = createBottomTabNavigator();
   return (
     <Tab.Navigator tabBar={(props: any) => <TabBar {...props} />}>
       <Tab.Screen name={Routes.FEED_SCREEN} component={FeedScreen} />
       <Tab.Screen name={Routes.POST_SCREEN} component={PostScreen} />
+      <Tab.Screen name={Routes.MESSAGE_NAVIGATOR} component={MessageNavigator} />
       <Tab.Screen name={Routes.FRIENDS_TABS} component={MaterialTopTabs} />
       <Tab.Screen name={Routes.PROFILE_SCREEN} component={ProfileScreen} />
     </Tab.Navigator>
+  );
+};
+
+const AuthNavigator = () => {
+  const Stack = createStackNavigator();
+  return (
+    <Stack.Navigator screenOptions={defaultNavigationOptions}>
+      <Stack.Screen name={Routes.LOGIN_SCREEN} component={LoginScreen} />
+      <Stack.Screen name={Routes.REGISTER_SCREEN} component={RegisterScreen} />
+    </Stack.Navigator>
   );
 };
 
@@ -38,46 +62,17 @@ const MaterialTopTabs = () => {
   );
 };
 
-export const Navigator = () => {
+export const RootNavigator = () => {
   const Stack = createStackNavigator();
   const isLoggedin = useAuthState();
 
   return (
     <NavigationContainer theme={DarkTheme}>
-      <Stack.Navigator>
+      <Stack.Navigator screenOptions={defaultNavigationOptions}>
         {isLoggedin ? (
-          <>
-            <Stack.Screen
-              name={Routes.DASHBOARD_TABS}
-              component={DashboardTabs}
-              options={{
-                headerTransparent: true,
-                headerShown: false,
-                headerTitle: "",
-              }}
-            />
-          </>
+          <Stack.Screen name={Routes.DASHBOARD_TAB_NAVIGATOR} component={DashboardTabNavigator} />
         ) : (
-          <>
-            <Stack.Screen
-              name={Routes.LOGIN_SCREEN}
-              component={LoginScreen}
-              options={{
-                headerTransparent: true,
-                headerShown: false,
-                headerTitle: "",
-              }}
-            />
-            <Stack.Screen
-              name={Routes.REGISTER_SCREEN}
-              component={RegisterScreen}
-              options={{
-                headerTransparent: true,
-                headerTitle: "",
-                headerShown: false,
-              }}
-            />
-          </>
+          <Stack.Screen name={Routes.AUTH_NAVIGATOR} component={AuthNavigator} />
         )}
       </Stack.Navigator>
     </NavigationContainer>

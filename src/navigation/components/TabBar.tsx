@@ -2,7 +2,7 @@ import React from "react";
 import { View, TouchableOpacity, Image, SafeAreaView } from "react-native";
 import { Color, Spacing } from "../../styles";
 import { Ionicons } from "@expo/vector-icons";
-import Routes from "../routes";
+import { Routes } from "../routes";
 import { connect } from "react-redux";
 
 interface IPropsFromState {
@@ -82,6 +82,14 @@ function TabBar(props: any) {
               return (
                 <Ionicons
                   name={isFocused ? "ios-person-add" : "ios-person-add-outline"}
+                  color={isFocused ? Color.white : Color.greyMed}
+                  size={20}
+                />
+              );
+            case Routes.MESSAGE_NAVIGATOR:
+              return (
+                <Ionicons
+                  name={isFocused ? "ios-chatbox-ellipses" : "ios-chatbox-ellipses-outline"}
                   color={isFocused ? Color.white : Color.greyMed}
                   size={20}
                 />

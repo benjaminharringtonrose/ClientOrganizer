@@ -2,24 +2,25 @@ import { put } from "redux-saga/effects";
 import * as firebase from "firebase";
 require("firebase/firestore");
 import uuid from "uuid-random";
-import { ADD_POST, UPLOAD_AVATAR } from "../types";
+import { ADD_POST, UPLOAD_AVATAR, IError } from "../types";
 import { fetchPostsRequested } from "../actions/FeedActions";
 import {
   fetchUserSucceeded,
   fetchUserFailed,
   fetchAllUsersSucceeded,
   fetchAllUsersFailed,
+  IFetchUserRequested,
 } from "../actions";
 
 // FETCH USER - SAGA
 
-export function* fetchUserSaga(action: any) {
+export function* fetchUserSaga(action: IFetchUserRequested) {
   try {
     const uid = action.payload;
     const doc = yield firebase.firestore().collection("users").doc(uid).get();
     yield put(fetchUserSucceeded(doc.data()));
   } catch (error) {
-    yield put(fetchUserFailed({ error }));
+    yield put(fetchUserFailed(error));
   }
 }
 
@@ -38,7 +39,7 @@ export function* fetchAllUsersSaga() {
       });
     yield put(fetchAllUsersSucceeded(users));
   } catch (error) {
-    yield put(fetchAllUsersFailed({ error }));
+    yield put(fetchAllUsersFailed(error));
   }
 }
 

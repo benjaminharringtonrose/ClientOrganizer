@@ -4,7 +4,7 @@ import { connect } from "react-redux";
 import { LOGIN_USER } from "../store/types";
 
 import { Color, Spacing } from "../styles";
-import Routes from "../navigation/routes";
+import { Routes } from "../navigation/routes";
 import { Icon } from "react-native-elements";
 import { Card, CardSection, ScreenContainer, Header, Input, Button, Spinner } from "../components";
 

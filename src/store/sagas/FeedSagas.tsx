@@ -20,6 +20,6 @@ export function* fetchPostsSaga() {
       });
     yield put(fetchPostsSucceeded(posts));
   } catch (error) {
-    yield put(fetchPostsFailed({ error }));
+    yield put(fetchPostsFailed(error));
   }
 }

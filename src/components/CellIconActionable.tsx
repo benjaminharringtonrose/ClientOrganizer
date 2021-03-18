@@ -13,7 +13,7 @@ interface CellIconActionableProps {
   iconLeftName?: "plus" | "minus" | "book" | "right" | "left";
   iconLeftColor?: string;
   iconLeftSize?: number;
-  iconRightName?: string;
+  iconRightName?: "plus" | "minus" | "book" | "right" | "left";
   iconRightColor?: string;
   iconRightSize?: number;
   style?: ViewStyle;

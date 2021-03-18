@@ -3,7 +3,7 @@ import { StatusBar } from "react-native";
 import { Provider } from "react-redux";
 import store from "./src/store/store";
 import firebase from "firebase";
-import { Navigator } from "./src/navigation/navigation";
+import { RootNavigator } from "./src/navigation/navigation";
 import FirebaseKeys from "./src/api/FirebaseKeys";
 
 class App extends Component {
@@ -16,7 +16,7 @@ class App extends Component {
     return (
       <Provider store={store}>
         <StatusBar barStyle={"light-content"} />
-        <Navigator />
+        <RootNavigator />
       </Provider>
     );
   }
