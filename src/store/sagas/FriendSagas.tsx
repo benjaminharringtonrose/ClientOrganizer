@@ -1,7 +1,5 @@
-import { DELETE_FRIEND } from "../types";
 import { put } from "redux-saga/effects";
 import firebase from "firebase";
-import uuid from "uuid-random";
 import { getDocRef } from "../../screens/util";
 import {
   fetchUserRequested,
@@ -16,28 +14,27 @@ import { fetchAllFriendsFailed, addFriendSucceeded, addFriendFailed } from "../a
 export function* addFriendSaga(action: any) {
   try {
     const {
-      theirUid,
-      theirFirstName,
-      theirLastName,
-      theirAvatar,
+      friendId,
+      friendFirstName,
+      friendLastName,
+      friendAvatar,
+      uid,
       firstName,
       lastName,
       avatar,
     } = action.payload;
     console.log("ACTION.PAYLOAD", action.payload);
 
-    const uid = yield firebase.auth().currentUser?.uid;
-
     // set the personB in personA's friends list
     const doc = yield getDocRef();
     yield doc.set(
       {
         friends: {
-          [theirUid]: {
-            theirUid,
-            firstName: theirFirstName,
-            lastName: theirLastName,
-            avatar: theirAvatar,
+          [friendId]: {
+            friendId,
+            friendFirstName,
+            friendLastName,
+            friendAvatar,
           },
         },
       },
@@ -45,16 +42,15 @@ export function* addFriendSaga(action: any) {
     );
 
     // set the personA in personB's friends list
-    console.log("THEEEEEIIIIIIRRRRSSS", theirUid);
     yield firebase
       .firestore()
       .collection("users")
-      .doc(theirUid)
+      .doc(friendId)
       .set(
         {
           friends: {
             [uid]: {
-              theirUid: uid,
+              friendId: uid,
               firstName,
               lastName,
               avatar,

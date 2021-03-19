@@ -24,10 +24,11 @@ interface IPropsFromState {
 interface IDispatchFromState {
   dispatchFetchUser: (uid: string) => void;
   dispatchAddFriend: ({
-    theirUid,
-    theirFirstName,
-    theirLastName,
-    theirAvatar,
+    friendId,
+    friendFirstName,
+    friendLastName,
+    friendAvatar,
+    uid,
     firstName,
     lastName,
     avatar,
@@ -38,13 +39,11 @@ type IMessageScreenProps = IPassedProps & IPropsFromState & IDispatchFromState;
 
 interface ILocalState {
   mappedNotifications?: any[];
-  selectedNotification?: IStringMap<any>;
 }
 
 function NotificationScreen(props: IMessageScreenProps) {
   const [state, setState] = useState<ILocalState>({
     mappedNotifications: undefined,
-    selectedNotification: undefined,
   });
 
   useEffect(() => {
@@ -56,25 +55,15 @@ function NotificationScreen(props: IMessageScreenProps) {
   }, [props.user]);
 
   const renderNotification = ({ item }: any) => {
-    const onNotificationPress = () => {
-      setState({
-        ...state,
-        selectedNotification: {
-          uid: item?.theirUid,
-          firstName: item.firstName,
-          lastName: item.lastName,
-          avatar: item.avatar,
-        },
-      });
-      props.navigation.navigate(Routes.MESSAGE_DETAILS_SCREEN);
-    };
+    const onNotificationPress = () => {};
 
     const onAcceptFriendRequest = () => {
       props.dispatchAddFriend({
-        theirUid: item?.theirUid,
-        theirFirstName: item.firstName,
-        theirLastName: item.lastName,
-        theirAvatar: item.avatar,
+        friendId: item?.theirUid,
+        friendFirstName: item.firstName,
+        friendLastName: item.lastName,
+        friendAvatar: item.avatar,
+        uid: props.user?.uid,
         firstName: props.user?.firstName,
         lastName: props.user?.lastName,
         avatar: props.user?.avatar,
@@ -161,10 +150,11 @@ const mapStateToProps = (state: any) => {
 const mapDispatchToProps = (dispatch: any) => ({
   dispatchFetchUser: (uid: string) => dispatch({ type: FETCH_USER.REQUESTED, payload: uid }),
   dispatchAddFriend: ({
-    theirUid,
-    theirFirstName,
-    theirLastName,
-    theirAvatar,
+    friendId,
+    friendFirstName,
+    friendLastName,
+    friendAvatar,
+    uid,
     firstName,
     lastName,
     avatar,
@@ -172,10 +162,11 @@ const mapDispatchToProps = (dispatch: any) => ({
     dispatch({
       type: ADD_FRIEND.REQUESTED,
       payload: {
-        theirUid,
-        theirFirstName,
-        theirLastName,
-        theirAvatar,
+        friendId,
+        friendFirstName,
+        friendLastName,
+        friendAvatar,
+        uid,
         firstName,
         lastName,
         avatar,
