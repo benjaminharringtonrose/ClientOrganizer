@@ -15,24 +15,54 @@ import { fetchAllFriendsFailed, addFriendSucceeded, addFriendFailed } from "../a
 
 export function* addFriendSaga(action: any) {
   try {
-    const { theirUid, firstName, lastName, avatar } = action.payload;
+    const {
+      theirUid,
+      theirFirstName,
+      theirLastName,
+      theirAvatar,
+      firstName,
+      lastName,
+      avatar,
+    } = action.payload;
     console.log("ACTION.PAYLOAD", action.payload);
 
     const uid = yield firebase.auth().currentUser?.uid;
+
+    // set the personB in personA's friends list
     const doc = yield getDocRef();
-    doc.set(
+    yield doc.set(
       {
         friends: {
           [theirUid]: {
             theirUid,
-            firstName,
-            lastName,
-            avatar,
+            firstName: theirFirstName,
+            lastName: theirLastName,
+            avatar: theirAvatar,
           },
         },
       },
       { merge: true }
     );
+
+    // set the personA in personB's friends list
+    console.log("THEEEEEIIIIIIRRRRSSS", theirUid);
+    yield firebase
+      .firestore()
+      .collection("users")
+      .doc(theirUid)
+      .set(
+        {
+          friends: {
+            [uid]: {
+              theirUid: uid,
+              firstName,
+              lastName,
+              avatar,
+            },
+          },
+        },
+        { merge: true }
+      );
     yield put(addFriendSucceeded());
     yield put(fetchUserRequested(uid));
   } catch (error) {

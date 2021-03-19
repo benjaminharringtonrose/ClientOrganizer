@@ -23,7 +23,15 @@ interface IPropsFromState {
 
 interface IDispatchFromState {
   dispatchFetchUser: (uid: string) => void;
-  dispatchAddFriend: ({ friendUID, firstName, lastName, email, avatar }: any) => void;
+  dispatchAddFriend: ({
+    theirUid,
+    theirFirstName,
+    theirLastName,
+    theirAvatar,
+    firstName,
+    lastName,
+    avatar,
+  }: any) => void;
 }
 
 type IMessageScreenProps = IPassedProps & IPropsFromState & IDispatchFromState;
@@ -64,9 +72,12 @@ function NotificationScreen(props: IMessageScreenProps) {
     const onAcceptFriendRequest = () => {
       props.dispatchAddFriend({
         theirUid: item?.theirUid,
-        firstName: item.firstName,
-        lastName: item.lastName,
-        avatar: item.avatar,
+        theirFirstName: item.firstName,
+        theirLastName: item.lastName,
+        theirAvatar: item.avatar,
+        firstName: props.user?.firstName,
+        lastName: props.user?.lastName,
+        avatar: props.user?.avatar,
       });
       const uid = firebase.auth().currentUser?.uid;
       const theirUid = item?.theirUid;
@@ -149,10 +160,26 @@ const mapStateToProps = (state: any) => {
 
 const mapDispatchToProps = (dispatch: any) => ({
   dispatchFetchUser: (uid: string) => dispatch({ type: FETCH_USER.REQUESTED, payload: uid }),
-  dispatchAddFriend: ({ theirUid, firstName, lastName, avatar }: any) =>
+  dispatchAddFriend: ({
+    theirUid,
+    theirFirstName,
+    theirLastName,
+    theirAvatar,
+    firstName,
+    lastName,
+    avatar,
+  }: any) =>
     dispatch({
       type: ADD_FRIEND.REQUESTED,
-      payload: { theirUid, firstName, lastName, avatar },
+      payload: {
+        theirUid,
+        theirFirstName,
+        theirLastName,
+        theirAvatar,
+        firstName,
+        lastName,
+        avatar,
+      },
     }),
 });
 

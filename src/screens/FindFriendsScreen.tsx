@@ -230,12 +230,12 @@ export const sendFriendRequest = ({
   doc.set(
     {
       notifications: {
-        [theirUid]: {
+        [uid!]: {
           notificationId,
           notificationType,
           message: "wants to be your friend.",
           timestamp: Date.now(),
-          theirUid,
+          theirUid: uid,
           theirPushToken,
           firstName,
           lastName,
