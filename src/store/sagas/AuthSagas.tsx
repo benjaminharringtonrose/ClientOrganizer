@@ -1,5 +1,7 @@
 import firebase from "firebase";
 import { call, put } from "redux-saga/effects";
+import * as Notifications from "expo-notifications";
+import * as Permissions from "expo-permissions";
 import { getDocRef } from "../../screens/util";
 import {
   loginUserSucceeded,
@@ -56,6 +58,7 @@ export function* registerUserSaga(action: any) {
       },
       { merge: true }
     );
+    yield getAndSetDevicePushToken();
     yield put(fetchUserRequested(uid));
   } catch (error) {
     console.warn(error);
@@ -73,3 +76,61 @@ export function* logoutUserSaga() {
     yield put(logoutUserFailed(error));
   }
 }
+
+export const getAndSetDevicePushToken = () => {
+  console.log("getDevicePushToken");
+  return Permissions.getAsync(Permissions.NOTIFICATIONS)
+    .then((response) =>
+      response.status === "granted" ? response : Permissions.askAsync(Permissions.NOTIFICATIONS)
+    )
+    .then((response) => {
+      if (response.status !== "granted") {
+        return Promise.reject(new Error("Push notifications permission was rejected"));
+      }
+
+      return Notifications.getExpoPushTokenAsync();
+    })
+    .then((token) => {
+      const db = getDocRef();
+      db.set(
+        {
+          pushToken: token,
+        },
+        { merge: true }
+      );
+    })
+    .catch((error) => {
+      console.log("Error while registering device push token", error);
+    });
+};
+
+const registerForPushNotifications = async () => {
+  const { status: existingStatus } = await Permissions.getAsync(Permissions.NOTIFICATIONS);
+  let finalStatus = existingStatus;
+  // only ask if permissions have not already been determined, because
+  // iOS won't necessarily prompt the user a second time.
+  if (existingStatus !== "granted") {
+    // Android remote notification permissions are granted during the app
+    // install, so this will only ask on iOS
+    const { status } = await Permissions.askAsync(Permissions.NOTIFICATIONS);
+    finalStatus = status;
+  }
+  // Stop here if the user did not grant permissions
+  if (finalStatus !== "granted") {
+    return;
+  }
+  // Get the token that uniquely identifies this device
+  try {
+    let token = await Notifications.getExpoPushTokenAsync();
+    // POST the token to your backend server from where you can retrieve it to send push notifications.
+    const db = getDocRef();
+    db.set(
+      {
+        pushToken: token,
+      },
+      { merge: true }
+    );
+  } catch (error) {
+    console.log(error);
+  }
+};

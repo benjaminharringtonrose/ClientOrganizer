@@ -6,6 +6,7 @@ import { FETCH_POSTS, FETCH_USER, FETCH_ALL_USERS, IError } from "../store/types
 import { Header, ScreenContainer, PostCard } from "../components";
 import { Color, TextStyles, ViewStyles } from "../styles";
 import { IStoreState } from "../store/store";
+import { getAndSetDevicePushToken } from "../store/sagas";
 
 interface IPassedProps {
   navigation: any;
@@ -33,6 +34,8 @@ function FeedScreen(props: IFeedScreenProps) {
     if (uid) {
       props.dispatchFetchUser(uid);
     }
+
+    getAndSetDevicePushToken();
   }, []);
 
   function refreshControl() {

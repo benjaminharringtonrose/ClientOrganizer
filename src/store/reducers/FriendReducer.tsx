@@ -1,7 +1,8 @@
-import { ADD_FRIEND, DELETE_FRIEND, IError } from "../types";
+import { ADD_FRIEND, DELETE_FRIEND, IError, SEND_FRIEND_REQUEST } from "../types";
 import { IStringMap } from "../../screens/RegisterScreen";
 
 export interface IFriendState {
+  readonly friendRequests?: IStringMap<any>;
   readonly friends?: IStringMap<any>;
   readonly addFriendLoading: boolean;
   readonly addFriendError?: IError;
@@ -10,6 +11,7 @@ export interface IFriendState {
 }
 
 export const DefaultFriendState: IFriendState = {
+  friendRequests: undefined,
   friends: undefined,
   addFriendLoading: false,
   addFriendError: undefined,
@@ -49,7 +51,7 @@ const FriendReducer = (state = DefaultFriendState, action: any) => {
     case DELETE_FRIEND.FAILED:
       return {
         ...state,
-        deleteFriendLoading: false,
+        sendFriendRequestLoading: false,
         deleteFriendError: action.payload.message,
       };
     default:

@@ -16,12 +16,22 @@ import { IStringMap } from "./RegisterScreen";
 import { FETCH_ALL_USERS, ADD_FRIEND } from "../store/types";
 import SearchBar from "../components/SearchBar";
 import { BottomModal } from "../components/BottomModal";
+import firebase from "firebase";
+import * as Permissions from "expo-permissions";
+import * as Notifications from "expo-notifications";
+import { sendPushNotification } from "../api/PushNotifications";
+import { getDocRef } from "./util";
+import uuid from "uuid-random";
 
 interface IPassedProps {
   navigation: any;
 }
 
 interface IPropsFromState {
+  uid: string;
+  avatar: string;
+  firstName: string;
+  lastName: string;
   fetchAllUsersLoading: boolean;
   fetchAllUsersError?: any;
   users?: IStringMap<any>[];
@@ -56,6 +66,7 @@ function FindFriendsScreen(props: IFindFriendsProps) {
           lastName: item.lastName,
           email: item.email,
           avatar: item.avatar,
+          pushToken: item.pushToken,
         },
       });
     };
@@ -101,12 +112,13 @@ function FindFriendsScreen(props: IFindFriendsProps) {
         refreshControl={refreshControl()}
       />
       <BottomModal
+        title={"Send Friend Request"}
         isVisible={state.showModal}
         onBackdropPress={() => setState({ ...state, showModal: false })}
       >
         <View style={{ minHeight: modalHeight, backgroundColor: Color.black }}>
           <Card>
-            {state.selectedUser && (
+            {!!state.selectedUser && (
               <CardSection>
                 <UserCard
                   avatar={state.selectedUser.avatar}
@@ -120,14 +132,23 @@ function FindFriendsScreen(props: IFindFriendsProps) {
             <CardSection>
               <Button
                 label={"Add"}
-                onPress={() => {
-                  props.dispatchAddFriend({
-                    friendUID: state.selectedUser?.uid,
-                    firstName: state.selectedUser?.firstName,
-                    lastName: state.selectedUser?.lastName,
-                    email: state.selectedUser?.email,
-                    avatar: state.selectedUser?.avatar,
+                onPress={async () => {
+                  console.log("PUSHHHHHH", state.selectedUser?.pushToken?.data);
+                  sendFriendRequest({
+                    pushToken: state.selectedUser?.pushToken,
+                    requestUid: state.selectedUser?.uid,
+                    firstName: props.firstName,
+                    lastName: props.lastName,
+                    avatar: props.avatar,
                   });
+                  sendPushNotification(state.selectedUser?.pushToken?.data);
+                  // props.dispatchAddFriend({
+                  //   friendUID: state.selectedUser?.uid,
+                  //   firstName: state.selectedUser?.firstName,
+                  //   lastName: state.selectedUser?.lastName,
+                  //   email: state.selectedUser?.email,
+                  //   avatar: state.selectedUser?.avatar,
+                  // });
                   setState({ ...state, showModal: false });
                 }}
                 style={{ marginBottom: Spacing.med }}
@@ -142,6 +163,10 @@ function FindFriendsScreen(props: IFindFriendsProps) {
 
 const mapStateToProps = (state: any) => {
   return {
+    uid: state.user?.user?.uid,
+    avatar: state.user?.user?.avatar,
+    firstName: state.user?.user?.firstName,
+    lastName: state.user?.user?.lastName,
     fetchAllUsersLoading: state.user.fetchAllUsersLoading,
     fetchAllUsersError: state.user?.fetchAllUsersError,
     users: state.user?.users,
@@ -179,3 +204,39 @@ const styles = StyleSheet.create({
     color: Color.white,
   },
 });
+
+interface IFriendRequest {
+  // requestUid, firstName, lastName
+  requestUid: string;
+  firstName: string;
+  lastName: string;
+  avatar: string;
+  pushToken: IStringMap<any>;
+}
+
+export const sendFriendRequest = ({
+  requestUid,
+  pushToken,
+  firstName,
+  lastName,
+  avatar,
+}: IFriendRequest) => {
+  // doc ref to the user you're sending the friend request to.
+  const doc = firebase.firestore().collection("users").doc(requestUid);
+  // but below you'll be sending the CURRENT users info
+  const uid = firebase.auth().currentUser?.uid;
+  doc.set(
+    {
+      friendRequests: {
+        [uuid()]: {
+          uid,
+          pushToken,
+          firstName,
+          lastName,
+          avatar,
+        },
+      },
+    },
+    { merge: true }
+  );
+};

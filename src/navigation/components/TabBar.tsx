@@ -62,6 +62,14 @@ function TabBar(props: any) {
                   size={20}
                 />
               );
+            case Routes.FRIENDS_TAB_NAVIGATOR:
+              return (
+                <Ionicons
+                  name={isFocused ? "ios-person-add" : "ios-person-add-outline"}
+                  color={isFocused ? Color.white : Color.greyMed}
+                  size={20}
+                />
+              );
             case Routes.FIND_FRIENDS_SCREEN:
               return (
                 <Ionicons
@@ -78,18 +86,18 @@ function TabBar(props: any) {
                   size={20}
                 />
               );
-            case Routes.FRIENDS_TABS:
-              return (
-                <Ionicons
-                  name={isFocused ? "ios-person-add" : "ios-person-add-outline"}
-                  color={isFocused ? Color.white : Color.greyMed}
-                  size={20}
-                />
-              );
             case Routes.MESSAGE_NAVIGATOR:
               return (
                 <Ionicons
                   name={isFocused ? "ios-chatbox-ellipses" : "ios-chatbox-ellipses-outline"}
+                  color={isFocused ? Color.white : Color.greyMed}
+                  size={20}
+                />
+              );
+            case Routes.NOTIFICATION_NAVIGATOR:
+              return (
+                <Ionicons
+                  name={isFocused ? "ios-notifications" : "ios-notifications-outline"}
                   color={isFocused ? Color.white : Color.greyMed}
                   size={20}
                 />

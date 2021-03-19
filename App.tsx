@@ -5,11 +5,13 @@ import store from "./src/store/store";
 import firebase from "firebase";
 import { RootNavigator } from "./src/navigation/navigation";
 import FirebaseKeys from "./src/api/FirebaseKeys";
+import { setNotificationsHandler } from "./src/api/PushNotifications";
 
 class App extends Component {
   componentDidMount() {
     if (!firebase.apps.length) {
       firebase.initializeApp(FirebaseKeys);
+      setNotificationsHandler();
     }
   }
   render() {

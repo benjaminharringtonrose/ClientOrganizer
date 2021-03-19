@@ -3,7 +3,12 @@ import { put } from "redux-saga/effects";
 import firebase from "firebase";
 import uuid from "uuid-random";
 import { getDocRef } from "../../screens/util";
-import { fetchUserRequested, deleteFriendSucceeded, deleteFriendFailed } from "../actions";
+import {
+  fetchUserRequested,
+  deleteFriendSucceeded,
+  deleteFriendFailed,
+  ISendFriendRequest,
+} from "../actions";
 import { fetchAllFriendsFailed, addFriendSucceeded, addFriendFailed } from "../actions";
 
 // ADD FRIEND SAGA
@@ -61,5 +66,12 @@ export function* fetchAllFriendsSaga() {
   try {
   } catch (error) {
     yield put(fetchAllFriendsFailed(error));
+  }
+}
+
+export function sendFriendRequest(action: ISendFriendRequest) {
+  try {
+  } catch (error) {
+    console.warn(error);
   }
 }

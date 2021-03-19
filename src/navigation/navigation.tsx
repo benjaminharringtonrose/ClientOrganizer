@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { useAuthState } from "../hooks/useAuthState";
 import { NavigationContainer, DarkTheme } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
@@ -15,6 +15,7 @@ import TabBar from "./components/TabBar";
 import FindFriendsScreen from "../screens/FindFriendsScreen";
 import MessageScreen from "../screens/MessageScreen";
 import MessageDetailsScreen from "../screens/MessageDetailsScreen";
+import NotificationScreen from "../screens/NotificationScreen";
 import { Routes } from "./routes";
 
 export const defaultNavigationOptions = { headerTransparent: true, headerShown: false };
@@ -29,14 +30,25 @@ const MessageNavigator = () => {
   );
 };
 
+const NotificationNavigator = () => {
+  const Stack = createStackNavigator();
+  return (
+    <Stack.Navigator screenOptions={defaultNavigationOptions}>
+      <Stack.Screen name={Routes.NOTIFICATION_SCREEN} component={NotificationScreen} />
+      {/* <Stack.Screen name={} component={} /> */}
+    </Stack.Navigator>
+  );
+};
+
 const DashboardTabNavigator = () => {
   const Tab = createBottomTabNavigator();
   return (
     <Tab.Navigator tabBar={(props: any) => <TabBar {...props} />}>
       <Tab.Screen name={Routes.FEED_SCREEN} component={FeedScreen} />
+      <Tab.Screen name={Routes.FRIENDS_TAB_NAVIGATOR} component={MaterialTopTabs} />
       <Tab.Screen name={Routes.POST_SCREEN} component={PostScreen} />
       <Tab.Screen name={Routes.MESSAGE_NAVIGATOR} component={MessageNavigator} />
-      <Tab.Screen name={Routes.FRIENDS_TABS} component={MaterialTopTabs} />
+      <Tab.Screen name={Routes.NOTIFICATION_NAVIGATOR} component={NotificationNavigator} />
       <Tab.Screen name={Routes.PROFILE_SCREEN} component={ProfileScreen} />
     </Tab.Navigator>
   );

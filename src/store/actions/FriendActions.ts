@@ -1,5 +1,11 @@
 import { Action } from "redux";
-import { FETCH_ALL_FRIENDS, ADD_FRIEND, DELETE_FRIEND, IError } from "../types";
+import {
+  FETCH_ALL_FRIENDS,
+  ADD_FRIEND,
+  DELETE_FRIEND,
+  IError,
+  SEND_FRIEND_REQUEST,
+} from "../types";
 import { IStringMap } from "../../screens/RegisterScreen";
 
 export type IFriendActions =
@@ -53,4 +59,13 @@ export interface IDeleteFriendFailed extends Action<DELETE_FRIEND.FAILED> {
 export const deleteFriendFailed = (error: IError): IDeleteFriendFailed => ({
   type: DELETE_FRIEND.FAILED,
   payload: error,
+});
+
+export interface ISendFriendRequest extends Action<SEND_FRIEND_REQUEST.SENT> {
+  payload: IStringMap<any>;
+}
+
+export const sendFriendRequest = (payload: IStringMap<any>): ISendFriendRequest => ({
+  type: SEND_FRIEND_REQUEST.SENT,
+  payload,
 });

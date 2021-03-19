@@ -18,6 +18,7 @@ export const DefaultAuthState: IAuthState = {
 // AUTH REDUCER
 
 const AuthReducer = (state = DefaultAuthState, action: any) => {
+  console.log(action);
   switch (action.type) {
     // LOGIN
     case LOGIN_USER.REQUESTED:

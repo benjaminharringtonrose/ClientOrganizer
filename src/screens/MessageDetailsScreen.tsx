@@ -213,7 +213,7 @@ function MessageDetailsScreen(props: MessageDetailsProps) {
 }
 
 const mapStateToProps = (state: IStoreState) => {
-  console.log(state?.user?.user?.uid);
+  // console.log(state?.user?.user?.uid);
   return {
     uid: state?.user?.user?.uid,
   };
