@@ -26,20 +26,23 @@ export function* addFriendSaga(action: any) {
     console.log("ACTION.PAYLOAD", action.payload);
 
     // set the personB in personA's friends list
-    const doc = yield getDocRef();
-    yield doc.set(
-      {
-        friends: {
-          [friendId]: {
-            friendId,
-            friendFirstName,
-            friendLastName,
-            friendAvatar,
+    yield firebase
+      .firestore()
+      .collection("users")
+      .doc(uid)
+      .set(
+        {
+          friends: {
+            [friendId]: {
+              friendId,
+              friendFirstName,
+              friendLastName,
+              friendAvatar,
+            },
           },
         },
-      },
-      { merge: true }
-    );
+        { merge: true }
+      );
 
     // set the personA in personB's friends list
     yield firebase
@@ -51,9 +54,9 @@ export function* addFriendSaga(action: any) {
           friends: {
             [uid]: {
               friendId: uid,
-              firstName,
-              lastName,
-              avatar,
+              friendFirstName: firstName,
+              friendLastName: lastName,
+              friendAvatar: avatar,
             },
           },
         },
