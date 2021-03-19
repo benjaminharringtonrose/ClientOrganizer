@@ -12,3 +12,4 @@ export * from "./ButtonBack";
 export * from "./CommentModal";
 export * from "./MessagePreviewCard";
 export * from "./UserCard";
+export * from "./FriendRequestCard";

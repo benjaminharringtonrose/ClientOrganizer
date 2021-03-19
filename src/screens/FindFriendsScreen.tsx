@@ -19,7 +19,7 @@ import { BottomModal } from "../components/BottomModal";
 import firebase from "firebase";
 import * as Permissions from "expo-permissions";
 import * as Notifications from "expo-notifications";
-import { sendPushNotification } from "../api/PushNotifications";
+import { sendPushNotification, NOTIFICATION_TYPE } from "../api/PushNotifications";
 import { getDocRef } from "./util";
 import uuid from "uuid-random";
 
@@ -133,10 +133,10 @@ function FindFriendsScreen(props: IFindFriendsProps) {
               <Button
                 label={"Add"}
                 onPress={async () => {
-                  console.log("PUSHHHHHH", state.selectedUser?.pushToken?.data);
                   sendFriendRequest({
-                    pushToken: state.selectedUser?.pushToken,
-                    requestUid: state.selectedUser?.uid,
+                    notificationType: NOTIFICATION_TYPE.FRIEND_REQUEST,
+                    theirUid: state.selectedUser?.uid,
+                    theirPushToken: state.selectedUser?.pushToken,
                     firstName: props.firstName,
                     lastName: props.lastName,
                     avatar: props.avatar,
@@ -206,31 +206,37 @@ const styles = StyleSheet.create({
 });
 
 interface IFriendRequest {
-  // requestUid, firstName, lastName
-  requestUid: string;
+  notificationType: NOTIFICATION_TYPE.FRIEND_REQUEST;
+  theirUid: string;
+  theirPushToken: IStringMap<any>;
   firstName: string;
   lastName: string;
   avatar: string;
-  pushToken: IStringMap<any>;
 }
 
 export const sendFriendRequest = ({
-  requestUid,
-  pushToken,
+  notificationType,
+  theirUid,
+  theirPushToken,
   firstName,
   lastName,
   avatar,
 }: IFriendRequest) => {
   // doc ref to the user you're sending the friend request to.
-  const doc = firebase.firestore().collection("users").doc(requestUid);
+  const doc = firebase.firestore().collection("users").doc(theirUid);
   // but below you'll be sending the CURRENT users info
   const uid = firebase.auth().currentUser?.uid;
+  const notificationId = uuid();
   doc.set(
     {
-      friendRequests: {
-        [uuid()]: {
-          uid,
-          pushToken,
+      notifications: {
+        [theirUid]: {
+          notificationId,
+          notificationType,
+          message: "wants to be your friend.",
+          timestamp: Date.now(),
+          theirUid,
+          theirPushToken,
           firstName,
           lastName,
           avatar,

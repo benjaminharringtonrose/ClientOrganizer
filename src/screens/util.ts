@@ -33,6 +33,17 @@ export function mapFriends(posts: any) {
   return acc;
 }
 
+export function mapNotifications(notifications: any) {
+  if (!notifications) {
+    return;
+  }
+  let acc: any = [];
+  for (const [key, value] of Object.entries(notifications)) {
+    acc = acc.concat({ ...(value as Object), id: key });
+  }
+  return acc;
+}
+
 export function deleteField() {
   firebase.firestore.FieldValue.delete();
 }

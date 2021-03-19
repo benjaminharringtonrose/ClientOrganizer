@@ -15,6 +15,7 @@ import {
   DELETE_FRIEND,
   FETCH_ALL_FRIENDS,
   SET_USER_ID,
+  FETCH_NOTIFICATIONS,
 } from "./types";
 import {
   fetchUserSaga,

@@ -42,7 +42,13 @@ function FeedScreen(props: IFeedScreenProps) {
     return (
       <RefreshControl
         refreshing={props.fetchPostsLoading}
-        onRefresh={() => props.dispatchFetchPosts()}
+        onRefresh={() => {
+          props.dispatchFetchPosts();
+          const uid = firebase.auth().currentUser?.uid;
+          if (uid) {
+            props.dispatchFetchUser(uid);
+          }
+        }}
         tintColor={Color.white}
       />
     );

@@ -13,7 +13,7 @@ export class Button extends Component<ButtonProps> {
   public render() {
     const { label, labelSize, onPress, style } = this.props;
     return (
-      <TouchableOpacity onPress={onPress} style={[style, styles.buttonStyle]}>
+      <TouchableOpacity onPress={onPress} style={[styles.buttonStyle, style]}>
         <Text style={[styles.textStyle, { fontSize: labelSize || 18 }]}>{label}</Text>
       </TouchableOpacity>
     );

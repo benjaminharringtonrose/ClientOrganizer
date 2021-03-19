@@ -2,6 +2,10 @@ import Constants from "expo-constants";
 import * as Notifications from "expo-notifications";
 import { Platform } from "react-native";
 
+export enum NOTIFICATION_TYPE {
+  FRIEND_REQUEST = "FRIEND_REQUEST",
+}
+
 export const setNotificationsHandler = () => {
   Notifications.setNotificationHandler({
     handleNotification: async () => ({

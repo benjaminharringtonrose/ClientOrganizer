@@ -15,17 +15,18 @@ import { fetchAllFriendsFailed, addFriendSucceeded, addFriendFailed } from "../a
 
 export function* addFriendSaga(action: any) {
   try {
-    const { friendUID, firstName, lastName, email, avatar } = action.payload;
+    const { theirUid, firstName, lastName, avatar } = action.payload;
+    console.log("ACTION.PAYLOAD", action.payload);
+
     const uid = yield firebase.auth().currentUser?.uid;
     const doc = yield getDocRef();
     doc.set(
       {
         friends: {
-          [uuid()]: {
-            uid: friendUID,
+          [theirUid]: {
+            theirUid,
             firstName,
             lastName,
-            email,
             avatar,
           },
         },
@@ -63,6 +64,13 @@ export function* deleteFriendSaga(action: any) {
 }
 
 export function* fetchAllFriendsSaga() {
+  try {
+  } catch (error) {
+    yield put(fetchAllFriendsFailed(error));
+  }
+}
+
+export function* fetchAllFriendRequestsSaga() {
   try {
   } catch (error) {
     yield put(fetchAllFriendsFailed(error));
