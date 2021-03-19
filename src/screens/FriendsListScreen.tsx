@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { View, Text, StyleSheet, FlatList, RefreshControl, Dimensions } from "react-native";
 import { connect } from "react-redux";
-import { Header, ScreenContainer, Card, CardSection, Button } from "../components";
+import { ScreenContainer, Card, CardSection, Button } from "../components";
 import { Color, Spacing } from "../styles";
 import { UserCard } from "../components/UserCard";
 import { mapFriends } from "./util";
@@ -48,8 +48,8 @@ function FriendsListScreen(props: IFindFriendsProps) {
     if (item) {
       return (
         <UserCard
-          avatar={item.avatar}
-          name={`${item.firstName} ${item.lastName}`}
+          avatar={item.friendAvatar}
+          name={`${item.friendFirstName} ${item.friendLastName}`}
           bio={item.bio}
           icon={"ellipsis-horizontal"}
           onPress={() =>
@@ -57,11 +57,10 @@ function FriendsListScreen(props: IFindFriendsProps) {
               ...state,
               showModal: true,
               selectedFriend: {
-                id: item.id,
-                firstName: item.firstName,
-                lastName: item.lastName,
-                email: item.email,
-                avatar: item.avatar,
+                id: item.friendId,
+                firstName: item.friendFirstName,
+                lastName: item.friendLastName,
+                avatar: item.friendAvatar,
               },
             })
           }
