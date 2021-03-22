@@ -1,10 +1,9 @@
 import React, { useState } from "react";
-import { View, Image, Text, StyleSheet, TouchableOpacity, ActivityIndicator } from "react-native";
+import { View, Image, Text, StyleSheet, ActivityIndicator } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { Spacing, Color } from "../styles";
 import { NOTIFICATION_TYPE } from "../api/PushNotifications";
 import { Button } from ".";
-import { IStringMap } from "../screens/RegisterScreen";
 
 interface IPostCardProps {
   notificationType?: NOTIFICATION_TYPE;

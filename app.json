@@ -6,7 +6,7 @@
     "orientation": "portrait",
     "icon": "./src/assets/icon.png",
     "splash": {
-      "image": "./src/assets/chatty-splash.png",
+      "image": "./src/assets/social.png",
       "resizeMode": "contain",
       "backgroundColor": "#121212"
     },

@@ -34,11 +34,13 @@ export function mapFriends(posts: any) {
 }
 
 export function mapNotifications(notifications: any) {
+  console.log("mapNotifications", notifications);
   if (!notifications) {
     return;
   }
   let acc: any = [];
   for (const [key, value] of Object.entries(notifications)) {
+    console.log("value", value);
     acc = acc.concat({ ...(value as Object), id: key });
   }
   return acc;

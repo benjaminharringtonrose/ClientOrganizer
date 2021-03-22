@@ -15,7 +15,7 @@ import TabBar from "./components/TabBar";
 import FindFriendsScreen from "../screens/FindFriendsScreen";
 import MessageScreen from "../screens/MessageScreen";
 import MessageDetailsScreen from "../screens/MessageDetailsScreen";
-import NotificationScreen from "../screens/NotificationScreen";
+import NotificationScreen from "../screens/NotificationsScreen";
 import { Routes } from "./routes";
 
 export const defaultNavigationOptions = { headerTransparent: true, headerShown: false };
@@ -45,10 +45,10 @@ const DashboardTabNavigator = () => {
   return (
     <Tab.Navigator tabBar={(props: any) => <TabBar {...props} />}>
       <Tab.Screen name={Routes.FEED_SCREEN} component={FeedScreen} />
-      <Tab.Screen name={Routes.FRIENDS_TAB_NAVIGATOR} component={MaterialTopTabs} />
       <Tab.Screen name={Routes.POST_SCREEN} component={PostScreen} />
       <Tab.Screen name={Routes.MESSAGE_NAVIGATOR} component={MessageNavigator} />
       <Tab.Screen name={Routes.NOTIFICATION_NAVIGATOR} component={NotificationNavigator} />
+      <Tab.Screen name={Routes.FRIENDS_TAB_NAVIGATOR} component={MaterialTopTabs} />
       <Tab.Screen name={Routes.PROFILE_SCREEN} component={ProfileScreen} />
     </Tab.Navigator>
   );
@@ -67,9 +67,12 @@ const AuthNavigator = () => {
 const MaterialTopTabs = () => {
   const Tab = createMaterialTopTabNavigator();
   return (
-    <Tab.Navigator tabBar={(props: any) => <TabBar {...props} />}>
-      <Tab.Screen name={Routes.FIND_FRIENDS_SCREEN} component={FindFriendsScreen} />
+    <Tab.Navigator
+      initialRouteName={Routes.FRIENDS_LIST_SCREEN}
+      tabBar={(props: any) => <TabBar {...props} />}
+    >
       <Tab.Screen name={Routes.FRIENDS_LIST_SCREEN} component={FriendsListScreen} />
+      <Tab.Screen name={Routes.FIND_FRIENDS_SCREEN} component={FindFriendsScreen} />
     </Tab.Navigator>
   );
 };

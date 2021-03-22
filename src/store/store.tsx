@@ -29,23 +29,38 @@ import {
   addFriendSaga,
   deleteFriendSaga,
   fetchAllFriendsSaga,
+  fetchNotificationsSaga,
 } from "./sagas";
-import { IAuthState, IFriendState, IFeedState, IUserState } from "./reducers";
+import { IAuthState, IFriendState, IFeedState, IUserState, INotificationsState } from "./reducers";
 
 import AuthReducer from "./reducers/AuthReducer";
 import UserReducer from "./reducers/UserReducer";
 import FeedReducer from "./reducers/FeedReducer";
 import FriendReducer from "./reducers/FriendReducer";
-import { IAuthActions, IFeedActions, IFriendActions, IUserActions, setUserId } from "./actions";
+import {
+  IAuthActions,
+  IFeedActions,
+  IFriendActions,
+  IUserActions,
+  setUserId,
+  INotificationsActions,
+} from "./actions";
+import NotificaitonsReducer from "./reducers/NotificationsReducer";
 
 export interface IStoreState {
   readonly auth: IAuthState;
   readonly user: IUserState;
   readonly friend: IFriendState;
   readonly feed: IFeedState;
+  readonly notifications: INotificationsState;
 }
 
-export type IActions = IAuthActions | IFeedActions | IFriendActions | IUserActions;
+export type IActions =
+  | IAuthActions
+  | IFeedActions
+  | IFriendActions
+  | IUserActions
+  | INotificationsActions;
 
 // ROOT ACTION LISTENER
 
@@ -67,6 +82,8 @@ function* rootActionListener() {
   yield takeLatest(FETCH_ALL_FRIENDS.REQUESTED, fetchAllFriendsSaga);
 
   yield takeLatest(SET_USER_ID.SET, setUserId);
+
+  yield takeLatest(FETCH_NOTIFICATIONS.REQUESTED, fetchNotificationsSaga);
 }
 
 // ROOT SAGA
@@ -82,6 +99,7 @@ const rootReducer: Reducer<IStoreState, IActions> = combineReducers({
   user: UserReducer,
   feed: FeedReducer,
   friend: FriendReducer,
+  notifications: NotificaitonsReducer,
 });
 
 const sagaMiddleware = createSagaMiddleware();

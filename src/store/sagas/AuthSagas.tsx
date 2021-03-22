@@ -13,6 +13,7 @@ import {
   registerUserSucceeded,
   registerUserFailed,
   setUserId,
+  fetchNotificationsRequested,
 } from "../actions";
 
 // LOGIN USER - SAGA
@@ -60,6 +61,7 @@ export function* registerUserSaga(action: any) {
     );
     yield getAndSetDevicePushToken();
     yield put(fetchUserRequested(uid));
+    yield put(fetchNotificationsRequested());
   } catch (error) {
     console.warn(error);
     yield put(registerUserFailed(error));
@@ -78,7 +80,6 @@ export function* logoutUserSaga() {
 }
 
 export const getAndSetDevicePushToken = () => {
-  console.log("getDevicePushToken");
   return Permissions.getAsync(Permissions.NOTIFICATIONS)
     .then((response) =>
       response.status === "granted" ? response : Permissions.askAsync(Permissions.NOTIFICATIONS)
@@ -100,7 +101,7 @@ export const getAndSetDevicePushToken = () => {
       );
     })
     .catch((error) => {
-      console.log("Error while registering device push token", error);
+      console.warn("Error while registering device push token", error);
     });
 };
 
@@ -131,6 +132,6 @@ const registerForPushNotifications = async () => {
       { merge: true }
     );
   } catch (error) {
-    console.log(error);
+    console.warn(error);
   }
 };

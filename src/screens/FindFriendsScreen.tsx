@@ -223,24 +223,22 @@ export const sendFriendRequest = ({
   avatar,
 }: IFriendRequest) => {
   // doc ref to the user you're sending the friend request to.
-  const doc = firebase.firestore().collection("users").doc(theirUid);
+  const doc = firebase.firestore().collection("notifications").doc(theirUid);
   // but below you'll be sending the CURRENT users info
   const uid = firebase.auth().currentUser?.uid;
   const notificationId = uuid();
   doc.set(
     {
-      notifications: {
-        [uid!]: {
-          notificationId,
-          notificationType,
-          message: "wants to be your friend.",
-          timestamp: Date.now(),
-          theirUid: uid,
-          theirPushToken,
-          firstName,
-          lastName,
-          avatar,
-        },
+      [uid!]: {
+        notificationId,
+        notificationType,
+        message: "wants to be your friend.",
+        timestamp: Date.now(),
+        theirUid: uid,
+        theirPushToken,
+        firstName,
+        lastName,
+        avatar,
       },
     },
     { merge: true }

@@ -23,7 +23,6 @@ export function* addFriendSaga(action: any) {
       lastName,
       avatar,
     } = action.payload;
-    console.log("ACTION.PAYLOAD", action.payload);
 
     // set the personB in personA's friends list
     yield firebase

@@ -4,7 +4,7 @@ import { connect } from "react-redux";
 import { ScreenContainer, MessagePreviewCard, Header, FriendRequestCard } from "../components";
 import { Color, Spacing } from "../styles";
 import { IStringMap } from "./RegisterScreen";
-import { IError, FETCH_USER, ADD_FRIEND } from "../store/types";
+import { IError, FETCH_USER, ADD_FRIEND, FETCH_NOTIFICATIONS } from "../store/types";
 import SearchBar from "../components/SearchBar";
 import { Routes } from "../navigation/routes";
 import { mapNotifications } from "./util";
@@ -19,10 +19,15 @@ interface IPropsFromState {
   user?: IStringMap<any>;
   fetchUserLoading: boolean;
   fetchUserError?: IError;
+
+  notifications?: IStringMap<any>[];
+  fetchNotificationsLoading: boolean;
+  fetchNotificationsError?: IError;
 }
 
 interface IDispatchFromState {
   dispatchFetchUser: (uid: string) => void;
+  dispatchFetchNotifications: () => void;
   dispatchAddFriend: ({
     friendId,
     friendFirstName,
@@ -47,19 +52,21 @@ function NotificationScreen(props: IMessageScreenProps) {
   });
 
   useEffect(() => {
-    setState({ ...state, mappedNotifications: mapNotifications(props?.user?.notifications) });
+    setState({ ...state, mappedNotifications: mapNotifications(props?.notifications) });
   }, []);
 
   useEffect(() => {
-    setState({ ...state, mappedNotifications: mapNotifications(props?.user?.notifications) });
-  }, [props.user]);
+    setState({ ...state, mappedNotifications: mapNotifications(props?.notifications) });
+  }, [props.notifications]);
 
   const renderNotification = ({ item }: any) => {
     const onNotificationPress = () => {};
 
     const onAcceptFriendRequest = () => {
+      const uid = firebase.auth().currentUser?.uid;
+
       props.dispatchAddFriend({
-        friendId: item?.theirUid,
+        friendId: item.theirUid,
         friendFirstName: item.firstName,
         friendLastName: item.lastName,
         friendAvatar: item.avatar,
@@ -68,22 +75,24 @@ function NotificationScreen(props: IMessageScreenProps) {
         lastName: props.user?.lastName,
         avatar: props.user?.avatar,
       });
-      const uid = firebase.auth().currentUser?.uid;
+
       const theirUid = item?.theirUid;
-      console.log("theirUid", theirUid);
+
+      console.log(`friendRequest`, firebase.firestore().collection("notifications").doc(uid).get());
+
       firebase
         .firestore()
-        .collection("users")
+        .collection("notifications")
         .doc(uid)
         .set(
           {
-            notifications: {
-              [theirUid!]: firebase.firestore.FieldValue.delete(),
-            },
+            [theirUid!]: firebase.firestore.FieldValue.delete(),
           },
           { merge: true }
-        );
+        )
+        .catch((error) => console.warn(error));
       props.dispatchFetchUser(uid!);
+      props.dispatchFetchNotifications();
     };
     const onDeclineFriendRequest = () => {};
 
@@ -117,7 +126,9 @@ function NotificationScreen(props: IMessageScreenProps) {
     return (
       <RefreshControl
         refreshing={props.fetchUserLoading}
-        onRefresh={() => props.dispatchFetchUser(props.user?.uid)}
+        onRefresh={() => {
+          props.dispatchFetchNotifications();
+        }}
         tintColor={Color.white}
       />
     );
@@ -140,15 +151,21 @@ function NotificationScreen(props: IMessageScreenProps) {
 }
 
 const mapStateToProps = (state: any) => {
+  // console.log("state?.notifications?.notifications", state?.notifications?.notifications);
   return {
     fetchUserLoading: state.user?.user?.fetchAllUsersLoading,
     fetchUserError: state.user?.user?.fetchAllUsersError,
     user: state.user?.user,
+
+    fetchNotificationsLoading: state.notifications?.fetchAllUsersLoading,
+    fetchNotificationsError: state.notifications?.fetchAllUsersError,
+    notifications: state.notifications?.notifications,
   };
 };
 
 const mapDispatchToProps = (dispatch: any) => ({
   dispatchFetchUser: (uid: string) => dispatch({ type: FETCH_USER.REQUESTED, payload: uid }),
+  dispatchFetchNotifications: () => dispatch({ type: FETCH_NOTIFICATIONS.REQUESTED }),
   dispatchAddFriend: ({
     friendId,
     friendFirstName,
