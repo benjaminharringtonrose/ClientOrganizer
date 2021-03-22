@@ -23,7 +23,7 @@ interface DispatchFromProps {
 
 type NotificationProps = PropsFromState & DispatchFromProps;
 
-class Notification extends React.Component<NotificationProps> {
+class ToastNotification extends React.Component<NotificationProps> {
   public render() {
     const { notificationVisible, notificationType, text, dismissNotification } = this.props;
 
@@ -36,14 +36,24 @@ class Notification extends React.Component<NotificationProps> {
                 style={{
                   backgroundColor: Color.confirm,
                   paddingTop: Spacing.xlarge,
-                  paddingBottom: Spacing.med,
+                  paddingBottom: Spacing.large,
                 }}
               >
                 <Text style={{ color: Color.white, textAlign: "center" }}>{text}</Text>
               </View>
             </Animatable.View>
           ) : (
-            <Banner animation={"slideInDown"} easing={"ease-in-out"} text={text} duration={500} />
+            <Animatable.View animation={"slideInDown"} easing={"ease-in-out"} duration={500}>
+              <View
+                style={{
+                  backgroundColor: Color.error,
+                  paddingTop: Spacing.xlarge,
+                  paddingBottom: Spacing.med,
+                }}
+              >
+                <Text style={{ color: Color.white, textAlign: "center" }}>{text}</Text>
+              </View>
+            </Animatable.View>
           )}
         </View>
       );
@@ -63,4 +73,4 @@ const mapDispatchToProps = (dispatch: any) => ({
   dispatchDismissNotification: () => dispatch(dismissToast()),
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(Notification);
+export default connect(mapStateToProps, mapDispatchToProps)(ToastNotification);

@@ -10,6 +10,12 @@
       "resizeMode": "contain",
       "backgroundColor": "#121212"
     },
+    "notification": {
+      "icon": "./src/assets/icon.png",
+      "color": "#002C56",
+      "iosDisplayInForeground": true,
+      "androidMode": "default"
+    },
     "updates": {
       "fallbackToCacheTimeout": 0
     },

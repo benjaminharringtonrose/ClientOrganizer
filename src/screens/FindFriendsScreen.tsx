@@ -140,7 +140,7 @@ function FindFriendsScreen(props: IFindFriendsProps) {
 
             <CardSection>
               <Button
-                label={"Add"}
+                label={"Send"}
                 onPress={() => {
                   props.dispatchFriendRequest({
                     notificationType: NOTIFICATION.FRIEND_REQUEST,
@@ -150,7 +150,11 @@ function FindFriendsScreen(props: IFindFriendsProps) {
                     lastName: props.lastName,
                     avatar: props.avatar,
                   });
-                  sendPushNotification(state.selectedUser?.pushToken?.data);
+                  sendPushNotification({
+                    expoPushToken: state.selectedUser?.pushToken?.data,
+                    title: `Friend request from ${state?.selectedUser?.firstName} ${state?.selectedUser?.lastName}`,
+                    message: "You've received a friend request.",
+                  });
                   setState({ ...state, showModal: false });
                 }}
                 style={{ marginBottom: Spacing.med }}

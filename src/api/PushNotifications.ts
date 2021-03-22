@@ -10,19 +10,19 @@ export const setNotificationsHandler = () => {
   Notifications.setNotificationHandler({
     handleNotification: async () => ({
       shouldShowAlert: true,
-      shouldPlaySound: false,
-      shouldSetBadge: false,
+      shouldPlaySound: true,
+      shouldSetBadge: true,
     }),
   });
 };
 
-export async function sendPushNotification(expoPushToken: string) {
+export async function sendPushNotification({ expoPushToken, title, body, data }: any) {
   const message = {
     to: expoPushToken,
     sound: "default",
-    title: "Original Title",
-    body: "And here is the body!",
-    data: { someData: "goes here" },
+    title,
+    body,
+    data,
   };
 
   await fetch("https://exp.host/--/api/v2/push/send", {
