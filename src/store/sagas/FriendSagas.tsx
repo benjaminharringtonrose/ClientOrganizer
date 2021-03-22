@@ -6,8 +6,12 @@ import {
   deleteFriendSucceeded,
   deleteFriendFailed,
   ISendFriendRequest,
+  publishToast,
 } from "../actions";
 import { fetchAllFriendsFailed, addFriendSucceeded, addFriendFailed } from "../actions";
+import uuid from "uuid-random";
+import { IFriendRequest, NOTIFICATION_TYPE } from "../types";
+import { IActions } from "../store";
 
 // ADD FRIEND SAGA
 
@@ -105,8 +109,39 @@ export function* fetchAllFriendRequestsSaga() {
   }
 }
 
-export function sendFriendRequest(action: ISendFriendRequest) {
+export function* sendFriendRequest(action: any) {
   try {
+    const {
+      notificationType,
+      theirUid,
+      theirPushToken,
+      firstName,
+      lastName,
+      avatar,
+    } = action.payload;
+    yield console.log("PAYLOADDDDDD", firstName);
+    // doc ref to the user you're sending the friend request to.
+    const doc = yield firebase.firestore().collection("notifications").doc(theirUid);
+    // but below you'll be sending the CURRENT users info
+    const uid = yield firebase.auth().currentUser?.uid;
+    const notificationId = uuid();
+    yield doc.set(
+      {
+        [uid!]: {
+          notificationId,
+          notificationType,
+          message: "wants to be your friend.",
+          timestamp: Date.now(),
+          theirUid: uid,
+          theirPushToken,
+          firstName,
+          lastName,
+          avatar,
+        },
+      },
+      { merge: true }
+    );
+    yield put(publishToast(NOTIFICATION_TYPE.SUCCESS, "Friend request sent."));
   } catch (error) {
     console.warn(error);
   }

@@ -6,6 +6,7 @@ import firebase from "firebase";
 import { RootNavigator } from "./src/navigation/navigation";
 import FirebaseKeys from "./src/api/FirebaseKeys";
 import { setNotificationsHandler } from "./src/api/PushNotifications";
+import Notification from "./src/components/Notification";
 
 class App extends Component {
   componentDidMount() {
@@ -19,6 +20,7 @@ class App extends Component {
       <Provider store={store}>
         <StatusBar barStyle={"light-content"} />
         <RootNavigator />
+        <Notification />
       </Provider>
     );
   }

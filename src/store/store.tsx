@@ -16,6 +16,8 @@ import {
   FETCH_ALL_FRIENDS,
   SET_USER_ID,
   FETCH_NOTIFICATIONS,
+  TOAST_NOTIFICATION,
+  SEND_FRIEND_REQUEST,
 } from "./types";
 import {
   fetchUserSaga,
@@ -30,6 +32,8 @@ import {
   deleteFriendSaga,
   fetchAllFriendsSaga,
   fetchNotificationsSaga,
+  toastWasPublished,
+  sendFriendRequest,
 } from "./sagas";
 import { IAuthState, IFriendState, IFeedState, IUserState, INotificationsState } from "./reducers";
 
@@ -84,6 +88,9 @@ function* rootActionListener() {
   yield takeLatest(SET_USER_ID.SET, setUserId);
 
   yield takeLatest(FETCH_NOTIFICATIONS.REQUESTED, fetchNotificationsSaga);
+  yield takeLatest(TOAST_NOTIFICATION.PUBLISH, toastWasPublished);
+
+  yield takeLatest(SEND_FRIEND_REQUEST.SENT, sendFriendRequest);
 }
 
 // ROOT SAGA

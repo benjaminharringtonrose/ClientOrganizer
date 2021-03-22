@@ -13,15 +13,16 @@ import { ScreenContainer, CardSection, Button, Card } from "../components";
 import { Color, Spacing } from "../styles";
 import { UserCard } from "../components/UserCard";
 import { IStringMap } from "./RegisterScreen";
-import { FETCH_ALL_USERS, ADD_FRIEND } from "../store/types";
+import {
+  FETCH_ALL_USERS,
+  ADD_FRIEND,
+  NOTIFICATION_TYPE,
+  SEND_FRIEND_REQUEST,
+  IFriendRequest,
+} from "../store/types";
 import SearchBar from "../components/SearchBar";
 import { BottomModal } from "../components/BottomModal";
-import firebase from "firebase";
-import * as Permissions from "expo-permissions";
-import * as Notifications from "expo-notifications";
-import { sendPushNotification, NOTIFICATION_TYPE } from "../api/PushNotifications";
-import { getDocRef } from "./util";
-import uuid from "uuid-random";
+import { sendPushNotification, NOTIFICATION } from "../api/PushNotifications";
 
 interface IPassedProps {
   navigation: any;
@@ -40,6 +41,14 @@ interface IPropsFromState {
 interface IDispatchFromState {
   dispatchFetchAllUsers: () => void;
   dispatchAddFriend: ({ friendUID, firstName, lastName, email, avatar }: any) => void;
+  dispatchFriendRequest: ({
+    notificationType,
+    theirUid,
+    theirPushToken,
+    firstName,
+    lastName,
+    avatar,
+  }: IFriendRequest) => void;
 }
 
 type IFindFriendsProps = IPassedProps & IPropsFromState & IDispatchFromState;
@@ -132,9 +141,9 @@ function FindFriendsScreen(props: IFindFriendsProps) {
             <CardSection>
               <Button
                 label={"Add"}
-                onPress={async () => {
-                  sendFriendRequest({
-                    notificationType: NOTIFICATION_TYPE.FRIEND_REQUEST,
+                onPress={() => {
+                  props.dispatchFriendRequest({
+                    notificationType: NOTIFICATION.FRIEND_REQUEST,
                     theirUid: state.selectedUser?.uid,
                     theirPushToken: state.selectedUser?.pushToken,
                     firstName: props.firstName,
@@ -142,13 +151,6 @@ function FindFriendsScreen(props: IFindFriendsProps) {
                     avatar: props.avatar,
                   });
                   sendPushNotification(state.selectedUser?.pushToken?.data);
-                  // props.dispatchAddFriend({
-                  //   friendUID: state.selectedUser?.uid,
-                  //   firstName: state.selectedUser?.firstName,
-                  //   lastName: state.selectedUser?.lastName,
-                  //   email: state.selectedUser?.email,
-                  //   avatar: state.selectedUser?.avatar,
-                  // });
                   setState({ ...state, showModal: false });
                 }}
                 style={{ marginBottom: Spacing.med }}
@@ -180,67 +182,10 @@ const mapDispatchToProps = (dispatch: any) => ({
       type: ADD_FRIEND.REQUESTED,
       payload: { friendUID, firstName, lastName, email, avatar },
     }),
+  dispatchFriendRequest: (payload: IFriendRequest) =>
+    dispatch({ type: SEND_FRIEND_REQUEST.SENT, payload }),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(FindFriendsScreen);
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: Color.darkThemeGreyDark,
-  },
-  header: {
-    paddingTop: 64,
-    paddingBottom: 16,
-    backgroundColor: Color.darkThemeGreyDark,
-    alignItems: "center",
-    justifyContent: "center",
-    borderBottomColor: Color.darkThemeGreyMed,
-    borderBottomWidth: 1,
-  },
-  headerTitle: {
-    fontSize: 20,
-    fontWeight: "500",
-    color: Color.white,
-  },
-});
-
-interface IFriendRequest {
-  notificationType: NOTIFICATION_TYPE.FRIEND_REQUEST;
-  theirUid: string;
-  theirPushToken: IStringMap<any>;
-  firstName: string;
-  lastName: string;
-  avatar: string;
-}
-
-export const sendFriendRequest = ({
-  notificationType,
-  theirUid,
-  theirPushToken,
-  firstName,
-  lastName,
-  avatar,
-}: IFriendRequest) => {
-  // doc ref to the user you're sending the friend request to.
-  const doc = firebase.firestore().collection("notifications").doc(theirUid);
-  // but below you'll be sending the CURRENT users info
-  const uid = firebase.auth().currentUser?.uid;
-  const notificationId = uuid();
-  doc.set(
-    {
-      [uid!]: {
-        notificationId,
-        notificationType,
-        message: "wants to be your friend.",
-        timestamp: Date.now(),
-        theirUid: uid,
-        theirPushToken,
-        firstName,
-        lastName,
-        avatar,
-      },
-    },
-    { merge: true }
-  );
-};
+const styles = StyleSheet.create({});

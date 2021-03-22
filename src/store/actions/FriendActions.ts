@@ -14,7 +14,8 @@ export type IFriendActions =
   | IFetchAllFriendsSucceeded
   | IFetchAllFriendsFailed
   | IDeleteFriendSucceeded
-  | IDeleteFriendFailed;
+  | IDeleteFriendFailed
+  | ISendFriendRequest;
 
 export interface IAddFriendSucceeded extends Action<ADD_FRIEND.SUCCEEDED> {}
 

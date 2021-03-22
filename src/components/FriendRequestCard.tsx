@@ -2,11 +2,11 @@ import React, { useState } from "react";
 import { View, Image, Text, StyleSheet, ActivityIndicator } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { Spacing, Color } from "../styles";
-import { NOTIFICATION_TYPE } from "../api/PushNotifications";
+import { NOTIFICATION } from "../api/PushNotifications";
 import { Button } from ".";
 
 interface IPostCardProps {
-  notificationType?: NOTIFICATION_TYPE;
+  notificationType?: NOTIFICATION;
   avatar?: string;
   name?: string;
   message?: number;

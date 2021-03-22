@@ -1,10 +1,10 @@
 import React from "react";
 import { FriendRequestCard } from "./FriendRequestCard";
-import { NOTIFICATION_TYPE } from "../api/PushNotifications";
+import { NOTIFICATION } from "../api/PushNotifications";
 import { IStringMap } from "../screens/RegisterScreen";
 
 interface INotificationCardProps {
-  notificationType?: NOTIFICATION_TYPE;
+  notificationType?: NOTIFICATION;
   avatar?: string;
   name?: string;
   message?: number;
@@ -14,7 +14,7 @@ interface INotificationCardProps {
 
 export function NotificationCard(props: INotificationCardProps) {
   switch (props.notificationType) {
-    case NOTIFICATION_TYPE.FRIEND_REQUEST:
+    case NOTIFICATION.FRIEND_REQUEST:
       return (
         <FriendRequestCard
           notificationType={props.notificationType}

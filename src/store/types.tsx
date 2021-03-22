@@ -1,3 +1,6 @@
+import { NOTIFICATION } from "../api/PushNotifications";
+import { IStringMap } from "../screens/RegisterScreen";
+
 export interface IError {
   message: string;
   code?: number;
@@ -16,6 +19,15 @@ export interface IPost {
   timestamp: number;
   text: string;
   image?: string;
+}
+
+export interface IFriendRequest {
+  notificationType: NOTIFICATION.FRIEND_REQUEST;
+  theirUid: string;
+  theirPushToken: IStringMap<any>;
+  firstName: string;
+  lastName: string;
+  avatar: string;
 }
 
 export enum LOGIN_USER {
@@ -113,7 +125,17 @@ export enum FETCH_MESSAGES {
 }
 
 export enum SEND_FRIEND_REQUEST {
-  SENT = "SENT",
+  SENT = "SEND_FRIEND_REQUEST_SENT",
+}
+
+export enum NOTIFICATION_TYPE {
+  SUCCESS = "NOTIFICATION_TYPE_SUCCESS",
+  ERROR = "NOTIFICATION_TYPE_ERROR",
+}
+
+export enum TOAST_NOTIFICATION {
+  PUBLISH = "TOAST_NOTIFICATION_PUBLISH",
+  DISMISS = "TOAST_NOTIFICATION_DISMISS",
 }
 
 export enum FETCH_NOTIFICATIONS {
