@@ -1,25 +1,26 @@
 import React, { Component } from "react";
-import { View, StatusBar } from "react-native";
+import { StatusBar } from "react-native";
 import { Provider } from "react-redux";
 import store from "./src/store/store";
 import firebase from "firebase";
-import { Color } from "./src/common/styles";
-import { Navigator } from "./src/navigation/navigation";
-import Firebase from "./src/api/firebase";
+import { RootNavigator } from "./src/navigation/navigation";
+import FirebaseKeys from "./src/api/FirebaseKeys";
+import { setNotificationsHandler } from "./src/api/PushNotifications";
+import ToastNotification from "./src/components/ToastNotification";
 
 class App extends Component {
   componentDidMount() {
     if (!firebase.apps.length) {
-      Firebase;
+      firebase.initializeApp(FirebaseKeys);
+      setNotificationsHandler();
     }
   }
   render() {
     return (
       <Provider store={store}>
         <StatusBar barStyle={"light-content"} />
-        <View style={{ flex: 1, backgroundColor: Color.darkThemeGreyDark }}>
-          <Navigator />
-        </View>
+        <RootNavigator />
+        <ToastNotification />
       </Provider>
     );
   }
