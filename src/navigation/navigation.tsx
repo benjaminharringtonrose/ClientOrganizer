@@ -1,94 +1,129 @@
 import React from "react";
-import { useAuthState } from "../hooks/useAuthState";
-import { NavigationContainer, DarkTheme } from "@react-navigation/native";
+import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
 
 import LoginScreen from "../screens/LoginScreen";
 import RegisterScreen from "../screens/RegisterScreen";
-import FeedScreen from "../screens/FeedScreen";
+import HomeScreen from "../screens/HomeScreen";
+import ScheduleScreen from "../screens/ScheduleScreen";
+import NotificationScreen from "../screens/NotificationScreen";
 import ProfileScreen from "../screens/ProfileScreen";
-import PostScreen from "../screens/PostScreen";
-import FriendsListScreen from "../screens/FriendsListScreen";
-import TabBar from "./components/TabBar";
-import FindFriendsScreen from "../screens/FindFriendsScreen";
-import MessageScreen from "../screens/MessageScreen";
-import MessageDetailsScreen from "../screens/MessageDetailsScreen";
-import NotificationScreen from "../screens/NotificationsScreen";
-import { Routes } from "./routes";
+import AddNewClientScreen from "../screens/AddNewClientScreen";
+import ClientDetailScreen from "../screens/ClientDetailsScreen";
+import ClientUpdateScreen from "../screens/ClientUpdateScreen";
 
-export const defaultNavigationOptions = { headerTransparent: true, headerShown: false };
+import Routes from "./routes";
+import { Ionicons } from "@expo/vector-icons";
+import { FontAwesome } from "@expo/vector-icons";
+import { Color, Spacing } from "../common/styles";
 
-const MessageNavigator = () => {
-  const Stack = createStackNavigator();
-  return (
-    <Stack.Navigator screenOptions={defaultNavigationOptions}>
-      <Stack.Screen name={Routes.MESSAGE_SCREEN} component={MessageScreen} />
-      <Stack.Screen name={Routes.MESSAGE_DETAILS_SCREEN} component={MessageDetailsScreen} />
-    </Stack.Navigator>
-  );
-};
-
-const NotificationNavigator = () => {
-  const Stack = createStackNavigator();
-  return (
-    <Stack.Navigator screenOptions={defaultNavigationOptions}>
-      <Stack.Screen name={Routes.NOTIFICATION_SCREEN} component={NotificationScreen} />
-      {/* <Stack.Screen name={} component={} /> */}
-    </Stack.Navigator>
-  );
-};
-
-const DashboardTabNavigator = () => {
+const DashboardTabs = () => {
   const Tab = createBottomTabNavigator();
   return (
-    <Tab.Navigator tabBar={(props: any) => <TabBar {...props} />}>
-      <Tab.Screen name={Routes.FEED_SCREEN} component={FeedScreen} />
-      <Tab.Screen name={Routes.POST_SCREEN} component={PostScreen} />
-      <Tab.Screen name={Routes.MESSAGE_NAVIGATOR} component={MessageNavigator} />
-      <Tab.Screen name={Routes.NOTIFICATION_NAVIGATOR} component={NotificationNavigator} />
-      <Tab.Screen name={Routes.FRIENDS_TAB_NAVIGATOR} component={MaterialTopTabs} />
-      <Tab.Screen name={Routes.PROFILE_SCREEN} component={ProfileScreen} />
-    </Tab.Navigator>
-  );
-};
-
-const AuthNavigator = () => {
-  const Stack = createStackNavigator();
-  return (
-    <Stack.Navigator screenOptions={defaultNavigationOptions}>
-      <Stack.Screen name={Routes.LOGIN_SCREEN} component={LoginScreen} />
-      <Stack.Screen name={Routes.REGISTER_SCREEN} component={RegisterScreen} />
-    </Stack.Navigator>
-  );
-};
-
-const MaterialTopTabs = () => {
-  const Tab = createMaterialTopTabNavigator();
-  return (
     <Tab.Navigator
-      initialRouteName={Routes.FRIENDS_LIST_SCREEN}
-      tabBar={(props: any) => <TabBar {...props} />}
+      tabBarOptions={{
+        initialRouteName: Routes.HOME_SCREEN,
+        activeTintColor: Color.warmGrey50,
+        activeBackgroundColor: Color.darkThemeGreyMed,
+        inactiveBackgroundColor: Color.darkThemeGreyMed,
+        labelStyle: {
+          paddingBottom: Spacing.micro,
+        },
+        style: {
+          backgroundColor: Color.darkThemeGreyDark,
+        },
+      }}
     >
-      <Tab.Screen name={Routes.FRIENDS_LIST_SCREEN} component={FriendsListScreen} />
-      <Tab.Screen name={Routes.FIND_FRIENDS_SCREEN} component={FindFriendsScreen} />
+      <Tab.Screen
+        name={Routes.SCHEDULE_SCREEN}
+        component={ScheduleScreen}
+        options={{
+          tabBarLabel: "Schedule",
+          tabBarIcon: () => <Ionicons name="ios-calendar" size={24} color={Color.peach} />,
+        }}
+      />
+      <Tab.Screen
+        name={Routes.HOME_SCREEN}
+        component={HomeScreen}
+        options={{
+          tabBarLabel: "Clients",
+          tabBarIcon: () => <Ionicons name="ios-person" size={24} color={Color.peach} />,
+        }}
+      />
+      {/* <Tab.Screen
+        name={Routes.NOTIFICATION_SCREEN}
+        component={NotificationScreen}
+        tabBarIcon={() => <Ionicons name="ios-notifications" size={24} color={Color.white} />}
+        options={{
+          tabBarLabel: "Notify",
+          tabBarIcon: () => <Ionicons name="ios-notifications" size={24} color={Color.white} />,
+        }}
+      /> */}
+      <Tab.Screen
+        name={Routes.PROFILE_SCREEN}
+        component={ProfileScreen}
+        options={{
+          tabBarLabel: "Settings",
+          tabBarIcon: () => <FontAwesome name="gear" size={24} color={Color.peach} />,
+        }}
+      />
     </Tab.Navigator>
   );
 };
 
-export const RootNavigator = () => {
+export const Navigator = () => {
   const Stack = createStackNavigator();
-  const isLoggedin = useAuthState();
-
   return (
-    <NavigationContainer theme={DarkTheme}>
-      <Stack.Navigator screenOptions={defaultNavigationOptions}>
-        {isLoggedin ? (
-          <Stack.Screen name={Routes.DASHBOARD_TAB_NAVIGATOR} component={DashboardTabNavigator} />
-        ) : (
-          <Stack.Screen name={Routes.AUTH_NAVIGATOR} component={AuthNavigator} />
-        )}
+    <NavigationContainer>
+      <Stack.Navigator initialRouteName={Routes.LOGIN_SCREEN}>
+        <Stack.Screen
+          name={Routes.LOGIN_SCREEN}
+          component={LoginScreen}
+          options={{ headerTransparent: true, headerTitle: "" }}
+        />
+        <Stack.Screen
+          name={Routes.REGISTER_SCREEN}
+          component={RegisterScreen}
+          options={{ headerTransparent: true, headerTitle: "", headerTintColor: "white" }}
+        />
+        <Stack.Screen
+          name={Routes.DASHBOARD_TABS}
+          component={DashboardTabs}
+          options={{
+            headerTransparent: true,
+            headerShown: false,
+            activeBackgroundColor: "tomato",
+            headerTitle: "",
+          }}
+        />
+        <Stack.Screen
+          name={Routes.ADD_NEW_CLIENT_SCREEN}
+          component={AddNewClientScreen}
+          options={{
+            headerTransparent: true,
+            headerTintColor: "white",
+            headerTitle: "",
+          }}
+        />
+        <Stack.Screen
+          name={Routes.CLIENT_DETAIL_SCREEN}
+          component={ClientDetailScreen}
+          options={{
+            headerTransparent: true,
+            headerTintColor: "white",
+            headerTitle: "",
+          }}
+        />
+        <Stack.Screen
+          name={Routes.CLIENT_UPDATE_SCREEN}
+          component={ClientUpdateScreen}
+          options={{
+            headerTransparent: true,
+            headerTintColor: "white",
+            headerTitle: "",
+          }}
+        />
       </Stack.Navigator>
     </NavigationContainer>
   );

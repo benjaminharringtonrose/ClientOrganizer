@@ -1,22 +1,29 @@
-import React, { useState, useEffect } from "react";
-import { Text, StyleSheet } from "react-native";
-import { connect } from "react-redux";
-
+import React, { Component, useState, useEffect } from "react";
 import {
-  Card,
-  Input,
-  Button,
-  Spinner,
-  ButtonBack,
-  Header,
-  CardSection,
-  ScreenContainer,
-} from "../components";
+  View,
+  Text,
+  StyleSheet,
+  ScrollView,
+  SafeAreaView,
+  TouchableOpacity,
+  Image,
+} from "react-native";
+import { connect } from "react-redux";
+import UserPermissions from "../util/permissions";
+import * as ImagePicker from "expo-image-picker";
 
-import { REGISTER_USER, UPLOAD_AVATAR } from "../store/types";
-import { Color, Spacing } from "../styles";
+import Card from "../common/components/Card";
+import Input from "../common/components/Input";
+import Button from "../common/components/Button";
+import Spinner from "../common/components/Spinner";
+import Header from "../common/components/Header";
+import { Ionicons } from "@expo/vector-icons";
 
-import { Routes } from "../navigation/routes";
+import { REGISTER_USER } from "../store/actions/types";
+import { avatarChanged } from "../store/actions";
+import { Color, Spacing } from "../common/styles";
+
+import Routes from "../navigation/routes";
 
 import { usePrevious } from "../hooks/usePrevious";
 
@@ -31,7 +38,7 @@ interface PropsFromState {
   authError: boolean;
 }
 interface DispatchFromState {
-  dispatchUploadAvatar: (uri: string) => any;
+  dispatchChangeAvatar: (text: string) => any;
   dispatchRegisterRequest: (object: any) => any;
 }
 
@@ -60,30 +67,44 @@ function RegisterScreen(props: RegisterScreenProps) {
 
   useEffect(() => {
     if (oldProps?.authLoading && !props.authLoading && !props.authError) {
-      props.navigation.navigate(Routes.DASHBOARD_TAB_NAVIGATOR);
+      props.navigation.navigate(Routes.DASHBOARD_TABS);
     }
   }, [props.authLoading, props.authError]);
 
   const onRegisterPress = () => {
     const { email, password, firstName, lastName } = state;
+    const { avatar } = props;
 
     props.dispatchRegisterRequest({
-      firstName,
-      lastName,
       email,
       password,
+      firstName,
+      lastName,
+      avatar,
     });
+  };
+
+  const onPickAvatar = async () => {
+    try {
+      UserPermissions.getCameraPermission();
+      let result = await ImagePicker.launchImageLibraryAsync({
+        mediaTypes: ImagePicker.MediaTypeOptions.Images,
+        allowsEditing: true,
+        aspect: [4, 3],
+      });
+      if (!result.cancelled) {
+        props.dispatchChangeAvatar(result.uri);
+      }
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const renderButton = () => {
     if (props.authLoading) {
       return <Spinner size="large" style={{ marginTop: Spacing.med }} />;
     }
-    return (
-      <CardSection>
-        <Button label={"Signup"} onPress={onRegisterPress} style={styles.button} />
-      </CardSection>
-    );
+    return <Button label={"Signup"} onPress={onRegisterPress} style={styles.button} />;
   };
 
   const renderError = () => {
@@ -93,22 +114,19 @@ function RegisterScreen(props: RegisterScreenProps) {
   };
 
   const { firstName, lastName, email, password } = state;
+  const { avatar } = props;
 
   return (
-    <ScreenContainer>
-      <Header
-        title={"Chatty"}
-        headerLeft={
-          <ButtonBack
-            onPress={() => props.navigation.goBack()}
-            iconSize={24}
-            iconColor={Color.white}
-          />
-        }
-      />
-      <Card>
-        <Text style={styles.subHeaderText}>{"Register Here"}</Text>
-        <CardSection>
+    <SafeAreaView style={styles.rootContainer}>
+      <ScrollView>
+        <View style={styles.headerContainer}>
+          <Header title={"Welcome!"} description={"Sign up to get started."} />
+        </View>
+        <Card>
+          <TouchableOpacity style={styles.avatarPlaceholder} onPress={onPickAvatar}>
+            {!!avatar && <Image source={{ uri: avatar }} style={styles.avatar} />}
+            <Ionicons name="ios-add" size={40} color="#FFF" style={styles.addIcon} />
+          </TouchableOpacity>
           <Input
             label="First Name"
             placeholder="John"
@@ -118,8 +136,6 @@ function RegisterScreen(props: RegisterScreenProps) {
             value={firstName}
             style={{ marginBottom: Spacing.small }}
           />
-        </CardSection>
-        <CardSection>
           <Input
             label="Last Name"
             placeholder="Smith"
@@ -129,8 +145,6 @@ function RegisterScreen(props: RegisterScreenProps) {
             value={lastName}
             style={{ marginBottom: Spacing.small }}
           />
-        </CardSection>
-        <CardSection>
           <Input
             label="Email"
             placeholder="email@gmail.com"
@@ -139,8 +153,6 @@ function RegisterScreen(props: RegisterScreenProps) {
             value={email}
             style={{ marginBottom: Spacing.small }}
           />
-        </CardSection>
-        <CardSection>
           <Input
             secureTextEntry
             label="Password"
@@ -149,36 +161,35 @@ function RegisterScreen(props: RegisterScreenProps) {
             value={password}
             style={{ marginBottom: Spacing.small }}
           />
-        </CardSection>
-
-        {renderError()}
-        {renderButton()}
-      </Card>
-    </ScreenContainer>
+          {renderError()}
+          {renderButton()}
+        </Card>
+      </ScrollView>
+    </SafeAreaView>
   );
 }
 
 const mapStateToProps = ({ auth }: any) => {
-  const { avatar, authError, authLoading, user } = auth;
+  const { avatar, error, loading, user } = auth;
   return {
     avatar,
-    authError: authError,
-    authLoading: authLoading,
+    authError: error,
+    authLoading: loading,
     user,
   };
 };
 
 const mapDispatchToProps = (dispatch: any) => ({
-  dispatchUploadAvatar: (result: string) =>
-    dispatch({ type: UPLOAD_AVATAR.REQUESTED, payload: result }),
-  dispatchRegisterRequest: ({ firstName, lastName, email, password }: any) => {
+  dispatchChangeAvatar: (result: string) => dispatch(avatarChanged(result)),
+  dispatchRegisterRequest: ({ email, password, firstName, lastName, avatar }: any) => {
     dispatch({
       type: REGISTER_USER.REQUESTED,
       payload: {
-        firstName,
-        lastName,
         email,
         password,
+        firstName,
+        lastName,
+        avatar,
       },
     });
   },
@@ -189,7 +200,7 @@ export default connect(mapStateToProps, mapDispatchToProps)(RegisterScreen);
 const styles = StyleSheet.create({
   rootContainer: {
     flex: 1,
-    backgroundColor: Color.darkThemeGreyDark,
+    backgroundColor: Color.darkThemeGreyMed,
   },
   headerContainer: {
     paddingTop: Spacing.xxlarge,
@@ -206,10 +217,12 @@ const styles = StyleSheet.create({
     alignSelf: "center",
     width: 120,
     height: 120,
-    backgroundColor: Color.darkThemeGreyMed,
+    backgroundColor: Color.warmGrey600,
     borderRadius: 60,
     marginTop: Spacing.small,
     marginBottom: Spacing.xlarge,
+    borderWidth: 2,
+    borderColor: Color.peach,
   },
   avatar: {
     position: "absolute",
@@ -221,13 +234,6 @@ const styles = StyleSheet.create({
     alignSelf: "center",
     marginTop: 38,
     marginLeft: 2,
-    color: Color.white,
-  },
-  subHeaderText: {
-    fontSize: 30,
-    color: Color.warmGrey200,
-    paddingTop: Spacing.small,
-    paddingBottom: Spacing.large,
-    paddingLeft: Spacing.micro,
+    color: Color.peach,
   },
 });

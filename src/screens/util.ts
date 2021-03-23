@@ -14,46 +14,37 @@ export const getUserById = (): any => {
       if (doc.exists) {
         return doc.data();
       } else {
-        console.warn("getUserById: No such document!");
+        console.log("No such document!");
       }
     })
     .catch(function (error) {
-      console.warn("getUserById - Error getting document:", error);
+      console.log("Error getting document:", error);
     });
 };
 
-export function mapFriends(posts: any) {
-  if (!posts) {
-    return;
+export function mapClients(clients: any) {
+  if (isEqual(clients, {})) {
+    return undefined;
   }
   let acc: any = [];
-  for (const [key, value] of Object.entries(posts)) {
+  for (const [key, value] of Object.entries(clients)) {
     acc = acc.concat({ ...(value as Object), id: key });
   }
-  return acc;
-}
-
-export function mapNotifications(notifications: any) {
-  if (!notifications) {
-    return;
-  }
-  let acc: any = [];
-  for (const [key, value] of Object.entries(notifications)) {
-    acc = acc.concat({ ...(value as Object), id: key });
-  }
-  acc.reverse();
-  return acc;
-}
-
-export function mapMessages(messages: any) {
-  if (!messages) {
-    return;
-  }
-  let acc: any = [];
-  for (const [key, value] of Object.entries(messages)) {
-    acc = acc.concat({ ...(value as Object), id: key });
-  }
-  acc.reverse();
+  acc.sort(function (a: any, b: any) {
+    if (!a || !b) {
+      return 0;
+    }
+    var nameA = a.lastName.toUpperCase(); // ignore upper and lowercase
+    var nameB = b.lastName.toUpperCase(); // ignore upper and lowercase
+    if (nameA < nameB) {
+      return -1;
+    }
+    if (nameA > nameB) {
+      return 1;
+    }
+    // names must be equal
+    return 0;
+  });
   return acc;
 }
 
@@ -72,5 +63,5 @@ export function callTelephone(phoneNumber: string) {
         console.warn("Phone number is not supported.");
       }
     })
-    .catch((e) => console.warn(e));
+    .catch((e) => console.log(e));
 }

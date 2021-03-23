@@ -1,183 +1,98 @@
-import React, { useEffect, useState } from "react";
-import { Text, StyleSheet, Image, View, TouchableOpacity, ActivityIndicator } from "react-native";
-import firebase from "firebase";
+import React, { useState, useEffect } from "react";
+import { Text, StyleSheet, ScrollView, Image, TouchableOpacity, View } from "react-native";
 import { connect } from "react-redux";
-import { LOGOUT_USER, FETCH_USER, UPLOAD_AVATAR } from "../store/types";
+import UserPermissions from "../util/permissions";
 import * as ImagePicker from "expo-image-picker";
+import { avatarChanged } from "../store/actions";
+import { LOGOUT_USER } from "../store/actions/types";
+import firebase from "firebase";
+import Spinner from "../common/components/Spinner";
+import Button from "../common/components/Button";
+import Card from "../common/components/Card";
+import CellLabelLeftRight from "../common/components/CellLabelLeftRight";
 import { Ionicons } from "@expo/vector-icons";
-
-import {
-  ScreenContainer,
-  Card,
-  CardSection,
-  Spinner,
-  Button,
-  CellLabelLeftRight,
-  Header,
-} from "../components";
-
-import { Color, Spacing } from "../styles";
-import UserPermissions from "../utilities/UserPermissions";
+import { Color, Spacing } from "../common/styles";
+import Routes from "../navigation/routes";
+import { usePrevious } from "../hooks/usePrevious";
 
 interface PassedProps {
   navigation: any;
 }
 
 interface PropsFromState {
+  loading: boolean;
+  error: boolean;
   avatar: string;
   firstName: string;
   lastName: string;
   email: string;
-  authLoading: boolean;
-  uploadAvatarLoading: boolean;
-  uploadAvatarError?: any;
 }
 
 interface DispatchFromState {
-  dispatchFetchUser: (uid: string) => any;
   dispatchLogoutRequest: (object: any) => any;
-  dispatchUploadAvatar: (avatarUri: string) => any;
+  dispatchChangeAvatar: (text: string) => any;
 }
 
 type ProfileScreenProps = PropsFromState & DispatchFromState & PassedProps;
 
-interface ILocalState {
-  imageLoading: boolean;
-}
-
 function ProfileScreen(props: ProfileScreenProps) {
-  const [state, setState] = useState<ILocalState>({
-    imageLoading: true,
-  });
+  const prevProps = usePrevious(props);
 
   useEffect(() => {
-    const uid = firebase.auth().currentUser?.uid;
-    if (uid) {
-      props.dispatchFetchUser(uid);
+    if (prevProps?.loading && !props.loading && !props.error) {
+      props.navigation.navigate(Routes.LOGIN_SCREEN);
     }
-  }, []);
+  }, [props.loading, props.error]);
 
   const onLogoutPress = () => {
     props.dispatchLogoutRequest(LOGOUT_USER.REQUESTED);
   };
 
   const renderSignOutButton = () => {
-    if (props.authLoading) {
-      return <Spinner size="small" color={Color.white} />;
+    if (props.loading) {
+      return <Spinner size="small" />;
     } else {
-      return (
-        <CardSection>
-          <Button label={"Sign Out"} onPress={onLogoutPress} />
-        </CardSection>
-      );
+      return <Button label={"Sign Out"} onPress={onLogoutPress} />;
     }
-  };
-
-  const onPickAvatar = async () => {
-    try {
-      UserPermissions.getCameraPermission();
-      let result = await ImagePicker.launchImageLibraryAsync({
-        mediaTypes: ImagePicker.MediaTypeOptions.Images,
-        allowsEditing: true,
-        aspect: [4, 3],
-      });
-      if (!result.cancelled) {
-        props.dispatchUploadAvatar(result.uri);
-      }
-    } catch (error) {
-      console.warn(error);
-    }
-  };
-
-  const onLoadEnd = () => {
-    setState({ ...state, imageLoading: false });
   };
 
   return (
-    <ScreenContainer>
-      <Header />
+    <ScrollView style={styles.container}>
       <Card>
-        <TouchableOpacity style={styles.avatarPlaceholder} onPress={onPickAvatar}>
-          <View>
-            <Image style={styles.avatar} onLoadEnd={onLoadEnd} source={{ uri: props.avatar }} />
-            {state.imageLoading && (
-              <ActivityIndicator
-                animating={state.imageLoading}
-                color={Color.white}
-                style={{
-                  flex: 1,
-                  marginTop: 60,
-                  alignItems: "center",
-                  justifyContent: "center",
-                }}
-              />
-            )}
-          </View>
-
-          <View
-            style={{
-              flex: 1,
-              alignItems: "flex-end",
-              justifyContent: "flex-end",
-            }}
-          >
-            <View
-              style={{
-                backgroundColor: props.uploadAvatarLoading ? Color.black : Color.primary,
-                borderRadius: 20,
-                borderColor: Color.black,
-                borderWidth: 5,
-              }}
-            >
-              {props.uploadAvatarLoading ? (
-                <ActivityIndicator size={30} color={Color.white} />
-              ) : (
-                <Ionicons name="ios-add" size={30} color={Color.white} style={styles.addIcon} />
-              )}
-            </View>
-          </View>
-        </TouchableOpacity>
-        <Text style={styles.subHeaderText}>{"User Profile"}</Text>
-        <CardSection>
-          <CellLabelLeftRight
-            labelLeft={"Name"}
-            labelRight={`${props.firstName} ${props.lastName}`}
-            style={{ marginBottom: Spacing.micro }}
-          />
-        </CardSection>
-        <CardSection>
-          <CellLabelLeftRight
-            labelLeft={"Email"}
-            labelRight={props.email}
-            style={{ marginBottom: Spacing.large }}
-          />
-        </CardSection>
-
+        <View style={styles.avatarPlaceholder}>
+          <Image source={{ uri: props.avatar }} style={styles.avatar} />
+          <Ionicons name="ios-add" size={40} color="#FFF" style={styles.addIcon} />
+        </View>
+        <Text style={styles.subHeaderText}>{"User Information"}</Text>
+        <CellLabelLeftRight
+          labelLeft={"Name"}
+          labelRight={`${props.firstName} ${props.lastName}`}
+          style={{ marginBottom: Spacing.small }}
+        />
+        <CellLabelLeftRight
+          labelLeft={"Email"}
+          labelRight={props.email}
+          style={{ marginBottom: Spacing.large }}
+        />
         {renderSignOutButton()}
       </Card>
-    </ScreenContainer>
+    </ScrollView>
   );
 }
 
 const mapStateToProps = (state: any) => {
-  // console.log("STATE", state.user);
   return {
-    avatar: state.user?.user?.avatar,
-    firstName: state.user?.user?.firstName,
-    lastName: state.user?.user?.lastName,
-    email: state.user?.user?.email,
-    authLoading: state.auth.loading,
-    authError: state.auth?.error,
-    uploadAvatarLoading: state.user?.uploadAvatarLoading,
-    uploadAvatarError: state.user?.uploadAvatarError,
+    avatar: state.user.user.avatar,
+    firstName: state.user.user.firstName,
+    lastName: state.user.user.lastName,
+    email: state.user.user.email,
+    loading: state.auth.loading,
+    error: state.auth.error,
   };
 };
 
 const mapDispatchToProps = (dispatch: any) => ({
-  dispatchFetchUser: (uid: any) => dispatch({ type: FETCH_USER.REQUESTED, payload: uid }),
   dispatchLogoutRequest: () => dispatch({ type: LOGOUT_USER.REQUESTED }),
-  dispatchUploadAvatar: (avatarUri: any) =>
-    dispatch({ type: UPLOAD_AVATAR.REQUESTED, payload: avatarUri }),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(ProfileScreen);
@@ -185,13 +100,14 @@ export default connect(mapStateToProps, mapDispatchToProps)(ProfileScreen);
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: Color.darkThemeGreyDark,
+    backgroundColor: Color.darkThemeGreyMed,
     paddingTop: Spacing.xxlarge,
   },
   avatarPlaceholder: {
+    alignSelf: "center",
     width: 120,
     height: 120,
-    alignSelf: "center",
+    backgroundColor: Color.darkThemeGreyMed,
     borderRadius: 60,
     marginVertical: Spacing.small,
   },
@@ -202,6 +118,9 @@ const styles = StyleSheet.create({
     borderRadius: 60,
   },
   addIcon: {
+    alignSelf: "center",
+    marginTop: 38,
+    marginLeft: 2,
     color: Color.greyLight,
   },
   subHeaderText: {
