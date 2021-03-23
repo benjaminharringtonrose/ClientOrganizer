@@ -15,9 +15,9 @@ function TabBar(props: any) {
       style={{
         flexDirection: "row",
         borderTopColor: Color.darkThemeGreyMed,
-        borderTopWidth: 0.5,
+        borderTopWidth: 1,
         borderBottomColor: Color.darkThemeGreyMed,
-        borderBottomWidth: 0.5,
+        borderBottomWidth: 1,
         height: 70,
         justifyContent: "center",
         alignItems: "center",
