@@ -18,7 +18,6 @@ export function* fetchNotificationsSaga() {
       .then((notification) => {
         if (notification.exists) {
           notifications = notification.data();
-          // console.log("fetchNotificationsSaga: notifications", notification.data()!);
         } else {
           // doc.data() will be undefined in this case
           console.warn("No such document!");

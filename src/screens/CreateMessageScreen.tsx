@@ -117,7 +117,6 @@ function CreateMessageScreen(props: CreateMessageScreenProps) {
   };
 
   const onSendMessagePress = () => {
-    console.log("onSendMessagePress ---------", state.selectedFriend?.friendId);
     props.dispatchSendMessage({
       senderId: props.user?.uid,
       recipientId: state.selectedFriend?.friendId,
@@ -127,7 +126,9 @@ function CreateMessageScreen(props: CreateMessageScreenProps) {
       threadLastName: state.selectedFriend?.friendLastName,
     });
     props.dispatchFetchMessages();
-    props.navigation.pop();
+    props.navigation.navigate(Routes.MESSAGE_DETAILS_SCREEN, {
+      threadId: state.selectedFriend?.friendId,
+    });
   };
 
   return (

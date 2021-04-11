@@ -20,7 +20,6 @@ export const DefaultFriendsState: IFriendsState = {
 };
 
 const FriendsReducer = (state = DefaultFriendsState, action: any) => {
-  // console.log(action);
   switch (action.type) {
     case ADD_FRIEND.REQUESTED:
       return {

@@ -8,7 +8,7 @@ import {
   SectionList,
 } from "react-native";
 import { connect } from "react-redux";
-import { ScreenContainer, MessagePreviewCard, Header, FriendRequestCard } from "../components";
+import { ScreenContainer, Header, FriendRequestCard } from "../components";
 import { Color, Spacing } from "../styles";
 import { IStringMap } from "./RegisterScreen";
 import { IError, FETCH_USER, ADD_FRIEND, FETCH_NOTIFICATIONS } from "../store/types";
@@ -64,7 +64,6 @@ function NotificationScreen(props: IMessageScreenProps) {
       .collection("notifications")
       .doc(props.uid)
       .onSnapshot((doc) => {
-        // console.log("Current data: ", doc.data());
         setState({ ...state, mappedNotifications: mapNotifications(doc.data()) });
       });
   }, []);
@@ -119,6 +118,7 @@ function NotificationScreen(props: IMessageScreenProps) {
           />
         );
       }
+      return null;
     }
     return null;
   };
@@ -151,7 +151,7 @@ function NotificationScreen(props: IMessageScreenProps) {
       <SectionList
         sections={notificationData}
         keyExtractor={(item, index) => item + index}
-        renderItem={renderNotification}
+        renderItem={renderNotification || []}
         renderSectionHeader={({ section: { title } }) => (
           <Text style={styles.sectionHeaderTitle}>{title}</Text>
         )}

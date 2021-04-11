@@ -23,7 +23,6 @@ export function* sendMessageSaga(action: any) {
     } = action.payload;
     const state: IStoreState = yield select();
     const uid = state.user?.user?.uid;
-    yield console.log("action.payload --------------", action.payload);
     const messageId = uuid();
 
     yield firebase
@@ -77,9 +76,9 @@ export function* sendMessageSaga(action: any) {
       );
 
     yield put(sendMessageSucceeded());
-    yield put(publishToast(NOTIFICATION_TYPE.SUCCESS, "Message sent."));
   } catch (error) {
     yield put(sendMessageFailed({ error } as any));
+    yield put(publishToast(NOTIFICATION_TYPE.ERROR, "Message failed to send. Try again later."));
     yield console.warn(error.message);
   }
 }
@@ -117,7 +116,7 @@ export function* fetchMessagesSaga() {
         }
       })
       .catch((error) => {
-        console.log("Error getting document:", error);
+        console.warn("Error getting document:", error);
       });
     yield put(fetchMessagesSucceeded(messages));
   } catch (error) {

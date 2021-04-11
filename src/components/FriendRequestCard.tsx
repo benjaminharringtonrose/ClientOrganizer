@@ -19,7 +19,7 @@ interface ILocalState {
   imageLoading: boolean;
 }
 
-export function FriendRequestCard(props: IPostCardProps) {
+export const FriendRequestCard = (props: IPostCardProps) => {
   const [state, setState] = useState<ILocalState>({
     commentModalVisible: false,
     imageLoading: true,
@@ -85,7 +85,7 @@ export function FriendRequestCard(props: IPostCardProps) {
       </View>
     </View>
   );
-}
+};
 
 const styles = StyleSheet.create({
   rootContainer: {

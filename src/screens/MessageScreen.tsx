@@ -53,10 +53,8 @@ function MessageScreen(props: IMessageScreenProps) {
           avatar: item.avatar,
         },
       });
-      console.log("ITEMMMMMMMMMMM", item);
       props.navigation.navigate(Routes.MESSAGE_DETAILS_SCREEN, {
         threadId: item.threadId,
-        messages: getMessages(item.messages),
       });
     };
     if (item) {

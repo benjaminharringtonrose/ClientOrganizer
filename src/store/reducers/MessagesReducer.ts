@@ -18,7 +18,6 @@ export const DefaultMessagesState: IMessagesState = {
 };
 
 const MessagesReducer = (state = DefaultMessagesState, action: any) => {
-  console.log(action);
   switch (action.type) {
     case FETCH_MESSAGES.REQUESTED:
       return {

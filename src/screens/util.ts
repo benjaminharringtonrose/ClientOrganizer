@@ -82,7 +82,6 @@ export const getMessages = (messages?: IStringMap<any>) => {
   }
   const acc: any = [];
   for (const [key, item] of Object.entries(messages)) {
-    console.log("item", item);
     const message = {
       messageId: item.messageId,
       message: item.message,

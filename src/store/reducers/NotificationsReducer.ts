@@ -20,7 +20,6 @@ const DefaultNotificaitonsState: INotificationsState = {
 };
 
 const NotificaitonsReducer = (state = DefaultNotificaitonsState, action: any) => {
-  // console.log(action);
   switch (action.type) {
     case FETCH_NOTIFICATIONS.REQUESTED:
       return {

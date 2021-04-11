@@ -160,7 +160,6 @@ function ProfileScreen(props: ProfileScreenProps) {
 }
 
 const mapStateToProps = (state: any) => {
-  // console.log("STATE", state.user);
   return {
     avatar: state.user?.user?.avatar,
     firstName: state.user?.user?.firstName,

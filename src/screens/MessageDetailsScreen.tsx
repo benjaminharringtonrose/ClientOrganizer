@@ -1,14 +1,5 @@
-import React, { useState } from "react";
-import {
-  View,
-  StyleSheet,
-  Text,
-  FlatList,
-  RefreshControl,
-  Dimensions,
-  TextInput,
-  TouchableOpacity,
-} from "react-native";
+import React, { useState, useEffect } from "react";
+import { View, Text, FlatList, Dimensions, TouchableOpacity } from "react-native";
 import { ScreenContainer, Header, ButtonBack, Input } from "../components";
 import { Color, Spacing } from "../styles";
 import { IStoreState } from "../store/store";
@@ -22,6 +13,9 @@ import { RouteProp } from "../store/types";
 import { fetchMessagesRequested, sendMessageRequested } from "../store/actions/MessagesActions";
 import { IStringMap } from "./RegisterScreen";
 import { messageThreadSelector } from "../store/selectors";
+import firebase from "firebase";
+import { getMessages } from "./util";
+import { useMessages } from "../hooks/useMessages";
 
 interface IPassedProps {
   navigation: StackNavigationProp<MessageParamList, Routes.MESSAGE_DETAILS_SCREEN>;
@@ -51,6 +45,7 @@ interface ILocalState {
   image?: string;
   imageLoading: boolean;
   messageInput: string;
+  mappedMessages?: IStringMap<any>[];
 }
 
 function MessageDetailsScreen(props: MessageDetailsProps) {
@@ -58,7 +53,21 @@ function MessageDetailsScreen(props: MessageDetailsProps) {
     image: undefined,
     imageLoading: true,
     messageInput: "",
+    mappedMessages: undefined,
   });
+
+  useEffect(() => {
+    const messages: any = [];
+    if (props.messages) {
+      console.log(props.messages);
+      for (const [key, thread] of Object.entries(props.messages)) {
+        for (const [key, message] of Object.entries(thread.messages)) {
+          messages.push(message);
+        }
+      }
+    }
+    setState({ ...state, mappedMessages: messages });
+  }, [props.messages]);
 
   const pickImage = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
@@ -70,15 +79,6 @@ function MessageDetailsScreen(props: MessageDetailsProps) {
       setState({ ...state, image: result.uri });
     }
   };
-  // function refreshControl() {
-  //   return (
-  //     <RefreshControl
-  //       refreshing={props.fetchPostsLoading}
-  //       onRefresh={() => props.dispatchFetchPosts()}
-  //       tintColor={Color.white}
-  //     />
-  //   );
-  // }
 
   const getThreadData = (threadId: string, messages?: IStringMap<any>) => {
     if (!messages) {
@@ -87,7 +87,6 @@ function MessageDetailsScreen(props: MessageDetailsProps) {
     }
     for (const [key, value] of Object.entries(messages)) {
       if (value.threadId === threadId) {
-        console.log("VALUEEEEE", value);
         return value;
       }
     }
@@ -95,7 +94,6 @@ function MessageDetailsScreen(props: MessageDetailsProps) {
 
   const onSendMessagePress = () => {
     const threadData = getThreadData(props.route.params?.threadId, props.messages);
-    console.log("THREAD DATA", props.route.params?.threadId);
     props.dispatchSendMessage({
       senderId: props.uid,
       recipientId: props.route.params?.threadId,
@@ -105,17 +103,18 @@ function MessageDetailsScreen(props: MessageDetailsProps) {
       threadLastName: threadData.threadLastName,
     });
     props.dispatchFetchMessages();
-    props.navigation.pop();
+    // props.navigation.pop();
   };
 
   const isSender = (senderId: string) => {
-    console.log("threadId", senderId);
     if (senderId === props.uid) {
       return true;
     }
     return false;
   };
+
   const screenWidth = Dimensions.get("screen").width;
+
   return (
     <ScreenContainer>
       <Header
@@ -129,7 +128,7 @@ function MessageDetailsScreen(props: MessageDetailsProps) {
         }
       />
       <FlatList
-        data={props.route.params?.messages}
+        data={state.mappedMessages}
         inverted
         renderItem={({ item }) => {
           if (item) {
@@ -237,7 +236,6 @@ function MessageDetailsScreen(props: MessageDetailsProps) {
 }
 
 const mapStateToProps = (state: IStoreState) => {
-  console.log(state?.user?.user?.uid);
   return {
     uid: state?.user?.user?.uid,
     messages: state.messages?.messages,
