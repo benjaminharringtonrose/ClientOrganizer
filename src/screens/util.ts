@@ -2,6 +2,7 @@ import firebase from "firebase";
 import { orderBy } from "lodash";
 import { Linking } from "react-native";
 import { IStringMap } from "./RegisterScreen";
+import { useImperativeHandle } from "react";
 
 export const getDocRef = (): any => {
   return firebase.firestore().collection("users").doc(firebase.auth().currentUser?.uid);
@@ -42,7 +43,6 @@ export function mapNotifications(notifications: any) {
   for (const [key, value] of Object.entries(notifications)) {
     acc = acc.concat({ ...(value as Object), id: key });
   }
-  acc.reverse();
   return acc;
 }
 
@@ -105,4 +105,36 @@ export const getMostRecentMessage = (messages: IStringMap<any>) => {
   }
   const mostRecentMessage = orderBy(acc, "timestamp", "asc").pop();
   return mostRecentMessage.message;
+};
+
+export const getFriendsAsync = async (friends?: string[]) => {
+  if (!friends) {
+    return;
+  }
+  let friendsData: IStringMap<any>[] = [];
+  await firebase
+    .firestore()
+    .collection("users")
+    .get()
+    .then((querySnapshot) => {
+      querySnapshot.forEach((doc) => {
+        const user = doc.data();
+        friends.forEach((userId) => {
+          if (userId === user.uid) {
+            const publicUserData = {
+              uid: user.uid,
+              firstName: user.firstName,
+              lastName: user.lastName,
+              pushToken: user.pushToken.data,
+              avatar: user.avatar,
+            };
+            friendsData.push(publicUserData);
+          }
+        });
+      });
+    })
+    .catch((error) => {
+      console.warn(error);
+    });
+  return friendsData;
 };

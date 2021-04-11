@@ -11,9 +11,9 @@ export function* fetchNotificationsSaga() {
     let notifications: firebase.firestore.DocumentData | undefined;
     const db = firebase.firestore();
 
-    const notificationsRef = db.collection("notifications").doc(uid);
+    const docRef = db.collection("notifications").doc(uid);
 
-    yield notificationsRef
+    yield docRef
       .get()
       .then((notification) => {
         if (notification.exists) {

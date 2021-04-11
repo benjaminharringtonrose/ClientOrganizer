@@ -59,10 +59,14 @@ function MessageDetailsScreen(props: MessageDetailsProps) {
   useEffect(() => {
     const messages: any = [];
     if (props.messages) {
-      console.log(props.messages);
+      console.log("props.route.params?.threadId", props.route.params?.threadId);
+      console.log("MESSAGES", props.messages);
       for (const [key, thread] of Object.entries(props.messages)) {
-        for (const [key, message] of Object.entries(thread.messages)) {
-          messages.push(message);
+        if (props.route.params?.threadId === thread.threadId) {
+          console.log("YES");
+          for (const [key, message] of Object.entries(thread.messages)) {
+            messages.push(message);
+          }
         }
       }
     }

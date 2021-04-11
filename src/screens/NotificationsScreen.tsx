@@ -89,6 +89,7 @@ function NotificationScreen(props: IMessageScreenProps) {
         return (
           <TouchableOpacity>
             <FriendRequestCard
+              key={item.uid}
               notificationType={item.notificationType}
               avatar={item.avatar}
               name={`${item.firstName} ${item.lastName}`}
@@ -144,14 +145,10 @@ function NotificationScreen(props: IMessageScreenProps) {
 
   return (
     <ScreenContainer>
-      <Header />
-      <View style={{ paddingLeft: Spacing.large, paddingVertical: Spacing.med }}>
-        <Text style={{ color: Color.white, fontSize: 40 }}>{"Notifications"}</Text>
-      </View>
       <SectionList
         sections={notificationData}
         keyExtractor={(item, index) => item + index}
-        renderItem={renderNotification || []}
+        renderItem={renderNotification}
         renderSectionHeader={({ section: { title } }) => (
           <Text style={styles.sectionHeaderTitle}>{title}</Text>
         )}

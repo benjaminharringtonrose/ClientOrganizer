@@ -68,7 +68,7 @@ const MessageNavigator = () => {
 const NotificationNavigator = () => {
   const Stack = createStackNavigator();
   return (
-    <Stack.Navigator screenOptions={defaultNavigationOptions}>
+    <Stack.Navigator screenOptions={{ ...defaultNavigationOptions, title: "Notifications" }}>
       <Stack.Screen name={Routes.NOTIFICATION_SCREEN} component={NotificationScreen} />
       {/* <Stack.Screen name={} component={} /> */}
     </Stack.Navigator>

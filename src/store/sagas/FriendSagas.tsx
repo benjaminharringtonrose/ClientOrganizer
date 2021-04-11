@@ -28,94 +28,59 @@ export function* addFriendSaga(action: any) {
       avatar,
     } = action.payload;
 
-    // add personB to personA's friends list
-    yield firebase
-      .firestore()
-      .collection("users")
-      .doc(uid)
-      .set(
-        {
-          friends: {
-            [friendId]: {
-              friendId,
-              friendFirstName,
-              friendLastName,
-              friendAvatar,
-            },
-          },
-        },
-        { merge: true }
-      );
+    const userCollectionRef = yield firebase.firestore().collection("users");
+    var notificationsCollectionRef = yield firebase.firestore().collection("notifications");
 
-    // add personA to personB's friends list
-    yield firebase
-      .firestore()
-      .collection("users")
-      .doc(friendId)
-      .set(
-        {
-          friends: {
-            [friendId]: {
-              friendId: uid,
-              friendFirstName,
-              friendLastName,
-              friendAvatar,
-            },
-          },
-        },
-        { merge: true }
-      );
+    // add B to A's friendList
+    yield userCollectionRef.doc(uid).update({
+      friendsList: firebase.firestore.FieldValue.arrayUnion(friendId),
+    });
 
-    yield firebase
-      .firestore()
-      .collection("notifications")
-      .doc(uid)
-      .set(
-        {
-          [friendId!]: firebase.firestore.FieldValue.delete(),
-        },
-        { merge: true }
-      );
+    // add A to B's friendList
+    yield userCollectionRef.doc(friendId).update({
+      friendsList: firebase.firestore.FieldValue.arrayUnion(uid),
+    });
 
-    yield firebase
-      .firestore()
-      .collection("notifications")
-      .doc(uid)
-      .set(
-        {
-          [uid!]: {
-            notificationType: NOTIFICATION.GENERAL,
-            notificationStatus: "unread",
-            message: "You accepted their friend request.",
-            timestamp: Date.now(),
-            theirUid: friendId,
-            firstName: friendFirstName,
-            lastName: friendLastName,
-            avatar: friendAvatar,
-          },
-        },
-        { merge: true }
-      );
+    // remove old notification
+    yield notificationsCollectionRef.doc(uid).set(
+      {
+        [friendId!]: firebase.firestore.FieldValue.delete(),
+      },
+      { merge: true }
+    );
 
-    yield firebase
-      .firestore()
-      .collection("notifications")
-      .doc(friendId)
-      .set(
-        {
-          [uid!]: {
-            notificationType: NOTIFICATION.GENERAL,
-            notificationStatus: "unread",
-            message: "accepted your friend request.",
-            timestamp: Date.now(),
-            theirUid: friendId,
-            firstName,
-            lastName,
-            avatar,
-          },
+    // add new notification
+    yield notificationsCollectionRef.doc(uid).set(
+      {
+        [uid!]: {
+          notificationType: NOTIFICATION.GENERAL,
+          notificationStatus: "unread",
+          message: "You accepted their friend request.",
+          timestamp: Date.now(),
+          theirUid: friendId,
+          firstName: friendFirstName,
+          lastName: friendLastName,
+          avatar: friendAvatar,
         },
-        { merge: true }
-      );
+      },
+      { merge: true }
+    );
+
+    yield notificationsCollectionRef.doc(friendId).set(
+      {
+        [uid!]: {
+          notificationType: NOTIFICATION.GENERAL,
+          notificationStatus: "unread",
+          message: "accepted your friend request.",
+          timestamp: Date.now(),
+          theirUid: friendId,
+          firstName,
+          lastName,
+          avatar,
+        },
+      },
+      { merge: true }
+    );
 
     yield put(addFriendSucceeded());
     yield put(publishToast(NOTIFICATION_TYPE.SUCCESS, "Accepted friend request."));
@@ -130,18 +95,15 @@ export function* deleteFriendSaga(action: any) {
   try {
     const { id } = action.payload;
     const uid = yield firebase.auth().currentUser?.uid;
-    yield firebase
-      .firestore()
-      .collection("users")
-      .doc(uid)
-      .set(
-        {
-          friends: {
-            [id!]: firebase.firestore.FieldValue.delete(),
-          },
+    const collectionRef = firebase.firestore().collection("users");
+    yield collectionRef.doc(uid).set(
+      {
+        friends: {
+          [id!]: firebase.firestore.FieldValue.delete(),
         },
-        { merge: true }
-      );
+      },
+      { merge: true }
+    );
     yield put(deleteFriendSucceeded());
     yield put(fetchUserRequested(uid));
   } catch (error) {
@@ -174,11 +136,11 @@ export function* sendFriendRequest(action: any) {
       avatar,
     } = action.payload;
     // doc ref to the user you're sending the friend request to.
-    const doc = yield firebase.firestore().collection("notifications").doc(theirUid);
+    const docRef = yield firebase.firestore().collection("notifications").doc(theirUid);
     // but below you'll be sending the CURRENT users info
     const uid = yield firebase.auth().currentUser?.uid;
     const notificationId = uuid();
-    yield doc.set(
+    yield docRef.set(
       {
         [uid!]: {
           notificationId,

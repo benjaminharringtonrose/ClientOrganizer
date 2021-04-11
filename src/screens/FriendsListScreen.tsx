@@ -4,7 +4,7 @@ import { connect } from "react-redux";
 import { ScreenContainer, Card, CardSection, Button } from "../components";
 import { Color, Spacing } from "../styles";
 import { UserCard } from "../components/UserCard";
-import { mapFriends } from "./util";
+import { mapFriends, getFriendsAsync } from "./util";
 import { IStringMap } from "./RegisterScreen";
 import { BottomModal } from "../components/BottomModal";
 import { DELETE_FRIEND } from "../store/types";
@@ -14,7 +14,7 @@ interface IPassedProps {
 }
 
 interface IPropsFromState {
-  friends?: IStringMap<any>;
+  friendsList?: string[];
 }
 
 interface IDispatchFromState {
@@ -37,30 +37,36 @@ function FriendsListScreen(props: IFindFriendsProps) {
   });
 
   useEffect(() => {
-    setState({ ...state, mappedFriends: mapFriends(props?.friends) });
+    getFriendsAsync(props.friendsList).then((friends) => {
+      console.log("friends", friends);
+      setState({ ...state, mappedFriends: mapFriends(friends) });
+    });
   }, []);
 
-  useEffect(() => {
-    setState({ ...state, mappedFriends: mapFriends(props?.friends) });
-  }, [props.friends]);
+  // useEffect(() => {
+  //   getFriendsAsync(props.friendsList).then((friends) => {
+  //     console.log("friends", friends);
+  //     setState({ ...state, mappedFriends: mapFriends(friends) });
+  //   });
+  // }, [props.friendsList]);
 
   const renderUser = ({ item }: any) => {
     if (item) {
       return (
         <UserCard
-          avatar={item.friendAvatar}
-          name={`${item.friendFirstName} ${item.friendLastName}`}
-          bio={item.bio}
+          key={item.uid}
+          avatar={item.avatar}
+          name={`${item.firstName} ${item.lastName}`}
           icon={"ellipsis-horizontal"}
           onPress={() =>
             setState({
               ...state,
               showModal: true,
               selectedFriend: {
-                id: item.friendId,
-                firstName: item.friendFirstName,
-                lastName: item.friendLastName,
-                avatar: item.friendAvatar,
+                id: item.uid,
+                firstName: item.firstName,
+                lastName: item.lastName,
+                avatar: item.avatar,
               },
             })
           }
@@ -70,7 +76,7 @@ function FriendsListScreen(props: IFindFriendsProps) {
     return null;
   };
   const modalHeight = Dimensions.get("screen").height / 4;
-
+  console.log("mappedFriends", state.mappedFriends);
   return (
     <ScreenContainer>
       <View style={{ paddingLeft: Spacing.large, paddingVertical: Spacing.med }}>
@@ -121,7 +127,7 @@ function FriendsListScreen(props: IFindFriendsProps) {
 
 const mapStateToProps = (state: any) => {
   return {
-    friends: state.user?.user?.friends,
+    friendsList: state.user?.user?.friendsList,
   };
 };
 
