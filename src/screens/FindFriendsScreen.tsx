@@ -65,7 +65,6 @@ function FindFriendsScreen(props: IFindFriendsProps) {
   });
 
   const renderUser = ({ item }: any) => {
-    console.log("ITEMMMMM", item);
     const onUserPress = () => {
       setState({
         ...state,

@@ -64,7 +64,11 @@ function PostScreen(props: IPostScreenProps) {
       text: state.text.trim(),
       image: state.image,
     });
-    setState({ ...state, image: undefined, text: "" });
+    setState({
+      ...state,
+      image: undefined,
+      text: "",
+    });
   };
 
   const pickImage = async () => {

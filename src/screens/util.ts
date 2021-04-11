@@ -1,6 +1,7 @@
 import firebase from "firebase";
-import { isEqual } from "lodash";
+import { orderBy } from "lodash";
 import { Linking } from "react-native";
+import { IStringMap } from "./RegisterScreen";
 
 export const getDocRef = (): any => {
   return firebase.firestore().collection("users").doc(firebase.auth().currentUser?.uid);
@@ -74,3 +75,35 @@ export function callTelephone(phoneNumber: string) {
     })
     .catch((e) => console.warn(e));
 }
+
+export const getMessages = (messages?: IStringMap<any>) => {
+  if (!messages) {
+    return;
+  }
+  const acc: any = [];
+  for (const [key, item] of Object.entries(messages)) {
+    console.log("item", item);
+    const message = {
+      messageId: item.messageId,
+      message: item.message,
+      timestamp: item.timestamp,
+      senderId: item.senderId,
+    };
+    acc.push(message);
+  }
+  const sortedMessages = orderBy(acc, "timestamp", "desc");
+  return sortedMessages;
+};
+
+export const getMostRecentMessage = (messages: IStringMap<any>) => {
+  const acc: any = [];
+  for (const [key, item] of Object.entries(messages)) {
+    acc.push({
+      message: item.message as string,
+      messageId: item.messageId,
+      timestamp: item.timestamp,
+    });
+  }
+  const mostRecentMessage = orderBy(acc, "timestamp", "asc").pop();
+  return mostRecentMessage.message;
+};

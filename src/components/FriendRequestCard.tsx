@@ -35,7 +35,7 @@ export function FriendRequestCard(props: IPostCardProps) {
   return (
     <View style={styles.rootContainer}>
       <View style={{ flexDirection: "row" }}>
-        {props.avatar ? (
+        {!!props.avatar ? (
           <View>
             <Image
               style={{

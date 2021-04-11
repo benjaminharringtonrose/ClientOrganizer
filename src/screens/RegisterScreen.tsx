@@ -1,27 +1,16 @@
 import React, { useState, useEffect } from "react";
 import { Text, StyleSheet } from "react-native";
 import { connect } from "react-redux";
-
-import {
-  Card,
-  Input,
-  Button,
-  Spinner,
-  ButtonBack,
-  Header,
-  CardSection,
-  ScreenContainer,
-} from "../components";
-
+import { Card, Input, Button, Spinner, CardSection, ScreenContainer } from "../components";
 import { REGISTER_USER, UPLOAD_AVATAR } from "../store/types";
 import { Color, Spacing } from "../styles";
-
 import { Routes } from "../navigation/routes";
-
 import { usePrevious } from "../hooks/usePrevious";
+import { StackNavigationProp } from "@react-navigation/stack";
+import { AuthParamList } from "../navigation/navigation";
 
 interface PassedProps {
-  navigation: any;
+  navigation: StackNavigationProp<AuthParamList, Routes.REGISTER_SCREEN>;
 }
 
 interface PropsFromState {
@@ -96,18 +85,13 @@ function RegisterScreen(props: RegisterScreenProps) {
 
   return (
     <ScreenContainer>
-      <Header
-        title={"Chatty"}
-        headerLeft={
-          <ButtonBack
-            onPress={() => props.navigation.goBack()}
-            iconSize={24}
-            iconColor={Color.white}
-          />
-        }
-      />
       <Card>
-        <Text style={styles.subHeaderText}>{"Register Here"}</Text>
+        <CardSection style={{ flexDirection: "column", paddingTop: Spacing.xxlarge }}>
+          <Text style={{ color: Color.white, fontSize: 36, paddingBottom: 10 }}>{"Sign Up"}</Text>
+          <Text style={{ color: Color.white, fontSize: 20, paddingBottom: Spacing.xxlarge }}>
+            {"Create an account"}
+          </Text>
+        </CardSection>
         <CardSection>
           <Input
             label="First Name"
@@ -150,7 +134,6 @@ function RegisterScreen(props: RegisterScreenProps) {
             style={{ marginBottom: Spacing.small }}
           />
         </CardSection>
-
         {renderError()}
         {renderButton()}
       </Card>
@@ -226,7 +209,7 @@ const styles = StyleSheet.create({
   subHeaderText: {
     fontSize: 30,
     color: Color.warmGrey200,
-    paddingTop: Spacing.small,
+    paddingTop: Spacing.xxlarge,
     paddingBottom: Spacing.large,
     paddingLeft: Spacing.micro,
   },

@@ -1,22 +1,30 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { View, Text, StyleSheet, FlatList, RefreshControl, TouchableOpacity } from "react-native";
 import { connect } from "react-redux";
 import { ScreenContainer, MessagePreviewCard, Header, ButtonText } from "../components";
 import { Color, Spacing } from "../styles";
 import { IStringMap } from "./RegisterScreen";
-import {} from "../store/types";
-import { Ionicons } from "@expo/vector-icons";
+import { IError } from "../store/types";
 import { Entypo } from "@expo/vector-icons";
 import SearchBar from "../components/SearchBar";
 import { Routes } from "../navigation/routes";
+import { IStoreState } from "../store/store";
+import { fetchMessagesRequested } from "../store/actions/MessagesActions";
+import { getMostRecentMessage, getMessages } from "./util";
 
 interface IPassedProps {
   navigation: any;
 }
 
-interface IPropsFromState {}
+interface IPropsFromState {
+  messages?: IStringMap<any>[];
+  fetchMessagesLoading: boolean;
+  fetchMessagesError?: IError;
+}
 
-interface IDispatchFromState {}
+interface IDispatchFromState {
+  dispatchFetchMessages: () => void;
+}
 
 type IMessageScreenProps = IPassedProps & IPropsFromState & IDispatchFromState;
 
@@ -24,43 +32,14 @@ interface ILocalState {
   selectedMessage?: IStringMap<any>;
 }
 
-const MESSAGES = [
-  {
-    messageId: "1",
-    senderAvatar:
-      "https://firebasestorage.googleapis.com/v0/b/socialapp-b2813/o/avatars%2F7b2c9077-c9f0-4fab-adeb-5e8106d1eaa1?alt=media&token=3670849f-ba08-4e25-bdb4-35da40a73e8b",
-    senderFirstName: "John",
-    senderLastName: "Smith",
-    message:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
-    timestamp: 1616035699702,
-  },
-  {
-    messageId: "2",
-    senderAvatar:
-      "https://firebasestorage.googleapis.com/v0/b/socialapp-b2813/o/avatars%2F7b2c9077-c9f0-4fab-adeb-5e8106d1eaa1?alt=media&token=3670849f-ba08-4e25-bdb4-35da40a73e8b",
-    senderFirstName: "Jimmy",
-    senderLastName: "Creech",
-    message:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
-    timestamp: 1616036070543,
-  },
-  {
-    messageId: "2",
-    senderAvatar:
-      "https://firebasestorage.googleapis.com/v0/b/socialapp-b2813/o/avatars%2F7b2c9077-c9f0-4fab-adeb-5e8106d1eaa1?alt=media&token=3670849f-ba08-4e25-bdb4-35da40a73e8b",
-    senderFirstName: "Sally",
-    senderLastName: "May",
-    message:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
-    timestamp: 1616036070543,
-  },
-];
-
 function MessageScreen(props: IMessageScreenProps) {
   const [state, setState] = useState<ILocalState>({
     selectedMessage: undefined,
   });
+
+  useEffect(() => {
+    props.dispatchFetchMessages();
+  }, []);
 
   const renderMessagePreview = ({ item }: any) => {
     const onMessagePress = () => {
@@ -74,15 +53,19 @@ function MessageScreen(props: IMessageScreenProps) {
           avatar: item.avatar,
         },
       });
-      props.navigation.navigate(Routes.MESSAGE_DETAILS_SCREEN);
+      console.log("ITEMMMMMMMMMMM", item);
+      props.navigation.navigate(Routes.MESSAGE_DETAILS_SCREEN, {
+        threadId: item.threadId,
+        messages: getMessages(item.messages),
+      });
     };
     if (item) {
       return (
         <TouchableOpacity onPress={onMessagePress}>
           <MessagePreviewCard
-            avatar={item.senderAvatar}
-            name={`${item.senderFirstName} ${item.senderLastName}`}
-            message={item.message}
+            avatar={item.threadAvatar}
+            name={`${item.threadFirstName} ${item.threadLastName}`}
+            message={getMostRecentMessage(item.messages)}
             timestamp={item.timestamp}
           />
         </TouchableOpacity>
@@ -91,16 +74,15 @@ function MessageScreen(props: IMessageScreenProps) {
     return null;
   };
 
-  // function refreshControl() {
-  //   return (
-  //     <RefreshControl
-  //       refreshing={props.fetchAllUsersLoading}
-  //       onRefresh={() => props.dispatchFetchAllUsers()}
-  //       tintColor={Color.white}
-  //     />
-  //   );
-  // }
-
+  function refreshControl() {
+    return (
+      <RefreshControl
+        refreshing={props.fetchMessagesLoading}
+        onRefresh={() => props.dispatchFetchMessages()}
+        tintColor={Color.white}
+      />
+    );
+  }
   return (
     <ScreenContainer>
       <Header
@@ -124,31 +106,26 @@ function MessageScreen(props: IMessageScreenProps) {
         <SearchBar value={""} onChangeText={() => {}} />
       </View>
       <FlatList
-        data={MESSAGES}
+        data={props.messages || []}
         renderItem={renderMessagePreview}
         keyExtractor={(item, index) => String(index)}
         showsVerticalScrollIndicator={false}
-        // refreshControl={refreshControl()}
+        refreshControl={refreshControl()}
       />
     </ScreenContainer>
   );
 }
 
-const mapStateToProps = (state: any) => {
+const mapStateToProps = (state: IStoreState) => {
   return {
-    // fetchAllUsersLoading: state.user.fetchAllUsersLoading,
-    // fetchAllUsersError: state.user?.fetchAllUsersError,
-    // users: state.user?.users,
+    messages: state.messages?.messages,
+    fetchMessagesLoading: state.messages?.fetchMessagesLoading,
+    fetchMessagesError: state.messages?.fetchMessagesError,
   };
 };
 
 const mapDispatchToProps = (dispatch: any) => ({
-  // dispatchFetchAllUsers: () => dispatch({ type: FETCH_ALL_USERS.REQUESTED }),
-  // dispatchAddFriend: ({ friendUID, firstName, lastName, email, avatar }: any) =>
-  //   dispatch({
-  //     type: ADD_FRIEND.REQUESTED,
-  //     payload: { friendUID, firstName, lastName, email, avatar },
-  //   }),
+  dispatchFetchMessages: () => dispatch(fetchMessagesRequested()),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(MessageScreen);

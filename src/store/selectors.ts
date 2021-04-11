@@ -1,8 +1,11 @@
 import { createSelector } from "reselect";
 import { IStoreState } from "./store";
+import { NOTIFICATION } from "../api/PushNotifications";
 
-const userSelector = (state: IStoreState) => state;
+const messagesSelector = (state: IStoreState) => state.messages.messages;
 
 const notificationsSelector = (state: IStoreState) => state.notifications.notifications;
 
-const orderedNotificationsSelector = createSelector(userSelector, (item) => item);
+export const messageThreadSelector = createSelector(notificationsSelector, (item) => {
+  item?.notificationType === NOTIFICATION.FRIEND_REQUEST;
+});

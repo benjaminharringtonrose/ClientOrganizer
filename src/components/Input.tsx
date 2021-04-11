@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { TextInput, View, Text, StyleSheet, StyleProp, ViewStyle, TextStyle } from "react-native";
 import { Color, Spacing } from "../styles";
+import { Ionicons } from "@expo/vector-icons";
 
 interface InputProps {
   label?: string;
@@ -56,7 +57,7 @@ export class Input extends Component<InputProps> {
     return (
       <View style={[styles.rootContainer, style]}>
         {!!label && <Text style={styles.labelText}>{label}</Text>}
-
+        <Ionicons name={"ios-add"} />
         <TextInput
           {...this.props}
           secureTextEntry={secureTextEntry}

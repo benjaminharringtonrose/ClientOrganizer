@@ -1,18 +1,17 @@
 import { Action } from "redux";
-import { IError, FETCH_MESSAGES } from "../types";
+import { IError, FETCH_MESSAGES, SEND_MESSAGE } from "../types";
+import { IStringMap } from "../../screens/RegisterScreen";
 
-export type INotificationsActions =
+export type IMessagesActions =
   | IFetchMessagesRequested
   | IFetchMessagesSucceeded
-  | IFetchMessagesFailed;
+  | IFetchMessagesFailed
+  | ISendMessageRequested;
 
-export interface IFetchMessagesRequested extends Action<FETCH_MESSAGES.REQUESTED> {
-  payload?: string;
-}
+export interface IFetchMessagesRequested extends Action<FETCH_MESSAGES.REQUESTED> {}
 
-export const fetchMessagesRequested = (payload?: string): IFetchMessagesRequested => ({
+export const fetchMessagesRequested = (): IFetchMessagesRequested => ({
   type: FETCH_MESSAGES.REQUESTED,
-  payload,
 });
 
 export interface IFetchMessagesSucceeded extends Action<FETCH_MESSAGES.SUCCEEDED> {
@@ -32,5 +31,33 @@ export interface IFetchMessagesFailed extends Action<FETCH_MESSAGES.FAILED> {
 
 export const fetchMessagesFailed = (error: IError): IFetchMessagesFailed => ({
   type: FETCH_MESSAGES.FAILED,
+  payload: error,
+});
+
+export interface ISendMessageRequested extends Action<SEND_MESSAGE.REQUESTED> {
+  payload?: IStringMap<any>;
+}
+
+export const sendMessageRequested = (payload?: IStringMap<any>): ISendMessageRequested => ({
+  type: SEND_MESSAGE.REQUESTED,
+  payload,
+});
+
+export interface ISendMessageSucceeded extends Action<SEND_MESSAGE.SUCCEEDED> {
+  payload?: any;
+}
+
+export const sendMessageSucceeded = (): ISendMessageSucceeded => {
+  return {
+    type: SEND_MESSAGE.SUCCEEDED,
+  };
+};
+
+export interface ISendMessageFailed extends Action<SEND_MESSAGE.FAILED> {
+  payload: IError;
+}
+
+export const sendMessageFailed = (error: IError): ISendMessageFailed => ({
+  type: SEND_MESSAGE.FAILED,
   payload: error,
 });

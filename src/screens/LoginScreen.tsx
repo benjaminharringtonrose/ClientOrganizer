@@ -2,14 +2,15 @@ import React, { useState } from "react";
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import { connect } from "react-redux";
 import { LOGIN_USER } from "../store/types";
-
 import { Color, Spacing } from "../styles";
 import { Routes } from "../navigation/routes";
 import { Icon } from "react-native-elements";
 import { Card, CardSection, ScreenContainer, Header, Input, Button, Spinner } from "../components";
+import { StackNavigationProp } from "@react-navigation/stack";
+import { AuthParamList } from "../navigation/navigation";
 
 interface IPassedProps {
-  navigation: any;
+  navigation: StackNavigationProp<AuthParamList, Routes.LOGIN_SCREEN>;
 }
 
 interface IPropsFromState {
@@ -63,8 +64,13 @@ function LoginScreen(props: LoginScreenProps) {
 
   return (
     <ScreenContainer>
-      <Header title={"Chatty"} containerStyle={{ marginBottom: Spacing.xxlarge }} />
       <Card>
+        <CardSection style={{ flexDirection: "column", paddingTop: Spacing.xxlarge }}>
+          <Text style={{ color: Color.white, fontSize: 36, paddingBottom: 10 }}>{"Welcome"}</Text>
+          <Text style={{ color: Color.white, fontSize: 20, paddingBottom: Spacing.xxlarge }}>
+            {"Log into your account"}
+          </Text>
+        </CardSection>
         <CardSection>
           <Input
             secureTextEntry={false}

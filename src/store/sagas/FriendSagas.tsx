@@ -1,6 +1,5 @@
 import { put } from "redux-saga/effects";
 import firebase from "firebase";
-import { getDocRef } from "../../screens/util";
 import {
   fetchUserRequested,
   deleteFriendSucceeded,
@@ -10,10 +9,8 @@ import {
 } from "../actions";
 import { fetchAllFriendsFailed, addFriendSucceeded, addFriendFailed } from "../actions";
 import uuid from "uuid-random";
-import { IFriendRequest, NOTIFICATION_TYPE } from "../types";
-import { IActions } from "../store";
+import { NOTIFICATION_TYPE } from "../types";
 import { NOTIFICATION, sendPushNotification } from "../../api/PushNotifications";
-import { fetchNotificationsSaga } from "./NotificationsSagas";
 
 // ADD FRIEND SAGA
 
@@ -58,11 +55,11 @@ export function* addFriendSaga(action: any) {
       .set(
         {
           friends: {
-            [uid]: {
+            [friendId]: {
               friendId: uid,
-              friendFirstName: firstName,
-              friendLastName: lastName,
-              friendAvatar: avatar,
+              friendFirstName,
+              friendLastName,
+              friendAvatar,
             },
           },
         },

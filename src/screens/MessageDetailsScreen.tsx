@@ -9,84 +9,55 @@ import {
   TextInput,
   TouchableOpacity,
 } from "react-native";
-import { ScreenContainer, Header, ButtonBack } from "../components";
+import { ScreenContainer, Header, ButtonBack, Input } from "../components";
 import { Color, Spacing } from "../styles";
 import { IStoreState } from "../store/store";
 import { connect } from "react-redux";
 import { Ionicons } from "@expo/vector-icons";
 import * as ImagePicker from "expo-image-picker";
+import { StackNavigationProp } from "@react-navigation/stack";
+import { Routes } from "../navigation/routes";
+import { MessageParamList } from "../navigation/navigation";
+import { RouteProp } from "../store/types";
+import { fetchMessagesRequested, sendMessageRequested } from "../store/actions/MessagesActions";
+import { IStringMap } from "./RegisterScreen";
+import { messageThreadSelector } from "../store/selectors";
 
-const list = [
-  {
-    senderId: "jhsdf",
-    message: "hsdgfjhsgdfj",
-  },
-];
-
-const MOCK_MESSAGES = [
-  {
-    senderId: "1",
-    message:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
-  },
-  {
-    senderId: "ljJzCc5iZQO847Fw0AHnb75fFq02",
-    message: "Lorem ipsum dolor sit amet.",
-  },
-  {
-    senderId: "3",
-    message:
-      "Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
-  },
-  {
-    senderId: "ljJzCc5iZQO847Fw0AHnb75fFq02",
-    message:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
-  },
-  {
-    senderId: "5",
-    message:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
-  },
-  {
-    senderId: "ljJzCc5iZQO847Fw0AHnb75fFq02",
-    message: "Lorem ipsum dolor sit amet.",
-  },
-  {
-    senderId: "7",
-    message:
-      "Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
-  },
-  {
-    senderId: "ljJzCc5iZQO847Fw0AHnb75fFq02",
-    message:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
-  },
-  {
-    senderId: "9",
-    message: "Consectetur adipiscing elit!",
-  },
-];
-
-interface PassedProps {
-  navigation: any;
+interface IPassedProps {
+  navigation: StackNavigationProp<MessageParamList, Routes.MESSAGE_DETAILS_SCREEN>;
+  route: RouteProp<MessageParamList, Routes.MESSAGE_DETAILS_SCREEN>;
 }
 
-interface PropsFromState {
+interface IPropsFromState {
   uid: string;
+  messages?: IStringMap<any>[];
 }
 
-type MessageDetailsProps = PassedProps & PropsFromState;
+interface IDispatchFromState {
+  dispatchSendMessage: ({
+    senderId,
+    recipientId,
+    threadFirstName,
+    threadLastName,
+    threadAvatar,
+    message,
+  }: any) => void;
+  dispatchFetchMessages: () => void;
+}
+
+type MessageDetailsProps = IPassedProps & IPropsFromState & IDispatchFromState;
 
 interface ILocalState {
   image?: string;
   imageLoading: boolean;
+  messageInput: string;
 }
 
 function MessageDetailsScreen(props: MessageDetailsProps) {
   const [state, setState] = useState<ILocalState>({
     image: undefined,
     imageLoading: true,
+    messageInput: "",
   });
 
   const pickImage = async () => {
@@ -109,7 +80,36 @@ function MessageDetailsScreen(props: MessageDetailsProps) {
   //   );
   // }
 
+  const getThreadData = (threadId: string, messages?: IStringMap<any>) => {
+    if (!messages) {
+      console.warn("No messages");
+      return;
+    }
+    for (const [key, value] of Object.entries(messages)) {
+      if (value.threadId === threadId) {
+        console.log("VALUEEEEE", value);
+        return value;
+      }
+    }
+  };
+
+  const onSendMessagePress = () => {
+    const threadData = getThreadData(props.route.params?.threadId, props.messages);
+    console.log("THREAD DATA", props.route.params?.threadId);
+    props.dispatchSendMessage({
+      senderId: props.uid,
+      recipientId: props.route.params?.threadId,
+      message: state.messageInput,
+      threadAvatar: threadData.threadAvatar,
+      threadFirstName: threadData.threadFirstName,
+      threadLastName: threadData.threadLastName,
+    });
+    props.dispatchFetchMessages();
+    props.navigation.pop();
+  };
+
   const isSender = (senderId: string) => {
+    console.log("threadId", senderId);
     if (senderId === props.uid) {
       return true;
     }
@@ -129,7 +129,8 @@ function MessageDetailsScreen(props: MessageDetailsProps) {
         }
       />
       <FlatList
-        data={MOCK_MESSAGES}
+        data={props.route.params?.messages}
+        inverted
         renderItem={({ item }) => {
           if (item) {
             if (isSender(item.senderId)) {
@@ -206,16 +207,29 @@ function MessageDetailsScreen(props: MessageDetailsProps) {
         >
           <Ionicons name="md-camera" size={32} color={Color.darkThemeGrey} />
         </TouchableOpacity>
-        <View style={{ flex: 1 }}>
-          <TextInput
+        <View
+          style={{
+            flex: 1,
+            minHeight: 40,
+            borderColor: Color.darkThemeGreyMed,
+            borderWidth: 2,
+            borderRadius: 20,
+            flexDirection: "row",
+            alignItems: "center",
+            paddingHorizontal: Spacing.micro,
+          }}
+        >
+          <Input
             style={{
               flex: 1,
-              minHeight: 40,
-              borderColor: Color.darkThemeGreyMed,
-              borderWidth: 3,
-              borderRadius: 20,
+              backgroundColor: Color.black,
             }}
+            selectionColor={Color.greyLight}
+            onChangeText={(messageInput: string) => setState({ ...state, messageInput })}
           />
+          <TouchableOpacity style={{ paddingRight: Spacing.small }} onPress={onSendMessagePress}>
+            <Ionicons name={"ios-send"} color={Color.darkThemeGrey} size={25} />
+          </TouchableOpacity>
         </View>
       </View>
     </ScreenContainer>
@@ -223,12 +237,33 @@ function MessageDetailsScreen(props: MessageDetailsProps) {
 }
 
 const mapStateToProps = (state: IStoreState) => {
-  // console.log(state?.user?.user?.uid);
+  console.log(state?.user?.user?.uid);
   return {
     uid: state?.user?.user?.uid,
+    messages: state.messages?.messages,
   };
 };
 
-const mapDispatchToProps = (dispatch: any) => ({});
+const mapDispatchToProps = (dispatch: any) => ({
+  dispatchFetchMessages: () => dispatch(fetchMessagesRequested()),
+  dispatchSendMessage: ({
+    senderId,
+    recipientId,
+    threadFirstName,
+    threadLastName,
+    threadAvatar,
+    message,
+  }: any) =>
+    dispatch(
+      sendMessageRequested({
+        senderId,
+        recipientId,
+        threadFirstName,
+        threadLastName,
+        threadAvatar,
+        message,
+      })
+    ),
+});
 
 export default connect(mapStateToProps, mapDispatchToProps)(MessageDetailsScreen);

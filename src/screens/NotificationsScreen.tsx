@@ -64,7 +64,7 @@ function NotificationScreen(props: IMessageScreenProps) {
       .collection("notifications")
       .doc(props.uid)
       .onSnapshot((doc) => {
-        console.log("Current data: ", doc.data());
+        // console.log("Current data: ", doc.data());
         setState({ ...state, mappedNotifications: mapNotifications(doc.data()) });
       });
   }, []);

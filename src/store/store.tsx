@@ -18,6 +18,8 @@ import {
   FETCH_NOTIFICATIONS,
   TOAST_NOTIFICATION,
   SEND_FRIEND_REQUEST,
+  SEND_MESSAGE,
+  FETCH_MESSAGES,
 } from "./types";
 import {
   fetchUserSaga,
@@ -50,6 +52,9 @@ import {
   INotificationsActions,
 } from "./actions";
 import NotificaitonsReducer from "./reducers/NotificationsReducer";
+import { sendMessageSaga, fetchMessagesSaga } from "./sagas/MessagesSagas";
+import MessagesReducer, { IMessagesState } from "./reducers/MessagesReducer";
+import { IMessagesActions } from "./actions/MessagesActions";
 
 export interface IStoreState {
   readonly auth: IAuthState;
@@ -57,6 +62,7 @@ export interface IStoreState {
   readonly friends: IFriendsState;
   readonly feed: IFeedState;
   readonly notifications: INotificationsState;
+  readonly messages: IMessagesState;
 }
 
 export type IActions =
@@ -64,7 +70,8 @@ export type IActions =
   | IFeedActions
   | IFriendsActions
   | IUserActions
-  | INotificationsActions;
+  | INotificationsActions
+  | IMessagesActions;
 
 // ROOT ACTION LISTENER
 
@@ -91,6 +98,9 @@ function* rootActionListener() {
   yield takeLatest(TOAST_NOTIFICATION.PUBLISH, toastWasPublished);
 
   yield takeLatest(SEND_FRIEND_REQUEST.SENT, sendFriendRequest);
+
+  yield takeLatest(SEND_MESSAGE.REQUESTED, sendMessageSaga);
+  yield takeLatest(FETCH_MESSAGES.REQUESTED, fetchMessagesSaga);
 }
 
 // ROOT SAGA
@@ -107,6 +117,7 @@ const rootReducer: Reducer<IStoreState, IActions> = combineReducers({
   feed: FeedReducer,
   friends: FriendsReducer,
   notifications: NotificaitonsReducer,
+  messages: MessagesReducer,
 });
 
 const sagaMiddleware = createSagaMiddleware();

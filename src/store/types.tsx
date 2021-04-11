@@ -30,6 +30,8 @@ export interface IFriendRequest {
   avatar: string;
 }
 
+export type RouteProp<ParamList extends any, RouteName extends keyof ParamList> = any;
+
 export enum LOGIN_USER {
   REQUESTED = "LOGIN_USER_REQUESTED",
   SUCCEEDED = "LOGIN_USER_SUCCEEDED",
@@ -122,6 +124,12 @@ export enum FETCH_MESSAGES {
   REQUESTED = "FETCH_MESSAGES_REQUESTED",
   SUCCEEDED = "FETCH_MESSAGES_SUCCEEDED",
   FAILED = "FETCH_MESSAGES_FAILED",
+}
+
+export enum SEND_MESSAGE {
+  REQUESTED = "SEND_MESSAGE_REQUEST",
+  SUCCEEDED = "SEND_MESSAGE_SUCCEEDED",
+  FAILED = "SEND_MESSAGE_FAILED",
 }
 
 export enum SEND_FRIEND_REQUEST {
