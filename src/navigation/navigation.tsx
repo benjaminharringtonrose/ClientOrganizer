@@ -70,7 +70,33 @@ const NotificationNavigator = () => {
   return (
     <Stack.Navigator screenOptions={{ ...defaultNavigationOptions, title: "Notifications" }}>
       <Stack.Screen name={Routes.NOTIFICATION_SCREEN} component={NotificationScreen} />
-      {/* <Stack.Screen name={} component={} /> */}
+    </Stack.Navigator>
+  );
+};
+
+const FeedNavigator = () => {
+  const Stack = createStackNavigator();
+  return (
+    <Stack.Navigator screenOptions={{ ...defaultNavigationOptions, title: "Feed" }}>
+      <Stack.Screen name={Routes.FEED_SCREEN} component={FeedScreen} />
+    </Stack.Navigator>
+  );
+};
+
+const PostNavigator = () => {
+  const Stack = createStackNavigator();
+  return (
+    <Stack.Navigator screenOptions={{ ...defaultNavigationOptions, title: "" }}>
+      <Stack.Screen name={Routes.POST_SCREEN} component={PostScreen} />
+    </Stack.Navigator>
+  );
+};
+
+const ProfileNavigator = () => {
+  const Stack = createStackNavigator();
+  return (
+    <Stack.Navigator screenOptions={{ ...defaultNavigationOptions, title: "Profile" }}>
+      <Stack.Screen name={Routes.PROFILE_SCREEN} component={ProfileScreen} />
     </Stack.Navigator>
   );
 };
@@ -78,13 +104,16 @@ const NotificationNavigator = () => {
 const DashboardTabNavigator = () => {
   const Tab = createBottomTabNavigator();
   return (
-    <Tab.Navigator tabBar={(props: any) => <TabBar {...props} />}>
-      <Tab.Screen name={Routes.FEED_SCREEN} component={FeedScreen} />
-      <Tab.Screen name={Routes.POST_SCREEN} component={PostScreen} />
+    <Tab.Navigator
+      screenOptions={() => ({ headerShown: true })}
+      tabBar={(props: any) => <TabBar {...props} />}
+    >
+      <Tab.Screen name={Routes.FEED_NAVIGATOR} component={FeedNavigator} />
+      <Tab.Screen name={Routes.POST_NAVIGATOR} component={PostNavigator} />
       <Tab.Screen name={Routes.MESSAGE_NAVIGATOR} component={MessageNavigator} />
       <Tab.Screen name={Routes.NOTIFICATION_NAVIGATOR} component={NotificationNavigator} />
       <Tab.Screen name={Routes.FRIENDS_TAB_NAVIGATOR} component={MaterialTopTabs} />
-      <Tab.Screen name={Routes.PROFILE_SCREEN} component={ProfileScreen} />
+      <Tab.Screen name={Routes.PROFILE_NAVIGATOR} component={ProfileNavigator} />
     </Tab.Navigator>
   );
 };
@@ -143,12 +172,7 @@ export const RootNavigator = () => {
 
   return (
     <NavigationContainer theme={DarkTheme}>
-      <Stack.Navigator
-        screenOptions={{
-          headerTransparent: true,
-          headerShown: false,
-        }}
-      >
+      <Stack.Navigator screenOptions={{ headerShown: false }}>
         {isLoggedin ? (
           <Stack.Screen name={Routes.DASHBOARD_TAB_NAVIGATOR} component={DashboardTabNavigator} />
         ) : (

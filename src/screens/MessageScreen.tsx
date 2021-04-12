@@ -10,7 +10,7 @@ import SearchBar from "../components/SearchBar";
 import { Routes } from "../navigation/routes";
 import { IStoreState } from "../store/store";
 import { fetchMessagesRequested } from "../store/actions/MessagesActions";
-import { getMostRecentMessage, getMessages } from "./util";
+import { getMostRecentMessage } from "./util";
 
 interface IPassedProps {
   navigation: any;
@@ -32,7 +32,7 @@ interface ILocalState {
   selectedMessage?: IStringMap<any>;
 }
 
-function MessageScreen(props: IMessageScreenProps) {
+const MessageScreen = (props: IMessageScreenProps) => {
   const [state, setState] = useState<ILocalState>({
     selectedMessage: undefined,
   });
@@ -72,7 +72,7 @@ function MessageScreen(props: IMessageScreenProps) {
     return null;
   };
 
-  function refreshControl() {
+  const refreshControl = () => {
     return (
       <RefreshControl
         refreshing={props.fetchMessagesLoading}
@@ -80,7 +80,7 @@ function MessageScreen(props: IMessageScreenProps) {
         tintColor={Color.white}
       />
     );
-  }
+  };
   return (
     <ScreenContainer>
       <Header
@@ -112,7 +112,7 @@ function MessageScreen(props: IMessageScreenProps) {
       />
     </ScreenContainer>
   );
-}
+};
 
 const mapStateToProps = (state: IStoreState) => {
   return {

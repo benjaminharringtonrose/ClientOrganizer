@@ -38,7 +38,7 @@ function TabBar(props: any) {
 
         const getIcon = () => {
           switch (route.name) {
-            case Routes.FEED_SCREEN:
+            case Routes.FEED_NAVIGATOR:
               return (
                 <Ionicons
                   name={isFocused ? "ios-home" : "ios-home-outline"}
@@ -46,7 +46,7 @@ function TabBar(props: any) {
                   size={20}
                 />
               );
-            case Routes.POST_SCREEN:
+            case Routes.POST_NAVIGATOR:
               return (
                 <Ionicons
                   name={isFocused ? "ios-add-circle" : "ios-add-circle-outline"}
@@ -54,7 +54,7 @@ function TabBar(props: any) {
                   size={20}
                 />
               );
-            case Routes.PROFILE_SCREEN:
+            case Routes.PROFILE_NAVIGATOR:
               return (
                 <Ionicons
                   name={isFocused ? "ios-settings" : "ios-settings-outline"}

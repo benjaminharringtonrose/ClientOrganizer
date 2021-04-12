@@ -4,6 +4,7 @@ import { Ionicons } from "@expo/vector-icons";
 import { Spacing, Color } from "../styles";
 import { NOTIFICATION } from "../api/PushNotifications";
 import { Button } from ".";
+import uuid from "uuid-random";
 
 interface IPostCardProps {
   notificationType?: NOTIFICATION;
@@ -35,7 +36,7 @@ export const FriendRequestCard = (props: IPostCardProps) => {
   return (
     <View style={styles.rootContainer}>
       <View style={{ flexDirection: "row" }}>
-        {!!props.avatar ? (
+        {!!props?.avatar ? (
           <View>
             <Image
               style={{
@@ -46,7 +47,7 @@ export const FriendRequestCard = (props: IPostCardProps) => {
                 marginLeft: Spacing.small,
               }}
               onLoadEnd={onLoadEnd}
-              source={{ uri: props.avatar }}
+              source={{ uri: props?.avatar }}
             />
             {state.imageLoading && (
               <ActivityIndicator
@@ -63,21 +64,23 @@ export const FriendRequestCard = (props: IPostCardProps) => {
         )}
 
         <View style={{ flex: 1 }}>
-          <Text style={styles.name}>{props.name}</Text>
-          <Text style={styles.message}>{props.message}</Text>
+          <Text style={styles.name}>{props?.name}</Text>
+          <Text style={styles.message}>{props?.message}</Text>
         </View>
         <View style={{ marginRight: Spacing.small }}>
-          {!!props.buttons &&
+          {!!props?.buttons &&
             props.buttons.map((button: any) => {
+              const index = uuid();
               return (
                 <Button
+                  key={index}
                   style={{
                     paddingHorizontal: Spacing.large,
                     marginBottom: Spacing.micro,
                     backgroundColor: Color.primary,
                   }}
                   label={button?.label}
-                  onPress={button.onPress}
+                  onPress={button?.onPress}
                 />
               );
             })}

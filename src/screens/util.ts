@@ -4,7 +4,7 @@ import { Linking } from "react-native";
 import { IStringMap } from "./RegisterScreen";
 import { useImperativeHandle } from "react";
 
-export const getDocRef = (): any => {
+export const getCurrentUserDocRef = (): any => {
   return firebase.firestore().collection("users").doc(firebase.auth().currentUser?.uid);
 };
 

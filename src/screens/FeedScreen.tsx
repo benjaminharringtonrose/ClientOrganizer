@@ -28,6 +28,9 @@ type IFeedScreenProps = IPropsFromState & IDispatchFromState & IPassedProps;
 
 function FeedScreen(props: IFeedScreenProps) {
   useEffect(() => {
+    props.navigation.setOptions({
+      title: "Feed",
+    });
     props.dispatchFetchPosts();
     props.dispatchFetchAllUsers();
     const uid = firebase.auth().currentUser?.uid;
@@ -56,7 +59,6 @@ function FeedScreen(props: IFeedScreenProps) {
 
   return (
     <ScreenContainer>
-      <Header title={"Feed"} titleStyle={TextStyles.header} containerStyle={ViewStyles.header} />
       <FlatList
         data={props.posts}
         renderItem={({ item }) => {

@@ -1,8 +1,6 @@
 import React, { useState } from "react";
 import { NOTIFICATION } from "../api/PushNotifications";
-import { IStringMap } from "../screens/RegisterScreen";
 import { View, ActivityIndicator, Image, Text, StyleSheet } from "react-native";
-import { Button } from "../components";
 import { Ionicons } from "@expo/vector-icons";
 import { Spacing, Color } from "../styles";
 import moment from "moment";
@@ -36,7 +34,7 @@ export function NotificationCard(props: INotificationCardProps) {
   return (
     <View style={styles.rootContainer}>
       <View style={{ flexDirection: "row" }}>
-        {props.avatar ? (
+        {!!props?.avatar ? (
           <View>
             <Image
               style={{
@@ -47,7 +45,7 @@ export function NotificationCard(props: INotificationCardProps) {
                 marginLeft: Spacing.small,
               }}
               onLoadEnd={onLoadEnd}
-              source={{ uri: props.avatar }}
+              source={{ uri: props?.avatar }}
             />
             {state.imageLoading && (
               <ActivityIndicator
@@ -64,9 +62,9 @@ export function NotificationCard(props: INotificationCardProps) {
         )}
 
         <View style={{ flex: 1 }}>
-          <Text style={styles.name}>{props.name}</Text>
+          <Text style={styles.name}>{props?.name}</Text>
 
-          <Text style={styles.message}>{props.message}</Text>
+          <Text style={styles.message}>{props?.message}</Text>
           <Text
             style={{
               fontSize: 14,
@@ -74,7 +72,7 @@ export function NotificationCard(props: INotificationCardProps) {
               textAlign: "justify",
             }}
           >
-            {moment(props.timestamp).fromNow()}
+            {moment(props?.timestamp).fromNow()}
           </Text>
         </View>
       </View>

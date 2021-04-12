@@ -32,7 +32,7 @@ export function PostCard(props: IPostCardProps) {
   return (
     <View style={styles.rootContainer}>
       <View style={{ flexDirection: "row" }}>
-        {!!props.avatar && (
+        {!!props?.avatar && (
           <Image
             source={{ uri: props.avatar }}
             style={{
@@ -46,17 +46,17 @@ export function PostCard(props: IPostCardProps) {
         )}
 
         <View style={{ flex: 1 }}>
-          <Text style={styles.name}>{props.name}</Text>
-          <Text style={styles.timestamp}>{moment(props.timestamp).fromNow()}</Text>
+          <Text style={styles.name}>{props?.name}</Text>
+          <Text style={styles.timestamp}>{moment(props?.timestamp).fromNow()}</Text>
         </View>
         <TouchableOpacity style={{ marginRight: Spacing.small }} onPress={onMorePress}>
           <Ionicons name="ellipsis-horizontal" size={24} color={Color.white} />
         </TouchableOpacity>
       </View>
-      {!!props.image && (
-        <Image source={{ uri: props.image }} style={styles.postImage} resizeMode="cover" />
+      {!!props?.image && (
+        <Image source={{ uri: props?.image }} style={styles.postImage} resizeMode="cover" />
       )}
-      {!!props.text && <Text style={styles.post}>{props.text}</Text>}
+      {!!props?.text && <Text style={styles.post}>{props?.text}</Text>}
       <View style={{ flexDirection: "row", marginLeft: Spacing.small }}>
         <TouchableOpacity onPress={onLikePress}>
           <Ionicons

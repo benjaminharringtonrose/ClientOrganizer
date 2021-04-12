@@ -16,6 +16,7 @@ import { mapNotifications } from "./util";
 import { NotificationCard } from "../components/NotificationCard";
 import firebase from "firebase";
 import { NOTIFICATION } from "../api/PushNotifications";
+import { usePrevious } from "../hooks/usePrevious";
 
 interface IPassedProps {
   navigation: any;
@@ -59,14 +60,25 @@ function NotificationScreen(props: IMessageScreenProps) {
   });
 
   useEffect(() => {
-    firebase
+    var unsubscribe = firebase
       .firestore()
       .collection("notifications")
       .doc(props.uid)
       .onSnapshot((doc) => {
         setState({ ...state, mappedNotifications: mapNotifications(doc.data()) });
       });
+    return function cleanup() {
+      unsubscribe();
+    };
   }, []);
+
+  const prevState = usePrevious(state);
+
+  useEffect(() => {
+    if (prevState && prevState.mappedNotifications !== state.mappedNotifications) {
+      console.log("updated!!!");
+    }
+  }, [state.mappedNotifications]);
 
   const renderNotification = ({ item }: any) => {
     const onAcceptFriendRequest = () => {
@@ -87,26 +99,24 @@ function NotificationScreen(props: IMessageScreenProps) {
     if (item) {
       if (item.notificationType === NOTIFICATION.FRIEND_REQUEST) {
         return (
-          <TouchableOpacity>
-            <FriendRequestCard
-              key={item.uid}
-              notificationType={item.notificationType}
-              avatar={item.avatar}
-              name={`${item.firstName} ${item.lastName}`}
-              message={item.message}
-              timestamp={item.timestamp}
-              buttons={[
-                {
-                  label: "Accept",
-                  onPress: onAcceptFriendRequest,
-                },
-                {
-                  label: "Decline",
-                  onPress: onDeclineFriendRequest,
-                },
-              ]}
-            />
-          </TouchableOpacity>
+          <FriendRequestCard
+            key={item.uid}
+            notificationType={item.notificationType}
+            avatar={item.avatar}
+            name={`${item.firstName} ${item.lastName}`}
+            message={item.message}
+            timestamp={item.timestamp}
+            buttons={[
+              {
+                label: "Accept",
+                onPress: onAcceptFriendRequest,
+              },
+              {
+                label: "Decline",
+                onPress: onDeclineFriendRequest,
+              },
+            ]}
+          />
         );
       } else if (item.notificationType === NOTIFICATION.GENERAL) {
         return (

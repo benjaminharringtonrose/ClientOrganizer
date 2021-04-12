@@ -2,7 +2,7 @@ import firebase from "firebase";
 import { call, put } from "redux-saga/effects";
 import * as Notifications from "expo-notifications";
 import * as Permissions from "expo-permissions";
-import { getDocRef } from "../../screens/util";
+import { getCurrentUserDocRef } from "../../screens/util";
 import {
   loginUserSucceeded,
   loginUserFailed,
@@ -45,7 +45,7 @@ export function* registerUserSaga(action: any) {
     const { firstName, lastName, email, password } = action.payload;
     const auth = firebase.auth();
     const data = yield call([auth, auth.createUserWithEmailAndPassword], email, password);
-    const db = getDocRef();
+    const db = getCurrentUserDocRef();
     yield db.set({
       firstName,
       lastName,
@@ -92,7 +92,7 @@ export const getAndSetDevicePushToken = () => {
       return Notifications.getExpoPushTokenAsync();
     })
     .then((token) => {
-      const db = getDocRef();
+      const db = getCurrentUserDocRef();
       db.set(
         {
           pushToken: token,
