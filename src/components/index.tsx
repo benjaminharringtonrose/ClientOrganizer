@@ -13,4 +13,3 @@ export * from "./CommentModal";
 export * from "./BottomModal";
 export * from "./MessagePreviewCard";
 export * from "./UserCard";
-export * from "./FriendRequestCard";

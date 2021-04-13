@@ -1,7 +1,7 @@
 import firebase from "firebase";
 import { put } from "redux-saga/effects";
 import { fetchPostsSucceeded, fetchPostsFailed } from "../actions/FeedActions";
-import { uploadPhotoAsync } from ".";
+import { uploadPhotoAsync } from "./UserSagas";
 
 // FETCH POSTS - SAGA
 

@@ -101,7 +101,7 @@ export const getAndSetDevicePushToken = () => {
       );
     })
     .catch((error) => {
-      console.warn("Error while registering device push token", error);
+      console.log("Error while registering device push token", error);
     });
 };
 
