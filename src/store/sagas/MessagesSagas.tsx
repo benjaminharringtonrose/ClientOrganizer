@@ -112,7 +112,7 @@ export function* fetchMessagesSaga() {
             }
           }
         } else {
-          console.warn("No such document!");
+          // doc.data() will be undefined in this case
         }
       })
       .catch((error) => {

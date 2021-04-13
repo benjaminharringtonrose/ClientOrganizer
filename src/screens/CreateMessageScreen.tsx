@@ -10,7 +10,7 @@ import { IStoreState } from "../store/store";
 import { IStringMap } from "./RegisterScreen";
 import { sendMessageRequested, fetchMessagesRequested } from "../store/actions/MessagesActions";
 import { FlatList } from "react-native-gesture-handler";
-import { mapFriends } from "./util";
+import { mapFriends, getFriendsAsync } from "./util";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { Routes } from "../navigation/routes";
 import { CreateMessageParamList } from "../navigation/navigation";
@@ -23,7 +23,7 @@ interface IPropsFromState {
   user?: any;
   sendMessageLoading: boolean;
   sendMessageError?: any;
-  friends?: IStringMap<any>;
+  friendsList?: string[];
 }
 
 interface ILocalState {
@@ -73,10 +73,15 @@ function CreateMessageScreen(props: CreateMessageScreenProps) {
         />
       ),
     });
-    setState({
-      ...state,
-      mappedFriends: mapFriends(props?.friends),
+    console.log("props.friendsList", props.friendsList);
+    getFriendsAsync(props.friendsList).then((friends) => {
+      console.log("friends", friends);
+      setState({ ...state, mappedFriends: mapFriends(friends) });
     });
+    // setState({
+    //   ...state,
+    //   mappedFriends: mapFriends(props?.friendsList),
+    // });
   }, []);
 
   const pickImage = async () => {
@@ -91,29 +96,6 @@ function CreateMessageScreen(props: CreateMessageScreenProps) {
         image: result.uri,
       });
     }
-  };
-
-  const renderFriend = ({ item }: any) => {
-    if (item) {
-      return (
-        <TouchableOpacity
-          onPress={() =>
-            setState({
-              ...state,
-              selectedFriend: item,
-              friendInput: `${item.friendFirstName} ${item.friendLastName}`,
-              showModal: false,
-            })
-          }
-        >
-          <UserCard
-            avatar={item.friendAvatar}
-            name={`${item.friendFirstName} ${item.friendLastName}`}
-          />
-        </TouchableOpacity>
-      );
-    }
-    return null;
   };
 
   const onSendMessagePress = () => {
@@ -228,7 +210,25 @@ function CreateMessageScreen(props: CreateMessageScreenProps) {
         onBackdropPress={() => setState({ ...state, showModal: false })}
       >
         <SafeAreaView style={{ minHeight: 100, backgroundColor: Color.black }}>
-          <FlatList data={state.mappedFriends} renderItem={renderFriend} />
+          <FlatList
+            data={state.mappedFriends}
+            renderItem={({ item }) => {
+              return (
+                <TouchableOpacity
+                  onPress={() =>
+                    setState({
+                      ...state,
+                      selectedFriend: item,
+                      friendInput: `${item.firstName} ${item.lastName}`,
+                      showModal: false,
+                    })
+                  }
+                >
+                  <UserCard avatar={item.avatar} name={`${item.firstName} ${item.lastName}`} />
+                </TouchableOpacity>
+              );
+            }}
+          />
         </SafeAreaView>
       </BottomModal>
     </ScreenContainer>
@@ -240,7 +240,7 @@ const mapStateToProps = (state: IStoreState) => {
     user: state.user?.user,
     sendMessageLoading: state.messages.sendMessageLoading,
     sendMessageError: state.messages?.fetchMessagesError,
-    friends: state.user?.user?.friends,
+    friendsList: state.user?.user?.friendsList,
   };
 };
 

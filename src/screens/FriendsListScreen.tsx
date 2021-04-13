@@ -45,37 +45,14 @@ function FriendsListScreen(props: IFindFriendsProps) {
   }, []);
 
   useEffect(() => {
-    getFriendsAsync(props.friendsList).then((friends) => {
-      console.log("friends", friends);
-      setState({ ...state, mappedFriends: mapFriends(friends) });
-    });
+    getFriendsAsync(props.friendsList)
+      .then((friends) => {
+        console.log("friends", friends);
+        setState({ ...state, mappedFriends: mapFriends(friends) });
+      })
+      .then(() => {});
   }, [props.friendsList]);
 
-  const renderUser = ({ item }: any) => {
-    if (item) {
-      return (
-        <UserCard
-          key={item.uid}
-          avatar={item.avatar}
-          name={`${item.firstName} ${item.lastName}`}
-          icon={"ellipsis-horizontal"}
-          onPress={() =>
-            setState({
-              ...state,
-              showModal: true,
-              selectedFriend: {
-                id: item.uid,
-                firstName: item.firstName,
-                lastName: item.lastName,
-                avatar: item.avatar,
-              },
-            })
-          }
-        />
-      );
-    }
-    return null;
-  };
   const modalHeight = Dimensions.get("screen").height / 4;
   console.log("mappedFriends", state.mappedFriends);
   return (
@@ -90,6 +67,8 @@ function FriendsListScreen(props: IFindFriendsProps) {
       ) : null}
       <FlatList
         data={state.mappedFriends}
+        keyExtractor={(item, index) => index.toString()}
+        showsVerticalScrollIndicator={false}
         renderItem={({ item }) => {
           return (
             <UserCard
@@ -112,8 +91,6 @@ function FriendsListScreen(props: IFindFriendsProps) {
             />
           );
         }}
-        keyExtractor={(item, index) => index.toString()}
-        showsVerticalScrollIndicator={false}
       />
       <BottomModal
         title={"Details"}
@@ -122,12 +99,12 @@ function FriendsListScreen(props: IFindFriendsProps) {
       >
         <View style={{ backgroundColor: Color.black, minHeight: modalHeight }}>
           <Card>
-            {state.selectedFriend && (
+            {!!state.selectedFriend && (
               <CardSection>
                 <UserCard
-                  avatar={state.selectedFriend.avatar}
-                  name={`${state.selectedFriend.firstName} ${state.selectedFriend.lastName}`}
-                  bio={state.selectedFriend.bio}
+                  avatar={state?.selectedFriend?.avatar}
+                  name={`${state?.selectedFriend?.firstName} ${state?.selectedFriend?.lastName}`}
+                  bio={state?.selectedFriend?.bio}
                   icon={"ellipsis-horizontal"}
                 />
               </CardSection>

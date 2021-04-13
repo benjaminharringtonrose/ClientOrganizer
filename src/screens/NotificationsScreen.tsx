@@ -1,14 +1,8 @@
 import React, { useState, useEffect } from "react";
-import {
-  View,
-  Text,
-  StyleSheet,
-  RefreshControl,
-  TouchableOpacity,
-  SectionList,
-} from "react-native";
+import { View, Text, StyleSheet, RefreshControl, SectionList } from "react-native";
 import { connect } from "react-redux";
-import { ScreenContainer, Header, FriendRequestCard } from "../components";
+import { ScreenContainer } from "../components";
+import { FriendRequestCard } from "../components/FriendRequestCard";
 import { Color, Spacing } from "../styles";
 import { IStringMap } from "./RegisterScreen";
 import { IError, FETCH_USER, ADD_FRIEND, FETCH_NOTIFICATIONS } from "../store/types";
