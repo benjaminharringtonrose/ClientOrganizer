@@ -34,10 +34,13 @@ export const fetchPostsFailed = (error: IError): IFetchPostsFailed => ({
   payload: error,
 });
 
-export interface IAddPostRequested extends Action<ADD_POST.REQUESTED> {}
+export interface IAddPostRequested extends Action<ADD_POST.REQUESTED> {
+  payload: any;
+}
 
-export const addPostRequested = (): IAddPostRequested => ({
+export const addPostRequested = (payload: any): IAddPostRequested => ({
   type: ADD_POST.REQUESTED,
+  payload,
 });
 
 export interface IAddPostSucceeded extends Action<ADD_POST.SUCCEEDED> {}

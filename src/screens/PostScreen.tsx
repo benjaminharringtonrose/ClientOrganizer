@@ -13,9 +13,10 @@ import { connect } from "react-redux";
 import { Routes } from "../navigation/routes";
 import { Color, Spacing } from "../styles";
 import { ScreenContainer, Header, ButtonText, ButtonBack } from "../components";
-import { ADD_POST, IError } from "../store/types";
+import { IError } from "../store/types";
 import { usePrevious } from "../hooks/usePrevious";
 import { IStoreState } from "../store/store";
+import { addPostRequested } from "../store/actions";
 
 interface IPassedProps {
   navigation: any;
@@ -164,13 +165,13 @@ const mapStateToProps = (state: IStoreState) => {
     firstName: state.user?.user?.firstName,
     lastName: state.user?.user?.lastName,
     email: state.user?.user?.email,
-    addPostLoading: state.user?.addPostLoading,
-    addPostError: state.user?.addPostError,
+    addPostLoading: state.feed.addPostLoading,
+    addPostError: state.feed?.addPostError,
   };
 };
 
 const mapDispatchToProps = (dispatch: any) => ({
-  dispatchAddPost: (object: any) => dispatch({ type: ADD_POST.REQUESTED, payload: object }),
+  dispatchAddPost: (payload: any) => dispatch(addPostRequested(payload)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(PostScreen);

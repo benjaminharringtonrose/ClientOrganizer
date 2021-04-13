@@ -99,6 +99,7 @@ function RegisterScreen(props: RegisterScreenProps) {
             placeholder="John"
             secureTextEntry={false}
             autoCapitalize={"words"}
+            returnKeyType={"next"}
             onChangeText={(firstName: string) => setState({ ...state, firstName })}
             value={firstName}
             style={{ marginBottom: Spacing.small }}
@@ -110,6 +111,7 @@ function RegisterScreen(props: RegisterScreenProps) {
             placeholder="Smith"
             secureTextEntry={false}
             autoCapitalize={"words"}
+            returnKeyType={"next"}
             onChangeText={(lastName: string) => setState({ ...state, lastName })}
             value={lastName}
             style={{ marginBottom: Spacing.small }}
@@ -120,6 +122,7 @@ function RegisterScreen(props: RegisterScreenProps) {
             label="Email"
             placeholder="email@gmail.com"
             secureTextEntry={false}
+            returnKeyType={"next"}
             onChangeText={(email: string) => setState({ ...state, email })}
             value={email}
             style={{ marginBottom: Spacing.small }}
@@ -130,6 +133,8 @@ function RegisterScreen(props: RegisterScreenProps) {
             secureTextEntry
             label="Password"
             placeholder="password"
+            returnKeyType={"go"}
+            onSubmitEditting={onRegisterPress}
             onChangeText={(password: string) => setState({ ...state, password })}
             value={password}
             style={{ marginBottom: Spacing.small }}
