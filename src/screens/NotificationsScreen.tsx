@@ -54,32 +54,7 @@ interface ILocalState {
 }
 
 function NotificationScreen(props: IMessageScreenProps) {
-  // const [state, setState] = useState<ILocalState>({
-  //   mappedNotifications: undefined,
-  // });
-
-  // useEffect(() => {
-  //   var unsubscribe = firebase
-  //     .firestore()
-  //     .collection("notifications")
-  //     .doc(props.uid)
-  //     .onSnapshot((doc) => {
-  //       setState({ ...state, mappedNotifications: mapNotifications(doc.data()) });
-  //     });
-  //   return function cleanup() {
-  //     unsubscribe();
-  //   };
-  // }, []);
-
-  // const prevState = usePrevious(state);
-
-  // useEffect(() => {
-  //   if (prevState && !isEqual(prevState?.mappedNotifications, state?.mappedNotifications)) {
-  //     props.dispatchSetBadge(true);
-  //   }
-  // }, [state.mappedNotifications]);
-
-  const notifications = useNotifications(props.dispatchSetBadge(true));
+  const notifications = useNotifications(() => props.dispatchSetBadge(true));
 
   const renderNotification = ({ item }: any) => {
     const onAcceptFriendRequest = () => {
@@ -151,7 +126,7 @@ function NotificationScreen(props: IMessageScreenProps) {
   const notificationData = [
     {
       title: "Friend Requests",
-      data: state?.mappedNotifications || [],
+      data: notifications || [],
     },
   ];
 
@@ -159,7 +134,7 @@ function NotificationScreen(props: IMessageScreenProps) {
 
   return (
     <ScreenContainer>
-      {!!state?.mappedNotifications?.length ? (
+      {!!notifications?.length ? (
         <SectionList
           sections={notificationData}
           keyExtractor={(item, index) => item + index}

@@ -8,7 +8,9 @@ export const useNotifications = (dispatchSetBadge: (bool: boolean) => void) => {
   const [state, setState] = useState<any>({
     mappedNotifications: undefined,
   });
+
   const uid = firebase.auth().currentUser?.uid;
+
   useEffect(() => {
     var unsubscribe = firebase
       .firestore()
@@ -26,7 +28,12 @@ export const useNotifications = (dispatchSetBadge: (bool: boolean) => void) => {
 
   useEffect(() => {
     if (prevState && !isEqual(prevState?.mappedNotifications, state?.mappedNotifications)) {
+      console.log("prevState: ", prevState);
+      console.log("prevState?.mappedNotifications: ", prevState?.mappedNotifications);
+      console.log("state?.mappedNotifications", state?.mappedNotifications);
       dispatchSetBadge(true);
     }
   }, [state.mappedNotifications]);
+
+  return state.mappedNotifications;
 };
