@@ -12,7 +12,6 @@ import {
 import { IStoreState } from "../store";
 import { publishToast } from "../actions";
 import { NOTIFICATION_TYPE } from "../types";
-import { Firebase } from "../../database/Firebase";
 
 export function* sendMessageSaga(action: any) {
   try {
@@ -89,8 +88,7 @@ export function* sendMessageSaga(action: any) {
 
 export function* fetchMessagesSaga() {
   try {
-    const state: IStoreState = yield select();
-    const uid = state.user?.user?.uid;
+    const uid: string | undefined = yield firebase.auth().currentUser?.uid;
     const messages: any[] = [];
     yield firebase
       .firestore()
@@ -130,20 +128,30 @@ export function* fetchMessagesSaga() {
 
 export function* fetchThreadsSaga() {
   try {
-    const state: IStoreState = yield select();
-    const threads: any = [];
+    let threads: firebase.firestore.DocumentData | undefined;
+    const uid: string | undefined = yield firebase.auth().currentUser?.uid;
     yield firebase
       .firestore()
       .collection("messages")
-      .doc(state.user?.uid)
+      .doc(uid)
       .get()
-      .then((thread) => {
-        if (thread.exists) {
-          threads.push(thread);
+      .then((doc) => {
+        if (doc.exists) {
+          threads = doc.data();
         }
+      })
+      .catch((error) => {
+        console.log(error);
       });
-    yield put(fetchThreadsSucceeded(threads));
+    let finalThreadsStructure: any = [];
+    if (threads) {
+      for (const [key, value] of Object.entries(threads)) {
+        finalThreadsStructure = finalThreadsStructure.concat({ ...value, id: key });
+      }
+    }
+    yield put(fetchThreadsSucceeded(finalThreadsStructure));
   } catch (error) {
+    console.warn(error);
     yield put(fetchThreadsFailed({ error } as any));
   }
 }

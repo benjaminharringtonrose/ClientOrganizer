@@ -1,11 +1,11 @@
 import { createSelector } from "reselect";
 import { IStoreState } from "./store";
-import { NOTIFICATION } from "../api/PushNotifications";
+import firebase from "firebase";
 
-const messagesSelector = (state: IStoreState) => state.messages.messages;
+const uid = firebase.auth().currentUser?.uid;
 
-const notificationsSelector = (state: IStoreState) => state.notifications.notifications;
-
-export const messageThreadSelector = createSelector(notificationsSelector, (item) => {
-  item?.notificationType === NOTIFICATION.FRIEND_REQUEST;
-});
+function getThread(state: IStoreState) {
+  return state.messages.threads?.filter((thread) => {
+    return thread.threadId === uid;
+  });
+}

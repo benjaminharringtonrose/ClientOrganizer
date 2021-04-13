@@ -95,6 +95,10 @@ export const getMessages = (messages?: IStringMap<any>) => {
 };
 
 export const getMostRecentMessage = (messages: IStringMap<any>) => {
+  console.log("messages", messages);
+  if (!messages) {
+    return;
+  }
   const acc: any = [];
   for (const [key, item] of Object.entries(messages)) {
     acc.push({

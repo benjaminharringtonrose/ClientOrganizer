@@ -9,20 +9,23 @@ import { Entypo } from "@expo/vector-icons";
 import SearchBar from "../components/SearchBar";
 import { Routes } from "../navigation/routes";
 import { IStoreState } from "../store/store";
-import { fetchMessagesRequested } from "../store/actions/MessagesActions";
+import { fetchMessagesRequested, fetchThreadsRequested } from "../store/actions/MessagesActions";
 import { getMostRecentMessage } from "./util";
+import { usePrevious } from "../hooks/usePrevious";
+import { isEqual } from "lodash";
 
 interface IPassedProps {
   navigation: any;
 }
 
 interface IPropsFromState {
-  messages?: IStringMap<any>[];
-  fetchMessagesLoading: boolean;
-  fetchMessagesError?: IError;
+  threads?: IStringMap<any>[];
+  fetchThreadsLoading: boolean;
+  fetchThreadsError?: IError;
 }
 
 interface IDispatchFromState {
+  dispatchFetchThreads: () => void;
   dispatchFetchMessages: () => void;
 }
 
@@ -30,32 +33,42 @@ type IMessageScreenProps = IPassedProps & IPropsFromState & IDispatchFromState;
 
 interface ILocalState {
   selectedMessage?: IStringMap<any>;
+  threads: any;
 }
 
 const MessageScreen = (props: IMessageScreenProps) => {
   const [state, setState] = useState<ILocalState>({
     selectedMessage: undefined,
+    threads: undefined,
   });
 
   useEffect(() => {
+    props.dispatchFetchThreads();
     props.dispatchFetchMessages();
   }, []);
 
+  const prevThreads = usePrevious(props?.threads);
+
+  useEffect(() => {
+    if (!isEqual(prevThreads, props?.threads)) {
+      setState({ ...state, threads: props?.threads });
+    }
+  }, [props.threads]);
+
   const renderMessagePreview = ({ item }: any) => {
-    console.log("item ==>", item);
     const onMessagePress = () => {
       setState({
         ...state,
         selectedMessage: {
           uid: item?.uid,
-          firstName: item.firstName,
-          lastName: item.lastName,
+          firstName: item.threadFirstName,
+          lastName: item.threadLastName,
           email: item.email,
           avatar: item.avatar,
         },
       });
       props.navigation.navigate(Routes.MESSAGE_DETAILS_SCREEN, {
-        threadId: item.senderId,
+        threadId: item.id,
       });
     };
     if (item) {
@@ -76,12 +89,15 @@ const MessageScreen = (props: IMessageScreenProps) => {
   const refreshControl = () => {
     return (
       <RefreshControl
-        refreshing={props.fetchMessagesLoading}
-        onRefresh={() => props.dispatchFetchMessages()}
+        refreshing={props.fetchThreadsLoading}
+        onRefresh={() => props.dispatchFetchThreads()}
         tintColor={Color.white}
       />
     );
   };
+
+  console.log("threads: ", state.threads);
+
   return (
     <ScreenContainer>
       <Header
@@ -104,13 +120,13 @@ const MessageScreen = (props: IMessageScreenProps) => {
       <View style={{ margin: Spacing.med }}>
         <SearchBar value={""} onChangeText={() => {}} />
       </View>
-      {props.messages?.length === 0 ? (
+      {state.threads?.length === 0 ? (
         <View style={styles.emptyMessagesContainer}>
           <Text style={{ color: Color.greyMed, fontSize: 16 }}>{"You have no messages"}</Text>
         </View>
       ) : null}
       <FlatList
-        data={props.messages || []}
+        data={state.threads || []}
         renderItem={renderMessagePreview}
         keyExtractor={(item, index) => String(index)}
         showsVerticalScrollIndicator={false}
@@ -122,13 +138,14 @@ const MessageScreen = (props: IMessageScreenProps) => {
 
 const mapStateToProps = (state: IStoreState) => {
   return {
-    messages: state.messages?.messages,
-    fetchMessagesLoading: state.messages?.fetchMessagesLoading,
-    fetchMessagesError: state.messages?.fetchMessagesError,
+    threads: state.messages?.threads,
+    fetchThreadsLoading: state.messages?.fetchThreadsLoading,
+    fetchThreadsError: state.messages?.fetchThreadsError,
   };
 };
 
 const mapDispatchToProps = (dispatch: any) => ({
+  dispatchFetchThreads: () => dispatch(fetchThreadsRequested()),
   dispatchFetchMessages: () => dispatch(fetchMessagesRequested()),
 });
 

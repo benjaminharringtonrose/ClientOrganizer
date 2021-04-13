@@ -21,6 +21,7 @@ interface IPassedProps {
 interface IPropsFromState {
   uid: string;
   messages?: IStringMap<any>[];
+  threads?: any;
 }
 
 interface IDispatchFromState {
@@ -56,10 +57,8 @@ function MessageDetailsScreen(props: MessageDetailsProps) {
     const messages: any = [];
     if (props.messages) {
       for (const [key, thread] of Object.entries(props.messages)) {
-        if (props.route.params?.threadId === thread.threadId) {
-          for (const [key, message] of Object.entries(thread.messages)) {
-            messages.push(message);
-          }
+        for (const [key, message] of Object.entries(thread.messages)) {
+          messages.push(message);
         }
       }
     }
@@ -77,23 +76,24 @@ function MessageDetailsScreen(props: MessageDetailsProps) {
     }
   };
 
-  const getThreadData = (senderId: string, messages?: IStringMap<any>) => {
+  const getThreadData = (threadId: string, messages?: IStringMap<any>) => {
     if (!messages) {
       console.warn("No messages");
       return;
     }
     for (const [key, value] of Object.entries(messages)) {
-      if (value.senderId === senderId) {
+      if (value.id === threadId) {
         return value;
       }
     }
   };
 
   const onSendMessagePress = () => {
-    const threadData = getThreadData(props.route.params?.senderId, props.messages);
+    const threadData = getThreadData(props.route.params?.threadId, props.threads);
+    console.log("threadData", threadData);
     props.dispatchSendMessage({
       senderId: props.uid,
-      recipientId: props.route.params?.senderId,
+      recipientId: props.route.params?.threadId,
       message: state.messageInput,
       threadAvatar: threadData.threadAvatar,
       threadFirstName: threadData.threadFirstName,
@@ -236,6 +236,7 @@ const mapStateToProps = (state: IStoreState) => {
   return {
     uid: state?.user?.user?.uid,
     messages: state.messages?.messages,
+    threads: state.messages?.threads,
   };
 };
 
