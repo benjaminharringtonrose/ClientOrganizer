@@ -103,6 +103,11 @@ const MessageScreen = (props: IMessageScreenProps) => {
       <View style={{ margin: Spacing.med }}>
         <SearchBar value={""} onChangeText={() => {}} />
       </View>
+      {props.messages?.length === 0 ? (
+        <View style={styles.emptyMessagesContainer}>
+          <Text style={{ color: Color.greyMed, fontSize: 16 }}>{"You have no messages"}</Text>
+        </View>
+      ) : null}
       <FlatList
         data={props.messages || []}
         renderItem={renderMessagePreview}
@@ -146,5 +151,12 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: "500",
     color: Color.white,
+  },
+  emptyMessagesContainer: {
+    paddingVertical: Spacing.small,
+    alignItems: "center",
+    borderWidth: 1,
+    borderColor: Color.darkThemeGreyMed,
+    marginHorizontal: Spacing.med,
   },
 });

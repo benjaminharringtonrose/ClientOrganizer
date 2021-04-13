@@ -96,15 +96,13 @@ export function* deleteFriendSaga(action: any) {
     const { id } = action.payload;
     const uid = yield firebase.auth().currentUser?.uid;
     const collectionRef = firebase.firestore().collection("users");
-    yield collectionRef.doc(uid).set(
-      {
-        friends: {
-          [id!]: firebase.firestore.FieldValue.delete(),
-        },
-      },
-      { merge: true }
-    );
+
+    yield collectionRef.doc(uid).update({
+      friendsList: firebase.firestore.FieldValue.arrayRemove(id),
+    });
+
     yield put(deleteFriendSucceeded());
+
     yield put(fetchUserRequested(uid));
   } catch (error) {
     yield put(deleteFriendFailed(error));
@@ -157,7 +155,7 @@ export function* sendFriendRequest(action: any) {
       },
       { merge: true }
     );
-    yield console.log("theirPushToken: ", theirPushToken);
+
     yield sendPushNotification({
       expoPushToken: theirPushToken,
       title: `Friend request from ${firstName} ${lastName}`,

@@ -125,7 +125,7 @@ export const getFriendsAsync = async (friends?: string[]) => {
               uid: user.uid,
               firstName: user.firstName,
               lastName: user.lastName,
-              pushToken: user.pushToken.data,
+              pushToken: user?.pushToken?.data || "",
               avatar: user.avatar,
             };
             friendsData.push(publicUserData);

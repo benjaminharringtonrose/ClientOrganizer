@@ -118,7 +118,7 @@ function FindFriendsScreen(props: IFindFriendsProps) {
       <FlatList
         data={props.users}
         renderItem={renderUser}
-        keyExtractor={(index) => String(index)}
+        keyExtractor={(item) => item.id}
         showsVerticalScrollIndicator={false}
         refreshControl={refreshControl()}
       />

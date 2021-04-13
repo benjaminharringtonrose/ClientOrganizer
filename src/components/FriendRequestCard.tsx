@@ -69,7 +69,7 @@ export const FriendRequestCard = (props: IPostCardProps) => {
         </View>
         <View style={{ marginRight: Spacing.small }}>
           {!!props?.buttons &&
-            props.buttons.map((button: any) => {
+            props?.buttons?.map((button: any) => {
               const index = uuid();
               return (
                 <Button

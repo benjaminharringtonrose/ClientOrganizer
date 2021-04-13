@@ -8,6 +8,7 @@ import { mapFriends, getFriendsAsync } from "./util";
 import { IStringMap } from "./RegisterScreen";
 import { BottomModal } from "../components/BottomModal";
 import { DELETE_FRIEND } from "../store/types";
+import uuid from "uuid-random";
 
 interface IPassedProps {
   navigation: any;
@@ -31,7 +32,7 @@ interface ILocalState {
 
 function FriendsListScreen(props: IFindFriendsProps) {
   const [state, setState] = useState<ILocalState>({
-    mappedFriends: undefined,
+    mappedFriends: [],
     showModal: false,
     selectedFriend: undefined,
   });
@@ -43,12 +44,12 @@ function FriendsListScreen(props: IFindFriendsProps) {
     });
   }, []);
 
-  // useEffect(() => {
-  //   getFriendsAsync(props.friendsList).then((friends) => {
-  //     console.log("friends", friends);
-  //     setState({ ...state, mappedFriends: mapFriends(friends) });
-  //   });
-  // }, [props.friendsList]);
+  useEffect(() => {
+    getFriendsAsync(props.friendsList).then((friends) => {
+      console.log("friends", friends);
+      setState({ ...state, mappedFriends: mapFriends(friends) });
+    });
+  }, [props.friendsList]);
 
   const renderUser = ({ item }: any) => {
     if (item) {
@@ -82,10 +83,36 @@ function FriendsListScreen(props: IFindFriendsProps) {
       <View style={{ paddingLeft: Spacing.large, paddingVertical: Spacing.med }}>
         <Text style={{ color: Color.white, fontSize: 40 }}>{"Friends List"}</Text>
       </View>
+      {state.mappedFriends?.length === 0 ? (
+        <View style={styles.emptyMessagesContainer}>
+          <Text style={{ color: Color.greyMed, fontSize: 16 }}>{"You have no friends"}</Text>
+        </View>
+      ) : null}
       <FlatList
         data={state.mappedFriends}
-        renderItem={renderUser}
-        keyExtractor={(item, index) => String(index)}
+        renderItem={({ item }) => {
+          return (
+            <UserCard
+              key={item.id}
+              avatar={item.avatar}
+              name={`${item.firstName} ${item.lastName}`}
+              icon={"ellipsis-horizontal"}
+              onPress={() =>
+                setState({
+                  ...state,
+                  showModal: true,
+                  selectedFriend: {
+                    id: item.uid,
+                    firstName: item.firstName,
+                    lastName: item.lastName,
+                    avatar: item.avatar,
+                  },
+                })
+              }
+            />
+          );
+        }}
+        keyExtractor={(item, index) => index.toString()}
         showsVerticalScrollIndicator={false}
       />
       <BottomModal
@@ -136,3 +163,13 @@ const mapDispatchToProps = (dispatch: any) => ({
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(FriendsListScreen);
+
+const styles = StyleSheet.create({
+  emptyMessagesContainer: {
+    paddingVertical: Spacing.small,
+    alignItems: "center",
+    borderWidth: 1,
+    borderColor: Color.darkThemeGreyMed,
+    marginHorizontal: Spacing.med,
+  },
+});

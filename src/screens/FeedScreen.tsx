@@ -1,10 +1,10 @@
 import React, { useEffect } from "react";
-import { FlatList, RefreshControl } from "react-native";
+import { FlatList, RefreshControl, View, StyleSheet, Text } from "react-native";
 import firebase from "firebase";
 import { connect } from "react-redux";
 import { FETCH_POSTS, FETCH_USER, FETCH_ALL_USERS, IError } from "../store/types";
-import { Header, ScreenContainer, PostCard } from "../components";
-import { Color, TextStyles, ViewStyles } from "../styles";
+import { ScreenContainer, PostCard } from "../components";
+import { Color, Spacing } from "../styles";
 import { IStoreState } from "../store/store";
 import { getAndSetDevicePushToken } from "../store/sagas";
 
@@ -59,6 +59,11 @@ function FeedScreen(props: IFeedScreenProps) {
 
   return (
     <ScreenContainer>
+      {props.posts?.length === 0 ? (
+        <View style={styles.emptyMessagesContainer}>
+          <Text style={{ color: Color.greyMed, fontSize: 16 }}>{"Your posts are empty"}</Text>
+        </View>
+      ) : null}
       <FlatList
         data={props.posts}
         renderItem={({ item }) => {
@@ -98,3 +103,14 @@ const mapDispatchToProps = (dispatch: any) => ({
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(FeedScreen);
+
+const styles = StyleSheet.create({
+  emptyMessagesContainer: {
+    marginTop: Spacing.xxlarge,
+    paddingVertical: Spacing.small,
+    alignItems: "center",
+    borderWidth: 1,
+    borderColor: Color.darkThemeGreyMed,
+    marginHorizontal: Spacing.med,
+  },
+});

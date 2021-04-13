@@ -75,7 +75,7 @@ function NotificationScreen(props: IMessageScreenProps) {
   const prevState = usePrevious(state);
 
   useEffect(() => {
-    if (prevState && prevState.mappedNotifications !== state.mappedNotifications) {
+    if (prevState && prevState?.mappedNotifications !== state?.mappedNotifications) {
       console.log("updated!!!");
     }
   }, [state.mappedNotifications]);
@@ -155,15 +155,21 @@ function NotificationScreen(props: IMessageScreenProps) {
 
   return (
     <ScreenContainer>
-      <SectionList
-        sections={notificationData}
-        keyExtractor={(item, index) => item + index}
-        renderItem={renderNotification}
-        renderSectionHeader={({ section: { title } }) => (
-          <Text style={styles.sectionHeaderTitle}>{title}</Text>
-        )}
-        refreshControl={refreshControl()}
-      />
+      {!!state?.mappedNotifications?.length ? (
+        <SectionList
+          sections={notificationData}
+          keyExtractor={(item, index) => item + index}
+          renderItem={renderNotification}
+          renderSectionHeader={({ section: { title } }) => (
+            <Text style={styles.sectionHeaderTitle}>{title}</Text>
+          )}
+          refreshControl={refreshControl()}
+        />
+      ) : (
+        <View style={styles.emptyMessagesContainer}>
+          <Text style={{ color: Color.greyMed, fontSize: 16 }}>{"You have no notifications"}</Text>
+        </View>
+      )}
     </ScreenContainer>
   );
 }
@@ -229,5 +235,13 @@ const styles = StyleSheet.create({
     fontWeight: "500",
     color: Color.greyMed,
     marginLeft: Spacing.large,
+  },
+  emptyMessagesContainer: {
+    marginTop: Spacing.large,
+    paddingVertical: Spacing.small,
+    alignItems: "center",
+    borderWidth: 1,
+    borderColor: Color.darkThemeGreyMed,
+    marginHorizontal: Spacing.med,
   },
 });
