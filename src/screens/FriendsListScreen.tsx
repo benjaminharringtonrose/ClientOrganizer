@@ -39,7 +39,6 @@ function FriendsListScreen(props: IFindFriendsProps) {
 
   useEffect(() => {
     getFriendsAsync(props.friendsList).then((friends) => {
-      console.log("friends", friends);
       setState({ ...state, mappedFriends: mapFriends(friends) });
     });
   }, []);
@@ -47,14 +46,12 @@ function FriendsListScreen(props: IFindFriendsProps) {
   useEffect(() => {
     getFriendsAsync(props.friendsList)
       .then((friends) => {
-        console.log("friends", friends);
         setState({ ...state, mappedFriends: mapFriends(friends) });
       })
       .then(() => {});
   }, [props.friendsList]);
 
   const modalHeight = Dimensions.get("screen").height / 4;
-  console.log("mappedFriends", state.mappedFriends);
   return (
     <ScreenContainer>
       <View style={{ paddingLeft: Spacing.large, paddingVertical: Spacing.med }}>

@@ -32,7 +32,8 @@ export function* sendMessageSaga(action: any) {
       .set(
         {
           [recipientId]: {
-            threadId: recipientId,
+            senderId,
+            recipientId,
             threadFirstName,
             threadLastName,
             threadAvatar,

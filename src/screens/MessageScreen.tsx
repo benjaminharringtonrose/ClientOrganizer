@@ -54,7 +54,7 @@ const MessageScreen = (props: IMessageScreenProps) => {
         },
       });
       props.navigation.navigate(Routes.MESSAGE_DETAILS_SCREEN, {
-        threadId: item.threadId,
+        threadId: item.senderId,
       });
     };
     if (item) {

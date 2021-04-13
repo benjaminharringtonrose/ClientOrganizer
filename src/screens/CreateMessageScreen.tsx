@@ -1,7 +1,15 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, TouchableOpacity, TextInput, StyleSheet, SafeAreaView } from "react-native";
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  StyleSheet,
+  SafeAreaView,
+  KeyboardAvoidingView,
+  Platform,
+} from "react-native";
 import { Color, Spacing } from "../styles";
-import { ScreenContainer, Header, ButtonText, UserCard, Input } from "../components";
+import { ScreenContainer, ButtonText, UserCard, Input } from "../components";
 import { Ionicons } from "@expo/vector-icons";
 import * as ImagePicker from "expo-image-picker";
 import { BottomModal } from "../components";
@@ -14,6 +22,8 @@ import { mapFriends, getFriendsAsync } from "./util";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { Routes } from "../navigation/routes";
 import { CreateMessageParamList } from "../navigation/navigation";
+import { MessageRecipientInput } from "../components/MessageRecipientInput";
+import { MessageSenderInput } from "../components/MessageSenderInput";
 
 interface IPassedProps {
   navigation: StackNavigationProp<CreateMessageParamList, Routes.CREATE_MESSAGE_SCREEN>;
@@ -73,15 +83,9 @@ function CreateMessageScreen(props: CreateMessageScreenProps) {
         />
       ),
     });
-    console.log("props.friendsList", props.friendsList);
     getFriendsAsync(props.friendsList).then((friends) => {
-      console.log("friends", friends);
       setState({ ...state, mappedFriends: mapFriends(friends) });
     });
-    // setState({
-    //   ...state,
-    //   mappedFriends: mapFriends(props?.friendsList),
-    // });
   }, []);
 
   const pickImage = async () => {
@@ -101,108 +105,31 @@ function CreateMessageScreen(props: CreateMessageScreenProps) {
   const onSendMessagePress = () => {
     props.dispatchSendMessage({
       senderId: props.user?.uid,
-      recipientId: state.selectedFriend?.friendId,
+      recipientId: state.selectedFriend?.uid,
       message: state.messageInput,
-      threadAvatar: state.selectedFriend?.friendAvatar,
-      threadFirstName: state.selectedFriend?.friendFirstName,
-      threadLastName: state.selectedFriend?.friendLastName,
+      threadAvatar: state.selectedFriend?.avatar,
+      threadFirstName: state.selectedFriend?.firstName,
+      threadLastName: state.selectedFriend?.lastName,
     });
     props.dispatchFetchMessages();
     props.navigation.navigate(Routes.MESSAGE_DETAILS_SCREEN, {
-      threadId: state.selectedFriend?.friendId,
+      threadId: state.selectedFriend?.uid,
     });
   };
 
   return (
     <ScreenContainer>
       <View style={{ flex: 1, justifyContent: "space-between" }}>
-        <View
-          style={{
-            flexDirection: "row",
-            alignItems: "center",
-            paddingVertical: Spacing.small,
-            paddingRight: Spacing.small,
-            borderBottomColor: Color.darkThemeGreyMed,
-            borderBottomWidth: 1,
-          }}
-        >
-          <Text
-            style={{
-              fontSize: 18,
-              color: Color.greyLight,
-              paddingHorizontal: Spacing.small,
-            }}
-          >
-            {"To:"}
-          </Text>
-          <Input
-            style={{
-              flex: 1,
-              minHeight: 40,
-              borderColor: Color.darkThemeGreyMed,
-              borderWidth: 2,
-              borderRadius: 20,
-              backgroundColor: Color.black,
-            }}
-            selectionColor={Color.greyLight}
-            onChangeText={(friendInput: string) => setState({ ...state, friendInput })}
-            value={state.friendInput}
-          />
-
-          <TouchableOpacity
-            style={{ marginLeft: Spacing.small }}
-            onPress={() => {
-              setState({ ...state, showModal: true });
-            }}
-          >
-            <Ionicons name={"ios-add-circle-outline"} color={Color.primary} size={30} />
-          </TouchableOpacity>
-        </View>
-
-        <View
-          style={{
-            flexDirection: "row",
-            paddingVertical: Spacing.small,
-            paddingRight: Spacing.small,
-            borderTopColor: Color.darkThemeGreyMed,
-            borderTopWidth: 1,
-          }}
-        >
-          <TouchableOpacity
-            style={{
-              alignItems: "center",
-              justifyContent: "center",
-              marginHorizontal: Spacing.small,
-            }}
-            onPress={pickImage}
-          >
-            <Ionicons name="md-camera" size={32} color={Color.darkThemeGrey} />
-          </TouchableOpacity>
-          <View
-            style={{
-              flex: 1,
-              minHeight: 40,
-              borderColor: Color.darkThemeGreyMed,
-              borderWidth: 2,
-              borderRadius: 20,
-              flexDirection: "row",
-              alignItems: "center",
-              paddingHorizontal: Spacing.micro,
-            }}
-          >
-            <Input
-              style={{
-                flex: 1,
-                backgroundColor: Color.black,
-              }}
-              selectionColor={Color.greyLight}
-              onChangeText={(messageInput: string) => setState({ ...state, messageInput })}
-            />
-            <TouchableOpacity style={{ paddingRight: Spacing.small }} onPress={onSendMessagePress}>
-              <Ionicons name={"ios-send"} color={Color.darkThemeGrey} size={25} />
-            </TouchableOpacity>
-          </View>
-        </View>
+        <MessageRecipientInput
+          onChangeText={(friendInput: string) => setState({ ...state, friendInput })}
+          value={state.friendInput}
+          onAddRecipientPress={() => setState({ ...state, showModal: true })}
+        />
+        <MessageSenderInput
+          onChangeText={(messageInput: string) => setState({ ...state, messageInput })}
+          onCameraPress={() => {}}
+          onSendPress={onSendMessagePress}
+        />
       </View>
       <BottomModal
         title={"Friends"}

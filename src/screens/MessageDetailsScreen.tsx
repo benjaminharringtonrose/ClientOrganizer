@@ -12,10 +12,6 @@ import { MessageParamList } from "../navigation/navigation";
 import { RouteProp } from "../store/types";
 import { fetchMessagesRequested, sendMessageRequested } from "../store/actions/MessagesActions";
 import { IStringMap } from "./RegisterScreen";
-import { messageThreadSelector } from "../store/selectors";
-import firebase from "firebase";
-import { getMessages } from "./util";
-import { useMessages } from "../hooks/useMessages";
 
 interface IPassedProps {
   navigation: StackNavigationProp<MessageParamList, Routes.MESSAGE_DETAILS_SCREEN>;
@@ -59,11 +55,8 @@ function MessageDetailsScreen(props: MessageDetailsProps) {
   useEffect(() => {
     const messages: any = [];
     if (props.messages) {
-      console.log("props.route.params?.threadId", props.route.params?.threadId);
-      console.log("MESSAGES", props.messages);
       for (const [key, thread] of Object.entries(props.messages)) {
         if (props.route.params?.threadId === thread.threadId) {
-          console.log("YES");
           for (const [key, message] of Object.entries(thread.messages)) {
             messages.push(message);
           }
@@ -84,30 +77,31 @@ function MessageDetailsScreen(props: MessageDetailsProps) {
     }
   };
 
-  const getThreadData = (threadId: string, messages?: IStringMap<any>) => {
+  const getThreadData = (senderId: string, messages?: IStringMap<any>) => {
     if (!messages) {
       console.warn("No messages");
       return;
     }
+    console.log("senderId", senderId, "messages", messages);
     for (const [key, value] of Object.entries(messages)) {
-      if (value.threadId === threadId) {
+      if (value.senderId === senderId) {
         return value;
       }
     }
   };
 
   const onSendMessagePress = () => {
-    const threadData = getThreadData(props.route.params?.threadId, props.messages);
+    const threadData = getThreadData(props.route.params?.senderId, props.messages);
     props.dispatchSendMessage({
       senderId: props.uid,
-      recipientId: props.route.params?.threadId,
+      recipientId: props.route.params?.senderId,
       message: state.messageInput,
       threadAvatar: threadData.threadAvatar,
       threadFirstName: threadData.threadFirstName,
       threadLastName: threadData.threadLastName,
     });
     props.dispatchFetchMessages();
-    // props.navigation.pop();
+    setState({ ...state, messageInput: "" });
   };
 
   const isSender = (senderId: string) => {

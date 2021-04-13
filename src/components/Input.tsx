@@ -82,12 +82,12 @@ export class Input extends Component<InputProps> {
 const styles = StyleSheet.create({
   rootContainer: {
     flex: 1,
-    minHeight: 40,
+    minHeight: 35,
     flexDirection: "row",
     alignItems: "center",
     backgroundColor: Color.darkThemeGreyMed,
     borderRadius: 5,
-    paddingVertical: Spacing.small,
+    paddingVertical: Spacing.micro,
     shadowColor: Color.darkThemeGreyDark,
     shadowOffset: { width: 3, height: 2 },
     shadowOpacity: 0.4,

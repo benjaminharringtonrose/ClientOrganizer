@@ -10,10 +10,6 @@ function TabBar(props: any) {
     <SafeAreaView
       style={{
         flexDirection: "row",
-        borderTopColor: Color.darkThemeGreyMed,
-        borderTopWidth: 1,
-        borderBottomColor: Color.darkThemeGreyMed,
-        borderBottomWidth: 1,
         height: 70,
         justifyContent: "center",
         alignItems: "center",
