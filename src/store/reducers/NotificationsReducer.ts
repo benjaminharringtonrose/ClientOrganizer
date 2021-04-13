@@ -20,7 +20,7 @@ const DefaultNotificationsState: INotificationsState = {
   notificationType: undefined,
 };
 
-const NotificationsReducer = (
+export const NotificationsReducer = (
   state = DefaultNotificationsState,
   action: INotificationsActions
 ): INotificationsState => {
@@ -62,5 +62,3 @@ const NotificationsReducer = (
       return state;
   }
 };
-
-export default NotificationsReducer;

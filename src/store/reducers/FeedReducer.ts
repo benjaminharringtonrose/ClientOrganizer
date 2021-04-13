@@ -18,7 +18,7 @@ export const DefaultFeedState: IFeedState = {
   addPostError: undefined,
 };
 
-const FeedReducer = (state = DefaultFeedState, action: IFeedActions): IFeedState => {
+export const FeedReducer = (state = DefaultFeedState, action: IFeedActions): IFeedState => {
   switch (action.type) {
     // FETCH POSTS
     case FETCH_POSTS.REQUESTED:
@@ -59,5 +59,3 @@ const FeedReducer = (state = DefaultFeedState, action: IFeedActions): IFeedState
       return state;
   }
 };
-
-export default FeedReducer;

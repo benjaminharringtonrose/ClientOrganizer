@@ -184,7 +184,7 @@ const mapDispatchToProps = (dispatch: any) => ({
       payload: { friendUID, firstName, lastName, email, avatar },
     }),
   dispatchFriendRequest: (payload: IFriendRequest) =>
-    dispatch({ type: SEND_FRIEND_REQUEST.SENT, payload }),
+    dispatch({ type: SEND_FRIEND_REQUEST, payload }),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(FindFriendsScreen);

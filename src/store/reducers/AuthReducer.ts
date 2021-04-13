@@ -26,7 +26,7 @@ export const DefaultAuthState: IAuthState = {
   registerError: undefined,
 };
 
-const AuthReducer = (state = DefaultAuthState, action: IAuthActions): IAuthState => {
+export const AuthReducer = (state = DefaultAuthState, action: IAuthActions): IAuthState => {
   switch (action.type) {
     // LOGIN
     case LOGIN_USER.REQUESTED:
@@ -88,5 +88,3 @@ const AuthReducer = (state = DefaultAuthState, action: IAuthActions): IAuthState
       return state;
   }
 };
-
-export default AuthReducer;

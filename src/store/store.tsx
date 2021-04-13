@@ -37,23 +37,24 @@ import {
   fetchNotificationsSaga,
   toastWasPublished,
   sendFriendRequest,
+  sendMessageSaga,
+  fetchMessagesSaga,
+  fetchThreadsSaga,
 } from "../store/sagas";
 import {
   IAuthState,
+  IUserState,
   IFriendsState,
   IFeedState,
-  IUserState,
   INotificationsState,
   IMessagesState,
+  AuthReducer,
+  UserReducer,
+  FriendsReducer,
+  FeedReducer,
+  NotificationsReducer,
+  MessagesReducer,
 } from "./reducers";
-
-import AuthReducer from "./reducers/AuthReducer";
-import UserReducer from "./reducers/UserReducer";
-import FeedReducer from "./reducers/FeedReducer";
-import FriendsReducer from "./reducers/FriendsReducer";
-import MessagesReducer from "./reducers/MessagesReducer";
-import NotificationsReducer from "./reducers/NotificationsReducer";
-
 import {
   IAuthActions,
   IFeedActions,
@@ -63,8 +64,6 @@ import {
   INotificationsActions,
   IMessagesActions,
 } from "./actions";
-
-import { sendMessageSaga, fetchMessagesSaga, fetchThreadsSaga } from "./sagas/MessagesSagas";
 
 export interface IStoreState {
   readonly auth: IAuthState;
@@ -89,6 +88,8 @@ function* rootActionListener() {
   yield takeLatest(LOGIN_USER.REQUESTED, loginUserSaga);
   yield takeLatest(REGISTER_USER.REQUESTED, registerUserSaga);
   yield takeLatest(LOGOUT_USER.REQUESTED, logoutUserSaga);
+  yield takeLatest(UPLOAD_AVATAR.REQUESTED, uploadAvatarSaga);
+  yield takeLatest(SET_USER_ID, setUserId);
 
   yield takeLatest(FETCH_USER.REQUESTED, fetchUserSaga);
   yield takeLatest(FETCH_ALL_USERS.REQUESTED, fetchAllUsersSaga);
@@ -96,18 +97,14 @@ function* rootActionListener() {
   yield takeLatest(FETCH_POSTS.REQUESTED, fetchPostsSaga);
   yield takeLatest(ADD_POST.REQUESTED, addPostSaga);
 
-  yield takeLatest(UPLOAD_AVATAR.REQUESTED, uploadAvatarSaga);
-
   yield takeLatest(ADD_FRIEND.REQUESTED, addFriendSaga);
   yield takeLatest(DELETE_FRIEND.REQUESTED, deleteFriendSaga);
   yield takeLatest(FETCH_ALL_FRIENDS.REQUESTED, fetchAllFriendsSaga);
 
-  yield takeLatest(SET_USER_ID, setUserId);
-
   yield takeLatest(FETCH_NOTIFICATIONS.REQUESTED, fetchNotificationsSaga);
   yield takeLatest(TOAST_NOTIFICATION.PUBLISH, toastWasPublished);
 
-  yield takeLatest(SEND_FRIEND_REQUEST.SENT, sendFriendRequest);
+  yield takeLatest(SEND_FRIEND_REQUEST, sendFriendRequest);
 
   yield takeLatest(SEND_MESSAGE.REQUESTED, sendMessageSaga);
   yield takeLatest(FETCH_MESSAGES.REQUESTED, fetchMessagesSaga);

@@ -24,7 +24,7 @@ export const DefaultMessagesState: IMessagesState = {
   sendMessageError: undefined,
 };
 
-const MessagesReducer = (
+export const MessagesReducer = (
   state = DefaultMessagesState,
   action: IMessagesActions
 ): IMessagesState => {
@@ -86,5 +86,3 @@ const MessagesReducer = (
       return state;
   }
 };
-
-export default MessagesReducer;

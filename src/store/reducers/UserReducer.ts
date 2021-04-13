@@ -37,7 +37,7 @@ const DefaultUserState: IUserState = {
   uploadAvatarError: undefined,
 };
 
-const UserReducer = (state = DefaultUserState, action: IUserActions): IUserState => {
+export const UserReducer = (state = DefaultUserState, action: IUserActions): IUserState => {
   switch (action.type) {
     case FETCH_USER.REQUESTED:
       return {
@@ -102,5 +102,3 @@ const UserReducer = (state = DefaultUserState, action: IUserActions): IUserState
       return state;
   }
 };
-
-export default UserReducer;

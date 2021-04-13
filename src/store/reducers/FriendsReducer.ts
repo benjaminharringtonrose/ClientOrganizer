@@ -20,7 +20,10 @@ export const DefaultFriendsState: IFriendsState = {
   deleteFriendError: undefined,
 };
 
-const FriendsReducer = (state = DefaultFriendsState, action: IFriendsActions): IFriendsState => {
+export const FriendsReducer = (
+  state = DefaultFriendsState,
+  action: IFriendsActions
+): IFriendsState => {
   switch (action.type) {
     // ADD FRIEND
     case ADD_FRIEND.REQUESTED:
@@ -60,5 +63,3 @@ const FriendsReducer = (state = DefaultFriendsState, action: IFriendsActions): I
       return state;
   }
 };
-
-export default FriendsReducer;

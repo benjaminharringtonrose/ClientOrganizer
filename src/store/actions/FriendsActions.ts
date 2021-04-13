@@ -94,11 +94,11 @@ export const deleteFriendFailed = (error: IError): IDeleteFriendFailed => ({
   payload: error,
 });
 
-export interface ISendFriendRequest extends Action<SEND_FRIEND_REQUEST.SENT> {
+export interface ISendFriendRequest extends Action<typeof SEND_FRIEND_REQUEST> {
   payload: IStringMap<any>;
 }
 
 export const sendFriendRequest = (payload: IStringMap<any>): ISendFriendRequest => ({
-  type: SEND_FRIEND_REQUEST.SENT,
+  type: SEND_FRIEND_REQUEST,
   payload,
 });
