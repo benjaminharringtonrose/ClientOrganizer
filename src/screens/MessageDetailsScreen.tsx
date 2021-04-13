@@ -12,6 +12,9 @@ import { MessageParamList } from "../navigation/navigation";
 import { RouteProp } from "../store/types";
 import { fetchMessagesRequested, sendMessageRequested } from "../store/actions/MessagesActions";
 import { IStringMap } from "./RegisterScreen";
+import firebase from "firebase";
+import { usePrevious } from "../hooks/usePrevious";
+import { isEqual } from "lodash";
 
 interface IPassedProps {
   navigation: StackNavigationProp<MessageParamList, Routes.MESSAGE_DETAILS_SCREEN>;
@@ -22,6 +25,7 @@ interface IPropsFromState {
   uid: string;
   messages?: IStringMap<any>[];
   threads?: any;
+  user: any;
 }
 
 interface IDispatchFromState {
@@ -54,16 +58,28 @@ function MessageDetailsScreen(props: MessageDetailsProps) {
   });
 
   useEffect(() => {
-    const messages: any = [];
-    if (props.messages) {
-      for (const [key, thread] of Object.entries(props.messages)) {
-        for (const [key, message] of Object.entries(thread.messages)) {
-          messages.push(message);
+    var unsubscribe = firebase
+      .firestore()
+      .collection("messages")
+      .doc(props.uid)
+      .onSnapshot((doc) => {
+        if (doc.exists) {
+          const docData = doc.data();
+          for (const [key, item] of Object.entries(docData!)) {
+            if (key === props.route.params?.threadId) {
+              let messages: any = [];
+              for (const [key, message] of Object.entries(item.messages!)) {
+                messages = messages.concat({ ...(message as Object), id: key });
+              }
+              setState({ ...state, mappedMessages: messages });
+            }
+          }
         }
-      }
-    }
-    setState({ ...state, mappedMessages: messages });
-  }, [props.messages]);
+      });
+    return function cleanup() {
+      unsubscribe();
+    };
+  }, []);
 
   const pickImage = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
@@ -76,28 +92,14 @@ function MessageDetailsScreen(props: MessageDetailsProps) {
     }
   };
 
-  const getThreadData = (threadId: string, messages?: IStringMap<any>) => {
-    if (!messages) {
-      console.warn("No messages");
-      return;
-    }
-    for (const [key, value] of Object.entries(messages)) {
-      if (value.id === threadId) {
-        return value;
-      }
-    }
-  };
-
   const onSendMessagePress = () => {
-    const threadData = getThreadData(props.route.params?.threadId, props.threads);
-    console.log("threadData", threadData);
     props.dispatchSendMessage({
       senderId: props.uid,
       recipientId: props.route.params?.threadId,
       message: state.messageInput,
-      threadAvatar: threadData.threadAvatar,
-      threadFirstName: threadData.threadFirstName,
-      threadLastName: threadData.threadLastName,
+      threadAvatar: props.user.avatar,
+      threadFirstName: props.user.firstName,
+      threadLastName: props.user.lastName,
     });
     props.dispatchFetchMessages();
     setState({ ...state, messageInput: "" });
@@ -111,6 +113,8 @@ function MessageDetailsScreen(props: MessageDetailsProps) {
   };
 
   const screenWidth = Dimensions.get("screen").width;
+
+  console.log("state.mappedMessages", state.mappedMessages);
 
   return (
     <ScreenContainer>
@@ -222,6 +226,7 @@ function MessageDetailsScreen(props: MessageDetailsProps) {
             }}
             selectionColor={Color.greyLight}
             onChangeText={(messageInput: string) => setState({ ...state, messageInput })}
+            value={state.messageInput}
           />
           <TouchableOpacity style={{ paddingRight: Spacing.small }} onPress={onSendMessagePress}>
             <Ionicons name={"ios-send"} color={Color.darkThemeGrey} size={25} />
@@ -234,9 +239,10 @@ function MessageDetailsScreen(props: MessageDetailsProps) {
 
 const mapStateToProps = (state: IStoreState) => {
   return {
-    uid: state?.user?.user?.uid,
+    uid: state.user?.user?.uid,
     messages: state.messages?.messages,
     threads: state.messages?.threads,
+    user: state.user?.user,
   };
 };
 
