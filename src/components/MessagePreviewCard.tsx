@@ -31,7 +31,7 @@ export function MessagePreviewCard(props: IMessagePreviewCardProps) {
   return (
     <View style={styles.rootContainer}>
       <View style={{ flexDirection: "row" }}>
-        {props.avatar ? (
+        {!!props?.avatar ? (
           <View>
             <Image
               style={{
@@ -42,7 +42,7 @@ export function MessagePreviewCard(props: IMessagePreviewCardProps) {
                 marginLeft: Spacing.small,
               }}
               onLoadEnd={onLoadEnd}
-              source={{ uri: props.avatar }}
+              source={{ uri: props?.avatar }}
             />
             {state.imageLoading && (
               <ActivityIndicator
@@ -60,15 +60,15 @@ export function MessagePreviewCard(props: IMessagePreviewCardProps) {
 
         <View style={{ flex: 1 }}>
           <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
-            <Text style={styles.name}>{props.name}</Text>
+            <Text style={styles.name}>{props?.name}</Text>
             <View style={{ flexDirection: "row", marginRight: Spacing.small }}>
-              <Text style={styles.time}>{moment(props.timestamp).fromNow()}</Text>
+              <Text style={styles.time}>{moment(props?.timestamp).fromNow()}</Text>
               <Ionicons name={"chevron-forward"} color={Color.greyMed} size={18} />
             </View>
           </View>
           <View>
             <Text style={styles.message} numberOfLines={2}>
-              {props.message}
+              {props?.message}
             </Text>
           </View>
         </View>
