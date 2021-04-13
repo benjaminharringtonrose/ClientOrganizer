@@ -1,8 +1,7 @@
 import { put } from "redux-saga/effects";
-import * as firebase from "firebase";
+import firebase from "firebase";
 require("firebase/firestore");
 import uuid from "uuid-random";
-import { ADD_POST, UPLOAD_AVATAR, IError } from "../types";
 import { fetchPostsRequested, addPostSucceeded, addPostFailed } from "../actions/FeedActions";
 import {
   fetchUserSucceeded,
@@ -19,7 +18,7 @@ import {
 export function* fetchUserSaga(action: IFetchUserRequested) {
   try {
     const uid = action.payload;
-    const doc = yield firebase.firestore().collection("users").doc(uid).get();
+    const doc: any = yield firebase.firestore().collection("users").doc(uid).get();
     yield put(fetchUserSucceeded(doc.data()));
   } catch (error) {
     yield put(fetchUserFailed(error));
@@ -76,14 +75,16 @@ export function* uploadAvatarSaga(action: any) {
   try {
     const uri = action.payload;
     const uid = firebase.auth().currentUser?.uid;
-    const avatarUri = yield uploadPhotoAsync(uri, `avatars/${uid}`);
+    const avatarUri: string | undefined = yield uploadPhotoAsync(uri, `avatars/${uid}`);
     yield firebase.firestore().collection("users").doc(uid).set(
       {
         avatar: avatarUri,
       },
       { merge: true }
     );
-    yield put(uploadAvatarSucceeded(avatarUri));
+    if (avatarUri) {
+      yield put(uploadAvatarSucceeded(avatarUri));
+    }
   } catch (error) {
     yield put(uploadAvatarFailed({ error }));
   }
@@ -101,7 +102,7 @@ export function* addPostSaga(action: any) {
     if (image) {
       imageUri = yield uploadPhotoAsync(image, `images/${postID}`);
     }
-    const avatarUri = yield uploadPhotoAsync(avatar, `avatars/${imageID}`);
+    const avatarUri: string | undefined = yield uploadPhotoAsync(avatar, `avatars/${imageID}`);
     firebase
       .firestore()
       .collection("posts")

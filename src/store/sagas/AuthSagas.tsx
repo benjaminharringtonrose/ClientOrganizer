@@ -22,9 +22,13 @@ export function* loginUserSaga(action: any) {
   try {
     const { email, password } = action.payload;
     const auth = firebase.auth();
-    const data = yield call([auth, auth.signInWithEmailAndPassword], email, password);
+    const data: Promise<firebase.auth.UserCredential> = yield call(
+      [auth, auth.signInWithEmailAndPassword],
+      email,
+      password
+    );
     yield put(loginUserSucceeded(data));
-    const uid = yield firebase.auth().currentUser?.uid;
+    const uid: string | undefined = yield firebase.auth().currentUser?.uid;
     yield firebase.firestore().collection("users").doc(uid).set(
       {
         uid: uid,
@@ -44,7 +48,11 @@ export function* registerUserSaga(action: any) {
   try {
     const { firstName, lastName, email, password } = action.payload;
     const auth = firebase.auth();
-    const data = yield call([auth, auth.createUserWithEmailAndPassword], email, password);
+    const data: Promise<firebase.auth.UserCredential> = yield call(
+      [auth, auth.createUserWithEmailAndPassword],
+      email,
+      password
+    );
     const db = getCurrentUserDocRef();
     yield db.set({
       firstName,

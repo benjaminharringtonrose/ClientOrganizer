@@ -15,7 +15,9 @@ interface IAlertModalProps {
 
 export default function AlertModal(props: IAlertModalProps) {
   return (
-    <Modal isVisible={props.isVisible}>
+    // I added is to fix ts but idk what it is -> panResponderThreshold={10} so if
+    // there's issues it's probably because of that.
+    <Modal panResponderThreshold={10} isVisible={props.isVisible}>
       <View style={styles.centeredView}>
         <Card>
           <View style={styles.modalView}>

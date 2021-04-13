@@ -9,7 +9,6 @@ export * from "./PostCard";
 export * from "./CellLabelLeftRight";
 export * from "./ButtonText";
 export * from "./ButtonBack";
-export * from "./CommentModal";
 export * from "./BottomModal";
 export * from "./MessagePreviewCard";
 export * from "./UserCard";

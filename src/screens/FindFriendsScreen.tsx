@@ -13,16 +13,10 @@ import { ScreenContainer, CardSection, Button, Card } from "../components";
 import { Color, Spacing } from "../styles";
 import { UserCard } from "../components/UserCard";
 import { IStringMap } from "./RegisterScreen";
-import {
-  FETCH_ALL_USERS,
-  ADD_FRIEND,
-  NOTIFICATION_TYPE,
-  SEND_FRIEND_REQUEST,
-  IFriendRequest,
-} from "../store/types";
+import { FETCH_ALL_USERS, ADD_FRIEND, SEND_FRIEND_REQUEST, IFriendRequest } from "../store/types";
 import SearchBar from "../components/SearchBar";
 import { BottomModal } from "../components/BottomModal";
-import { sendPushNotification, NOTIFICATION } from "../api/PushNotifications";
+import { NOTIFICATION } from "../api/PushNotifications";
 import { IStoreState } from "../store/store";
 
 interface IPassedProps {

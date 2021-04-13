@@ -28,8 +28,8 @@ interface IPropsFromState {
   firstName: string;
   lastName: string;
   email: string;
-  authLoading: boolean;
-  uthError?: IError;
+  logoutLoading: boolean;
+  logoutError?: IError;
   uploadAvatarLoading: boolean;
   uploadAvatarError?: IError;
 }
@@ -63,7 +63,7 @@ function ProfileScreen(props: ProfileScreenProps) {
   };
 
   const renderSignOutButton = () => {
-    if (props.authLoading) {
+    if (props.logoutLoading) {
       return <Spinner size="small" color={Color.white} />;
     } else {
       return (
@@ -165,9 +165,9 @@ const mapStateToProps = (state: IStoreState) => {
     firstName: state.user?.user?.firstName,
     lastName: state.user?.user?.lastName,
     email: state.user?.user?.email,
-    authLoading: state.auth.authLoading,
-    authError: state.auth?.authError,
-    uploadAvatarLoading: state.user?.uploadAvatarLoading,
+    logoutLoading: state.auth.logoutLoading,
+    logoutError: state.auth?.logoutError,
+    uploadAvatarLoading: state.user.uploadAvatarLoading,
     uploadAvatarError: state.user?.uploadAvatarError,
   };
 };

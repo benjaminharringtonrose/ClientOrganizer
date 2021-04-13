@@ -12,6 +12,13 @@ import uuid from "uuid-random";
 import { NOTIFICATION_TYPE } from "../types";
 import { NOTIFICATION, sendPushNotification } from "../../api/PushNotifications";
 
+export type CollectionReference = firebase.firestore.CollectionReference<
+  firebase.firestore.DocumentData
+>;
+export type DocumentReference = firebase.firestore.DocumentReference<
+  firebase.firestore.DocumentData
+>;
+
 // ADD FRIEND SAGA
 
 export function* addFriendSaga(action: any) {
@@ -21,15 +28,16 @@ export function* addFriendSaga(action: any) {
       friendFirstName,
       friendLastName,
       friendAvatar,
-      friendPushToken,
       uid,
       firstName,
       lastName,
       avatar,
     } = action.payload;
 
-    const userCollectionRef = yield firebase.firestore().collection("users");
-    var notificationsCollectionRef = yield firebase.firestore().collection("notifications");
+    const userCollectionRef: CollectionReference = yield firebase.firestore().collection("users");
+    var notificationsCollectionRef: CollectionReference = yield firebase
+      .firestore()
+      .collection("notifications");
 
     // add B to A's friendList
     yield userCollectionRef.doc(uid).update({
@@ -94,7 +102,7 @@ export function* addFriendSaga(action: any) {
 export function* deleteFriendSaga(action: any) {
   try {
     const { id } = action.payload;
-    const uid = yield firebase.auth().currentUser?.uid;
+    const uid: string | undefined = yield firebase.auth().currentUser?.uid;
     const collectionRef = firebase.firestore().collection("users");
 
     yield collectionRef.doc(uid).update({
@@ -134,7 +142,10 @@ export function* sendFriendRequest(action: any) {
       avatar,
     } = action.payload;
     // doc ref to the user you're sending the friend request to.
-    const docRef = yield firebase.firestore().collection("notifications").doc(theirUid);
+    const docRef: DocumentReference = yield firebase
+      .firestore()
+      .collection("notifications")
+      .doc(theirUid);
     // but below you'll be sending the CURRENT users info
     const uid: string | undefined = yield firebase.auth().currentUser?.uid;
     const notificationId = uuid();
