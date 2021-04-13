@@ -20,7 +20,7 @@ export const DefaultFriendsState: IFriendsState = {
   deleteFriendError: undefined,
 };
 
-const FriendsReducer = (state = DefaultFriendsState, action: IFriendsActions) => {
+const FriendsReducer = (state = DefaultFriendsState, action: IFriendsActions): IFriendsState => {
   switch (action.type) {
     // ADD FRIEND
     case ADD_FRIEND.REQUESTED:
@@ -53,8 +53,8 @@ const FriendsReducer = (state = DefaultFriendsState, action: IFriendsActions) =>
     case DELETE_FRIEND.FAILED:
       return {
         ...state,
-        sendFriendRequestLoading: false,
-        deleteFriendError: action.payload.message,
+        deleteFriendLoading: false,
+        deleteFriendError: action.payload,
       };
     default:
       return state;

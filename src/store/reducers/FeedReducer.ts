@@ -18,7 +18,7 @@ export const DefaultFeedState: IFeedState = {
   addPostError: undefined,
 };
 
-const FeedReducer = (state = DefaultFeedState, action: IFeedActions) => {
+const FeedReducer = (state = DefaultFeedState, action: IFeedActions): IFeedState => {
   switch (action.type) {
     // FETCH POSTS
     case FETCH_POSTS.REQUESTED:
@@ -35,7 +35,7 @@ const FeedReducer = (state = DefaultFeedState, action: IFeedActions) => {
     case FETCH_POSTS.FAILED:
       return {
         ...state,
-        fetchPostsError: action.payload.message,
+        fetchPostsError: action.payload,
         fetchPostsLoading: false,
       };
     // ADD POSTS
@@ -52,7 +52,7 @@ const FeedReducer = (state = DefaultFeedState, action: IFeedActions) => {
     case ADD_POST.FAILED:
       return {
         ...state,
-        addPostError: action.payload.message,
+        addPostError: action.payload,
         addPostLoading: false,
       };
     default:
