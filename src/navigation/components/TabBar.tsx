@@ -89,11 +89,26 @@ function TabBar(props: any) {
               );
             case Routes.NOTIFICATION_NAVIGATOR:
               return (
-                <Ionicons
-                  name={isFocused ? "ios-notifications" : "ios-notifications-outline"}
-                  color={isFocused ? Color.white : Color.greyMed}
-                  size={20}
-                />
+                <View style={{ flexDirection: "row" }}>
+                  <Ionicons
+                    name={isFocused ? "ios-notifications" : "ios-notifications-outline"}
+                    color={isFocused ? Color.white : Color.greyMed}
+                    size={20}
+                  />
+                  <View
+                    style={{
+                      backgroundColor: props.badgeVisible ? Color.primary : Color.black,
+                      width: 10,
+                      height: 10,
+                      position: "absolute",
+                      borderRadius: 5,
+                      left: 15,
+                      right: 0,
+                      top: 0,
+                      bottom: 0,
+                    }}
+                  />
+                </View>
               );
           }
         };
@@ -115,6 +130,7 @@ function TabBar(props: any) {
 const mapStateToProps = (state: IStoreState) => {
   return {
     avatar: state.user?.user?.avatar,
+    badgeVisible: state.notifications?.badgeVisible,
   };
 };
 

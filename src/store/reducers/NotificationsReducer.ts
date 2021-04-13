@@ -1,4 +1,10 @@
-import { FETCH_NOTIFICATIONS, IError, TOAST_NOTIFICATION, NOTIFICATION_TYPE } from "../types";
+import {
+  FETCH_NOTIFICATIONS,
+  IError,
+  TOAST_NOTIFICATION,
+  NOTIFICATION_TYPE,
+  SET_BADGE,
+} from "../types";
 import { IStringMap } from "../../screens/RegisterScreen";
 import { INotificationsActions } from "../actions";
 
@@ -9,6 +15,7 @@ export interface INotificationsState {
   readonly notificationType?: NOTIFICATION_TYPE;
   readonly text?: string;
   readonly notificationVisible: boolean;
+  readonly badgeVisible: boolean;
 }
 
 const DefaultNotificationsState: INotificationsState = {
@@ -18,6 +25,7 @@ const DefaultNotificationsState: INotificationsState = {
   notificationVisible: false,
   text: undefined,
   notificationType: undefined,
+  badgeVisible: false,
 };
 
 export const NotificationsReducer = (
@@ -57,6 +65,11 @@ export const NotificationsReducer = (
         notificationVisible: false,
         text: undefined,
         notificationType: undefined,
+      };
+    case SET_BADGE:
+      return {
+        ...state,
+        badgeVisible: action.payload,
       };
     default:
       return state;

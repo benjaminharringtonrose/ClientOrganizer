@@ -100,7 +100,7 @@ function ProfileScreen(props: ProfileScreenProps) {
         <TouchableOpacity style={styles.avatarPlaceholder} onPress={onPickAvatar}>
           <View>
             <Image style={styles.avatar} onLoadEnd={onLoadEnd} source={{ uri: props.avatar }} />
-            {state.imageLoading && (
+            {state.imageLoading && props.avatar && (
               <ActivityIndicator
                 animating={state.imageLoading}
                 color={Color.white}

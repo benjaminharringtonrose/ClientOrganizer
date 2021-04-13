@@ -1,5 +1,11 @@
 import { Action } from "redux";
-import { FETCH_NOTIFICATIONS, IError, NOTIFICATION_TYPE, TOAST_NOTIFICATION } from "../types";
+import {
+  FETCH_NOTIFICATIONS,
+  IError,
+  NOTIFICATION_TYPE,
+  TOAST_NOTIFICATION,
+  SET_BADGE,
+} from "../types";
 import { IStringMap } from "../../screens/RegisterScreen";
 
 export type INotificationsActions =
@@ -7,7 +13,8 @@ export type INotificationsActions =
   | IFetchNotificationsSucceeded
   | IFetchNotificationsFailed
   | IPublishToast
-  | IDismissToast;
+  | IDismissToast
+  | ISetBadge;
 
 export interface IFetchNotificationsRequested extends Action<FETCH_NOTIFICATIONS.REQUESTED> {
   payload?: string;
@@ -53,4 +60,13 @@ export interface IDismissToast extends Action<typeof TOAST_NOTIFICATION.DISMISS>
 
 export const dismissToast = (): IDismissToast => ({
   type: TOAST_NOTIFICATION.DISMISS,
+});
+
+export interface ISetBadge extends Action<typeof SET_BADGE> {
+  payload: boolean;
+}
+
+export const setBadge = (payload: boolean): ISetBadge => ({
+  type: SET_BADGE,
+  payload,
 });

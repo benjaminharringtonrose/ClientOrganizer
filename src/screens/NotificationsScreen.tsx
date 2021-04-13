@@ -12,6 +12,9 @@ import firebase from "firebase";
 import { NOTIFICATION } from "../api/PushNotifications";
 import { usePrevious } from "../hooks/usePrevious";
 import { IStoreState } from "../store/store";
+import { setBadge } from "../store/actions";
+import { isEqual } from "lodash";
+import { useNotifications } from "../hooks/useNotifications";
 
 interface IPassedProps {
   navigation: any;
@@ -22,10 +25,10 @@ interface IPropsFromState {
   user?: IStringMap<any>;
   fetchUserLoading: boolean;
   fetchUserError?: IError;
-
   notifications?: IStringMap<any>[];
   fetchNotificationsLoading: boolean;
   fetchNotificationsError?: IError;
+  badgeVisible: boolean;
 }
 
 interface IDispatchFromState {
@@ -41,6 +44,7 @@ interface IDispatchFromState {
     lastName,
     avatar,
   }: any) => void;
+  dispatchSetBadge: (shouldSetBadge: boolean) => void;
 }
 
 type IMessageScreenProps = IPassedProps & IPropsFromState & IDispatchFromState;
@@ -50,30 +54,32 @@ interface ILocalState {
 }
 
 function NotificationScreen(props: IMessageScreenProps) {
-  const [state, setState] = useState<ILocalState>({
-    mappedNotifications: undefined,
-  });
+  // const [state, setState] = useState<ILocalState>({
+  //   mappedNotifications: undefined,
+  // });
 
-  useEffect(() => {
-    var unsubscribe = firebase
-      .firestore()
-      .collection("notifications")
-      .doc(props.uid)
-      .onSnapshot((doc) => {
-        setState({ ...state, mappedNotifications: mapNotifications(doc.data()) });
-      });
-    return function cleanup() {
-      unsubscribe();
-    };
-  }, []);
+  // useEffect(() => {
+  //   var unsubscribe = firebase
+  //     .firestore()
+  //     .collection("notifications")
+  //     .doc(props.uid)
+  //     .onSnapshot((doc) => {
+  //       setState({ ...state, mappedNotifications: mapNotifications(doc.data()) });
+  //     });
+  //   return function cleanup() {
+  //     unsubscribe();
+  //   };
+  // }, []);
 
-  const prevState = usePrevious(state);
+  // const prevState = usePrevious(state);
 
-  useEffect(() => {
-    if (prevState && prevState?.mappedNotifications !== state?.mappedNotifications) {
-      console.log("updated!!!");
-    }
-  }, [state.mappedNotifications]);
+  // useEffect(() => {
+  //   if (prevState && !isEqual(prevState?.mappedNotifications, state?.mappedNotifications)) {
+  //     props.dispatchSetBadge(true);
+  //   }
+  // }, [state.mappedNotifications]);
+
+  const notifications = useNotifications(props.dispatchSetBadge(true));
 
   const renderNotification = ({ item }: any) => {
     const onAcceptFriendRequest = () => {
@@ -135,6 +141,7 @@ function NotificationScreen(props: IMessageScreenProps) {
         refreshing={props.fetchUserLoading}
         onRefresh={() => {
           props.dispatchFetchNotifications();
+          props.dispatchSetBadge(false);
         }}
         tintColor={Color.white}
       />
@@ -147,6 +154,8 @@ function NotificationScreen(props: IMessageScreenProps) {
       data: state?.mappedNotifications || [],
     },
   ];
+
+  console.log("badgeVisible", props.badgeVisible);
 
   return (
     <ScreenContainer>
@@ -178,12 +187,14 @@ const mapStateToProps = (state: IStoreState) => {
     fetchNotificationsLoading: state.notifications?.fetchNotificationsLoading,
     fetchNotificationsError: state.notifications?.fetchNotificationsError,
     notifications: state.notifications?.notifications,
+    badgeVisible: state.notifications.badgeVisible,
   };
 };
 
 const mapDispatchToProps = (dispatch: any) => ({
   dispatchFetchUser: (uid: string) => dispatch({ type: FETCH_USER.REQUESTED, payload: uid }),
   dispatchFetchNotifications: () => dispatch({ type: FETCH_NOTIFICATIONS.REQUESTED }),
+  dispatchSetBadge: (shouldSetBadge: boolean) => dispatch(setBadge(shouldSetBadge)),
   dispatchAddFriend: ({
     friendId,
     friendFirstName,
