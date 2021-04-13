@@ -159,9 +159,12 @@ export function* sendFriendRequest(action: any) {
     );
     yield console.log("theirPushToken: ", theirPushToken);
     yield sendPushNotification({
-      expoPushToken: theirPushToken.data,
+      expoPushToken: theirPushToken,
       title: `Friend request from ${firstName} ${lastName}`,
       message: "You've received a friend request.",
+      data: {
+        vibrate: false,
+      },
     });
     yield put(publishToast(NOTIFICATION_TYPE.SUCCESS, "Friend request sent."));
   } catch (error) {

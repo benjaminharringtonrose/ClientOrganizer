@@ -86,7 +86,7 @@ const FeedNavigator = () => {
 const PostNavigator = () => {
   const Stack = createStackNavigator();
   return (
-    <Stack.Navigator screenOptions={{ ...defaultNavigationOptions, title: "" }}>
+    <Stack.Navigator screenOptions={{ headerShown: false }}>
       <Stack.Screen name={Routes.POST_SCREEN} component={PostScreen} />
     </Stack.Navigator>
   );

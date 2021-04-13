@@ -71,11 +71,11 @@ function FindFriendsScreen(props: IFindFriendsProps) {
         showModal: true,
         selectedUser: {
           uid: item?.uid,
-          firstName: item.firstName,
-          lastName: item.lastName,
-          email: item.email,
-          avatar: item.avatar,
-          pushToken: item.theirPushToken || "",
+          firstName: item?.firstName,
+          lastName: item?.lastName,
+          email: item?.email,
+          avatar: item?.avatar,
+          pushToken: item?.pushToken?.data || "",
         },
       });
     };
@@ -105,6 +105,8 @@ function FindFriendsScreen(props: IFindFriendsProps) {
   }
 
   const modalHeight = Dimensions.get("screen").height / 4;
+
+  console.log("props.users", props.users);
   return (
     <ScreenContainer>
       <View style={{ paddingLeft: Spacing.large, paddingTop: Spacing.med }}>

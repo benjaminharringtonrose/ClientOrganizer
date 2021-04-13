@@ -95,7 +95,6 @@ function ProfileScreen(props: ProfileScreenProps) {
 
   return (
     <ScreenContainer>
-      <Header />
       <Card>
         <TouchableOpacity style={styles.avatarPlaceholder} onPress={onPickAvatar}>
           <View>

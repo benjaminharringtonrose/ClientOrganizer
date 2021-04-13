@@ -18,7 +18,7 @@ export interface BottomModalProps {
 export class BottomModal extends React.Component<BottomModalProps> {
   public render() {
     const { title, isVisible, onBackdropPress, style, safeAreaDisabled, headerRight } = this.props;
-    const viewHeight = Dimensions.get("screen").height;
+    const deviceHeight = Dimensions.get("screen").height;
     return (
       <RNModal
         isVisible={isVisible}
@@ -45,50 +45,47 @@ export class BottomModal extends React.Component<BottomModalProps> {
         >
           <SafeAreaView
             forceInset={{ bottom: safeAreaDisabled ? "never" : "always", top: "never" }}
-            style={{ maxHeight: viewHeight * 0.8 }}
+            style={{ maxHeight: deviceHeight * 0.8 }}
           >
             <View
               style={{
                 paddingHorizontal: Spacing.med,
-                backgroundColor: Color.darkThemeGreyMed,
+                backgroundColor: Color.darkThemeGreyDark,
                 flexDirection: "row",
                 alignItems: "center",
               }}
             >
               {!!title && (
-                <View
-                  style={{
-                    flex: 1,
-                    justifyContent: "center",
-                    alignItems: "center",
-                    marginVertical: Spacing.med,
-                    paddingHorizontal: Spacing.xlarge,
-                  }}
-                >
+                <View style={styles.titleContainer}>
                   <Text style={{ color: Color.white, fontSize: 24 }}>{title}</Text>
                 </View>
               )}
 
               {headerRight ? (
-                <View
-                  style={{
-                    position: "absolute",
-                    right: 0,
-                    top: 0,
-                    bottom: 0,
-                    justifyContent: "center",
-                  }}
-                >
-                  {headerRight()}
-                </View>
+                <View style={styles.headerRightContainer}>{headerRight()}</View>
               ) : null}
             </View>
-            <Divider borderWidth={StyleSheet.hairlineWidth} borderColor={Color.greyMed} />
             {this.props.children}
           </SafeAreaView>
-          <Divider borderWidth={StyleSheet.hairlineWidth} borderColor={Color.greyMed} />
         </View>
       </RNModal>
     );
   }
 }
+
+const styles = StyleSheet.create({
+  headerRightContainer: {
+    position: "absolute",
+    right: 0,
+    top: 0,
+    bottom: 0,
+    justifyContent: "center",
+  },
+  titleContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    marginVertical: Spacing.med,
+    paddingHorizontal: Spacing.xlarge,
+  },
+});

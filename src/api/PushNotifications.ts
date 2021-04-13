@@ -11,7 +11,7 @@ export const setNotificationsHandler = () => {
   Notifications.setNotificationHandler({
     handleNotification: async () => ({
       shouldShowAlert: true,
-      shouldPlaySound: true,
+      shouldPlaySound: false,
       shouldSetBadge: true,
     }),
   });
@@ -24,6 +24,7 @@ export async function sendPushNotification({ expoPushToken, title, body, data }:
     title,
     body,
     data,
+    vibrate: false,
   };
 
   await fetch("https://exp.host/--/api/v2/push/send", {

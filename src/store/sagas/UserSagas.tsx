@@ -34,6 +34,7 @@ export function* fetchAllUsersSaga() {
       .then(function (querySnapshot) {
         querySnapshot.forEach((doc) => {
           const user = doc.data();
+          console.log("GET USER", user);
           users.push(user);
         });
       });

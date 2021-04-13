@@ -57,7 +57,6 @@ export class Input extends Component<InputProps> {
     return (
       <View style={[styles.rootContainer, style]}>
         {!!label && <Text style={styles.labelText}>{label}</Text>}
-        <Ionicons name={"ios-add"} />
         <TextInput
           {...this.props}
           secureTextEntry={secureTextEntry}

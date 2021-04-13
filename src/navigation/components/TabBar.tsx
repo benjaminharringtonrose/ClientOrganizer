@@ -5,10 +5,6 @@ import { Ionicons } from "@expo/vector-icons";
 import { Routes } from "../routes";
 import { connect } from "react-redux";
 
-interface IPropsFromState {
-  avatar: string;
-}
-
 function TabBar(props: any) {
   return (
     <SafeAreaView

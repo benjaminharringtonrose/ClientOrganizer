@@ -48,27 +48,6 @@ function PostScreen(props: IPostScreenProps) {
     imageLoading: true,
   });
 
-  useEffect(() => {
-    props.navigation.setOptions({
-      headerLeft: () => (
-        <ButtonBack
-          onPress={() => props.navigation.goBack()}
-          iconSize={24}
-          iconColor={Color.white}
-          style={{ marginLeft: Spacing.large }}
-        />
-      ),
-      headerRight: () => (
-        <ButtonText
-          text={"Post"}
-          onPress={handlePost}
-          textStyle={{ fontWeight: "500", color: Color.white, fontSize: 17 }}
-          containerStyle={{ marginRight: Spacing.large }}
-        />
-      ),
-    });
-  }, []);
-
   const oldProps = usePrevious(props);
 
   useEffect(() => {
@@ -116,6 +95,24 @@ function PostScreen(props: IPostScreenProps) {
   }
   return (
     <ScreenContainer>
+      <Header
+        headerLeft={
+          <ButtonBack
+            onPress={() => props.navigation.goBack()}
+            iconSize={24}
+            iconColor={Color.white}
+            style={{ marginLeft: Spacing.large }}
+          />
+        }
+        headerRight={
+          <ButtonText
+            text={"Post"}
+            onPress={handlePost}
+            textStyle={{ fontWeight: "500", color: Color.white, fontSize: 17 }}
+            containerStyle={{ marginRight: Spacing.large }}
+          />
+        }
+      />
       <View style={styles.inputContainer}>
         {!!props.avatar ? (
           <View>
