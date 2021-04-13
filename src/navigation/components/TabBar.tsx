@@ -4,6 +4,7 @@ import { Color, Spacing } from "../../styles";
 import { Ionicons } from "@expo/vector-icons";
 import { Routes } from "../routes";
 import { connect } from "react-redux";
+import { IStoreState } from "../../store/store";
 
 function TabBar(props: any) {
   return (
@@ -111,7 +112,7 @@ function TabBar(props: any) {
   );
 }
 
-const mapStateToProps = (state: any) => {
+const mapStateToProps = (state: IStoreState) => {
   return {
     avatar: state.user?.user?.avatar,
   };

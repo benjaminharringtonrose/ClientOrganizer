@@ -169,7 +169,6 @@ const MaterialTopTabs = () => {
 export const RootNavigator = () => {
   const Stack = createStackNavigator();
   const isLoggedin = useAuthState();
-
   return (
     <NavigationContainer theme={DarkTheme}>
       <Stack.Navigator screenOptions={{ headerShown: false }}>

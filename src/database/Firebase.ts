@@ -1,15 +1,19 @@
-import firebase from "firebase";
+import firebase, { firestore } from "firebase";
 import FirebaseKeys from "../api/FirebaseKeys";
 import { setNotificationsHandler } from "../api/PushNotifications";
 
 export class Firebase {
   private static instance: Firebase;
+  private uid: string | undefined;
+  private db: firestore.Firestore;
 
   private constructor() {
     if (!firebase.apps.length) {
       firebase.initializeApp(FirebaseKeys);
       setNotificationsHandler();
     }
+    this.uid = firebase.auth().currentUser?.uid;
+    this.db = firebase.firestore();
   }
 
   public static getInstance(): Firebase {
@@ -19,9 +23,20 @@ export class Firebase {
     return Firebase.instance;
   }
 
-  public someBusinessLogic() {
-    // ...
-  }
+  public getCurrentUser = () => {
+    if (!this.uid) {
+      return;
+    }
+    this.db
+      .collection("users")
+      .doc(this.uid)
+      .get()
+      .then((doc) => {
+        if (doc.exists) {
+          return doc.data();
+        }
+      });
+  };
 }
 
 // /**
@@ -32,9 +47,9 @@ export class Firebase {
 //   const db2 = Firebase.getInstance();
 
 //   if (db1 === db2) {
-//       console.log('Singleton works, both variables contain the same instance.');
+//       // Singleton works, both variables contain the same instance.
 //   } else {
-//       console.log('Singleton failed, variables contain different instances.');
+//       // Singleton failed, variables contain different instances.
 //   }
 // }
 

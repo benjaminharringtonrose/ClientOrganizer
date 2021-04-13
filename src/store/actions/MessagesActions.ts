@@ -1,12 +1,45 @@
 import { Action } from "redux";
-import { IError, FETCH_MESSAGES, SEND_MESSAGE } from "../types";
+import { IError, FETCH_MESSAGES, SEND_MESSAGE, FETCH_THREADS } from "../types";
 import { IStringMap } from "../../screens/RegisterScreen";
 
 export type IMessagesActions =
   | IFetchMessagesRequested
   | IFetchMessagesSucceeded
   | IFetchMessagesFailed
-  | ISendMessageRequested;
+  | IFetchThreadsRequested
+  | IFetchThreadsSucceeded
+  | IFetchThreadsFailed
+  | ISendMessageRequested
+  | ISendMessageSucceeded
+  | ISendMessageFailed;
+
+export interface IFetchThreadsRequested extends Action<FETCH_THREADS.REQUESTED> {}
+
+export const fetchThreadsRequested = (): IFetchThreadsRequested => ({
+  type: FETCH_THREADS.REQUESTED,
+});
+
+export interface IFetchThreadsSucceeded extends Action<FETCH_THREADS.SUCCEEDED> {
+  payload?: any;
+}
+
+export const fetchThreadsSucceeded = (payload: any): IFetchThreadsSucceeded => {
+  return {
+    type: FETCH_THREADS.SUCCEEDED,
+    payload,
+  };
+};
+
+export interface IFetchThreadsFailed extends Action<FETCH_THREADS.FAILED> {
+  payload: IError;
+}
+
+export const fetchThreadsFailed = (error: IError): IFetchThreadsFailed => ({
+  type: FETCH_THREADS.FAILED,
+  payload: error,
+});
+
+// ------------
 
 export interface IFetchMessagesRequested extends Action<FETCH_MESSAGES.REQUESTED> {}
 

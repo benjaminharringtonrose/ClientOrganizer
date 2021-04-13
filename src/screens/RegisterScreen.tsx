@@ -2,12 +2,13 @@ import React, { useState, useEffect } from "react";
 import { Text, StyleSheet } from "react-native";
 import { connect } from "react-redux";
 import { Card, Input, Button, Spinner, CardSection, ScreenContainer } from "../components";
-import { REGISTER_USER, UPLOAD_AVATAR } from "../store/types";
+import { REGISTER_USER, UPLOAD_AVATAR, IError } from "../store/types";
 import { Color, Spacing } from "../styles";
 import { Routes } from "../navigation/routes";
 import { usePrevious } from "../hooks/usePrevious";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { AuthParamList } from "../navigation/navigation";
+import { IStoreState } from "../store/store";
 
 interface PassedProps {
   navigation: StackNavigationProp<AuthParamList, Routes.REGISTER_SCREEN>;
@@ -15,9 +16,9 @@ interface PassedProps {
 
 interface PropsFromState {
   avatar?: string;
-  user: any;
-  authLoading: boolean;
-  authError: boolean;
+  user?: any;
+  registerLoading: boolean;
+  registerError?: IError;
 }
 interface DispatchFromState {
   dispatchUploadAvatar: (uri: string) => any;
@@ -48,10 +49,10 @@ function RegisterScreen(props: RegisterScreenProps) {
   const oldProps = usePrevious(props);
 
   useEffect(() => {
-    if (oldProps?.authLoading && !props.authLoading && !props.authError) {
+    if (oldProps?.authLoading && !props.registerLoading && !props.registerError) {
       props.navigation.navigate(Routes.DASHBOARD_TAB_NAVIGATOR);
     }
-  }, [props.authLoading, props.authError]);
+  }, [props.registerLoading, props.registerError]);
 
   const onRegisterPress = () => {
     const { email, password, firstName, lastName } = state;
@@ -65,7 +66,7 @@ function RegisterScreen(props: RegisterScreenProps) {
   };
 
   const renderButton = () => {
-    if (props.authLoading) {
+    if (props.registerLoading) {
       return <Spinner size="large" style={{ marginTop: Spacing.med }} />;
     }
     return (
@@ -76,8 +77,8 @@ function RegisterScreen(props: RegisterScreenProps) {
   };
 
   const renderError = () => {
-    if (props.authError) {
-      return <Text style={styles.errorText}>{props.authError}</Text>;
+    if (props.registerError) {
+      return <Text style={styles.errorText}>{props.registerError}</Text>;
     }
   };
 
@@ -141,13 +142,12 @@ function RegisterScreen(props: RegisterScreenProps) {
   );
 }
 
-const mapStateToProps = ({ auth }: any) => {
-  const { avatar, authError, authLoading, user } = auth;
+const mapStateToProps = (state: IStoreState) => {
   return {
-    avatar,
-    authError: authError,
-    authLoading: authLoading,
-    user,
+    avatar: state.auth?.avatar,
+    registerLoading: state.auth.registerLoading,
+    registerError: state.auth?.registerError,
+    user: state.user?.user,
   };
 };
 

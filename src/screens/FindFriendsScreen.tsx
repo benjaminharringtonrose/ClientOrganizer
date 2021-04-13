@@ -23,6 +23,7 @@ import {
 import SearchBar from "../components/SearchBar";
 import { BottomModal } from "../components/BottomModal";
 import { sendPushNotification, NOTIFICATION } from "../api/PushNotifications";
+import { IStoreState } from "../store/store";
 
 interface IPassedProps {
   navigation: any;
@@ -106,7 +107,6 @@ function FindFriendsScreen(props: IFindFriendsProps) {
 
   const modalHeight = Dimensions.get("screen").height / 4;
 
-  console.log("props.users", props.users);
   return (
     <ScreenContainer>
       <View style={{ paddingLeft: Spacing.large, paddingTop: Spacing.med }}>
@@ -164,7 +164,7 @@ function FindFriendsScreen(props: IFindFriendsProps) {
   );
 }
 
-const mapStateToProps = (state: any) => {
+const mapStateToProps = (state: IStoreState) => {
   return {
     uid: state.user?.user?.uid,
     avatar: state.user?.user?.avatar,

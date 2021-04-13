@@ -6,10 +6,13 @@ import {
   sendMessageFailed,
   fetchMessagesSucceeded,
   fetchMessagesFailed,
+  fetchThreadsFailed,
+  fetchThreadsSucceeded,
 } from "../actions/MessagesActions";
 import { IStoreState } from "../store";
 import { publishToast } from "../actions";
 import { NOTIFICATION_TYPE } from "../types";
+import { Firebase } from "../../database/Firebase";
 
 export function* sendMessageSaga(action: any) {
   try {
@@ -122,5 +125,25 @@ export function* fetchMessagesSaga() {
     yield put(fetchMessagesSucceeded(messages));
   } catch (error) {
     yield put(fetchMessagesFailed({ error } as any));
+  }
+}
+
+export function* fetchThreadsSaga() {
+  try {
+    const state: IStoreState = yield select();
+    const threads: any = [];
+    yield firebase
+      .firestore()
+      .collection("messages")
+      .doc(state.user?.uid)
+      .get()
+      .then((thread) => {
+        if (thread.exists) {
+          threads.push(thread);
+        }
+      });
+    yield put(fetchThreadsSucceeded(threads));
+  } catch (error) {
+    yield put(fetchThreadsFailed({ error } as any));
   }
 }

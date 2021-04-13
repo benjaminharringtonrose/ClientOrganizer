@@ -11,6 +11,7 @@ import { NotificationCard } from "../components/NotificationCard";
 import firebase from "firebase";
 import { NOTIFICATION } from "../api/PushNotifications";
 import { usePrevious } from "../hooks/usePrevious";
+import { IStoreState } from "../store/store";
 
 interface IPassedProps {
   navigation: any;
@@ -168,14 +169,14 @@ function NotificationScreen(props: IMessageScreenProps) {
   );
 }
 
-const mapStateToProps = (state: any) => {
+const mapStateToProps = (state: IStoreState) => {
   return {
     fetchUserLoading: state.user?.user?.fetchAllUsersLoading,
     fetchUserError: state.user?.user?.fetchAllUsersError,
     user: state.user?.user,
     uid: state.user?.user?.uid,
-    fetchNotificationsLoading: state.notifications?.fetchAllUsersLoading,
-    fetchNotificationsError: state.notifications?.fetchAllUsersError,
+    fetchNotificationsLoading: state.notifications?.fetchNotificationsLoading,
+    fetchNotificationsError: state.notifications?.fetchNotificationsError,
     notifications: state.notifications?.notifications,
   };
 };

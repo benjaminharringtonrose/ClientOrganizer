@@ -5,7 +5,9 @@ import { IStringMap } from "../../screens/RegisterScreen";
 export type INotificationsActions =
   | IFetchNotificationsRequested
   | IFetchNotificationsSucceeded
-  | IFetchNotificationsFailed;
+  | IFetchNotificationsFailed
+  | IPublishToast
+  | IDismissToast;
 
 export interface IFetchNotificationsRequested extends Action<FETCH_NOTIFICATIONS.REQUESTED> {
   payload?: string;
@@ -36,22 +38,19 @@ export const fetchNotificationsFailed = (error: IError): IFetchNotificationsFail
   payload: error,
 });
 
-export interface IPublishToastNotification extends Action<typeof TOAST_NOTIFICATION.PUBLISH> {
+export interface IPublishToast extends Action<typeof TOAST_NOTIFICATION.PUBLISH> {
   notificationType: NOTIFICATION_TYPE;
   text: string;
 }
 
-export const publishToast = (
-  notificationType: NOTIFICATION_TYPE,
-  text: string
-): IPublishToastNotification => ({
+export const publishToast = (notificationType: NOTIFICATION_TYPE, text: string): IPublishToast => ({
   type: TOAST_NOTIFICATION.PUBLISH,
   notificationType,
   text,
 });
 
-export interface IDismissToastNotification extends Action<typeof TOAST_NOTIFICATION.DISMISS> {}
+export interface IDismissToast extends Action<typeof TOAST_NOTIFICATION.DISMISS> {}
 
-export const dismissToast = (): IDismissToastNotification => ({
+export const dismissToast = (): IDismissToast => ({
   type: TOAST_NOTIFICATION.DISMISS,
 });

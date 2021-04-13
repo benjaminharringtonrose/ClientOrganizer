@@ -136,7 +136,7 @@ export function* sendFriendRequest(action: any) {
     // doc ref to the user you're sending the friend request to.
     const docRef = yield firebase.firestore().collection("notifications").doc(theirUid);
     // but below you'll be sending the CURRENT users info
-    const uid = yield firebase.auth().currentUser?.uid;
+    const uid: string | undefined = yield firebase.auth().currentUser?.uid;
     const notificationId = uuid();
     yield docRef.set(
       {

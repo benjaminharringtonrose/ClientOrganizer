@@ -1,5 +1,5 @@
 import { Action } from "redux";
-import { FETCH_USER, FETCH_ALL_USERS, IError, SET_USER_ID } from "../types";
+import { FETCH_USER, FETCH_ALL_USERS, IError, SET_USER_ID, UPLOAD_AVATAR } from "../types";
 import { IStringMap } from "../../screens/RegisterScreen";
 
 export type IUserActions =
@@ -8,7 +8,13 @@ export type IUserActions =
   | IFetchUserFailed
   | IFetchAllUsersRequested
   | IFetchAllUsersSucceeded
-  | IFetchAllUsersFailed;
+  | IFetchAllUsersFailed
+  | IUploadAvatarRequested
+  | IUploadAvatarSucceeded
+  | IUploadAvatarFailed
+  | ISetUserId;
+
+// FETCH USER
 
 export interface IFetchUserRequested extends Action<FETCH_USER.REQUESTED> {
   payload?: string;
@@ -39,6 +45,8 @@ export const fetchUserFailed = (error: IError): IFetchUserFailed => ({
   payload: error,
 });
 
+// FETCH ALL USERS
+
 export interface IFetchAllUsersRequested extends Action<FETCH_ALL_USERS.REQUESTED> {}
 
 export const fetchAllUsersRequested = (): IFetchAllUsersRequested => ({
@@ -63,13 +71,39 @@ export const fetchAllUsersFailed = (error: IError): IFetchAllUsersFailed => ({
   payload: error,
 });
 
-export interface ISetUserId extends Action<SET_USER_ID.SET> {
+// SET UID
+
+export interface ISetUserId extends Action<typeof SET_USER_ID> {
   payload?: string;
 }
 
-export const setUserId = (payload?: string): ISetUserId => {
-  return {
-    type: SET_USER_ID.SET,
-    payload,
-  };
-};
+export const setUserId = (payload?: string): ISetUserId => ({
+  type: SET_USER_ID,
+  payload,
+});
+
+// UPLOAD AVATAR
+
+export interface IUploadAvatarRequested extends Action<UPLOAD_AVATAR.REQUESTED> {}
+
+export const uploadAvatarRequested = (): IUploadAvatarRequested => ({
+  type: UPLOAD_AVATAR.REQUESTED,
+});
+
+export interface IUploadAvatarSucceeded extends Action<UPLOAD_AVATAR.SUCCEEDED> {
+  payload: string;
+}
+
+export const uploadAvatarSucceeded = (avatarUri: string): IUploadAvatarSucceeded => ({
+  type: UPLOAD_AVATAR.SUCCEEDED,
+  payload: avatarUri,
+});
+
+export interface IUploadAvatarFailed extends Action<UPLOAD_AVATAR.FAILED> {
+  payload: IError;
+}
+
+export const uploadAvatarFailed = (error: any): IUploadAvatarFailed => ({
+  type: UPLOAD_AVATAR.FAILED,
+  payload: error,
+});

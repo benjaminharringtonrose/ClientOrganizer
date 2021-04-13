@@ -42,6 +42,7 @@ const MessageScreen = (props: IMessageScreenProps) => {
   }, []);
 
   const renderMessagePreview = ({ item }: any) => {
+    console.log("item ==>", item);
     const onMessagePress = () => {
       setState({
         ...state,

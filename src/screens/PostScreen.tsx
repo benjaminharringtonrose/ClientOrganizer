@@ -13,8 +13,9 @@ import { connect } from "react-redux";
 import { Routes } from "../navigation/routes";
 import { Color, Spacing } from "../styles";
 import { ScreenContainer, Header, ButtonText, ButtonBack } from "../components";
-import { ADD_POST } from "../store/types";
+import { ADD_POST, IError } from "../store/types";
 import { usePrevious } from "../hooks/usePrevious";
+import { IStoreState } from "../store/store";
 
 interface IPassedProps {
   navigation: any;
@@ -26,7 +27,7 @@ interface IPropsFromState {
   lastName: string;
   email: string;
   addPostLoading: boolean;
-  addPostError?: any;
+  addPostError?: IError;
 }
 
 interface IDispatchFromState {
@@ -157,7 +158,7 @@ function PostScreen(props: IPostScreenProps) {
   );
 }
 
-const mapStateToProps = (state: any) => {
+const mapStateToProps = (state: IStoreState) => {
   return {
     avatar: state.user?.user?.avatar,
     firstName: state.user?.user?.firstName,

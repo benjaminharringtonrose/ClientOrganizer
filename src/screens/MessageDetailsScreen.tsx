@@ -82,7 +82,6 @@ function MessageDetailsScreen(props: MessageDetailsProps) {
       console.warn("No messages");
       return;
     }
-    console.log("senderId", senderId, "messages", messages);
     for (const [key, value] of Object.entries(messages)) {
       if (value.senderId === senderId) {
         return value;

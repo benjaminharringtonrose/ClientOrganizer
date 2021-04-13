@@ -7,10 +7,12 @@ import {
   SET_USER_ID,
 } from "../types";
 import { IStringMap } from "../../screens/RegisterScreen";
+import { IUserActions } from "../actions";
 
 export interface IUserState {
   readonly uid?: string;
   readonly user?: IStringMap<any>;
+  readonly users?: any;
   readonly fetchUserLoading: boolean;
   readonly fetchUserError?: IError;
   readonly fetchAllUsersLoading: boolean;
@@ -24,6 +26,7 @@ export interface IUserState {
 const DefaultUserState: IUserState = {
   uid: undefined,
   user: undefined,
+  users: undefined,
   fetchUserLoading: false,
   fetchUserError: undefined,
   fetchAllUsersLoading: false,
@@ -34,7 +37,7 @@ const DefaultUserState: IUserState = {
   uploadAvatarError: undefined,
 };
 
-const UserReducer = (state = DefaultUserState, action: any) => {
+const UserReducer = (state = DefaultUserState, action: IUserActions): IUserState => {
   switch (action.type) {
     case FETCH_USER.REQUESTED:
       return {
@@ -50,7 +53,7 @@ const UserReducer = (state = DefaultUserState, action: any) => {
     case FETCH_USER.FAILED:
       return {
         ...state,
-        fetchUserError: action.payload.message,
+        fetchUserError: action.payload,
         fetchUserLoading: false,
       };
     case FETCH_ALL_USERS.REQUESTED:
@@ -67,24 +70,8 @@ const UserReducer = (state = DefaultUserState, action: any) => {
     case FETCH_ALL_USERS.FAILED:
       return {
         ...state,
-        fetchAllUsersError: action.payload.message,
+        fetchAllUsersError: action.payload,
         fetchAllUsersLoading: false,
-      };
-    case ADD_POST.REQUESTED:
-      return {
-        ...state,
-        addPostLoading: true,
-      };
-    case ADD_POST.SUCCEEDED:
-      return {
-        ...state,
-        addPostLoading: false,
-      };
-    case ADD_POST.FAILED:
-      return {
-        ...state,
-        addPostError: action.payload.message,
-        addPostLoading: false,
       };
     case UPLOAD_AVATAR.REQUESTED:
       return {
@@ -103,10 +90,10 @@ const UserReducer = (state = DefaultUserState, action: any) => {
     case UPLOAD_AVATAR.FAILED:
       return {
         ...state,
-        uploadAvatarError: action.payload.message,
+        uploadAvatarError: action.payload,
         uploadAvatarLoading: false,
       };
-    case SET_USER_ID.SET:
+    case SET_USER_ID:
       return {
         ...state,
         uid: action.payload,

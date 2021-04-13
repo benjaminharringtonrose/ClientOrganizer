@@ -14,8 +14,8 @@ class App extends Component {
     return (
       <Provider store={store}>
         <StatusBar barStyle={"light-content"} />
-        <RootNavigator />
         <ToastNotification />
+        <RootNavigator />
       </Provider>
     );
   }

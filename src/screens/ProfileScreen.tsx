@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Text, StyleSheet, Image, View, TouchableOpacity, ActivityIndicator } from "react-native";
 import firebase from "firebase";
 import { connect } from "react-redux";
-import { LOGOUT_USER, FETCH_USER, UPLOAD_AVATAR } from "../store/types";
+import { LOGOUT_USER, FETCH_USER, UPLOAD_AVATAR, IError } from "../store/types";
 import * as ImagePicker from "expo-image-picker";
 import { Ionicons } from "@expo/vector-icons";
 
@@ -13,33 +13,34 @@ import {
   Spinner,
   Button,
   CellLabelLeftRight,
-  Header,
 } from "../components";
 
 import { Color, Spacing } from "../styles";
 import UserPermissions from "../utilities/UserPermissions";
+import { IStoreState } from "../store/store";
 
-interface PassedProps {
+interface IPassedProps {
   navigation: any;
 }
 
-interface PropsFromState {
+interface IPropsFromState {
   avatar: string;
   firstName: string;
   lastName: string;
   email: string;
   authLoading: boolean;
+  uthError?: IError;
   uploadAvatarLoading: boolean;
-  uploadAvatarError?: any;
+  uploadAvatarError?: IError;
 }
 
-interface DispatchFromState {
+interface IDispatchFromState {
   dispatchFetchUser: (uid: string) => any;
   dispatchLogoutRequest: (object: any) => any;
   dispatchUploadAvatar: (avatarUri: string) => any;
 }
 
-type ProfileScreenProps = PropsFromState & DispatchFromState & PassedProps;
+type ProfileScreenProps = IPropsFromState & IDispatchFromState & IPassedProps;
 
 interface ILocalState {
   imageLoading: boolean;
@@ -158,14 +159,14 @@ function ProfileScreen(props: ProfileScreenProps) {
   );
 }
 
-const mapStateToProps = (state: any) => {
+const mapStateToProps = (state: IStoreState) => {
   return {
     avatar: state.user?.user?.avatar,
     firstName: state.user?.user?.firstName,
     lastName: state.user?.user?.lastName,
     email: state.user?.user?.email,
-    authLoading: state.auth.loading,
-    authError: state.auth?.error,
+    authLoading: state.auth.authLoading,
+    authError: state.auth?.authError,
     uploadAvatarLoading: state.user?.uploadAvatarLoading,
     uploadAvatarError: state.user?.uploadAvatarError,
   };

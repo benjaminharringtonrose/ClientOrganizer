@@ -1,12 +1,11 @@
 import React from "react";
 import { connect } from "react-redux";
-import { SafeAreaView, View, Text } from "react-native";
+import { View, Text } from "react-native";
 
 import { dismissToast } from "../store/actions";
 import { NOTIFICATION_TYPE } from "../store/types";
 
 import { IStoreState } from "../store/store";
-import { Banner } from "./Banner";
 
 import * as Animatable from "react-native-animatable";
 import { Color, Spacing } from "../styles";

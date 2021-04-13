@@ -20,6 +20,7 @@ import {
   SEND_FRIEND_REQUEST,
   SEND_MESSAGE,
   FETCH_MESSAGES,
+  FETCH_THREADS,
 } from "./types";
 import {
   fetchUserSaga,
@@ -37,12 +38,22 @@ import {
   toastWasPublished,
   sendFriendRequest,
 } from "../store/sagas";
-import { IAuthState, IFriendsState, IFeedState, IUserState, INotificationsState } from "./reducers";
+import {
+  IAuthState,
+  IFriendsState,
+  IFeedState,
+  IUserState,
+  INotificationsState,
+  IMessagesState,
+} from "./reducers";
 
 import AuthReducer from "./reducers/AuthReducer";
 import UserReducer from "./reducers/UserReducer";
 import FeedReducer from "./reducers/FeedReducer";
 import FriendsReducer from "./reducers/FriendsReducer";
+import MessagesReducer from "./reducers/MessagesReducer";
+import NotificationsReducer from "./reducers/NotificationsReducer";
+
 import {
   IAuthActions,
   IFeedActions,
@@ -50,11 +61,10 @@ import {
   IUserActions,
   setUserId,
   INotificationsActions,
+  IMessagesActions,
 } from "./actions";
-import NotificaitonsReducer from "./reducers/NotificationsReducer";
-import { sendMessageSaga, fetchMessagesSaga } from "./sagas/MessagesSagas";
-import MessagesReducer, { IMessagesState } from "./reducers/MessagesReducer";
-import { IMessagesActions } from "./actions/MessagesActions";
+
+import { sendMessageSaga, fetchMessagesSaga, fetchThreadsSaga } from "./sagas/MessagesSagas";
 
 export interface IStoreState {
   readonly auth: IAuthState;
@@ -92,7 +102,7 @@ function* rootActionListener() {
   yield takeLatest(DELETE_FRIEND.REQUESTED, deleteFriendSaga);
   yield takeLatest(FETCH_ALL_FRIENDS.REQUESTED, fetchAllFriendsSaga);
 
-  yield takeLatest(SET_USER_ID.SET, setUserId);
+  yield takeLatest(SET_USER_ID, setUserId);
 
   yield takeLatest(FETCH_NOTIFICATIONS.REQUESTED, fetchNotificationsSaga);
   yield takeLatest(TOAST_NOTIFICATION.PUBLISH, toastWasPublished);
@@ -101,6 +111,7 @@ function* rootActionListener() {
 
   yield takeLatest(SEND_MESSAGE.REQUESTED, sendMessageSaga);
   yield takeLatest(FETCH_MESSAGES.REQUESTED, fetchMessagesSaga);
+  yield takeLatest(FETCH_THREADS.REQUESTED, fetchThreadsSaga);
 }
 
 // ROOT SAGA
@@ -116,7 +127,7 @@ const rootReducer: Reducer<IStoreState, IActions> = combineReducers({
   user: UserReducer,
   feed: FeedReducer,
   friends: FriendsReducer,
-  notifications: NotificaitonsReducer,
+  notifications: NotificationsReducer,
   messages: MessagesReducer,
 });
 

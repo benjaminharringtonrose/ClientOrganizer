@@ -9,6 +9,7 @@ import { IStringMap } from "./RegisterScreen";
 import { BottomModal } from "../components/BottomModal";
 import { DELETE_FRIEND } from "../store/types";
 import uuid from "uuid-random";
+import { IStoreState } from "../store/store";
 
 interface IPassedProps {
   navigation: any;
@@ -126,7 +127,7 @@ function FriendsListScreen(props: IFindFriendsProps) {
   );
 }
 
-const mapStateToProps = (state: any) => {
+const mapStateToProps = (state: IStoreState) => {
   return {
     friendsList: state.user?.user?.friendsList,
   };

@@ -7,7 +7,7 @@ import { IStoreState } from "../store";
 
 export function* fetchNotificationsSaga() {
   try {
-    const uid = yield firebase.auth().currentUser?.uid;
+    const uid: string | undefined = yield firebase.auth().currentUser?.uid;
     let notifications: firebase.firestore.DocumentData | undefined;
     const db = firebase.firestore();
 

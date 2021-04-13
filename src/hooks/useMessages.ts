@@ -3,7 +3,6 @@ import { useState, useEffect } from "react";
 
 export const useMessages = (messagesProp?: IStringMap<any>) => {
   const [mappedMessages, setMappedMessages] = useState(undefined);
-  console.log("MESSAGES", messagesProp);
   useEffect(() => {
     const messages: any = [];
     if (messagesProp) {

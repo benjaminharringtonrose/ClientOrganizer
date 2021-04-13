@@ -1,79 +1,88 @@
 import { LOGIN_USER, REGISTER_USER, LOGOUT_USER } from "../types";
 import { IError } from "../types";
+import { IAuthActions } from "../actions";
 
 export interface IAuthState {
+  readonly user?: any;
   readonly avatar?: string;
   readonly uid: string;
-  readonly authError?: IError;
-  readonly authLoading: boolean;
+  readonly loginError?: IError;
+  readonly loginLoading: boolean;
+  readonly logoutError?: IError;
+  readonly logoutLoading: boolean;
+  readonly registerLoading: boolean;
+  readonly registerError?: IError;
 }
 
 export const DefaultAuthState: IAuthState = {
+  user: undefined,
   avatar: undefined,
   uid: "",
-  authError: undefined,
-  authLoading: false,
+  loginError: undefined,
+  loginLoading: false,
+  logoutError: undefined,
+  logoutLoading: false,
+  registerLoading: false,
+  registerError: undefined,
 };
 
-// AUTH REDUCER
-
-const AuthReducer = (state = DefaultAuthState, action: any) => {
+const AuthReducer = (state = DefaultAuthState, action: IAuthActions): IAuthState => {
   switch (action.type) {
     // LOGIN
     case LOGIN_USER.REQUESTED:
       return {
         ...state,
-        authLoading: true,
+        loginLoading: true,
       };
     case LOGIN_USER.SUCCEEDED:
       return {
         ...state,
         user: action.payload,
-        authLoading: false,
-        authError: undefined,
+        loginLoading: false,
+        loginError: undefined,
       };
     case LOGIN_USER.FAILED:
       return {
         ...state,
-        authError: action.payload.message,
-        authLoading: false,
+        loginError: action.payload,
+        loginLoading: false,
       };
     // LOGOUT
     case LOGOUT_USER.REQUESTED:
       return {
         ...state,
-        authLoading: true,
+        logoutLoading: true,
       };
     case LOGOUT_USER.SUCCEEDED:
       return {
         ...state,
         ...DefaultAuthState,
-        authLoading: false,
+        logoutLoading: false,
       };
     case LOGOUT_USER.FAILED:
       return {
         ...state,
-        authError: action.payload.message,
-        authLoading: false,
+        logoutLoading: false,
+        logoutError: action.payload,
       };
     // REGISTER
     case REGISTER_USER.REQUESTED:
       return {
         ...state,
-        loading: true,
+        registerLoading: true,
       };
     case REGISTER_USER.SUCCEEDED:
       return {
         ...state,
         user: action.payload,
-        loading: false,
-        authError: undefined,
+        registerLoading: false,
+        registerError: undefined,
       };
     case REGISTER_USER.FAILED:
       return {
         ...state,
-        authError: action.payload.message,
-        loading: false,
+        registerLoading: false,
+        registerError: action.payload,
       };
     default:
       return state;

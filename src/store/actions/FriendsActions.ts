@@ -9,13 +9,26 @@ import {
 import { IStringMap } from "../../screens/RegisterScreen";
 
 export type IFriendsActions =
+  | IAddFriendRequested
   | IAddFriendSucceeded
   | IAddFriendFailed
   | IFetchAllFriendsSucceeded
   | IFetchAllFriendsFailed
+  | IDeleteFriendRequested
   | IDeleteFriendSucceeded
   | IDeleteFriendFailed
   | ISendFriendRequest;
+
+// ADD FRIEND
+
+export interface IAddFriendRequested extends Action<ADD_FRIEND.REQUESTED> {
+  payload?: string;
+}
+
+export const addFriendRequested = (payload?: string): IAddFriendRequested => ({
+  type: ADD_FRIEND.REQUESTED,
+  payload,
+});
 
 export interface IAddFriendSucceeded extends Action<ADD_FRIEND.SUCCEEDED> {}
 
@@ -32,6 +45,14 @@ export const addFriendFailed = (error: IError): IAddFriendFailed => ({
   payload: error,
 });
 
+// FETCH ALL FRIENDS
+
+export interface IFetchAllFriendsRequested extends Action<FETCH_ALL_FRIENDS.REQUESTED> {}
+
+export const fetchAllFriendsRequested = (payload?: string): IFetchAllFriendsRequested => ({
+  type: FETCH_ALL_FRIENDS.REQUESTED,
+});
+
 export interface IFetchAllFriendsSucceeded extends Action<FETCH_ALL_FRIENDS.SUCCEEDED> {}
 
 export const fetchAllFriendsSucceeded = (): IFetchAllFriendsSucceeded => ({
@@ -45,6 +66,17 @@ export interface IFetchAllFriendsFailed extends Action<FETCH_ALL_FRIENDS.FAILED>
 export const fetchAllFriendsFailed = (error: IError): IFetchAllFriendsFailed => ({
   type: FETCH_ALL_FRIENDS.FAILED,
   payload: error,
+});
+
+// DELETE FRIEND
+
+export interface IDeleteFriendRequested extends Action<DELETE_FRIEND.REQUESTED> {
+  payload?: string;
+}
+
+export const deleteFriendRequested = (id?: string): IDeleteFriendRequested => ({
+  type: DELETE_FRIEND.REQUESTED,
+  payload: id,
 });
 
 export interface IDeleteFriendSucceeded extends Action<DELETE_FRIEND.SUCCEEDED> {}

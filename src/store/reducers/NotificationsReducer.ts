@@ -1,5 +1,6 @@
 import { FETCH_NOTIFICATIONS, IError, TOAST_NOTIFICATION, NOTIFICATION_TYPE } from "../types";
 import { IStringMap } from "../../screens/RegisterScreen";
+import { INotificationsActions } from "../actions";
 
 export interface INotificationsState {
   readonly notifications?: any;
@@ -10,7 +11,7 @@ export interface INotificationsState {
   readonly notificationVisible: boolean;
 }
 
-const DefaultNotificaitonsState: INotificationsState = {
+const DefaultNotificationsState: INotificationsState = {
   notifications: undefined,
   fetchNotificationsLoading: false,
   fetchNotificationsError: undefined,
@@ -19,8 +20,12 @@ const DefaultNotificaitonsState: INotificationsState = {
   notificationType: undefined,
 };
 
-const NotificaitonsReducer = (state = DefaultNotificaitonsState, action: any) => {
+const NotificationsReducer = (
+  state = DefaultNotificationsState,
+  action: INotificationsActions
+): INotificationsState => {
   switch (action.type) {
+    // FETCH NOTIFICATIONS
     case FETCH_NOTIFICATIONS.REQUESTED:
       return {
         ...state,
@@ -35,9 +40,10 @@ const NotificaitonsReducer = (state = DefaultNotificaitonsState, action: any) =>
     case FETCH_NOTIFICATIONS.FAILED:
       return {
         ...state,
-        fetchNotificationsError: action.payload.message,
+        fetchNotificationsError: action.payload,
         fetchNotificationsLoading: false,
       };
+    // TOAST
     case TOAST_NOTIFICATION.PUBLISH:
       return {
         ...state,
@@ -57,4 +63,4 @@ const NotificaitonsReducer = (state = DefaultNotificaitonsState, action: any) =>
   }
 };
 
-export default NotificaitonsReducer;
+export default NotificationsReducer;

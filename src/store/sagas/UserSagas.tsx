@@ -3,13 +3,15 @@ import * as firebase from "firebase";
 require("firebase/firestore");
 import uuid from "uuid-random";
 import { ADD_POST, UPLOAD_AVATAR, IError } from "../types";
-import { fetchPostsRequested } from "../actions/FeedActions";
+import { fetchPostsRequested, addPostSucceeded, addPostFailed } from "../actions/FeedActions";
 import {
   fetchUserSucceeded,
   fetchUserFailed,
   fetchAllUsersSucceeded,
   fetchAllUsersFailed,
   IFetchUserRequested,
+  uploadAvatarSucceeded,
+  uploadAvatarFailed,
 } from "../actions";
 
 // FETCH USER - SAGA
@@ -34,7 +36,6 @@ export function* fetchAllUsersSaga() {
       .then(function (querySnapshot) {
         querySnapshot.forEach((doc) => {
           const user = doc.data();
-          console.log("GET USER", user);
           users.push(user);
         });
       });
@@ -69,27 +70,6 @@ export const uploadPhotoAsync = async (uri: RequestInfo, filename: string | unde
   });
 };
 
-// UPLOAD AVATAR - ACTIONS
-
-export function uploadAvatarRequested() {
-  return {
-    type: UPLOAD_AVATAR.REQUESTED,
-  };
-}
-
-export function uploadAvatarSucceeded(avatarUri: string) {
-  return {
-    type: UPLOAD_AVATAR.SUCCEEDED,
-    payload: avatarUri,
-  };
-}
-export function uploadAvatarFailed(error: any) {
-  return {
-    type: UPLOAD_AVATAR.FAILED,
-    payload: error,
-  };
-}
-
 // UPLOAD AVATAR - SAGA
 
 export function* uploadAvatarSaga(action: any) {
@@ -109,34 +89,14 @@ export function* uploadAvatarSaga(action: any) {
   }
 }
 
-// ADD POST - ACTIONS
-
-export function addPostRequested() {
-  return {
-    type: ADD_POST.REQUESTED,
-  };
-}
-
-export function addPostSucceeded() {
-  return {
-    type: ADD_POST.SUCCEEDED,
-  };
-}
-export function addPostFailed(error: any) {
-  return {
-    type: ADD_POST.FAILED,
-    payload: error,
-  };
-}
-
 // ADD POST - SAGA
 
 export function* addPostSaga(action: any) {
   try {
     const { firstName, lastName, avatar, text, image } = action.payload;
-    const uid = yield firebase.auth().currentUser?.uid;
-    const postID = uuid();
-    const imageID = uuid();
+    const uid: string | undefined = yield firebase.auth().currentUser?.uid;
+    const postID: string = uuid();
+    const imageID: string = uuid();
     let imageUri: unknown;
     if (image) {
       imageUri = yield uploadPhotoAsync(image, `images/${postID}`);

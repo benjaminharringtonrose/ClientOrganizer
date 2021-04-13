@@ -3,12 +3,21 @@ import { LOGIN_USER, LOGOUT_USER, REGISTER_USER, IError } from "../types";
 import { IStringMap } from "../../screens/RegisterScreen";
 
 export type IAuthActions =
+  | ILoginUserRequested
   | ILoginUserSucceeded
   | ILoginUserFailed
+  | ILogoutUserRequested
   | ILogoutUserSucceeded
   | ILogoutUserFailed
+  | IRegisterUserRequested
   | IRegisterUserSucceeded
   | IRegisterUserFailed;
+
+export interface ILoginUserRequested extends Action<LOGIN_USER.REQUESTED> {}
+
+export const loginUserRequested = (): ILoginUserRequested => ({
+  type: LOGIN_USER.REQUESTED,
+});
 
 export interface ILoginUserSucceeded extends Action<LOGIN_USER.SUCCEEDED> {
   payload: IStringMap<any>;
@@ -32,6 +41,12 @@ export function loginUserFailed(payload: IError) {
   };
 }
 
+export interface ILogoutUserRequested extends Action<LOGOUT_USER.REQUESTED> {}
+
+export const logoutUserRequested = (): ILogoutUserRequested => ({
+  type: LOGOUT_USER.REQUESTED,
+});
+
 export interface ILogoutUserSucceeded extends Action<LOGOUT_USER.SUCCEEDED> {}
 
 export function logoutUserSucceeded() {
@@ -50,6 +65,12 @@ export function logoutUserFailed(error: IError) {
     payload: error,
   };
 }
+
+export interface IRegisterUserRequested extends Action<REGISTER_USER.REQUESTED> {}
+
+export const registerUserRequested = (): IRegisterUserRequested => ({
+  type: REGISTER_USER.REQUESTED,
+});
 
 export interface IRegisterUserSucceeded extends Action<REGISTER_USER.SUCCEEDED> {
   payload: IStringMap<any>;

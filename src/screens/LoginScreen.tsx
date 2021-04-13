@@ -1,21 +1,22 @@
 import React, { useState } from "react";
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import { connect } from "react-redux";
-import { LOGIN_USER } from "../store/types";
+import { LOGIN_USER, IError } from "../store/types";
 import { Color, Spacing } from "../styles";
 import { Routes } from "../navigation/routes";
 import { Icon } from "react-native-elements";
 import { Card, CardSection, ScreenContainer, Header, Input, Button, Spinner } from "../components";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { AuthParamList } from "../navigation/navigation";
+import { IStoreState } from "../store/store";
 
 interface IPassedProps {
   navigation: StackNavigationProp<AuthParamList, Routes.LOGIN_SCREEN>;
 }
 
 interface IPropsFromState {
-  authLoading: boolean;
-  authError: boolean;
+  loginLoading: boolean;
+  loginError?: IError;
 }
 interface IDispatchFromState {
   dispatchLoginRequest: (object: any) => any;
@@ -41,7 +42,7 @@ function LoginScreen(props: LoginScreenProps) {
   };
 
   const renderLoginButton = () => {
-    if (props.authLoading) {
+    if (props.loginLoading) {
       return <Spinner size="small" color={Color.white} />;
     } else {
       return (
@@ -53,10 +54,10 @@ function LoginScreen(props: LoginScreenProps) {
   };
 
   const renderError = () => {
-    if (props.authError) {
+    if (props.loginError) {
       return (
         <View style={{ marginVertical: Spacing.small }}>
-          <Text style={styles.errorTextStyle}>{props.authError}</Text>
+          <Text style={styles.errorTextStyle}>{props.loginError.message}</Text>
         </View>
       );
     }
@@ -110,10 +111,10 @@ function LoginScreen(props: LoginScreenProps) {
   );
 }
 
-const mapStateToProps = (state: any) => {
+const mapStateToProps = (state: IStoreState) => {
   return {
-    authError: state.auth.authError,
-    authLoading: state.auth.authLoading,
+    authError: state.auth?.loginLoading,
+    authLoading: state.auth.loginError,
   };
 };
 
