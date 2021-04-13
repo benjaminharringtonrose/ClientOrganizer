@@ -71,6 +71,9 @@ function MessageDetailsScreen(props: MessageDetailsProps) {
               for (const [key, message] of Object.entries(item.messages!)) {
                 messages = messages.concat({ ...(message as Object), id: key });
               }
+              messages.sort(function (a: any, b: any) {
+                return a.timestamp < b.timestamp;
+              });
               setState({ ...state, mappedMessages: messages });
             }
           }
@@ -93,6 +96,7 @@ function MessageDetailsScreen(props: MessageDetailsProps) {
   };
 
   const onSendMessagePress = () => {
+    setState({ ...state, messageInput: "" });
     props.dispatchSendMessage({
       senderId: props.uid,
       recipientId: props.route.params?.threadId,
@@ -102,7 +106,6 @@ function MessageDetailsScreen(props: MessageDetailsProps) {
       threadLastName: props.user.lastName,
     });
     props.dispatchFetchMessages();
-    setState({ ...state, messageInput: "" });
   };
 
   const isSender = (senderId: string) => {
@@ -122,7 +125,7 @@ function MessageDetailsScreen(props: MessageDetailsProps) {
         title={"Message Details"}
         headerLeft={
           <ButtonBack
-            onPress={() => props.navigation.goBack()}
+            onPress={() => props.navigation.popToTop()}
             iconSize={24}
             iconColor={Color.white}
           />

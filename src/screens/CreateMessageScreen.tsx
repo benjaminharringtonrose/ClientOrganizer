@@ -114,6 +114,7 @@ function CreateMessageScreen(props: CreateMessageScreenProps) {
     props.dispatchFetchMessages();
     props.navigation.navigate(Routes.MESSAGE_DETAILS_SCREEN, {
       threadId: state.selectedFriend?.uid,
+      previousScreen: Routes.CREATE_MESSAGE_SCREEN,
     });
   };
 
