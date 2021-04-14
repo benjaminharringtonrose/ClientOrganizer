@@ -1,5 +1,4 @@
-import React, { useState, useEffect } from "react";
-import { FlatList } from "react-native";
+import React, { useState } from "react";
 import { ScreenContainer, Header, ButtonBack } from "../components";
 import { Color } from "../styles";
 import { IStoreState } from "../store/store";
@@ -11,11 +10,9 @@ import { MessageParamList } from "../navigation/navigation";
 import { RouteProp } from "../store/types";
 import { fetchMessagesRequested, sendMessageRequested } from "../store/actions/MessagesActions";
 import { IStringMap } from "./RegisterScreen";
-import firebase from "firebase";
-import { BubbleSender } from "../components/BubbleSender";
-import { BubbleReciever } from "../components/BubbleReciever";
 import { MessageSenderInput } from "../components/MessageSenderInput";
 import { BubbleMessageList } from "../components/BubbleMessageList";
+import { useMessages } from "../hooks/useMessages";
 
 interface IPassedProps {
   navigation: StackNavigationProp<MessageParamList, Routes.MESSAGE_DETAILS_SCREEN>;
@@ -47,7 +44,6 @@ interface ILocalState {
   image?: string;
   imageLoading: boolean;
   messageInput: string;
-  mappedMessages?: IStringMap<any>[];
 }
 
 function MessageDetailsScreen(props: MessageDetailsProps) {
@@ -55,35 +51,9 @@ function MessageDetailsScreen(props: MessageDetailsProps) {
     image: undefined,
     imageLoading: true,
     messageInput: "",
-    mappedMessages: undefined,
   });
 
-  useEffect(() => {
-    var unsubscribe = firebase
-      .firestore()
-      .collection("messages")
-      .doc(props.uid)
-      .onSnapshot((doc) => {
-        if (doc.exists) {
-          const docData = doc.data();
-          for (const [key, item] of Object.entries(docData!)) {
-            if (key === props.route.params?.threadId) {
-              let messages: any = [];
-              for (const [key, message] of Object.entries(item.messages!)) {
-                messages = messages.concat({ ...(message as Object), id: key });
-              }
-              messages.sort(function (a: any, b: any) {
-                return a.timestamp < b.timestamp;
-              });
-              setState({ ...state, mappedMessages: messages });
-            }
-          }
-        }
-      });
-    return function cleanup() {
-      unsubscribe();
-    };
-  }, []);
+  const messages = useMessages(props.route.params?.threadId);
 
   const pickImage = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
@@ -121,7 +91,7 @@ function MessageDetailsScreen(props: MessageDetailsProps) {
           />
         }
       />
-      <BubbleMessageList messages={state.mappedMessages} uid={props.uid} />
+      <BubbleMessageList messages={messages} uid={props.uid} />
       <MessageSenderInput
         onChangeText={(messageInput: string) => setState({ ...state, messageInput })}
         onCameraPress={() => {}}
