@@ -67,7 +67,6 @@ function MessageDetailsScreen(props: MessageDetailsProps) {
   };
 
   const onSendMessagePress = () => {
-    setState({ ...state, messageInput: "" });
     props.dispatchSendMessage({
       senderId: props.uid,
       recipientId: props.route.params?.threadId,
@@ -76,6 +75,7 @@ function MessageDetailsScreen(props: MessageDetailsProps) {
       threadFirstName: props.user.firstName,
       threadLastName: props.user.lastName,
     });
+    setState({ ...state, messageInput: "" });
     props.dispatchFetchMessages();
   };
 
@@ -96,6 +96,7 @@ function MessageDetailsScreen(props: MessageDetailsProps) {
         onChangeText={(messageInput: string) => setState({ ...state, messageInput })}
         onCameraPress={() => {}}
         onSendPress={onSendMessagePress}
+        value={state.messageInput}
       />
     </ScreenContainer>
   );

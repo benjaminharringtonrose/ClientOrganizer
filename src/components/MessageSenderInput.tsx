@@ -6,6 +6,7 @@ import { Ionicons } from "@expo/vector-icons";
 
 interface IMeaasgeSenderInputProps {
   onChangeText: (text: string) => void;
+  value: string;
   onCameraPress: () => void;
   onSendPress: () => void;
 }
@@ -47,6 +48,7 @@ export const MessageSenderInput = (props: IMeaasgeSenderInputProps) => {
           style={{ backgroundColor: "transparent" }}
           selectionColor={Color.greyLight}
           onChangeText={props.onChangeText}
+          value={props.value}
         />
         <TouchableOpacity style={{ paddingRight: Spacing.small }} onPress={props.onSendPress}>
           <Ionicons name={"ios-send"} color={Color.darkThemeGrey} size={25} />

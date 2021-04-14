@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { View, Text, StyleSheet, FlatList, RefreshControl, TouchableOpacity } from "react-native";
 import { connect } from "react-redux";
+import * as Animatable from "react-native-animatable";
 import { ScreenContainer, MessagePreviewCard, Header, ButtonText } from "../components";
 import { Color, Spacing } from "../styles";
 import { IStringMap } from "./RegisterScreen";
@@ -13,6 +14,7 @@ import { fetchMessagesRequested, fetchThreadsRequested } from "../store/actions/
 import { getMostRecentMessage } from "./util";
 import { usePrevious } from "../hooks/usePrevious";
 import { isEqual } from "lodash";
+import { Ionicons } from "@expo/vector-icons";
 
 interface IPassedProps {
   navigation: any;
@@ -34,12 +36,14 @@ type IMessageScreenProps = IPassedProps & IPropsFromState & IDispatchFromState;
 interface ILocalState {
   selectedMessage?: IStringMap<any>;
   threads: any;
+  showEdit?: boolean;
 }
 
 const MessageScreen = (props: IMessageScreenProps) => {
   const [state, setState] = useState<ILocalState>({
     selectedMessage: undefined,
     threads: undefined,
+    showEdit: undefined,
   });
 
   useEffect(() => {
@@ -54,6 +58,11 @@ const MessageScreen = (props: IMessageScreenProps) => {
       setState({ ...state, threads: props?.threads });
     }
   }, [props.threads]);
+
+  useEffect(() => {
+    if (state.showEdit !== undefined && !!state.showEdit) {
+    }
+  }, [state.showEdit]);
 
   const renderMessagePreview = ({ item }: any) => {
     const onMessagePress = () => {
@@ -71,16 +80,75 @@ const MessageScreen = (props: IMessageScreenProps) => {
         threadId: item.id,
       });
     };
+
+    function makeSlideTranslation(translationType: string, fromValue: number, toValue: number) {
+      return {
+        from: {
+          [translationType]: fromValue,
+        },
+        to: {
+          [translationType]: toValue,
+        },
+      };
+    }
+
     if (item) {
       return (
-        <TouchableOpacity onPress={onMessagePress}>
-          <MessagePreviewCard
-            avatar={item.threadAvatar}
-            name={`${item.threadFirstName} ${item.threadLastName}`}
-            message={getMostRecentMessage(item.messages)}
-            timestamp={item.timestamp}
-          />
-        </TouchableOpacity>
+        <View style={{ flex: 1, flexDirection: "row" }}>
+          {state.showEdit && (
+            <Animatable.View
+              ref={(ref) => (this.view = ref)}
+              animation={makeSlideTranslation("translateX", -100, 0)}
+            >
+              <TouchableOpacity
+                style={{
+                  flex: 1,
+                  backgroundColor: Color.error,
+                  width: 80,
+                  height: 75,
+                  borderBottomRightRadius: 10,
+                  borderTopRightRadius: 10,
+                }}
+              >
+                <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+                  <Ionicons name={"close"} color={Color.white} size={25} />
+                </View>
+              </TouchableOpacity>
+            </Animatable.View>
+          )}
+          {state.showEdit ? (
+            <TouchableOpacity style={{ flex: 1 }} onPress={onMessagePress}>
+              <Animatable.View animation={makeSlideTranslation("translateX", -80, 0)}>
+                <MessagePreviewCard
+                  avatar={item.threadAvatar}
+                  name={`${item.threadFirstName} ${item.threadLastName}`}
+                  message={getMostRecentMessage(item.messages)}
+                  timestamp={item.timestamp}
+                />
+              </Animatable.View>
+            </TouchableOpacity>
+          ) : !state.showEdit && state.showEdit !== undefined ? (
+            <TouchableOpacity style={{ flex: 1 }} onPress={onMessagePress}>
+              <Animatable.View animation={makeSlideTranslation("translateX", 80, 0)}>
+                <MessagePreviewCard
+                  avatar={item.threadAvatar}
+                  name={`${item.threadFirstName} ${item.threadLastName}`}
+                  message={getMostRecentMessage(item.messages)}
+                  timestamp={item.timestamp}
+                />
+              </Animatable.View>
+            </TouchableOpacity>
+          ) : (
+            <TouchableOpacity style={{ flex: 1 }} onPress={onMessagePress}>
+              <MessagePreviewCard
+                avatar={item.threadAvatar}
+                name={`${item.threadFirstName} ${item.threadLastName}`}
+                message={getMostRecentMessage(item.messages)}
+                timestamp={item.timestamp}
+              />
+            </TouchableOpacity>
+          )}
+        </View>
       );
     }
     return null;
@@ -104,7 +172,9 @@ const MessageScreen = (props: IMessageScreenProps) => {
         headerLeft={
           <ButtonText
             text={"Edit"}
-            onPress={() => {}}
+            onPress={() => {
+              setState({ ...state, showEdit: !state.showEdit });
+            }}
             textStyle={{ fontSize: 18, fontWeight: "500", color: Color.white }}
           />
         }

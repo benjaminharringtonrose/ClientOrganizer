@@ -62,7 +62,12 @@ export function MessagePreviewCard(props: IMessagePreviewCardProps) {
           <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
             <Text style={styles.name}>{props?.name}</Text>
             <View style={{ flexDirection: "row", marginRight: Spacing.small }}>
-              <Text style={styles.time}>{moment(props?.timestamp).fromNow()}</Text>
+              {!!props?.timestamp && (
+                <Text style={styles.time} numberOfLines={1}>
+                  {moment(props?.timestamp).fromNow()}
+                </Text>
+              )}
+
               <Ionicons name={"chevron-forward"} color={Color.greyMed} size={18} />
             </View>
           </View>
@@ -84,6 +89,7 @@ const styles = StyleSheet.create({
     borderColor: Color.darkThemeGreyMed,
     borderWidth: 0.5,
     paddingVertical: Spacing.small,
+    minHeight: 75,
   },
   avatar: {
     width: 36,
