@@ -49,10 +49,6 @@ interface IDispatchFromState {
 
 type IMessageScreenProps = IPassedProps & IPropsFromState & IDispatchFromState;
 
-interface ILocalState {
-  mappedNotifications?: any[];
-}
-
 function NotificationScreen(props: IMessageScreenProps) {
   const notifications = useNotifications(() => props.dispatchSetBadge(true));
 
@@ -129,8 +125,6 @@ function NotificationScreen(props: IMessageScreenProps) {
       data: notifications || [],
     },
   ];
-
-  console.log("badgeVisible", props.badgeVisible);
 
   return (
     <ScreenContainer>

@@ -1,10 +1,9 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, FlatList, Dimensions, TouchableOpacity } from "react-native";
-import { ScreenContainer, Header, ButtonBack, Input } from "../components";
-import { Color, Spacing } from "../styles";
+import { FlatList } from "react-native";
+import { ScreenContainer, Header, ButtonBack } from "../components";
+import { Color } from "../styles";
 import { IStoreState } from "../store/store";
 import { connect } from "react-redux";
-import { Ionicons } from "@expo/vector-icons";
 import * as ImagePicker from "expo-image-picker";
 import { StackNavigationProp } from "@react-navigation/stack";
 import { Routes } from "../navigation/routes";
@@ -13,8 +12,10 @@ import { RouteProp } from "../store/types";
 import { fetchMessagesRequested, sendMessageRequested } from "../store/actions/MessagesActions";
 import { IStringMap } from "./RegisterScreen";
 import firebase from "firebase";
-import { usePrevious } from "../hooks/usePrevious";
-import { isEqual } from "lodash";
+import { BubbleSender } from "../components/BubbleSender";
+import { BubbleReciever } from "../components/BubbleReciever";
+import { MessageSenderInput } from "../components/MessageSenderInput";
+import { BubbleMessageList } from "../components/BubbleMessageList";
 
 interface IPassedProps {
   navigation: StackNavigationProp<MessageParamList, Routes.MESSAGE_DETAILS_SCREEN>;
@@ -108,17 +109,6 @@ function MessageDetailsScreen(props: MessageDetailsProps) {
     props.dispatchFetchMessages();
   };
 
-  const isSender = (senderId: string) => {
-    if (senderId === props.uid) {
-      return true;
-    }
-    return false;
-  };
-
-  const screenWidth = Dimensions.get("screen").width;
-
-  console.log("state.mappedMessages", state.mappedMessages);
-
   return (
     <ScreenContainer>
       <Header
@@ -131,111 +121,12 @@ function MessageDetailsScreen(props: MessageDetailsProps) {
           />
         }
       />
-      <FlatList
-        data={state.mappedMessages}
-        inverted
-        renderItem={({ item }) => {
-          if (item) {
-            if (isSender(item.senderId)) {
-              return (
-                <View
-                  style={{
-                    flex: 1,
-                    alignItems: "flex-end",
-                    marginBottom: Spacing.micro,
-                    marginHorizontal: Spacing.small,
-                  }}
-                >
-                  <View
-                    style={{
-                      flex: 1,
-                      padding: 15,
-                      backgroundColor: Color.primary,
-                      borderRadius: 20,
-                      width: screenWidth * 0.8,
-                    }}
-                  >
-                    <Text style={{ color: Color.white, fontSize: 18 }}>{item.message}</Text>
-                  </View>
-                </View>
-              );
-            } else {
-              return (
-                <View
-                  style={{
-                    flex: 1,
-                    alignItems: "flex-start",
-                    marginBottom: Spacing.micro,
-                    marginHorizontal: Spacing.small,
-                  }}
-                >
-                  <View
-                    style={{
-                      flex: 1,
-                      padding: 15,
-                      backgroundColor: Color.darkThemeGreyMed,
-                      borderRadius: 20,
-                      width: screenWidth * 0.8,
-                    }}
-                  >
-                    <Text style={{ color: Color.white, fontSize: 18 }}>{item.message}</Text>
-                  </View>
-                </View>
-              );
-            }
-          }
-          return null;
-        }}
-        keyExtractor={(item, index) => index.toString()}
-        showsVerticalScrollIndicator={false}
-        // refreshControl={refreshControl()}
+      <BubbleMessageList messages={state.mappedMessages} uid={props.uid} />
+      <MessageSenderInput
+        onChangeText={(messageInput: string) => setState({ ...state, messageInput })}
+        onCameraPress={() => {}}
+        onSendPress={onSendMessagePress}
       />
-
-      <View
-        style={{
-          flexDirection: "row",
-          paddingVertical: Spacing.small,
-          paddingRight: Spacing.small,
-          borderTopColor: Color.darkThemeGreyMed,
-          borderTopWidth: 1,
-        }}
-      >
-        <TouchableOpacity
-          style={{
-            alignItems: "center",
-            justifyContent: "center",
-            marginHorizontal: Spacing.small,
-          }}
-          onPress={pickImage}
-        >
-          <Ionicons name="md-camera" size={32} color={Color.darkThemeGrey} />
-        </TouchableOpacity>
-        <View
-          style={{
-            flex: 1,
-            minHeight: 40,
-            borderColor: Color.darkThemeGreyMed,
-            borderWidth: 2,
-            borderRadius: 20,
-            flexDirection: "row",
-            alignItems: "center",
-            paddingHorizontal: Spacing.micro,
-          }}
-        >
-          <Input
-            style={{
-              flex: 1,
-              backgroundColor: Color.black,
-            }}
-            selectionColor={Color.greyLight}
-            onChangeText={(messageInput: string) => setState({ ...state, messageInput })}
-            value={state.messageInput}
-          />
-          <TouchableOpacity style={{ paddingRight: Spacing.small }} onPress={onSendMessagePress}>
-            <Ionicons name={"ios-send"} color={Color.darkThemeGrey} size={25} />
-          </TouchableOpacity>
-        </View>
-      </View>
     </ScreenContainer>
   );
 }

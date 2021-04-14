@@ -4,8 +4,12 @@ import { mapNotifications } from "../screens/util";
 import { usePrevious } from "./usePrevious";
 import { isEqual } from "lodash";
 
+interface ILocalState {
+  mappedNotifications?: any[];
+}
+
 export const useNotifications = (dispatchSetBadge: (bool: boolean) => void) => {
-  const [state, setState] = useState<any>({
+  const [state, setState] = useState<ILocalState>({
     mappedNotifications: undefined,
   });
 
