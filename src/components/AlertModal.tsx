@@ -29,8 +29,12 @@ export default function AlertModal(props: IAlertModalProps) {
             <Text style={styles.modalText}>{props.label}</Text>
             {props.actions.map((action) => {
               return (
-                <CardSection>
-                  <Button label={action.buttonLabel} onPress={action.onPress} />
+                <CardSection style={{ marginBottom: Spacing.xsmall }}>
+                  <Button
+                    label={action.buttonLabel}
+                    onPress={action.onPress}
+                    style={{ backgroundColor: Color.primary }}
+                  />
                 </CardSection>
               );
             })}
@@ -48,8 +52,8 @@ const styles = StyleSheet.create({
   },
   modalView: {
     marginTop: 100,
-    backgroundColor: Color.darkThemeGreyMed,
-    borderRadius: 3,
+    backgroundColor: Color.darkThemeGreyDark,
+    borderRadius: 15,
     padding: 40,
     marginHorizontal: Spacing.small,
   },
