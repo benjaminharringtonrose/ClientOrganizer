@@ -1,5 +1,13 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, StyleSheet, FlatList, RefreshControl, TouchableOpacity } from "react-native";
+import {
+  View,
+  Text,
+  StyleSheet,
+  FlatList,
+  RefreshControl,
+  TouchableOpacity,
+  Dimensions,
+} from "react-native";
 import { connect } from "react-redux";
 import * as Animatable from "react-native-animatable";
 import { ScreenContainer, MessagePreviewCard, Header, ButtonText } from "../components";
@@ -11,10 +19,11 @@ import SearchBar from "../components/SearchBar";
 import { Routes } from "../navigation/routes";
 import { IStoreState } from "../store/store";
 import { fetchMessagesRequested, fetchThreadsRequested } from "../store/actions/MessagesActions";
-import { getMostRecentMessage } from "./util";
+import { getMostRecentMessage, makeSlideTranslation } from "./util";
 import { usePrevious } from "../hooks/usePrevious";
 import { isEqual } from "lodash";
 import { Ionicons } from "@expo/vector-icons";
+import AlertModal from "../components/AlertModal";
 
 interface IPassedProps {
   navigation: any;
@@ -37,6 +46,7 @@ interface ILocalState {
   selectedMessage?: IStringMap<any>;
   threads: any;
   showEdit?: boolean;
+  showAlert: boolean;
 }
 
 const MessageScreen = (props: IMessageScreenProps) => {
@@ -44,7 +54,10 @@ const MessageScreen = (props: IMessageScreenProps) => {
     selectedMessage: undefined,
     threads: undefined,
     showEdit: undefined,
+    showAlert: false,
   });
+
+  const screenWidth = Dimensions.get("screen").width;
 
   useEffect(() => {
     props.dispatchFetchThreads();
@@ -81,26 +94,15 @@ const MessageScreen = (props: IMessageScreenProps) => {
       });
     };
 
-    function makeSlideTranslation(translationType: string, fromValue: number, toValue: number) {
-      return {
-        from: {
-          [translationType]: fromValue,
-        },
-        to: {
-          [translationType]: toValue,
-        },
-      };
-    }
-
     if (item) {
       return (
         <View style={{ flex: 1, flexDirection: "row" }}>
-          {state.showEdit && (
-            <Animatable.View
-              ref={(ref) => (this.view = ref)}
-              animation={makeSlideTranslation("translateX", -100, 0)}
-            >
+          {!!state?.showEdit && (
+            <Animatable.View animation={makeSlideTranslation("translateX", -80, 0)}>
               <TouchableOpacity
+                onPress={() => {
+                  setState({ ...state, showAlert: true });
+                }}
                 style={{
                   flex: 1,
                   backgroundColor: Color.error,
@@ -116,8 +118,8 @@ const MessageScreen = (props: IMessageScreenProps) => {
               </TouchableOpacity>
             </Animatable.View>
           )}
-          {state.showEdit ? (
-            <TouchableOpacity style={{ flex: 1 }} onPress={onMessagePress}>
+          {!!state?.showEdit ? (
+            <TouchableOpacity style={{ flex: 1, width: screenWidth }} onPress={onMessagePress}>
               <Animatable.View animation={makeSlideTranslation("translateX", -80, 0)}>
                 <MessagePreviewCard
                   avatar={item.threadAvatar}
@@ -201,6 +203,15 @@ const MessageScreen = (props: IMessageScreenProps) => {
         keyExtractor={(item, index) => String(index)}
         showsVerticalScrollIndicator={false}
         refreshControl={refreshControl()}
+      />
+      <AlertModal
+        label={"Are you sure you want to delete this message thread?"}
+        actions={[
+          { buttonLabel: "Delete", onPress: () => {} },
+          { buttonLabel: "Nevermind", onPress: () => setState({ ...state, showAlert: false }) },
+        ]}
+        isVisible={state.showAlert}
+        onBackdropPress={() => setState({ ...state, showAlert: false })}
       />
     </ScreenContainer>
   );

@@ -11,13 +11,18 @@ interface IAlertModalProps {
   label: string;
   actions: IStringMap<any>[];
   isVisible: boolean;
+  onBackdropPress: () => void;
 }
 
 export default function AlertModal(props: IAlertModalProps) {
   return (
     // I added is to fix ts but idk what it is -> panResponderThreshold={10} so if
     // there's issues it's probably because of that.
-    <Modal panResponderThreshold={10} isVisible={props.isVisible}>
+    <Modal
+      panResponderThreshold={10}
+      isVisible={props.isVisible}
+      onBackdropPress={props.onBackdropPress}
+    >
       <View style={styles.centeredView}>
         <Card>
           <View style={styles.modalView}>
@@ -40,7 +45,6 @@ const styles = StyleSheet.create({
   centeredView: {
     flex: 1,
     justifyContent: "center",
-    marginTop: 22,
   },
   modalView: {
     marginTop: 100,

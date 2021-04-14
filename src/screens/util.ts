@@ -90,3 +90,18 @@ export const getFriendsAsync = async (friends?: string[]) => {
     });
   return friendsData;
 };
+
+export const makeSlideTranslation = (
+  translationType: string,
+  fromValue: number,
+  toValue: number
+) => {
+  return {
+    from: {
+      [translationType]: fromValue,
+    },
+    to: {
+      [translationType]: toValue,
+    },
+  };
+};
